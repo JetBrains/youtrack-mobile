@@ -230,7 +230,6 @@ msgstr "カメラ"
 #: src/views/create-issue/create-issue-actions.ts
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 #: src/views/inbox-threads/inbox-threads.tsx
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 #: src/views/issue/issue-base-actions-creater.ts
 #: src/views/knowledge-base/knowledge-base-actions.ts
@@ -332,7 +331,6 @@ msgstr "内容が変更されました"
 #: src/views/article/article__activity.tsx
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copied"
@@ -349,7 +347,6 @@ msgstr "フィールドテキストのコピー"
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copy link"
 msgstr "リンクのコピー"
@@ -361,7 +358,6 @@ msgstr "記事のリンクをコピー"
 
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copy text"
 msgstr "テキストのコピー"
@@ -410,7 +406,6 @@ msgstr "さんがプルリクエストを却下しました"
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__actions.ts
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Delete"
@@ -491,7 +486,6 @@ msgstr "件の下書き"
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Edit"
 msgstr "編集"
@@ -987,6 +981,10 @@ msgstr "リストから記事を選択"
 #: src/views/issues/issues.tsx
 msgid "Select an issue from the list"
 msgstr "リストから課題を選択"
+
+#: src/views/issue/activity/activity__add-spent-time.tsx
+msgid "Select an option"
+msgstr ""
 
 #: src/components/custom-field/Issue-sprints-field.tsx
 msgid "select sprint"

@@ -238,7 +238,6 @@ msgstr "Kamera"
 #: src/views/create-issue/create-issue-actions.ts
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 #: src/views/inbox-threads/inbox-threads.tsx
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 #: src/views/issue/issue-base-actions-creater.ts
 #: src/views/knowledge-base/knowledge-base-actions.ts
@@ -340,7 +339,6 @@ msgstr "İçerik revize edildi"
 #: src/views/article/article__activity.tsx
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copied"
@@ -357,7 +355,6 @@ msgstr "Alan metnini kopyala"
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copy link"
 msgstr "Bağlantıyı kopyala"
@@ -369,7 +366,6 @@ msgstr ""
 
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copy text"
 msgstr "Metni kopyala"
@@ -418,7 +414,6 @@ msgstr "çekme talebi reddedildi"
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__actions.ts
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Delete"
@@ -499,7 +494,6 @@ msgstr "Taslaklar"
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Edit"
 msgstr "Düzenle"
@@ -997,6 +991,10 @@ msgstr ""
 #: src/views/issues/issues.tsx
 msgid "Select an issue from the list"
 msgstr ""
+
+#: src/views/issue/activity/activity__add-spent-time.tsx
+msgid "Select an option"
+msgstr "Bir seçenek belirleyin"
 
 #: src/components/custom-field/Issue-sprints-field.tsx
 msgid "select sprint"

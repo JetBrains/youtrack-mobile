@@ -238,7 +238,6 @@ msgstr "Fotocamera"
 #: src/views/create-issue/create-issue-actions.ts
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 #: src/views/inbox-threads/inbox-threads.tsx
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 #: src/views/issue/issue-base-actions-creater.ts
 #: src/views/knowledge-base/knowledge-base-actions.ts
@@ -340,7 +339,6 @@ msgstr "Contenuto revisionato"
 #: src/views/article/article__activity.tsx
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copied"
@@ -357,7 +355,6 @@ msgstr "Copia il testo del campo"
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copy link"
 msgstr "Copia link"
@@ -369,7 +366,6 @@ msgstr "Copia link all'articolo"
 
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copy text"
 msgstr "Copia testo"
@@ -418,7 +414,6 @@ msgstr ""
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__actions.ts
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Delete"
@@ -499,7 +494,6 @@ msgstr "Bozze"
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Edit"
 msgstr "Modifica"
@@ -997,6 +991,10 @@ msgstr "Seleziona un articolo dall'elenco"
 #: src/views/issues/issues.tsx
 msgid "Select an issue from the list"
 msgstr "Seleziona un ticket dall'elenco"
+
+#: src/views/issue/activity/activity__add-spent-time.tsx
+msgid "Select an option"
+msgstr "Seleziona un'opzione"
 
 #: src/components/custom-field/Issue-sprints-field.tsx
 msgid "select sprint"

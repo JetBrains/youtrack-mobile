@@ -230,7 +230,6 @@ msgstr "카메라"
 #: src/views/create-issue/create-issue-actions.ts
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 #: src/views/inbox-threads/inbox-threads.tsx
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 #: src/views/issue/issue-base-actions-creater.ts
 #: src/views/knowledge-base/knowledge-base-actions.ts
@@ -332,7 +331,6 @@ msgstr "내용 수정됨"
 #: src/views/article/article__activity.tsx
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copied"
@@ -349,7 +347,6 @@ msgstr "필드 텍스트 복사"
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copy link"
 msgstr "링크 복사"
@@ -361,7 +358,6 @@ msgstr "자료 링크 복사"
 
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copy text"
 msgstr "텍스트 복사"
@@ -410,7 +406,6 @@ msgstr "풀 리퀘스트가 거부되었습니다"
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__actions.ts
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Delete"
@@ -491,7 +486,6 @@ msgstr "이슈 초안"
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Edit"
 msgstr "편집"
@@ -987,6 +981,10 @@ msgstr "목록에서 기사 선택"
 #: src/views/issues/issues.tsx
 msgid "Select an issue from the list"
 msgstr "목록에서 이슈 선택"
+
+#: src/views/issue/activity/activity__add-spent-time.tsx
+msgid "Select an option"
+msgstr ""
 
 #: src/components/custom-field/Issue-sprints-field.tsx
 msgid "select sprint"

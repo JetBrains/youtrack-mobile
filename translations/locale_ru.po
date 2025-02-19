@@ -254,7 +254,6 @@ msgstr "Камера"
 #: src/views/create-issue/create-issue-actions.ts
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 #: src/views/inbox-threads/inbox-threads.tsx
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 #: src/views/issue/issue-base-actions-creater.ts
 #: src/views/knowledge-base/knowledge-base-actions.ts
@@ -356,7 +355,6 @@ msgstr "Содержимое изменено"
 #: src/views/article/article__activity.tsx
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copied"
@@ -373,7 +371,6 @@ msgstr "Копировать текст в поле"
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copy link"
 msgstr "Скопировать ссылку"
@@ -385,7 +382,6 @@ msgstr "Скопировать ссылку на статью"
 
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copy text"
 msgstr "Скопировать текст"
@@ -434,7 +430,6 @@ msgstr "отклонил(а) пул-реквест"
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__actions.ts
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Delete"
@@ -515,7 +510,6 @@ msgstr "Черновики"
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
-#: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Edit"
 msgstr "Изменить"
@@ -1017,6 +1011,10 @@ msgstr "Выберите статью из списка"
 #: src/views/issues/issues.tsx
 msgid "Select an issue from the list"
 msgstr "Выбрать задачу из списка"
+
+#: src/views/issue/activity/activity__add-spent-time.tsx
+msgid "Select an option"
+msgstr ""
 
 #: src/components/custom-field/Issue-sprints-field.tsx
 msgid "select sprint"
