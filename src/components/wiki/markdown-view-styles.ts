@@ -96,7 +96,9 @@ export const baseMarkdownStyles = {
   ordered_list: {},
   list_item: {},
 
-  bullet_list_icon: {},
+  bullet_list_icon: {
+    marginTop: UNIT,
+  },
   bullet_list_icon_checkbox: {
     color: 'transparent',
   },
@@ -107,8 +109,8 @@ export const baseMarkdownStyles = {
   },
 
   ordered_list_icon: {
-    marginLeft: UNIT,
-    marginRight: UNIT,
+    marginTop: UNIT,
+    marginHorizontal: UNIT,
   },
 
   ordered_list_content: {},
