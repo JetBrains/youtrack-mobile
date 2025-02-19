@@ -310,7 +310,7 @@ msgstr "Confirm logout"
 msgid "Confirmation required"
 msgstr "Confirmation required"
 
-#: src/actions/app-actions.ts:887
+#: src/actions/app-actions.ts:889
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
@@ -1379,6 +1379,10 @@ msgstr "Write a comment, @mention people"
 #: src/components/account/accounts.tsx:55
 msgid "Yes"
 msgstr "Yes"
+
+#: src/actions/app-actions.ts:802
+msgid "You are trying to open a link from another server. Please add this server to the app first."
+msgstr "You are trying to open a link from another server. Please add this server to the app first."
 
 #: src/views/issue/issue-user-cc.tsx:108
 msgid "You can only CC a maximum of 5 reporters per ticket"

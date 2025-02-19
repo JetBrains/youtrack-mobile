@@ -1408,6 +1408,10 @@ msgstr "Napisz komentarz, @wspomnij o kimś"
 msgid "Yes"
 msgstr "Tak"
 
+#: src/actions/app-actions.ts
+msgid "You are trying to open a link from another server. Please add this server to the app first."
+msgstr ""
+
 #: src/views/issue/issue-user-cc.tsx
 msgid "You can only CC a maximum of 5 reporters per ticket"
 msgstr "Możesz wysłać kopie DW do maksymalnie 5 reporterów na zgłoszenie pomocy technicznej"

@@ -1386,6 +1386,10 @@ msgstr "Escribir un comentario, @mencionar personas"
 msgid "Yes"
 msgstr "Sí"
 
+#: src/actions/app-actions.ts
+msgid "You are trying to open a link from another server. Please add this server to the app first."
+msgstr ""
+
 #: src/views/issue/issue-user-cc.tsx
 msgid "You can only CC a maximum of 5 reporters per ticket"
 msgstr "Solo puede poner en CC a un máximo de 5 notificadores por ticket"

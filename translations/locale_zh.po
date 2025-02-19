@@ -1375,6 +1375,10 @@ msgstr "写评论，提及人(@)"
 msgid "Yes"
 msgstr "是"
 
+#: src/actions/app-actions.ts
+msgid "You are trying to open a link from another server. Please add this server to the app first."
+msgstr ""
+
 #: src/views/issue/issue-user-cc.tsx
 msgid "You can only CC a maximum of 5 reporters per ticket"
 msgstr "每个工单最多只能抄送 5 位报告者"

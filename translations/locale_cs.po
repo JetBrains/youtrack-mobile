@@ -1408,6 +1408,10 @@ msgstr "Napsat komentář, @mention osoby"
 msgid "Yes"
 msgstr "Ano"
 
+#: src/actions/app-actions.ts
+msgid "You are trying to open a link from another server. Please add this server to the app first."
+msgstr ""
+
 #: src/views/issue/issue-user-cc.tsx
 msgid "You can only CC a maximum of 5 reporters per ticket"
 msgstr ""

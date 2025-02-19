@@ -1408,6 +1408,10 @@ msgstr "Введите текст комментария, @упоминайте 
 msgid "Yes"
 msgstr "Да"
 
+#: src/actions/app-actions.ts
+msgid "You are trying to open a link from another server. Please add this server to the app first."
+msgstr ""
+
 #: src/views/issue/issue-user-cc.tsx
 msgid "You can only CC a maximum of 5 reporters per ticket"
 msgstr "В копию можно добавлять не более 5 авторов на один запрос"

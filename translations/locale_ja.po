@@ -1375,6 +1375,10 @@ msgstr "コメントを書くか、他のユーザーについて@メンショ�
 msgid "Yes"
 msgstr "はい"
 
+#: src/actions/app-actions.ts
+msgid "You are trying to open a link from another server. Please add this server to the app first."
+msgstr ""
+
 #: src/views/issue/issue-user-cc.tsx
 msgid "You can only CC a maximum of 5 reporters per ticket"
 msgstr "1 つのチケットに CC できる報告者数は最大 5 人です"
