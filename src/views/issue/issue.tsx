@@ -116,7 +116,7 @@ export class Issue<T extends IssueProps> extends IssueTabbed<IssueProps & T> {
   }
 
   async componentWillUpdate(nextProps: IssueProps) {
-    if (nextProps.issueId !== this.props.issueId && this.props.issuePlaceholder.idReadable !== nextProps.issueId) {
+    if (nextProps.issueId !== this.props.issueId && this.props.issuePlaceholder?.idReadable !== nextProps.issueId) {
       this.switchToDetailsTab();
       this.props.resetActivityPage();
       await this.init();
