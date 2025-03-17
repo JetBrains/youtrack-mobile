@@ -86,7 +86,7 @@ msgstr "Accept"
 msgid "Activity"
 msgstr "Activity"
 
-#: src/views/issue/activity/issue__activity.tsx:181
+#: src/views/issue/activity/issue__activity.tsx:182
 msgid "Activity Settings"
 msgstr "Activity Settings"
 
@@ -406,7 +406,7 @@ msgstr "declined the pull request"
 #: src/views/article/article__activity.tsx:250
 #: src/views/create-issue/create-issue-drafts.tsx:38
 #: src/views/issue/activity/issue__activity-stream.tsx:179
-#: src/views/issue/activity/issue__activity.tsx:284
+#: src/views/issue/activity/issue__activity.tsx:285
 #: src/views/issue/activity/issue-activity__actions.ts:269
 #: src/views/issue/activity/issue-activity__comment-actions.ts:264
 #: src/views/issue/issue-base-actions-creater.ts:583
@@ -487,7 +487,7 @@ msgstr "Drafts"
 #: src/views/article/arcticle-actions.ts:263
 #: src/views/article/article__activity.tsx:179
 #: src/views/issue/activity/issue__activity-stream.tsx:101
-#: src/views/issue/activity/issue__activity.tsx:273
+#: src/views/issue/activity/issue__activity.tsx:274
 #: src/views/issue/issue-base-actions-creater.ts:533
 msgid "Edit"
 msgstr "Edit"
