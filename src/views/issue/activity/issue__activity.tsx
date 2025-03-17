@@ -117,7 +117,8 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
       return;
     }
 
-    const redirectedFromIssueToIssue = prevProps?.issue?.id !== this.props.issue.id && this.props.activityPage === null;
+    const redirectedFromIssueToIssue =
+      prevProps?.issue?.id !== this.props.issue?.id && this.props.activityPage === null;
     const isIssueOpenedFromList = !prevProps.issuePlaceholder && this.props.issuePlaceholder;
     const isRedirectedFromIssueToIssue =
       prevProps.issuePlaceholder &&
