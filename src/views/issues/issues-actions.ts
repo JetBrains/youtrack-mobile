@@ -7,12 +7,12 @@ import usage from 'components/usage/usage';
 import {ANALYTICS_ISSUES_PAGE, ANALYTICS_TICKETS_PAGE} from 'components/analytics/analytics-ids';
 import {
   convertToNonStructural,
+  createFilterSettings,
   createQueryFromFiltersSetting,
   getFilterFieldName,
 } from 'views/issues/issues-helper';
 import {
-  FilterSetting,
-  FiltersSetting,
+  FilterFieldSetting,
   IssuesSetting,
   issuesSearchSettingMode,
   IssuesSettings,
@@ -215,7 +215,7 @@ const loadIssues = (query: string): ReduxAction => async (
 
 const getFiltersQuery = (): ReduxAction<string> => (dispatch: ReduxThunkDispatch) => {
   const settings: IssuesSettings = dispatch(getIssuesSettings());
-  const filtersSettings: FilterSetting[] = Object.values(settings.search.filters!);
+  const filtersSettings: FilterFieldSetting[] = Object.values(settings.search.filters!);
   return `${createQueryFromFiltersSetting(filtersSettings)}`;
 };
 
@@ -393,7 +393,7 @@ const cachedIssuesSettings = (settings?: IssuesSettings): ReduxAction<IssuesSett
     );
   };
 
-const openFilterFieldSelect = (filterSetting: FilterSetting): ReduxAction => (
+const openFilterFieldSelect = (filterSetting: FilterFieldSetting): ReduxAction => (
   dispatch: ReduxThunkDispatch,
   getState: ReduxStateGetter,
   getApi: ReduxAPIGetter,
@@ -662,21 +662,7 @@ const setFilters = (): (
       ...settings,
       search: {
         ...settings.search,
-        filters: visibleFiltersNames.reduce((akk: FiltersSetting, it: string) => {
-          const id: string = it.toLowerCase();
-          const filterSettings: FilterSetting | undefined = settings.search.filters?.[id];
-          const filterField: FilterField[] = filterFields.filter((i: FilterField) => {
-            return getFilterFieldName(i) === id || id === i.id;
-          });
-          return {
-            ...akk,
-            [id]: {
-              id,
-              filterField,
-              selectedValues: filterSettings?.selectedValues || [],
-            },
-          };
-        }, {}),
+        filters: createFilterSettings(visibleFiltersNames, filterFields, settings),
       },
     };
     dispatch(cachedIssuesSettings(settings));

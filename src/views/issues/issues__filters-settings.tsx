@@ -6,6 +6,7 @@ import {useSelector} from 'react-redux';
 import IssuesFiltersSettingList from 'views/issues/issues__filters-settings__list';
 import ModalPortal from 'components/modal-view/modal-portal';
 import Router from 'components/router/router';
+import {defaultIssuesFilterFieldConfig} from 'views/issues/index';
 import {i18n} from 'components/i18n/i18n';
 import {IconAngleRight} from 'components/icon/icon';
 import {isSplitView} from 'components/responsive/responsive-helper';
@@ -13,7 +14,7 @@ import {isSplitView} from 'components/responsive/responsive-helper';
 import styles from './issues.styles';
 
 import type {AppState} from 'reducers';
-import {defaultIssuesFilterFieldConfig, FilterSetting} from 'views/issues/index';
+import type {FilterFieldSetting} from 'views/issues/index';
 import type {User} from 'types/User';
 
 
@@ -26,7 +27,7 @@ const IssuesFiltersSetting = ({
   onOpen: () => void;
   user: User;
 }) => {
-  const [filters, setFilters] = React.useState<FilterSetting[]>([]);
+  const [filters, setFilters] = React.useState<FilterFieldSetting[]>([]);
   const [modalChildren, updateModalChildren] = useState<React.JSX.Element | null>(null);
   const issuesSettings = useSelector((state: AppState) => state.issueList.settings);
   const isHelpdeskMode = useSelector((state: AppState) => state.issueList.helpDeskMode);
@@ -44,8 +45,8 @@ const IssuesFiltersSetting = ({
         : Object.values(defaultIssuesFilterFieldConfig)
     );
     if (issuesSettings.search?.filters) {
-      const list: FilterSetting[] | undefined = filterFields.reduce(
-        (akk: FilterSetting[], it: string) => {
+      const list: FilterFieldSetting[] | undefined = filterFields.reduce(
+        (akk: FilterFieldSetting[], it: string) => {
           return [...akk, (issuesSettings.search.filters || {})[it?.toLowerCase()]];
         },
         []
@@ -67,7 +68,7 @@ const IssuesFiltersSetting = ({
       <TouchableOpacity style={styles.settingsRow} onPress={onPress}>
         <Text numberOfLines={1} style={[styles.settingsItemText, !filters.length && styles.settingsItemTextEmpty]}>
           {filters.length
-            ? filters.map((it: FilterSetting) => it?.filterField?.[0]?.name || it.id).join(', ')
+            ? filters.map((it: FilterFieldSetting) => it?.filterField?.[0]?.name || it.id).join(', ')
             : i18n('Add filter')}
         </Text>
         <IconAngleRight size={19} color={styles.settingsItemIcon.color} />
@@ -79,9 +80,9 @@ const IssuesFiltersSetting = ({
     return (
       <IssuesFiltersSettingList
         filters={filters}
-        onApply={(fs: FilterSetting[]) => {
+        onApply={(fs: FilterFieldSetting[]) => {
           setFilters(fs);
-          onApply(fs.map((it: FilterSetting) => it.id.toLowerCase()));
+          onApply(fs.map((it: FilterFieldSetting) => it.id.toLowerCase()));
         }}
         onBack={onBack}
       />

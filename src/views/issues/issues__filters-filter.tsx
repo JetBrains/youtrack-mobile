@@ -6,10 +6,12 @@ import {ThemeContext} from 'components/theme/theme-context';
 
 import styles from './issues.styles';
 
-import {defaultIssuesFilterFieldConfig, FilterSetting} from 'views/issues/index';
+import {defaultIssuesFilterFieldConfig} from 'views/issues/index';
 import {i18n} from 'components/i18n/i18n';
 import {getFilterFieldName} from 'views/issues/issues-helper';
 import {Theme} from 'types/Theme';
+
+import type {FilterFieldSetting} from 'views/issues/index';
 
 
 const IssuesFilterField = ({
@@ -17,9 +19,9 @@ const IssuesFilterField = ({
   disabled,
   onPress,
 }: {
-  filterSetting: FilterSetting,
+  filterSetting: FilterFieldSetting,
   disabled?: boolean;
-  onPress: (filterSetting: FilterSetting) => void;
+  onPress: (filterSetting: FilterFieldSetting) => void;
 }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const theme: Theme = useContext(ThemeContext);

@@ -44,7 +44,7 @@ import {initialState} from './issues-reducers';
 import {isReactElement} from 'util/util';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {
-  FilterSetting,
+  FilterFieldSetting,
   issuesSearchSettingMode,
   issuesViewSettingMode,
 } from 'views/issues/index';
@@ -86,7 +86,7 @@ export type IssuesProps = IssuesState & IssuesActions & ReduxExtraActions & {
   networkState: NetInfoState,
   isInProgress: boolean,
   user: User,
-  onFilterPress: (filterField: FilterSetting) => any,
+  onFilterPress: (filterField: FilterFieldSetting) => any,
   issuePermissions: IssuePermissions,
 
   onQueryUpdate: (query: string) => ReduxThunkDispatch
@@ -305,7 +305,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
 
     const IssueRowComponent = settings.view.mode === issuesViewSettingMode.S ? IssueRowCompact : IssueRow;
     const contextIsProject: any = hasType.project(this.props.searchContext);
-    const filterFieldProject: FilterSetting | undefined = settings.search.filters?.project;
+    const filterFieldProject: FilterFieldSetting | undefined = settings.search.filters?.project;
     const selectedProjects: string[] | undefined = filterFieldProject?.selectedValues;
     const hideId: boolean = (
       contextIsProject && selectedProjects?.length === 0 ||

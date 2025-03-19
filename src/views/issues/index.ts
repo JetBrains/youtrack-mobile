@@ -5,14 +5,15 @@ import type {FilterField} from 'types/Sorting';
 import type {IssueOnList} from 'types/Issue';
 
 
-export interface FilterSetting {
+export interface FilterFieldSetting {
   filterField: FilterField[];
   id: string;
+  name: string;
   selectedValues: string[];
 }
 
-export interface FiltersSetting {
-  [name: string]: FilterSetting;
+export interface FilterFiledSettingMap {
+  [name: string]: FilterFieldSetting;
 }
 
 export interface IssuesSetting {
@@ -21,7 +22,7 @@ export interface IssuesSetting {
 }
 
 export interface IssuesSettingSearch extends IssuesSetting {
-  filters?: FiltersSetting;
+  filters?: FilterFiledSettingMap;
 }
 
 export interface IssuesSettings {

@@ -7,7 +7,7 @@ import {whiteSpacesRegex} from 'components/wiki/util/patterns';
 
 import type API from 'components/api/api';
 import type {FilterField, IssueFieldSortProperty, SearchSuggestions} from 'types/Sorting';
-import type {FilterSetting} from 'views/issues/index';
+import type {FilterFieldSetting, FilterFiledSettingMap, IssuesSettings} from 'views/issues/index';
 import type {Folder} from 'types/User';
 
 
@@ -57,8 +57,8 @@ const wrapToBraces = (text: string): string => {
   return str;
 };
 
-const createQueryFromFiltersSetting = (filters: FilterSetting[] = []): string => {
-  const groupedQuery = filters.reduce((akk: {[key: string]: string}, it: FilterSetting) => {
+const createQueryFromFiltersSetting = (filters: FilterFieldSetting[] = []): string => {
+  const groupedQuery = filters.reduce((akk: {[key: string]: string}, it: FilterFieldSetting) => {
     const query: string = (it.selectedValues || []).map(wrapToBraces).join(',');
 
     if (query) {
@@ -76,8 +76,38 @@ const createQueryFromFiltersSetting = (filters: FilterSetting[] = []): string =>
 };
 
 const getFilterFieldName = (filterField: FilterField) => {
-  const key: string = filterField?.customField?.name || filterField?.name || '';
-  return key.toLowerCase();
+  const filed = filterField?.customField || filterField;
+  return filed.name.toLowerCase();
+};
+
+const createFilterSetting = (
+  id: string,
+  filterFields: FilterField[],
+  selectedValues: string[] = [],
+): FilterFieldSetting => {
+    const filterField: FilterField[] = filterFields.filter((i: FilterField) => getFilterFieldName(i) === id);
+    return {
+      id,
+      name: id,
+      filterField,
+      selectedValues,
+    };
+};
+
+const createFilterSettings = (
+  visibleFieldsNames: string[],
+  filterFields: FilterField[],
+  settings: IssuesSettings
+): FilterFiledSettingMap => {
+  return visibleFieldsNames.reduce((akk: FilterFiledSettingMap, it: string) => {
+    const id: string = it.toLowerCase();
+    const filterSetting = settings.search.filters?.[id];
+    const setting = createFilterSetting(id, filterFields, filterSetting?.selectedValues);
+    return {
+      ...akk,
+      [id]: setting,
+    };
+  }, {});
 };
 
 const createAnimatedRotateStyle = (): {transform: {rotate: Animated.AnimatedInterpolation<string>}[]} => {
@@ -107,6 +137,7 @@ export {
   createQueryFromFiltersSetting,
   createAnimatedRotateStyle,
   convertToNonStructural,
+  createFilterSettings,
   doAssist,
   getFilterFieldName,
   getSortPropertyName,

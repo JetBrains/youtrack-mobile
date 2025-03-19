@@ -1,6 +1,6 @@
 import * as helper from './issues-helper';
 
-import type {FilterSetting} from 'views/issues/index';
+import type {FilterFieldSetting} from 'views/issues/index';
 import type {FilterField} from 'types/Sorting';
 
 
@@ -84,14 +84,15 @@ describe('Issues helper', () => {
     });
   });
 
-  function createSettingMock(name: string = nameMock, values?: string[]): FilterSetting[] {
+  function createSettingMock(name: string = nameMock, values?: string[]): FilterFieldSetting[] {
     const key = name.toLowerCase();
     return [{
       id: key,
+      name,
       filterField: Array(2).fill({
         $type: 'CustomFilterField',
         id: key,
-        name: key,
+        name,
       }),
       selectedValues: values || Array(2).fill(fieldValue),
     }];

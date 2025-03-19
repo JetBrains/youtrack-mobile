@@ -10,7 +10,7 @@ import {openFilterFieldSelect, resetFilterFields} from 'views/issues/issues-acti
 import styles from './issues.styles';
 
 import type {AppState} from 'reducers';
-import type {FilterSetting, FiltersSetting, IssuesSettings} from 'views/issues/index';
+import type {FilterFieldSetting, FilterFiledSettingMap, IssuesSettings} from 'views/issues/index';
 import type {ReduxThunkDispatch} from 'types/Redux';
 
 
@@ -20,7 +20,7 @@ const IssuesFilters = (): React.JSX.Element | null => {
   const disabled: boolean = useSelector((state: AppState) => state.issueList.isRefreshing);
   const settings: IssuesSettings = useSelector((state: AppState) => state.issueList.settings);
 
-  const getSearchFilters = (): FiltersSetting => settings.search.filters || {};
+  const getSearchFilters = (): FilterFiledSettingMap => settings.search.filters || {};
 
   const getSearchFiltersKeys = (): string[] => Object.keys(getSearchFilters());
 
@@ -36,13 +36,13 @@ const IssuesFilters = (): React.JSX.Element | null => {
       <View style={styles.filters}>
         {
           getSearchFiltersKeys().map((it: string, i: number) => {
-            const fs: FilterSetting = getSearchFilters()[it];
+            const fs: FilterFieldSetting = getSearchFilters()[it];
             return fs.filterField[0] ? (
               <IssuesFilterField
                 key={`searchFilters-${i}`}
                 filterSetting={fs}
                 disabled={disabled}
-                onPress={(filterSetting: FilterSetting) => {
+                onPress={(filterSetting: FilterFieldSetting) => {
                   dispatch(openFilterFieldSelect(filterSetting));
                 }}
               />
