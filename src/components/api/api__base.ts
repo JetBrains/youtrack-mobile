@@ -3,9 +3,8 @@ import qs from 'qs';
 import ApiHelper from './api__helper';
 import issueFields from 'components/api/api__issue-fields';
 import log from 'components/log/log';
-import Router from 'components/router/router';
 import {fetch2, RequestController, requestController} from './api__request-controller';
-import {extractErrorMessage, getErrorMessage, resolveErrorMessage} from 'components/error/error-resolver';
+import {getErrorMessage, resolveErrorMessage} from 'components/error/error-resolver';
 import {handleRelativeUrl} from 'components/config/config';
 import {HTTP_STATUS} from 'components/error/error-http-codes';
 
@@ -134,7 +133,7 @@ export default class BaseAPI {
     const error = await response.json();
     if (this.isUnauthorized(error, response.status)) {
       try {
-        log.info('API(doRequest):Unauthorised: Refreshing token...');
+        log.info(`API(doRequest):Unauthorised "${response.url}": Refreshing token...`);
         await this.auth.refreshToken();
         log.info('API(doRequest):Repeating a request');
         response = await send();
@@ -153,17 +152,7 @@ export default class BaseAPI {
       }
       return response;
     } else {
-      try {
-        log.warn('API(doRequest): Request failed.', {
-          error: error.error || '',
-          error_description: error.error_description || '',
-          error_type: error.error_type || '',
-          error_workflow_type: error.error_workflow_type || '',
-        });
-      } catch (er) {}
-      if (response.status === HTTP_STATUS.FORBIDDEN) {
-        return Router.EnterServer({serverUrl: this.config.backendUrl, error: extractErrorMessage(error, true)});
-      }
+      log.warn(`API(doRequest): Request ${response.url} failed.`, error);
       throw error;
     }
   }
