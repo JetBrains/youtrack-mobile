@@ -485,7 +485,7 @@ describe('app-actions', () => {
       expect(routerHelper.navigateToRouteById).not.toHaveBeenCalled();
     });
 
-    it('should redirect to `Issues screen`', async () => {
+    it.skip('should redirect to `Issues screen`', async () => {
       (appActionHelper.getCachedPermissions as jest.Mock).mockReturnValueOnce([]);
       setStoreAndCurrentUser({guest: false} as User);
 

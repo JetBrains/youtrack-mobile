@@ -158,11 +158,14 @@ class Router {
     const defaultRoute: string = this.rootRoutes[0];
     let route = null;
     const params: typeof props & {uuid?: string} = Object.assign({}, props);
-    if (props?.issueId) {
+    if (props?.issueId || props?.navigateToActivity) {
       route = routeMap.Issue;
     }
     if (props?.articleId) {
       route = routeMap.ArticleSingle;
+    }
+    if (props?.searchQuery) {
+      route = routeMap.Issues;
     }
     if (props?.helpdeskFormId) {
       params.uuid = props.helpdeskFormId;

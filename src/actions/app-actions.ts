@@ -38,7 +38,6 @@ import {isSplitView} from 'components/responsive/responsive-helper';
 import {loadConfig} from 'components/config/config';
 import {loadTranslation} from 'components/i18n/i18n-translation';
 import {logEvent} from 'components/log/log-helper';
-import {navigateToRouteById} from 'components/router/router-helper';
 import {notify, notifyError} from 'components/notification/notification';
 import {routeMap} from 'app-routes';
 import {SET_DRAFT_COMMENT_DATA, SET_PROGRESS} from './action-types';
@@ -972,9 +971,8 @@ export function initializeApp(
     await dispatch(migrateToIssuesFilterSearch());
     await createAPIInstance();
 
-    let isRedirected: boolean = false;
     if (cachedPermissions) {
-      isRedirected = navigateToRouteById(issueId, articleId, navigateToActivity, !!profiles?.helpdesk?.isReporter);
+      log.info('App Actions(initializeApp): Permission cache found');
     }
 
     let configCurrent = config;
@@ -1020,7 +1018,7 @@ export function initializeApp(
           articleId,
           navigateToActivity,
           extractIssuesQuery(url) ?? undefined,
-          isRedirected,
+          false,
         ),
       );
     }
@@ -1098,8 +1096,9 @@ export function setAccount(notificationRouteData: NotificationRouteData | null):
     }
 
     const targetConfig: AppConfig | null = storage.getStorageState().config;
-
+    log.info('App Actions(setAccount): config found', targetConfig);
     if (targetConfig) {
+      log.info('App Actions(setAccount): push notification data', notificationRouteData);
       dispatch(
         initializeApp(
           targetConfig,
