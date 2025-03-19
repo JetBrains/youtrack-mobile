@@ -1407,7 +1407,7 @@ PODS:
     - Yoga
   - react-native-netinfo (9.3.7):
     - React-Core
-  - react-native-notifications (4.3.3):
+  - react-native-notifications (5.1.0):
     - React-Core
   - react-native-pager-view (6.6.1):
     - DoubleConversion
@@ -2325,7 +2325,7 @@ SPEC CHECKSUMS:
   react-native-ios-context-menu: 15399c2cf69f198d22ac5c7ed7b87eec1b1d5bd7
   react-native-ios-utilities: 9e79d6d2625516f3e21dd2a59d3354d4bfbad3bd
   react-native-netinfo: 2517ad504b3d303e90d7a431b0fcaef76d207983
-  react-native-notifications: 83b4fd4a127a6c918fc846cae90da60f84819e44
+  react-native-notifications: 4601a5a8db4ced6ae7cfc43b44d35fe437ac50c4
   react-native-pager-view: 3ae40be5b2700f3f2645c1fbc751a03a4323172d
   react-native-render-html: 984dfe2294163d04bf5fe25d7c9f122e60e05ebe
   react-native-restart: 7595693413fe3ca15893702f2c8306c62a708162
