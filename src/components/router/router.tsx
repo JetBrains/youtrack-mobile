@@ -160,16 +160,20 @@ class Router {
     const params: typeof props & {uuid?: string} = Object.assign({}, props);
     if (props?.issueId || props?.navigateToActivity) {
       route = routeMap.Issue;
+      log.info(`Router: navigate to ISSUE ${JSON.stringify(this.props)}`);
     }
     if (props?.articleId) {
       route = routeMap.ArticleSingle;
+      log.info(`Router: navigate to ARTICLE ${JSON.stringify(this.props)}`);
     }
     if (props?.searchQuery) {
+      log.info(`Router: navigate to ISSUES ${JSON.stringify(this.props)}`);
       route = routeMap.Issues;
     }
     if (props?.helpdeskFormId) {
       params.uuid = props.helpdeskFormId;
       route = routeMap.HelpDeskFeedback;
+      log.info(`Router: navigate to HELPDESK ${JSON.stringify(this.props)}`);
     }
     if (route) {
       this.navigate(route, params, {forceReset: true});

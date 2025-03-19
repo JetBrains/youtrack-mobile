@@ -602,16 +602,23 @@ export function completeInitialization(
     if (!isRedirected) {
       if (currentUser.profiles?.helpdesk?.isReporter) {
         Router.Tickets();
-      } else if (Router.getRoutes().length <= 1) {
-        Router.navigateToDefaultRoute(
-          issueId || articleId || searchQuery || helpdeskFormId ? {
-            issueId,
-            articleId,
-            navigateToActivity,
-            searchQuery,
-            helpdeskFormId,
-          } : undefined,
-        );
+      } else {
+        const length = Router.getRoutes().length;
+        const isStackNotEmpty = length <= 1;
+        log.info('App Actions(completeInitialization): Initialization completed');
+        log.info(`App Actions(completeInitialization): stack: ${JSON.stringify(Router.getRoutes())}`);
+        log.info(`App Actions(completeInitialization): stack has length ${length}`);
+        if (isStackNotEmpty) {
+          Router.navigateToDefaultRoute(
+            issueId || articleId || searchQuery || helpdeskFormId ? {
+              issueId,
+              articleId,
+              navigateToActivity,
+              searchQuery,
+              helpdeskFormId,
+            } : undefined,
+          );
+        }
       }
     }
 
@@ -1098,7 +1105,7 @@ export function setAccount(notificationRouteData: NotificationRouteData | null):
     const targetConfig: AppConfig | null = storage.getStorageState().config;
     log.info('App Actions(setAccount): config found', targetConfig);
     if (targetConfig) {
-      log.info('App Actions(setAccount): push notification data', notificationRouteData);
+      log.info(`App Actions(setAccount): push notification data: ${JSON.stringify(notificationRouteData)}`);
       dispatch(
         initializeApp(
           targetConfig,
