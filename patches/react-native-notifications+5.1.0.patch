@@ -1,0 +1,43 @@
+diff --git a/node_modules/react-native-notifications/lib/android/app/src/main/java/com/wix/reactnativenotifications/core/JsIOHelper.java b/node_modules/react-native-notifications/lib/android/app/src/main/java/com/wix/reactnativenotifications/core/JsIOHelper.java
+index 4d8f4d1..665a702 100644
+--- a/node_modules/react-native-notifications/lib/android/app/src/main/java/com/wix/reactnativenotifications/core/JsIOHelper.java
++++ b/node_modules/react-native-notifications/lib/android/app/src/main/java/com/wix/reactnativenotifications/core/JsIOHelper.java
+@@ -9,15 +9,11 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
+ 
+ public class JsIOHelper {
+     public boolean sendEventToJS(String eventName, Bundle data, ReactContext reactContext) {
+-        if (reactContext != null) {
+-            sendEventToJS(eventName, Arguments.fromBundle(data), reactContext);
+-            return true;
+-        }
+-        return false;
++        return sendEventToJS(eventName, Arguments.fromBundle(data), reactContext);
+     }
+ 
+     public boolean sendEventToJS(String eventName, WritableMap data, ReactContext reactContext) {
+-        if (reactContext != null) {
++        if (reactContext != null && reactContext.hasActiveCatalystInstance()) {
+             reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(eventName, data);
+             return true;
+         }
+diff --git a/node_modules/react-native-notifications/lib/android/app/src/main/java/com/wix/reactnativenotifications/fcm/FcmToken.java b/node_modules/react-native-notifications/lib/android/app/src/main/java/com/wix/reactnativenotifications/fcm/FcmToken.java
+index 7db6e8d..913d586 100644
+--- a/node_modules/react-native-notifications/lib/android/app/src/main/java/com/wix/reactnativenotifications/fcm/FcmToken.java
++++ b/node_modules/react-native-notifications/lib/android/app/src/main/java/com/wix/reactnativenotifications/fcm/FcmToken.java
+@@ -90,12 +90,9 @@ public class FcmToken implements IFcmToken {
+     protected void sendTokenToJS() {
+         final ReactInstanceManager instanceManager = ((ReactApplication) mAppContext).getReactNativeHost().getReactInstanceManager();
+         final ReactContext reactContext = instanceManager.getCurrentReactContext();
+-
+-        // Note: Cannot assume react-context exists cause this is an async dispatched service.
+-        if (reactContext != null && reactContext.hasActiveCatalystInstance()) {
+-            Bundle tokenMap = new Bundle();
+-            tokenMap.putString("deviceToken", sToken);
+-            mJsIOHelper.sendEventToJS(TOKEN_RECEIVED_EVENT_NAME, tokenMap, reactContext);
+-        }
++        Bundle tokenMap = new Bundle();
++        tokenMap.putString("deviceToken", sToken);
++        // mJsIOHelper is safe now when context is null or react instance is not active
++        mJsIOHelper.sendEventToJS(TOKEN_RECEIVED_EVENT_NAME, tokenMap, reactContext);
+     }
+ }
