@@ -90,7 +90,7 @@ msgstr "Activity"
 msgid "Activity Settings"
 msgstr "Activity Settings"
 
-#: src/views/issues/issues__filters-settings.tsx:71
+#: src/views/issues/issues__filters-settings.tsx:72
 msgid "Add filter"
 msgstr "Add filter"
 
@@ -129,7 +129,7 @@ msgstr "added a reaction"
 msgid "All"
 msgstr "All"
 
-#: src/views/issues/issues__filters-filter.tsx:31
+#: src/views/issues/issues__filters-filter.tsx:33
 msgid "All projects"
 msgstr "All projects"
 
@@ -310,7 +310,7 @@ msgstr "Confirm logout"
 msgid "Confirmation required"
 msgstr "Confirmation required"
 
-#: src/actions/app-actions.ts:889
+#: src/actions/app-actions.ts:895
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
@@ -560,7 +560,7 @@ msgstr "Filter projects"
 msgid "Filter projects, saved searches, and tags"
 msgstr "Filter projects, saved searches, and tags"
 
-#: src/views/issues/issues__filters-settings__list.tsx:201
+#: src/views/issues/issues__filters-settings__list.tsx:158
 #: src/views/issues/issues__settings.tsx:110
 msgid "Filter Settings"
 msgstr "Filter Settings"
@@ -579,7 +579,7 @@ msgstr "Filter tags"
 msgid "Filter users, groups, and teams"
 msgstr "Filter users, groups, and teams"
 
-#: src/views/issues/index.ts:64
+#: src/views/issues/index.ts:65
 msgid "Filters"
 msgstr "Filters"
 
@@ -663,7 +663,7 @@ msgstr "just now"
 msgid "Knowledge Base"
 msgstr "Knowledge Base"
 
-#: src/views/issues/index.ts:53
+#: src/views/issues/index.ts:54
 msgid "Large"
 msgstr "Large"
 
@@ -746,7 +746,7 @@ msgid_plural "Matches {{issuesCount}} tickets"
 msgstr[0] "Matches {{issuesCount}} ticket"
 msgstr[1] "Matches {{issuesCount}} tickets"
 
-#: src/views/issues/index.ts:49
+#: src/views/issues/index.ts:50
 msgid "Medium"
 msgstr "Medium"
 
@@ -889,7 +889,7 @@ msgstr "Projects collapsed"
 msgid "Projects expanded"
 msgstr "Projects expanded"
 
-#: src/views/issues/index.ts:60
+#: src/views/issues/index.ts:61
 msgid "Query"
 msgstr "Query"
 
@@ -1075,7 +1075,7 @@ msgstr "Show all issues tagged with \"{{tagName}}\"..."
 msgid "Show more"
 msgstr "Show more"
 
-#: src/views/issues/index.ts:45
+#: src/views/issues/index.ts:46
 msgid "Small"
 msgstr "Small"
 
@@ -1197,7 +1197,7 @@ msgstr "The commit author is not an assignee in the project."
 msgid "The search query contains unknown values"
 msgstr "The search query contains unknown values"
 
-#: src/actions/app-actions.ts:462
+#: src/actions/app-actions.ts:461
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 msgstr "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 
@@ -1380,7 +1380,7 @@ msgstr "Write a comment, @mention people"
 msgid "Yes"
 msgstr "Yes"
 
-#: src/actions/app-actions.ts:802
+#: src/actions/app-actions.ts:808
 msgid "You are trying to open a link from another server. Please add this server to the app first."
 msgstr "You are trying to open a link from another server. Please add this server to the app first."
 
@@ -1408,7 +1408,7 @@ msgstr ""
 msgid "Your account has insufficient permission to perform this operation."
 msgstr "Your account has insufficient permission to perform this operation."
 
-#: src/actions/app-actions.ts:262
+#: src/actions/app-actions.ts:261
 msgid "Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator."
 msgstr "Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator."
 
