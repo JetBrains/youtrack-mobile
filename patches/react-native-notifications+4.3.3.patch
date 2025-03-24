@@ -12,20 +12,10 @@ index 90969b2..4c00e69 100644
              if (notification != null) {
                  notification.onOpened();
 diff --git a/node_modules/react-native-notifications/lib/android/app/src/main/java/com/wix/reactnativenotifications/RNNotificationsPackage.java b/node_modules/react-native-notifications/lib/android/app/src/main/java/com/wix/reactnativenotifications/RNNotificationsPackage.java
-index a249c6a..5bb21be 100644
+index a249c6a..dc1c3c5 100644
 --- a/node_modules/react-native-notifications/lib/android/app/src/main/java/com/wix/reactnativenotifications/RNNotificationsPackage.java
 +++ b/node_modules/react-native-notifications/lib/android/app/src/main/java/com/wix/reactnativenotifications/RNNotificationsPackage.java
-@@ -66,9 +66,6 @@ public class RNNotificationsPackage implements ReactPackage, AppLifecycleFacade.
- 
-     @Override
-     public void onActivityStarted(Activity activity) {
--        if (InitialNotificationHolder.getInstance().get() == null) {
--            callOnOpenedIfNeed(activity);
--        }
-     }
- 
-     @Override
-@@ -95,8 +92,7 @@ public class RNNotificationsPackage implements ReactPackage, AppLifecycleFacade.
+@@ -95,8 +95,7 @@ public class RNNotificationsPackage implements ReactPackage, AppLifecycleFacade.
          Intent intent = activity.getIntent();
          if (NotificationIntentAdapter.canHandleIntent(intent)) {
              Context appContext = mApplication.getApplicationContext();
