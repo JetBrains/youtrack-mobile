@@ -61,6 +61,23 @@ export const rowStyles = {
   activitySeparator: {
     ...separator,
     marginLeft: UNIT,
+    borderColor: 'transparent',
+  },
+  pinnedActivitiesBlockIcon: {
+    color: '$icon',
+    marginTop: -2,
+    marginRight: UNIT / 2,
+  },
+  pinnedActivitiesBlockTitle: {
+    color: '$textSecondary',
+    marginVertical: UNIT * 2,
+    marginLeft: UNIT * 6.5,
+  },
+  pinnedActivitiesSeparator: {
+    ...separator,
+    marginLeft: UNIT,
+    marginTop: UNIT,
+    marginBottom: UNIT,
     borderColor: '$separator',
   },
   activityAvatar: {

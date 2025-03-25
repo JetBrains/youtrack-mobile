@@ -179,6 +179,7 @@ export interface IssueComment extends EntityBase {
   article?: { id: string; };
   attachments?: Attachment[];
   mentions?: Mentions;
+  pinned?: boolean;
 }
 
 export type IssueLinkType = {

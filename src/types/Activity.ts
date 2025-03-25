@@ -80,6 +80,7 @@ export interface Activity {
   added: ActivityItem | ActivityItem[];
   removed: ActivityItem | ActivityItem[];
   pullRequest?: PullRequest;
+  pinned: boolean;
 }
 
 export interface ActivityGroup extends Activity {

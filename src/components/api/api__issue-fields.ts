@@ -257,6 +257,7 @@ const ISSUE_COMMENTS_FIELDS: any = toField([
   'deleted',
   'hasEmail',
   'canUpdateVisibility',
+  'pinned',
   {
     attachments: ISSUE_ATTACHMENTS_FIELDS,
   },

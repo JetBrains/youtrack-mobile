@@ -1,4 +1,7 @@
 import React, {MutableRefObject, useCallback, useLayoutEffect, useRef} from 'react';
+
+import IconPin from '@jetbrains/icons/pin-filled.svg';
+
 import {
   Animated,
   LayoutRectangle,
@@ -99,7 +102,25 @@ export const ActivityStream = (props: ActivityStreamProps) => {
     highlight,
   } = props;
 
+  const getCommentFromActivityGroup = (activityGroup: ActivityGroup): IssueComment =>
+    firstActivityChange(activityGroup.comment) as IssueComment;
+
   const {openBottomSheet, closeBottomSheet} = useBottomSheetContext();
+  let pinnedActivities: ActivityGroup[] = [];
+  if (activities?.length) {
+    pinnedActivities = activities?.reduce(
+      (acc, activityGroup) => {
+        const isPinnedComment = !!(activityGroup.comment && getCommentFromActivityGroup(activityGroup).pinned);
+        if (isPinnedComment) {
+          activityGroup.id = `${activityGroup.id}-pinned`;
+          activityGroup.merged = false;
+          acc.push(activityGroup);
+        }
+        return acc;
+      },
+      [] as ActivityGroup[]
+    );
+  }
 
   const onScroll = ({nativeEvent}: { nativeEvent: NativeScrollEvent }) => (
     scrollOffset.current = nativeEvent.contentOffset.y
@@ -150,9 +171,6 @@ export const ActivityStream = (props: ActivityStreamProps) => {
       }
     }, 100);
   }, [highlight, scrollToActivity]);
-
-  const getCommentFromActivityGroup = (activityGroup: ActivityGroup): IssueComment =>
-    firstActivityChange(activityGroup.comment) as IssueComment;
 
   const renderCommentReactions = (activityGroup: ActivityGroup) => {
     const comment = getCommentFromActivityGroup(activityGroup);
@@ -463,7 +481,7 @@ export const ActivityStream = (props: ActivityStreamProps) => {
     if (activityGroup.hidden) {
       return null;
     }
-    const _comment: | IssueComment | null = getCommentFromActivityGroup(activityGroup);
+    const _comment: IssueComment | null = getCommentFromActivityGroup(activityGroup);
     const nextActivity = props?.activities?.[index + 1];
     const prevActivity = props?.activities?.[index - 1];
     return (
@@ -481,7 +499,7 @@ export const ActivityStream = (props: ActivityStreamProps) => {
           }
         }}
       >
-        {(nextActivity?.merged || (prevActivity?.merged && activityGroup.merged && nextActivity?.merged)) && (
+        {!_comment?.pinned && (nextActivity?.merged || (prevActivity?.merged && activityGroup.merged && nextActivity?.merged)) && (
           <View
             style={[styles.activityMergedConnector, !activityGroup?.merged && styles.activityMergedConnectorFirst]}
           />
@@ -508,6 +526,16 @@ export const ActivityStream = (props: ActivityStreamProps) => {
       onScroll={onScroll}
     >
       {renderHeader()}
+      {!!pinnedActivities.length && (
+        <>
+          <Text style={styles.pinnedActivitiesBlockTitle}>
+            <IconPin style={styles.pinnedActivitiesBlockIcon} width={14} height={14} color={styles.pinnedActivitiesBlockIcon.color}/>
+            {i18n('Pinned comments')}
+          </Text>
+          {pinnedActivities.map(renderActivityGroup)}
+          <View style={styles.pinnedActivitiesSeparator} />
+        </>
+      )}
       {(activities || []).map(renderActivityGroup)}
       {activities?.length === 0 && (
         <Text style={styles.activityNoActivity}>{i18n('No activity yet')}</Text>
