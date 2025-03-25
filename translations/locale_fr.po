@@ -92,7 +92,7 @@ msgstr "Accepter"
 msgid "Activity"
 msgstr "Activité"
 
-#: src/views/issue/activity/issue__activity.tsx
+#: src/views/settings/settings.tsx
 msgid "Activity Settings"
 msgstr "Paramètres d'activité"
 
@@ -139,6 +139,7 @@ msgstr "Tout"
 msgid "All projects"
 msgstr "Tous les projets"
 
+#: src/views/settings/settings__activity.tsx
 #: src/views/settings/settings__appearance.tsx
 #: src/views/settings/settings.tsx
 msgid "Appearance"
@@ -869,6 +870,10 @@ msgstr "Les personnes ajoutées en CC reçoivent les mêmes notifications que ce
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
 msgstr "Photothèque et vidéothèque"
+
+#: src/components/activity-stream/activity__stream.tsx
+msgid "Pinned comments"
+msgstr ""
 
 #: src/views/issues/issues__settings.tsx
 msgid "Preview Size"

@@ -106,7 +106,7 @@ msgstr "Přijmout"
 msgid "Activity"
 msgstr "Aktivita"
 
-#: src/views/issue/activity/issue__activity.tsx
+#: src/views/settings/settings.tsx
 msgid "Activity Settings"
 msgstr "Nastavení aktivity"
 
@@ -153,6 +153,7 @@ msgstr "Vše"
 msgid "All projects"
 msgstr "Všechny projekty"
 
+#: src/views/settings/settings__activity.tsx
 #: src/views/settings/settings__appearance.tsx
 #: src/views/settings/settings.tsx
 msgid "Appearance"
@@ -889,6 +890,10 @@ msgstr ""
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
 msgstr "Knihovna fotografií a videí"
+
+#: src/components/activity-stream/activity__stream.tsx
+msgid "Pinned comments"
+msgstr ""
 
 #: src/views/issues/issues__settings.tsx
 msgid "Preview Size"

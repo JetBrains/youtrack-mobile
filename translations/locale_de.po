@@ -92,7 +92,7 @@ msgstr "Annehmen"
 msgid "Activity"
 msgstr "Aktivität"
 
-#: src/views/issue/activity/issue__activity.tsx
+#: src/views/settings/settings.tsx
 msgid "Activity Settings"
 msgstr "Aktivitätseinstellungen"
 
@@ -139,6 +139,7 @@ msgstr "Alle"
 msgid "All projects"
 msgstr "Alle Projekte"
 
+#: src/views/settings/settings__activity.tsx
 #: src/views/settings/settings__appearance.tsx
 #: src/views/settings/settings.tsx
 msgid "Appearance"
@@ -869,6 +870,10 @@ msgstr "Kopienempfänger*innen erhalten die gleichen Benachrichtigungen wie die 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
 msgstr "Foto- und Videobibliothek"
+
+#: src/components/activity-stream/activity__stream.tsx
+msgid "Pinned comments"
+msgstr ""
 
 #: src/views/issues/issues__settings.tsx
 msgid "Preview Size"

@@ -85,7 +85,7 @@ msgstr "同意します"
 msgid "Activity"
 msgstr "アクティビティ"
 
-#: src/views/issue/activity/issue__activity.tsx
+#: src/views/settings/settings.tsx
 msgid "Activity Settings"
 msgstr "アクティビティの設定"
 
@@ -132,6 +132,7 @@ msgstr "すべて"
 msgid "All projects"
 msgstr "すべてのプロジェクト"
 
+#: src/views/settings/settings__activity.tsx
 #: src/views/settings/settings__appearance.tsx
 #: src/views/settings/settings.tsx
 msgid "Appearance"
@@ -859,6 +860,10 @@ msgstr "CC として追加されたユーザーはこのチケットを報告し
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
 msgstr "写真とビデオのライブラリ"
+
+#: src/components/activity-stream/activity__stream.tsx
+msgid "Pinned comments"
+msgstr ""
 
 #: src/views/issues/issues__settings.tsx
 msgid "Preview Size"

@@ -86,7 +86,7 @@ msgstr "Accept"
 msgid "Activity"
 msgstr "Activity"
 
-#: src/views/issue/activity/issue__activity.tsx:182
+#: src/views/settings/settings.tsx:91
 msgid "Activity Settings"
 msgstr "Activity Settings"
 
@@ -133,8 +133,9 @@ msgstr "All"
 msgid "All projects"
 msgstr "All projects"
 
+#: src/views/settings/settings__activity.tsx:35
 #: src/views/settings/settings__appearance.tsx:53
-#: src/views/settings/settings.tsx:79
+#: src/views/settings/settings.tsx:81
 msgid "Appearance"
 msgstr "Appearance"
 
@@ -310,7 +311,7 @@ msgstr "Confirm logout"
 msgid "Confirmation required"
 msgstr "Confirmation required"
 
-#: src/actions/app-actions.ts:895
+#: src/actions/app-actions.ts:894
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
@@ -406,7 +407,7 @@ msgstr "declined the pull request"
 #: src/views/article/article__activity.tsx:250
 #: src/views/create-issue/create-issue-drafts.tsx:38
 #: src/views/issue/activity/issue__activity-stream.tsx:179
-#: src/views/issue/activity/issue__activity.tsx:285
+#: src/views/issue/activity/issue__activity.tsx:233
 #: src/views/issue/activity/issue-activity__actions.ts:269
 #: src/views/issue/activity/issue-activity__comment-actions.ts:264
 #: src/views/issue/issue-base-actions-creater.ts:583
@@ -487,7 +488,7 @@ msgstr "Drafts"
 #: src/views/article/arcticle-actions.ts:263
 #: src/views/article/article__activity.tsx:179
 #: src/views/issue/activity/issue__activity-stream.tsx:101
-#: src/views/issue/activity/issue__activity.tsx:274
+#: src/views/issue/activity/issue__activity.tsx:222
 #: src/views/issue/issue-base-actions-creater.ts:533
 msgid "Edit"
 msgstr "Edit"
@@ -783,7 +784,7 @@ msgstr "New messages"
 msgid "Next"
 msgstr "Next"
 
-#: src/components/activity-stream/activity__stream.tsx:513
+#: src/components/activity-stream/activity__stream.tsx:541
 msgid "No activity yet"
 msgstr "No activity yet"
 
@@ -863,6 +864,10 @@ msgstr "People added as CCs receive the same notifications that are sent to the 
 #: src/components/attach-file/attach-file-dialog.tsx:70
 msgid "Photo and video library"
 msgstr "Photo and video library"
+
+#: src/components/activity-stream/activity__stream.tsx:533
+msgid "Pinned comments"
+msgstr "Pinned comments"
 
 #: src/views/issues/issues__settings.tsx:149
 msgid "Preview Size"
@@ -1006,7 +1011,7 @@ msgstr "Send crash report"
 msgid "Send extended report to Bugsnag"
 msgstr "Send extended report to Bugsnag"
 
-#: src/views/settings/settings.tsx:115
+#: src/views/settings/settings.tsx:122
 msgid "Send feedback"
 msgstr "Send feedback"
 
@@ -1031,7 +1036,7 @@ msgstr "Set a date"
 msgid "Set date and time"
 msgstr "Set date and time"
 
-#: src/views/settings/settings.tsx:53
+#: src/views/settings/settings.tsx:55
 msgid "Settings"
 msgstr "Settings"
 
@@ -1052,7 +1057,7 @@ msgstr "Share link"
 msgid "Share link to article"
 msgstr "Share link to article"
 
-#: src/views/settings/settings.tsx:106
+#: src/views/settings/settings.tsx:116
 msgid "Share logs"
 msgstr "Share logs"
 
@@ -1197,7 +1202,7 @@ msgstr "The commit author is not an assignee in the project."
 msgid "The search query contains unknown values"
 msgstr "The search query contains unknown values"
 
-#: src/actions/app-actions.ts:461
+#: src/actions/app-actions.ts:462
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 msgstr "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 
@@ -1235,7 +1240,7 @@ msgstr "Thread unmuted"
 
 #: src/views/issues/issues-actions.ts:72
 #: src/views/issues/issues-reducers.ts:57
-#: src/views/settings/settings.tsx:85
+#: src/views/settings/settings.tsx:98
 #: src/views/tickets/tickets.tsx:30
 msgid "Tickets"
 msgstr "Tickets"
@@ -1338,7 +1343,7 @@ msgstr "View reported issues"
 msgid "Visibility"
 msgstr "Visibility"
 
-#: src/components/activity-stream/activity__stream.tsx:241
+#: src/components/activity-stream/activity__stream.tsx:259
 #: src/components/visibility/comment-visibility-control.tsx:110
 msgid "Visible to {{presentation}}"
 msgstr "Visible to {{presentation}}"
@@ -1380,7 +1385,7 @@ msgstr "Write a comment, @mention people"
 msgid "Yes"
 msgstr "Yes"
 
-#: src/actions/app-actions.ts:808
+#: src/actions/app-actions.ts:807
 msgid "You are trying to open a link from another server. Please add this server to the app first."
 msgstr "You are trying to open a link from another server. Please add this server to the app first."
 
@@ -1408,7 +1413,7 @@ msgstr ""
 msgid "Your account has insufficient permission to perform this operation."
 msgstr "Your account has insufficient permission to perform this operation."
 
-#: src/actions/app-actions.ts:261
+#: src/actions/app-actions.ts:262
 msgid "Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator."
 msgstr "Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator."
 

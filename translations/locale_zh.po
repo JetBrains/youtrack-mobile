@@ -85,7 +85,7 @@ msgstr "接受"
 msgid "Activity"
 msgstr "活动"
 
-#: src/views/issue/activity/issue__activity.tsx
+#: src/views/settings/settings.tsx
 msgid "Activity Settings"
 msgstr "活动设置"
 
@@ -132,6 +132,7 @@ msgstr "全部"
 msgid "All projects"
 msgstr "所有项目"
 
+#: src/views/settings/settings__activity.tsx
 #: src/views/settings/settings__appearance.tsx
 #: src/views/settings/settings.tsx
 msgid "Appearance"
@@ -859,6 +860,10 @@ msgstr "添加为抄送人的人员会收到通知，该通知与发送给报告
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
 msgstr "照片和视频库"
+
+#: src/components/activity-stream/activity__stream.tsx
+msgid "Pinned comments"
+msgstr ""
 
 #: src/views/issues/issues__settings.tsx
 msgid "Preview Size"

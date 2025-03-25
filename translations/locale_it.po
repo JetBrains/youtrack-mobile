@@ -92,7 +92,7 @@ msgstr "Accetta"
 msgid "Activity"
 msgstr "Attività"
 
-#: src/views/issue/activity/issue__activity.tsx
+#: src/views/settings/settings.tsx
 msgid "Activity Settings"
 msgstr "Impostazioni attività"
 
@@ -139,6 +139,7 @@ msgstr "Tutti"
 msgid "All projects"
 msgstr "Tutti i progetti"
 
+#: src/views/settings/settings__activity.tsx
 #: src/views/settings/settings__appearance.tsx
 #: src/views/settings/settings.tsx
 msgid "Appearance"
@@ -869,6 +870,10 @@ msgstr ""
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
 msgstr "Libreria foto e video"
+
+#: src/components/activity-stream/activity__stream.tsx
+msgid "Pinned comments"
+msgstr ""
 
 #: src/views/issues/issues__settings.tsx
 msgid "Preview Size"

@@ -106,7 +106,7 @@ msgstr "Zaakceptuj"
 msgid "Activity"
 msgstr "Aktywność"
 
-#: src/views/issue/activity/issue__activity.tsx
+#: src/views/settings/settings.tsx
 msgid "Activity Settings"
 msgstr "Ustawienia aktywności"
 
@@ -153,6 +153,7 @@ msgstr "Wszystkie"
 msgid "All projects"
 msgstr "Wszystkie projekty"
 
+#: src/views/settings/settings__activity.tsx
 #: src/views/settings/settings__appearance.tsx
 #: src/views/settings/settings.tsx
 msgid "Appearance"
@@ -889,6 +890,10 @@ msgstr "Osoby dodane jako odbiorcy kopii DW otrzymują te same powiadomienia, co
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
 msgstr "Biblioteka zdjęć i filmów"
+
+#: src/components/activity-stream/activity__stream.tsx
+msgid "Pinned comments"
+msgstr "Przypięte komentarze"
 
 #: src/views/issues/issues__settings.tsx
 msgid "Preview Size"

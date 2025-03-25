@@ -92,7 +92,7 @@ msgstr "Elfogadás"
 msgid "Activity"
 msgstr "Tevékenység"
 
-#: src/views/issue/activity/issue__activity.tsx
+#: src/views/settings/settings.tsx
 msgid "Activity Settings"
 msgstr "Tevékenység beállításai"
 
@@ -139,6 +139,7 @@ msgstr "Mind"
 msgid "All projects"
 msgstr "Minden projekt"
 
+#: src/views/settings/settings__activity.tsx
 #: src/views/settings/settings__appearance.tsx
 #: src/views/settings/settings.tsx
 msgid "Appearance"
@@ -868,6 +869,10 @@ msgstr ""
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
+msgstr ""
+
+#: src/components/activity-stream/activity__stream.tsx
+msgid "Pinned comments"
 msgstr ""
 
 #: src/views/issues/issues__settings.tsx

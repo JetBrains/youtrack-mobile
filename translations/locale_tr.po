@@ -92,7 +92,7 @@ msgstr "Kabul et"
 msgid "Activity"
 msgstr "Aktivite"
 
-#: src/views/issue/activity/issue__activity.tsx
+#: src/views/settings/settings.tsx
 msgid "Activity Settings"
 msgstr ""
 
@@ -139,6 +139,7 @@ msgstr "Tümü"
 msgid "All projects"
 msgstr "Tüm projeler"
 
+#: src/views/settings/settings__activity.tsx
 #: src/views/settings/settings__appearance.tsx
 #: src/views/settings/settings.tsx
 msgid "Appearance"
@@ -869,6 +870,10 @@ msgstr ""
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
 msgstr "Fotoğraf ve video kitaplığı"
+
+#: src/components/activity-stream/activity__stream.tsx
+msgid "Pinned comments"
+msgstr ""
 
 #: src/views/issues/issues__settings.tsx
 msgid "Preview Size"

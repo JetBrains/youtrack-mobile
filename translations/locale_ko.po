@@ -85,7 +85,7 @@ msgstr "수락"
 msgid "Activity"
 msgstr "활동"
 
-#: src/views/issue/activity/issue__activity.tsx
+#: src/views/settings/settings.tsx
 msgid "Activity Settings"
 msgstr "활동 설정"
 
@@ -132,6 +132,7 @@ msgstr "전체"
 msgid "All projects"
 msgstr "모든 프로젝트"
 
+#: src/views/settings/settings__activity.tsx
 #: src/views/settings/settings__appearance.tsx
 #: src/views/settings/settings.tsx
 msgid "Appearance"
@@ -859,6 +860,10 @@ msgstr "참조에 추가된 이들은 이 티켓을 신고한 사람에게 전�
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
 msgstr "사진 및 비디오 라이브러리"
+
+#: src/components/activity-stream/activity__stream.tsx
+msgid "Pinned comments"
+msgstr ""
 
 #: src/views/issues/issues__settings.tsx
 msgid "Preview Size"
