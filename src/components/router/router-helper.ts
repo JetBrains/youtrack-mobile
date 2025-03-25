@@ -7,23 +7,18 @@ const navigateToRouteById = (
   navigateToActivity?: string,
   isReporter?: boolean
 ): boolean => {
-  const listRoute = isReporter ? Router.Tickets : Router.Issues;
+  const defaultRoute = isReporter ? Router.Tickets : Router.Issues;
   const hasEntity = !!(issueId || articleId);
-
-  if (isSplitView()) {
-    if (!hasEntity) {
-      listRoute();
-    } else {
+  if (!hasEntity) {
+    defaultRoute();
+  } else {
+    if (isSplitView()) {
       if (issueId) {
-        listRoute({issueId, navigateToActivity});
+        defaultRoute({issueId, navigateToActivity});
       }
       if (articleId) {
         Router.KnowledgeBase({lastVisitedArticle: {id: articleId}, navigateToActivity});
       }
-    }
-  } else {
-    if (!hasEntity) {
-      listRoute();
     } else {
       if (issueId) {
         Router.Issue({issueId, navigateToActivity}, {forceReset: true});

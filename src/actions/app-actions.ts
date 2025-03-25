@@ -600,26 +600,23 @@ export function completeInitialization(
     await dispatch(cacheProjects());
     log.info('App Actions: Initialization completed');
 
-    if (!isRedirected) {
+    const isStackNotEmpty = Router.getRoutes().length <= 1;
+    log.info(`App Actions(completeInitialization): stack: ${JSON.stringify(Router.getRoutes())}`);
+    if (isStackNotEmpty && !isRedirected) {
       if (currentUser.profiles?.helpdesk?.isReporter) {
         Router.Tickets();
       } else {
-        const length = Router.getRoutes().length;
-        const isStackNotEmpty = length <= 1;
-        log.info('App Actions(completeInitialization): Initialization completed');
-        log.info(`App Actions(completeInitialization): stack: ${JSON.stringify(Router.getRoutes())}`);
-        log.info(`App Actions(completeInitialization): stack has length ${length}`);
-        if (isStackNotEmpty) {
-          Router.navigateToDefaultRoute(
-            issueId || articleId || searchQuery || helpdeskFormId ? {
-              issueId,
-              articleId,
-              navigateToActivity,
-              searchQuery,
-              helpdeskFormId,
-            } : undefined,
-          );
-        }
+        Router.navigateToDefaultRoute(
+          issueId || articleId || searchQuery || helpdeskFormId
+            ? {
+                issueId,
+                articleId,
+                navigateToActivity,
+                searchQuery,
+                helpdeskFormId,
+              }
+            : undefined
+        );
       }
     }
 
@@ -628,6 +625,7 @@ export function completeInitialization(
     if (checkVersion(FEATURE_VERSION.inboxThreads)) {
       dispatch(inboxCheckUpdateStatus());
     }
+    log.info('App Actions(completeInitialization): Initialization completed');
   };
 }
 
