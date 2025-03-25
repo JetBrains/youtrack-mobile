@@ -10,6 +10,7 @@ import clicksToShowCounter from 'components/debug-view/clicks-to-show-counter';
 import FeaturesDebugSettings from 'components/feature/features-debug-settings';
 import Header from 'components/header/header';
 import Router from 'components/router/router';
+import SettingsActivity from 'views/settings/settings__activity';
 import SettingsAppearance from './settings__appearance';
 import SettingsFeedbackForm from './settings__feedback-form';
 import usage, {VERSION_STRING} from 'components/usage/usage';
@@ -17,6 +18,7 @@ import {ANALYTICS_SETTINGS_PAGE} from 'components/analytics/analytics-ids';
 import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
+import {isIssueActivitiesAPIEnabled} from 'views/issue/activity/issue-activity__helper';
 import {useUITheme} from 'components/theme/use-theme';
 
 import styles from './settings.styles';
@@ -80,6 +82,17 @@ export default function Settings() {
             </TouchableOpacity>
           </View>
 
+          {isIssueActivitiesAPIEnabled() && (
+            <View style={styles.settingsListItem}>
+              <TouchableOpacity
+                hitSlop={HIT_SLOP}
+                onPress={() => Router.Page({children: <SettingsActivity uiTheme={uiTheme} />})}
+              >
+                <Text style={styles.settingsListItemTitleText}>{i18n('Activity Settings')}</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
           {isHelpdeskAccessible && (
             <View style={styles.settingsListItem}>
               <Text style={styles.settingsListItemTitleText}>{i18n('Tickets')}</Text>
@@ -96,22 +109,16 @@ export default function Settings() {
             </View>
           )}
 
-          <View style={styles.separator}/>
+          <View style={styles.separator} />
 
           <View style={styles.settingsListItem}>
-            <TouchableOpacity
-              hitSlop={HIT_SLOP}
-              onPress={() => dispatch(appActions.openDebugView())}
-            >
+            <TouchableOpacity hitSlop={HIT_SLOP} onPress={() => dispatch(appActions.openDebugView())}>
               <Text style={styles.settingsListItemTitleText}>{i18n('Share logs')}</Text>
             </TouchableOpacity>
           </View>
 
           <View style={styles.settingsListItem}>
-            <TouchableOpacity
-              hitSlop={HIT_SLOP}
-              onPress={() => Router.Page({children: <SettingsFeedbackForm />})}
-            >
+            <TouchableOpacity hitSlop={HIT_SLOP} onPress={() => Router.Page({children: <SettingsFeedbackForm />})}>
               <Text style={styles.settingsListItemTitleText}>{i18n('Send feedback')}</Text>
             </TouchableOpacity>
           </View>

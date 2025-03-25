@@ -1,14 +1,12 @@
 import React, {PureComponent} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 
 import {bindActionCreators, Dispatch} from 'redux';
 import {connect} from 'react-redux';
 
 import * as activityActions from './issue-activity__actions';
 import AddSpentTimeForm from './activity__add-spent-time';
-import BottomSheetModal from 'components/modal-panel-bottom/bottom-sheet-modal';
 import ErrorMessage from 'components/error-message/error-message';
-import IssueActivitiesSettings from './issue__activity-settings';
 import IssueActivityCommentAdd from './issue__activity-comment-add';
 import IssueActivityStream from './issue__activity-stream';
 import IssueActivityStreamCommentEdit from './issue-activity__comment-edit';
@@ -32,10 +30,11 @@ import {getApi} from 'components/api/api__instance';
 import {guid} from 'util/util';
 import {HIT_SLOP, UNIT} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
-import {IconAngleDown, IconClose} from 'components/icon/icon';
+import {IconClose} from 'components/icon/icon';
 import {isIssueActivitiesAPIEnabled} from './issue-activity__helper';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {IssueContext} from '../issue-context';
+import {issuePermissionsNull} from 'components/issue-permissions/issue-permissions-helper';
 import {logEvent} from 'components/log/log-helper';
 import {setDraftCommentData} from 'actions/app-actions';
 import {SkeletonIssueActivities} from 'components/skeleton/skeleton';
@@ -44,20 +43,24 @@ import {ThemeContext} from 'components/theme/theme-context';
 import styles from './issue-activity.styles';
 
 import type {Activity, ActivityItem} from 'types/Activity';
-import type {IssueContextData, IssueFull, IssueOnList} from 'types/Issue';
+import type {AppState} from 'reducers';
+import type {ContextMenuConfigItem} from 'types/MenuConfig';
+import type {CustomError} from 'types/Error';
 import type {EventSubscription} from 'react-native';
+import type {IssueActivityActions} from './issue-activity__actions';
 import type {IssueComment} from 'types/CustomFields';
+import type {IssueContextData, IssueFull, IssueOnList} from 'types/Issue';
+import type {RequestHeaders} from 'types/Auth';
 import type {State as IssueActivityState} from './issue-activity__reducers';
 import type {State as IssueCommentActivityState} from './issue-activity__comment-reducers';
-import type {Theme, UITheme} from 'types/Theme';
+import type {Theme} from 'types/Theme';
 import type {User, UserAppearanceProfile} from 'types/User';
 import type {WorkItem} from 'types/Work';
 import type {YouTrackWiki} from 'types/Wiki';
-import {AppState} from 'reducers';
-import {ContextMenuConfigItem} from 'types/MenuConfig';
-import {IssueActivityActions} from './issue-activity__actions';
-import {CustomError} from 'types/Error';
-import {RequestHeaders} from 'types/Auth';
+
+export const DEFAULT_USER_APPEARANCE_PROFILE = {
+  naturalCommentsOrder: true,
+};
 
 type IssueActivityProps = IssueActivityState &
   IssueActivityActions &
@@ -73,24 +76,22 @@ type IssueActivityProps = IssueActivityState &
     };
     issuePermissions: IssuePermissions;
     updateOptimisticallyActivityPage: (activityPage: Activity[]) => void;
-    selectProps: ISelectProps;
+    selectProps: ISelectProps<unknown>;
   };
 
 interface State {
   modalChildren: any;
-  settingsVisible: boolean;
 }
 
 export class IssueActivity extends PureComponent<IssueActivityProps, State> {
   backendUrl: string = getApi().config.backendUrl;
   imageHeaders: RequestHeaders = getApi().auth.getAuthorizationHeaders();
-  issuePermissions: IssuePermissions;
+  issuePermissions: IssuePermissions = issuePermissionsNull;
   issueContext: IssueContextData;
   goOnlineSubscription: EventSubscription;
   theme: Theme = defaultTheme;
   state: State = {
     modalChildren: null,
-    settingsVisible: false,
   };
 
   constructor(props: IssueActivityProps) {
@@ -160,60 +161,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
     }
   };
 
-  renderActivitySettings(disabled: boolean, uiTheme: UITheme) {
-    const {
-      issueActivityTypes,
-      issueActivityEnabledTypes,
-      updateUserAppearanceProfile,
-    } = this.props;
-    return (
-      <>
-        <TouchableOpacity
-          hitSlop={HIT_SLOP}
-          disabled={disabled}
-          style={styles.settingsButton}
-          onPress={() =>
-            this.setState({
-              settingsVisible: true,
-            })
-          }
-        >
-          <Text style={styles.settingsButtonText}>
-            {i18n('Activity Settings')}
-          </Text>
-          <IconAngleDown size={19} color={styles.settingsButtonText.color} />
-        </TouchableOpacity>
-        <BottomSheetModal
-          isVisible={this.state.settingsVisible}
-          onClose={() =>
-            this.setState({
-              settingsVisible: false,
-            })
-          }
-        >
-          <IssueActivitiesSettings
-            disabled={disabled}
-            issueActivityTypes={issueActivityTypes}
-            issueActivityEnabledTypes={issueActivityEnabledTypes}
-            onApply={(userAppearanceProfile: UserAppearanceProfile) => {
-              if (userAppearanceProfile) {
-                return updateUserAppearanceProfile(userAppearanceProfile);
-              }
-
-              this.loadIssueActivities(true);
-            }}
-            userAppearanceProfile={this.getUserAppearanceProfile()}
-            uiTheme={uiTheme}
-          />
-        </BottomSheetModal>
-      </>
-    );
-  }
-
   getUserAppearanceProfile(): UserAppearanceProfile | { naturalCommentsOrder: boolean; } {
-    const DEFAULT_USER_APPEARANCE_PROFILE = {
-      naturalCommentsOrder: true,
-    };
     const {user} = this.props;
     return user?.profiles?.appearance || DEFAULT_USER_APPEARANCE_PROFILE;
   }
@@ -305,24 +253,9 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
         refreshControl={this.renderRefreshControl}
         onUpdate={() => this.refresh(true)}
         renderHeader={() => {
-          const hasError: boolean = this.hasLoadingError();
-
-          if (hasError) {
-            return <ErrorMessage error={this.props.activitiesLoadingError as CustomError} />;
-          } else {
-            const activitiesApiEnabled: boolean = isIssueActivitiesAPIEnabled();
-            const activityLoaded: boolean = this.isActivityLoaded();
-            const showLoading: boolean = !activityLoaded && !hasError;
-            const isActivitySettingEnabled: boolean =
-              activitiesApiEnabled &&
-              !showLoading &&
-              !hasError &&
-              activityLoaded;
-            return this.renderActivitySettings(
-              !isActivitySettingEnabled,
-              this.theme.uiTheme,
-            );
-          }
+          return this.hasLoadingError() ? (
+            <ErrorMessage error={this.props.activitiesLoadingError as CustomError} />
+          ) : null;
         }}
         highlight={highlight}
       />

@@ -70,7 +70,8 @@ export const rowStyles = {
   },
   pinnedActivitiesBlockTitle: {
     color: '$textSecondary',
-    marginVertical: UNIT * 2,
+    marginTop: UNIT,
+    marginBottom: UNIT * 2,
     marginLeft: UNIT * 6.5,
   },
   pinnedActivitiesSeparator: {
