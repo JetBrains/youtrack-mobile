@@ -61,6 +61,7 @@
     "@react-native-firebase/analytics": "^21.6.1",
     "@react-native-firebase/app": "^21.6.1",
     "@react-native-masked-view/masked-view": "^0.3.1",
+    "@react-native-voice/voice": "^3.2.4",
     "@reduxjs/toolkit": "1.7.2",
     "base64-js": "1.5.1",
     "cssfilter": "^0.0.10",
@@ -193,5 +194,6 @@
     "typescript": "5.0.4",
     "update-json-file": "1.1.1",
     "wait-on": "^6.0.1"
-  }
+  },
+  "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
 }

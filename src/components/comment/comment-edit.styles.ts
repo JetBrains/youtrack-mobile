@@ -10,7 +10,8 @@ export default EStyleSheet.create({
   container: {
     maxHeight: '100%',
     paddingVertical: UNIT,
-    paddingHorizontal: UNIT * 3,
+    paddingHorizontal: UNIT * 5,
+
     ...elevationBottom,
     ...Platform.select({
       android: {
@@ -18,6 +19,7 @@ export default EStyleSheet.create({
         borderTopColor: '$separator',
       },
     }),
+    // backgroundColor: 'yellow',
   },
   suggestionsContainer: {
     flexGrow: 1,
@@ -68,6 +70,10 @@ export default EStyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingRight: UNIT / 2,
+    // backgroundColor: 'orange',
+    borderColor: 'red',
+    borderLeftColor: 2,
+    borderRightColor: 3,
   },
   commentInputContainer: {
     flexDirection: 'row',
@@ -83,6 +89,7 @@ export default EStyleSheet.create({
   },
   commentInput: {
     flex: 1,
+    flexDirection: 'row',
     maxHeight: 106,
     padding: 0,
     ...mainText,

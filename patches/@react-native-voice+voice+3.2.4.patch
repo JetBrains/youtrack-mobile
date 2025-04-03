@@ -1,0 +1,58 @@
+diff --git a/node_modules/@react-native-voice/voice/android/src/main/java/com/wenkesj/voice/VoiceModule.java b/node_modules/@react-native-voice/voice/android/src/main/java/com/wenkesj/voice/VoiceModule.java
+index f22833e..9679a41 100644
+--- a/node_modules/@react-native-voice/voice/android/src/main/java/com/wenkesj/voice/VoiceModule.java
++++ b/node_modules/@react-native-voice/voice/android/src/main/java/com/wenkesj/voice/VoiceModule.java
+@@ -342,17 +342,23 @@ public class VoiceModule extends ReactContextBaseJavaModule implements Recogniti
+ 
+   @Override
+   public void onResults(Bundle results) {
+-    WritableArray arr = Arguments.createArray();
+-
+     ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+-    for (String result : matches) {
+-      arr.pushString(result);
+-    }
+ 
+-    WritableMap event = Arguments.createMap();
+-    event.putArray("value", arr);
+-    sendEvent("onSpeechResults", event);
+-    Log.d("ASR", "onResults()");
++    if (matches != null && !matches.isEmpty()) {
++      WritableArray arr = Arguments.createArray();
++
++      for (String result : matches) {
++        arr.pushString(result);
++      }
++
++      WritableMap event = Arguments.createMap();
++      event.putArray("value", arr); sendEvent("onSpeechResults", event);
++    } else {
++      // Handle the case where results are null or empty
++      // You can send an event or take appropriate action
++      WritableMap event = Arguments.createMap(); event.putBoolean("error", true);
++      sendEvent("onSpeechResults", event);
++    }
+   }
+ 
+   @Override
+diff --git a/node_modules/@react-native-voice/voice/src/index.ts b/node_modules/@react-native-voice/voice/src/index.ts
+index 8b51121..1084c20 100644
+--- a/node_modules/@react-native-voice/voice/src/index.ts
++++ b/node_modules/@react-native-voice/voice/src/index.ts
+@@ -73,6 +73,16 @@ class RCTVoice {
+       );
+     }
+ 
++    if ('duration' in options) {
++      Object.assign(options,
++        {
++          'EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS': options['duration'] as number * 1000,
++          'EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS': options['duration'] as number * 1000,
++        }
++      );
++      delete options['duration'];
++    }
++
+     return new Promise((resolve, reject) => {
+       const callback = (error: string) => {
+         if (error) {

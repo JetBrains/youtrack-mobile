@@ -9,6 +9,7 @@ import {mockReactNativeNotification} from './jest-mock__react-native-notificatio
 log.disableLog();
 
 jest.mock('react-native-reanimated', () => require('react-native-reanimated/mock'));
+jest.mock('@react-native-voice/voice', () => {});
 
 mockReactNativeNotification();
 

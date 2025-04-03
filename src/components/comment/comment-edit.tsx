@@ -47,6 +47,7 @@ import type {ReduxThunkDispatch} from 'types/Redux';
 import type {Theme} from 'types/Theme';
 import type {User, UserMentions} from 'types/User';
 import type {Visibility, VisibilityGroups} from 'types/Visibility';
+import VoiceTest, {isRecordingAvailable} from 'components/voice/voice';
 
 interface EditingComment extends IssueComment {
   reply?: boolean;
@@ -522,29 +523,26 @@ const CommentEdit = (props: Props) => {
                   changeState({mentionsVisible: false});
                   toggleVisibilityControl(false);
                 }
-              },
+              }
             )}
             {Boolean(!!editingComment.text || hasAttachments()) && renderSubmitButton()}
           </View>
+
+          {isRecordingAvailable && <VoiceTest onRecognize={(text: string) => {
+            if (text) {
+              const updatedDraftComment = getCurrentComment({text});
+              setEditingComment(updatedDraftComment);
+            }
+          }} />}
         </View>
 
-        {hasAttachments() && (
-          <View style={styles.attachmentsContainer}>{renderAttachments()}</View>
-        )}
+        {hasAttachments() && <View style={styles.attachmentsContainer}>{renderAttachments()}</View>}
 
         {state.isAttachActionsVisible && (
-          <BottomSheetModal
-            isVisible={true}
-            onClose={hideAttachActionsPanel}
-            withHandle={false}
-            snapPoint={130}
-          >
+          <BottomSheetModal isVisible={true} onClose={hideAttachActionsPanel} withHandle={false} snapPoint={130}>
             {props.canAttach && (
               <TouchableOpacity
-                style={[
-                  styles.actionsContainerButton,
-                  styles.floatContextButton,
-                ]}
+                style={[styles.actionsContainerButton, styles.floatContextButton]}
                 disabled={isSaving || mentionsVisible}
                 onPress={() => {
                   changeState({
@@ -553,27 +551,15 @@ const CommentEdit = (props: Props) => {
                   });
                 }}
               >
-                <IconAttachment
-                  width={22}
-                  height={22}
-                  fill={styles.actionsContainerButton.color}
-                />
-                <Text
-                  style={[
-                    styles.actionsContainerButtonText,
-                    styles.floatContextButtonText,
-                  ]}
-                >
+                <IconAttachment width={22} height={22} fill={styles.actionsContainerButton.color} />
+                <Text style={[styles.actionsContainerButtonText, styles.floatContextButtonText]}>
                   {i18n('Attach file')}
                 </Text>
               </TouchableOpacity>
             )}
             {!!props.onAddSpentTime && (
               <TouchableOpacity
-                style={[
-                  styles.actionsContainerButton,
-                  styles.floatContextButton,
-                ]}
+                style={[styles.actionsContainerButton, styles.floatContextButton]}
                 onPress={() => {
                   changeState({
                     isAttachActionsVisible: false,
@@ -584,17 +570,8 @@ const CommentEdit = (props: Props) => {
                   }
                 }}
               >
-                <IconTime
-                  color={styles.actionsContainerButton.color}
-                  width={22}
-                  height={22}
-                />
-                <Text
-                  style={[
-                    styles.actionsContainerButtonText,
-                    styles.floatContextButtonText,
-                  ]}
-                >
+                <IconTime color={styles.actionsContainerButton.color} width={22} height={22} />
+                <Text style={[styles.actionsContainerButtonText, styles.floatContextButtonText]}>
                   {i18n('Add spent time')}
                 </Text>
               </TouchableOpacity>
