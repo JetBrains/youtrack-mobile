@@ -16,7 +16,7 @@ interface Props {
   comment: IssueComment;
   issueContext: IssueContextData;
   onAddSpentTime?: () => void;
-  onCommentChange: (comment: IssueComment, isAttachmentChange?: boolean) => Promise<IssueComment | null>;
+  onCommentChange: (comment: IssueComment, isAttachmentChange?: boolean) => Promise<IssueComment>;
   onSubmitComment: (comment: IssueComment) => Promise<void>;
   header?: React.ReactNode;
   stateFieldName: keyof AppState;
@@ -32,7 +32,7 @@ const IssueActivityStreamCommentEdit = (props: Props) => {
   };
 
   const {
-    onCommentChange = () => Promise.resolve(null),
+    onCommentChange = (comment: IssueComment) => Promise.resolve(comment),
     onAddSpentTime = null,
     stateFieldName,
   } = props;
