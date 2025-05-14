@@ -113,7 +113,7 @@ export interface CommentActions {
     dispatch: ReduxThunkDispatch,
     getState: ReduxStateGetter,
     getApi: ReduxAPIGetter
-  ) => Promise<IssueComment | null>;
+  ) => Promise<IssueComment>;
   getDraftComment: () => ReduxAction<Promise<IssueComment | null>>;
   restoreComment: (comment: IssueComment) => ReduxAction;
   submitDraftComment: (draftComment: IssueComment) => ReduxAction;
@@ -166,7 +166,7 @@ export const createActivityCommentActions = (stateFieldName = DEFAULT_ISSUE_STAT
         return draftComment;
       },
     updateDraftComment:
-      (draftComment: IssueComment, doNotFlush: boolean = false): ReduxAction<Promise<null | IssueComment>> =>
+      (draftComment: IssueComment, doNotFlush: boolean = false): ReduxAction<Promise<IssueComment>> =>
       async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
         const issueState: SingleIssueState = getState()[stateFieldName as keyof AppState] as IssueState;
         const issueId = draftComment?.issue?.id || issueState?.issueId || issueState?.issue?.id;
@@ -179,9 +179,9 @@ export const createActivityCommentActions = (stateFieldName = DEFAULT_ISSUE_STAT
             dispatch(actions.setEditingComment(draft));
           }
 
-          return error ? null : draft;
+          return error ? draftComment : draft;
         } else {
-          return null;
+          return draftComment;
         }
       },
     submitDraftComment: function (draftComment: IssueComment): ReduxAction {
@@ -204,6 +204,7 @@ export const createActivityCommentActions = (stateFieldName = DEFAULT_ISSUE_STAT
     },
     setEditingComment: function (comment: (IssueComment | {text: string; reply: boolean}) | null): ReduxAction {
       return async (dispatch: ReduxThunkDispatch) => {
+
         dispatch({
           type: types.SET_EDITING_COMMENT,
           comment,

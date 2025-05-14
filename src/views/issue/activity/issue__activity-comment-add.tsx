@@ -20,7 +20,7 @@ import {Visibility} from 'types/Visibility';
 interface Props {
   comment: IssueComment;
   onAddSpentTime: null | (() => void);
-  onCommentChange: (draftComment: IssueComment, isAttachmentChange?: boolean) => Promise<IssueComment | null>;
+  onCommentChange: (draftComment: IssueComment, isAttachmentChange?: boolean) => Promise<IssueComment>;
   onSubmitComment: (draftComment: IssueComment) => Promise<void>;
   stateFieldName: keyof AppState;
 }
@@ -47,18 +47,24 @@ const IssueActivityStreamCommentAdd = (props: Props) => {
   if (!visibility && isHelpdeskProject && !isAgent && team) {
     visibility = IssueVisibility.createLimitedVisibility([team]);
   }
+  const canUpdateVisibility = props.comment?.canUpdateVisibility || !isHelpdeskProject;
+  const memoizedComment = React.useMemo(
+    () => ({
+      issue: {id: issue.id},
+      visibility,
+      ...props.comment,
+      text: props.comment?.text || '',
+      canUpdateVisibility,
+    }),
+    [canUpdateVisibility, issue.id, props.comment, visibility]
+  );
 
   return (
     <IssueCommentEdit
       onCommentChange={props.onCommentChange}
       getVisibilityOptions={(q: string) => getApi().issue.getVisibilityOptions(issue.id, q)}
       onSubmitComment={props.onSubmitComment}
-      editingComment={{
-        ...props.comment,
-        issue: {id: issue.id},
-        visibility,
-        canUpdateVisibility: props.comment?.canUpdateVisibility || !isHelpdeskProject,
-      }}
+      editingComment={memoizedComment}
       getCommentSuggestions={async (query: string) =>
         dispatch(createActivityCommentActions(props.stateFieldName).loadCommentSuggestions(query))
       }

@@ -17,7 +17,6 @@ import AttachmentAddPanel from 'components/attachments-row/attachments-add-panel
 import AttachmentsRow from 'components/attachments-row/attachments-row';
 import BottomSheetModal from 'components/modal-panel-bottom/bottom-sheet-modal';
 import Header from 'components/header/header';
-import {IconAdd} from 'components/icon/icon';
 import IconTime from 'components/icon/assets/time.svg';
 import IssueVisibility from 'components/visibility/issue-visibility';
 import log from 'components/log/log';
@@ -34,7 +33,7 @@ import {
 import {getAttachmentActions} from 'components/attachments-row/attachment-actions';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
-import {IconArrowUp, IconCheck, IconClose} from 'components/icon/icon';
+import {IconAdd, IconArrowUp, IconCheck, IconClose} from 'components/icon/icon';
 import {ThemeContext} from 'components/theme/theme-context';
 import {UNIT} from 'components/variables';
 
@@ -64,209 +63,171 @@ export interface Props {
   header?: React.ReactNode;
   isArticle?: boolean;
   isEditMode?: boolean;
-  onAddSpentTime?: (() => any) | null;
+  onAddSpentTime?: (() => void) | null;
   onAttach: (files: NormalizedAttachment[], comment: IssueComment) => Promise<Attachment[]>;
-  onCommentChange: (comment: IssueComment, isAttachmentChange?: boolean) => Promise<IssueComment | null>;
+  onCommentChange: (comment: IssueComment, isAttachmentChange?: boolean) => Promise<IssueComment>;
   onSubmitComment: (comment: IssueComment) => any;
   visibilityLabel?: string;
 }
 
-interface State {
-  attachFileSource: string | null;
-  commentCaret: number;
-  editingComment: EditingComment;
-  height: number;
-  isAttachActionsVisible: boolean;
-  isAttachFileDialogVisible: boolean;
-  isSaving: boolean;
-  isVisibilityControlVisible: boolean;
-  isVisibilitySelectVisible: boolean;
-  mentions: UserMentions | null;
-  mentionsLoading: boolean;
-  mentionsQuery: string;
-  mentionsVisible: boolean;
-  visibility?: Visibility;
-}
-
-
-const EMPTY_COMMENT: EditingComment = {
+const EMPTY_COMMENT = {
   text: '',
   updated: -1,
 } as EditingComment;
+
+function isCommentEqual(c1: EditingComment, c2: EditingComment): boolean {
+  return JSON.stringify(c1) === JSON.stringify(c2);
+}
 
 const CommentEdit = (props: Props) => {
   const dispatch: ReduxThunkDispatch = useDispatch();
   const theme: Theme = React.useContext(ThemeContext);
   const attachmentActions: AttachmentActions = getAttachmentActions('issueCommentInput');
   const isReporter = useIsReporter();
+  const {onCommentChange: doChange} = props;
 
   const editCommentInput = React.useRef<TextInput | null>(null);
+
+  const [commentCaret, setCommentCaret] = React.useState<number>(0);
+
+  const textRef = React.useRef<string>('');
   const editingCommentRef = React.useRef<EditingComment>(EMPTY_COMMENT);
+  const visibilityRef = React.useRef<VisibilityGroups | null | undefined>();
 
-  const [state, updateState] = React.useState<State>({
-    attachFileSource: null,
-    commentCaret: 0,
-    editingComment: {...EMPTY_COMMENT, ...props.editingComment},
-    height: UNIT * 4,
-    isAttachActionsVisible: false,
-    isAttachFileDialogVisible: false,
-    isSaving: false,
-    isVisibilityControlVisible: false,
-    isVisibilitySelectVisible: false,
-    mentions: null,
-    mentionsLoading: false,
-    mentionsQuery: '',
-    mentionsVisible: false,
-  });
-
-  const changeState = (statePart: Partial<State>): void => {
-    updateState((prevState: State) => ({...prevState, ...statePart}));
+  const [editingComment, setEditingComment] = React.useState<EditingComment>(EMPTY_COMMENT);
+  const setComment = (comment: EditingComment) => {
+    setEditingComment(comment);
+    editingCommentRef.current = comment;
   };
 
-  const setEditingComment = React.useCallback((editingComment: EditingComment) => {
-    changeState({editingComment});
-    editingCommentRef.current = editingComment;
-  }, []);
-
-  const setEmptyComment = () => {
-    setEditingComment(EMPTY_COMMENT);
+  const [commentText, setCommentText] = React.useState<string>('');
+  const setText = (txt: string) => {
+    setCommentText(txt);
+    textRef.current = txt;
+  };
+  const [commentVisibility, setCommentVisibility] = React.useState<VisibilityGroups | null | undefined>(null);
+  const setVisibility = (v: VisibilityGroups | null | undefined) => {
+    setCommentVisibility(v);
+    visibilityRef.current = v;
   };
 
-  const toggleSaving = (isSaving: boolean): void => {
-    changeState({isSaving});
-  };
+  const [height, setHeight] = React.useState<number>(UNIT * 4);
 
-  const getCurrentComment = React.useCallback(
-    (data: EditingComment | Partial<EditingComment> = {}): EditingComment => ({
-      ...props.editingComment,
-      attachments: state.editingComment.attachments,
-      visibility: state.editingComment.visibility || props.editingComment.visibility,
-      usesMarkdown: true,
-      canUpdateVisibility: !!(state.editingComment.canUpdateVisibility || props.canUpdateCommentVisibility),
-      ...data,
-    }),
-    [
-      props.canUpdateCommentVisibility,
-      props.editingComment,
-      state.editingComment.attachments,
-      state.editingComment.canUpdateVisibility,
-      state.editingComment.visibility,
-    ]
-  );
+  const [isAttachActionsVisible, setAttachActionsVisible] = React.useState<boolean>(false);
+  const [isAttachFileDialogVisible, setAttachFileDialogVisible] = React.useState<boolean>(false);
+  const [isSaving, setSaving] = React.useState<boolean>(false);
+  const [isVisibilityControlVisible, setVisibilityControlVisible] = React.useState<boolean>(false);
+  const [isVisibilitySelectVisible, setIsVisibilitySelectVisible] = React.useState<boolean>(false);
+
+  const [mentions, setMentions] = React.useState<UserMentions | null>(null);
+  const [mentionsLoading, setMentionsLoading] = React.useState<boolean>(false);
+  const [mentionsQuery, setMentionsQuery] = React.useState<string>('');
+  const [mentionsVisible, setMentionsVisible] = React.useState<boolean>(false);
 
   const onCommentChange = React.useCallback(
-    async (draft: EditingComment, isAttachmentChange: boolean = false): Promise<IssueComment> => {
-      toggleSaving(true);
-      const comment = await props.onCommentChange(draft, isAttachmentChange);
-      toggleSaving(false);
-      return comment || draft;
+    async (comment: EditingComment, isAttachmentChange: boolean = false): Promise<IssueComment> => {
+      setSaving(true);
+      const c = await doChange(comment, isAttachmentChange);
+      setSaving(false);
+      return c;
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [props.onCommentChange]
+    [doChange]
   );
-  const onSubmitComment = React.useCallback(
-    async (): Promise<void> => {
-      toggleVisibilityControl(false);
-      toggleSaving(true);
-      const draft = getCurrentComment(state.editingComment);
-      const visibility = !draft.canUpdateVisibility ? undefined : draft.visibility;
-      const comment = await onCommentChange({
-        ...draft,
-        visibility,
-      });
-      await props.onSubmitComment(comment);
-      setEmptyComment();
-      toggleSaving(false);
+
+  const onSubmitComment = async () => {
+    setSaving(true);
+    setVisibilityControlVisible(false);
+    const c = await onCommentChange({
+      ...editingComment,
+      text: commentText,
+      visibility: !editingComment.canUpdateVisibility ? undefined : commentVisibility,
+    });
+    await props.onSubmitComment(c);
+
+    setComment(EMPTY_COMMENT);
+    setSaving(false);
+  };
+
+  React.useEffect(
+    () => {
+      const comment = props.editingComment;
+      if (isCommentEqual(comment, editingCommentRef.current)) {
+        return;
+      }
+
+      setText(comment.text);
+      setVisibility(comment.visibility);
+      setComment(comment);
+      setCommentCaret(comment.text.length || 0);
+
+      if (comment?.reply === true) {
+        focus();
+      }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [props.onSubmitComment, toggleSaving]
+    [props.editingComment]
   );
 
   React.useEffect(() => {
     return () => {
-      if (editingCommentRef.current.id || editingCommentRef.current.text || editingCommentRef.current.visibility) {
-        onCommentChange(getCurrentComment(editingCommentRef.current)).then(() => setEditingComment(EMPTY_COMMENT));
-      } else {
-        setEditingComment(EMPTY_COMMENT);
+      const text = textRef.current;
+      const comment = editingCommentRef.current;
+      const visibility = visibilityRef.current;
+      if (
+        text &&
+        text !== props.editingComment.text ||
+        (comment.id &&
+          JSON.stringify(visibility) !== JSON.stringify(props.editingComment.visibility))
+      ) {
+        onCommentChange({...comment, text, visibility}).then(() => {
+          setComment(EMPTY_COMMENT);
+        });
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  React.useEffect(
-    () => {
-      if (
-        props.editingComment?.reply === true ||
-        (state.editingComment.id === undefined && props.editingComment?.id) ||
-        (state.editingComment.id && state.editingComment?.updated < props.editingComment?.updated)
-      ) {
-        const comment: EditingComment = {...state.editingComment, ...props.editingComment};
-        setEditingComment(comment);
-        changeState({commentCaret: comment.text?.length});
-        if (props.editingComment.reply) {
-          focus();
-        }
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [props.editingComment, setEditingComment]
-  );
-
-  const focus = (): void => {
-    editCommentInput.current?.focus();
-  };
-
-  const toggleVisibilityControl = (isVisibilityControlVisible: boolean): void => {
-    changeState({isVisibilityControlVisible});
+  const focus = () => {
+    if (editCommentInput.current) {
+      editCommentInput.current.focus();
+    }
   };
 
   const onMentionsShow = async (
-    text: string,
+    txt: string,
     caret: number,
-  ): Promise<void> => {
-    const word = (getSuggestWord(text, caret));
+  ) => {
+    const word = (getSuggestWord(txt, caret));
     if (!word) {
-      changeState({
-        mentionsVisible: false,
-        mentionsQuery: '',
-      });
+      setMentionsVisible(false);
+      setMentionsQuery('');
     } else if (word[0] === '@') {
-      const mentionsQuery = word.slice(1);
-      changeState({
-        mentionsVisible: true,
-        mentionsQuery,
-        mentionsLoading: true,
-      });
-      const mentions: UserMentions = await props.getCommentSuggestions(mentionsQuery);
-      changeState({
-        mentionsLoading: false,
-        mentions,
-      });
+      const q = word.slice(1);
+      setMentionsVisible(true);
+      setMentionsQuery(q);
+      setMentionsLoading(true);
+      const um: UserMentions = await props.getCommentSuggestions(mentionsQuery);
+      setMentionsLoading(false);
+      setMentions(um);
     }
   };
 
   const applySuggestion = (user: User) => {
     const newText = composeSuggestionText(
       user,
-      state.editingComment.text,
-      state.commentCaret,
+      commentText,
+      commentCaret,
     );
 
     if (newText) {
       const updatedText = `${newText} `;
-      setEditingComment({
-        ...state.editingComment,
-        text: updatedText,
-      });
-      changeState({
-        mentionsVisible: false,
-        isVisibilityControlVisible: true,
-      });
+      setText(updatedText);
+      setMentionsVisible(false);
+      setVisibilityControlVisible(true);
     }
   };
 
-  const renderUserMentions = (): React.ReactNode | undefined => {
-    if (state.mentionsVisible) {
+  const renderUserMentions = () => {
+    if (mentionsVisible) {
       return (
         <Mentions
           style={[
@@ -275,8 +236,8 @@ const CommentEdit = (props: Props) => {
             },
             props.isEditMode ? styles.mentionsEdit : styles.mentions,
           ]}
-          isLoading={state.mentionsLoading}
-          mentions={state.mentions}
+          isLoading={mentionsLoading}
+          mentions={mentions}
           onApply={(user: User) => {
             applySuggestion(user);
             focus();
@@ -287,19 +248,16 @@ const CommentEdit = (props: Props) => {
   };
 
   const renderVisibility = () => {
-    const toggleSelectVisibility = (isVisibilitySelectVisible: boolean) => changeState({isVisibilitySelectVisible});
-    const enabled = state.editingComment.canUpdateVisibility || props.canUpdateCommentVisibility;
+    const enabled = editingComment.canUpdateVisibility || props.canUpdateCommentVisibility;
     return (
       <VisibilityControl
         color={styles.private.color}
         disabled={!enabled}
-        onShow={() => toggleSelectVisibility(true)}
-        onHide={() => toggleSelectVisibility(false)}
-        visibility={state.editingComment.visibility}
-        onSubmit={async (visibility: Visibility | null) => {
-          const draft = getCurrentComment({...state.editingComment, visibility});
-          setEditingComment(draft);
-          await onCommentChange(draft);
+        onShow={() => setIsVisibilitySelectVisible(true)}
+        onHide={() => setIsVisibilitySelectVisible(false)}
+        visibility={commentVisibility}
+        onSubmit={(v: Visibility | null) => {
+          setVisibility(v);
         }}
         getOptions={props.getVisibilityOptions}
         visibilityDefaultLabel={props.visibilityLabel}
@@ -307,13 +265,8 @@ const CommentEdit = (props: Props) => {
     );
   };
 
-  const toggleAttachFileDialog = (isAttachFileDialogVisible: boolean): void => {
-    changeState({isAttachFileDialogVisible});
-  };
-
   const renderSubmitButton = () => {
-    const {isSaving} = state;
-    const isDisabled: boolean = !state.editingComment.text && !state.editingComment.attachments || isSaving;
+    const isDisabled: boolean = !commentText && !editingComment.attachments || isSaving;
     return (
       <TouchableOpacity
         testID="test:id/commentSubmitButton"
@@ -342,30 +295,26 @@ const CommentEdit = (props: Props) => {
         actions={{
           onAttach: async (
             files: NormalizedAttachment[],
-            onAttachingFinish: () => any,
+            onAttachingFinish: () => void,
           ) => {
-            let draftComment: EditingComment = state.editingComment;
+            let draftComment: EditingComment = editingComment;
 
             if (!draftComment.id) {
-              draftComment = await onCommentChange(state.editingComment) as EditingComment;
+              draftComment = await onCommentChange(editingComment);
             }
 
             const addedAttachments = await dispatch(props.onAttach(files, draftComment));
             onAttachingFinish();
-            toggleAttachFileDialog(false);
-            const updatedComment: EditingComment = getCurrentComment({
-              ...state.editingComment,
+            setAttachFileDialogVisible(false);
+            const c = {
               ...draftComment,
-              attachments: [
-                ...(state.editingComment.attachments || []),
-                ...addedAttachments,
-              ],
-            });
-            setEditingComment(updatedComment);
-            onCommentChange(updatedComment, true);
+              attachments: (editingComment.attachments || []).concat(addedAttachments),
+            };
+            setComment(c);
+            onCommentChange(c, true);
           },
           onCancel: () => {
-            toggleAttachFileDialog(false);
+            setAttachFileDialogVisible(false);
           },
         }}
       />
@@ -375,7 +324,7 @@ const CommentEdit = (props: Props) => {
   const renderAttachments = () => {
     return (
       <AttachmentsRow
-        attachments={state.editingComment.attachments}
+        attachments={editingComment.attachments}
         attachingImage={null}
         onImageLoadingError={(err: any) =>
           log.warn('onImageLoadingError', err.nativeEvent)
@@ -387,7 +336,7 @@ const CommentEdit = (props: Props) => {
           )
         }
         userCanRemoveAttachment={(attachment: Attachment) =>
-          !state.isSaving && props.canRemoveAttach(attachment)
+          !isSaving && props.canRemoveAttach(attachment)
         }
         onRemoveImage={async (attachment: Attachment) => {
           const resource = props.isArticle
@@ -396,15 +345,15 @@ const CommentEdit = (props: Props) => {
           await dispatch(
             resource(
               attachment,
-              hasType.commentDraft(state.editingComment) ? undefined : state.editingComment.id,
+              hasType.commentDraft(editingComment) ? undefined : editingComment.id,
             ),
           );
           const attachments: Attachment[] = (
-            state.editingComment.attachments || []
+            editingComment.attachments || []
           ).filter((it: Attachment) => it.id !== attachment.id);
-          const updatedComment: EditingComment = getCurrentComment({attachments});
-          setEditingComment(updatedComment);
-          await onCommentChange(updatedComment, true);
+          const c = {...editingComment, attachments};
+          setComment(c);
+          await onCommentChange(c, true);
 
           if (props.isEditMode) {
             closeModal();
@@ -417,8 +366,8 @@ const CommentEdit = (props: Props) => {
 
   const renderCommentInput = (
     autoFocus: boolean,
-    onFocus: (...args: any[]) => any,
-    onBlur: (...args: any[]) => any,
+    onFocus: () => void,
+    onBlur: () => void,
   ) => {
     return (
       <TextInput
@@ -430,63 +379,52 @@ const CommentEdit = (props: Props) => {
         autoFocus={autoFocus || props.isEditMode}
         ref={editCommentInput}
         placeholder={i18n('Write a comment, @mention people')}
-        value={state.editingComment.text}
-        editable={!state.isSaving}
+        value={commentText}
+        editable={!isSaving}
         underlineColorAndroid="transparent"
         keyboardAppearance={theme.uiTheme.name}
         placeholderTextColor={styles.commentInputPlaceholder.color}
         autoCapitalize="sentences"
         onSelectionChange={event => {
-          changeState({commentCaret: event.nativeEvent.selection.start});
+          setCommentCaret(event.nativeEvent.selection.start);
         }}
-        onChangeText={(text: string) => {
-          const updatedDraftComment = getCurrentComment({text});
-          setEditingComment(updatedDraftComment);
-          onMentionsShow(text, state.commentCaret);
+        onChangeText={(txt: string) => {
+          setText(txt);
+          onMentionsShow(txt, commentCaret);
         }}
         onContentSizeChange={event => {
-          changeState({height: event.nativeEvent.contentSize.height});
+          setHeight(event.nativeEvent.contentSize.height);
         }}
         onFocus={onFocus}
         onBlur={onBlur}
         style={[
           styles.commentInput,
           {
-            height: Math.max(MIN_INPUT_SIZE, state.height + 8),
+            height: Math.max(MIN_INPUT_SIZE, height + 8),
           },
         ]}
       />
     );
   };
 
-  const closeModal = (): void => {
-    Router.pop(true);
-  };
+  const closeModal = () => Router.pop(true);
 
-  const hasAttachments = (): boolean => !!state.editingComment?.attachments?.length;
+  const hasAttachments = (): boolean => !!editingComment?.attachments?.length;
 
   const renderAddNewComment = () => {
-    const {
-      isSaving,
-      mentionsVisible,
-      isVisibilityControlVisible,
-      isVisibilitySelectVisible,
-      editingComment,
-    } = state;
-
-    const showVisibilityControl = !mentionsVisible && (
-      IssueVisibility.isSecured(editingComment.visibility) ||
+    const showVisibilityControl = editingComment && !mentionsVisible && (
+      IssueVisibility.isSecured(commentVisibility) ||
       !!editingComment.text ||
-      editingComment.visibility ||
+      commentVisibility ||
       !!editingComment?.attachments?.length ||
       (isVisibilitySelectVisible || isVisibilityControlVisible)
     );
 
-    const hideAttachActionsPanel = () => changeState({isAttachActionsVisible: false});
+    const hideAttachActionsPanel = () => setAttachActionsVisible(false);
 
     return (
       <>
-        {!!editingComment.id && props.header}
+        {editingComment.id ? props.header : null}
         {!isReporter &&
           <View
             style={[styles.commentHeaderContainer, showVisibilityControl ? styles.commentHeaderContainerCreate : null]}
@@ -500,11 +438,7 @@ const CommentEdit = (props: Props) => {
             <View style={styles.actionsContainer}>
               <TouchableOpacity
                 style={styles.actionsContainerButton}
-                onPress={() =>
-                  changeState({
-                    isAttachActionsVisible: true,
-                  })
-                }
+                onPress={() => setAttachActionsVisible(true)}
               >
                 <IconAdd color={styles.actionsContainerButton.color}/>
               </TouchableOpacity>
@@ -515,16 +449,16 @@ const CommentEdit = (props: Props) => {
             style={[styles.commentInputContainer, !props.canCommentPublicly && styles.commentInputContainerHighlighted]}
           >
             {renderCommentInput(
-              props.focus || !!editingComment.reply,
-              () => toggleVisibilityControl(true),
+              props.focus || !!editingComment?.reply,
+              () => setVisibilityControlVisible(true),
               () => {
                 if (!isVisibilitySelectVisible) {
-                  changeState({mentionsVisible: false});
-                  toggleVisibilityControl(false);
+                  setMentionsVisible(false);
+                  setVisibilityControlVisible(false);
                 }
               },
             )}
-            {Boolean(!!editingComment.text || hasAttachments()) && renderSubmitButton()}
+            {Boolean(!!commentText || hasAttachments()) && renderSubmitButton()}
           </View>
         </View>
 
@@ -532,7 +466,7 @@ const CommentEdit = (props: Props) => {
           <View style={styles.attachmentsContainer}>{renderAttachments()}</View>
         )}
 
-        {state.isAttachActionsVisible && (
+        {isAttachActionsVisible && (
           <BottomSheetModal
             isVisible={true}
             onClose={hideAttachActionsPanel}
@@ -547,10 +481,8 @@ const CommentEdit = (props: Props) => {
                 ]}
                 disabled={isSaving || mentionsVisible}
                 onPress={() => {
-                  changeState({
-                    isAttachActionsVisible: false,
-                    isAttachFileDialogVisible: true,
-                  });
+                  setAttachActionsVisible(false);
+                  setAttachFileDialogVisible(true);
                 }}
               >
                 <IconAttachment
@@ -575,9 +507,7 @@ const CommentEdit = (props: Props) => {
                   styles.floatContextButton,
                 ]}
                 onPress={() => {
-                  changeState({
-                    isAttachActionsVisible: false,
-                  });
+                  setAttachActionsVisible(false);
 
                   if (props.onAddSpentTime) {
                     props.onAddSpentTime();
@@ -606,22 +536,22 @@ const CommentEdit = (props: Props) => {
   };
 
   const renderEditComment = () => {
-    const isSubmitEnabled: boolean = !!state.editingComment.text || hasAttachments();
+    const isSubmitEnabled: boolean = !!commentText || hasAttachments();
     return (
       <View style={styles.commentEditContainer}>
-        {!state.mentionsVisible && (
+        {!mentionsVisible && (
           <Header
             style={styles.commentEditHeader}
             title={i18n('Edit comment')}
             leftButton={
               <IconClose
                 size={21}
-                color={state.isSaving ? styles.disabled.color : styles.link.color}
+                color={isSaving ? styles.disabled.color : styles.link.color}
               />
             }
-            onBack={() => !state.isSaving && closeModal()}
+            onBack={() => !isSaving && closeModal()}
             rightButton={
-              state.isSaving ? (
+              isSaving ? (
                 <ActivityIndicator color={styles.link.color}/>
               ) : (
                 <IconCheck
@@ -646,7 +576,7 @@ const CommentEdit = (props: Props) => {
           multilineInputStyle={styles.mainText}
         >
           <View style={styles.commentEditContent}>
-            {!isReporter && !state.mentionsVisible && (
+            {!isReporter && !mentionsVisible && (
               <View style={styles.commentEditVisibility}>
                 {renderVisibility()}
               </View>
@@ -657,14 +587,12 @@ const CommentEdit = (props: Props) => {
                 true,
                 () => {},
                 () => {
-                  changeState({
-                    mentionsVisible: false,
-                  });
+                  setMentionsVisible(false);
                 },
               )}
             </View>
 
-            {!state.mentionsVisible && (
+            {!mentionsVisible && (
               <View style={styles.commentEditAttachments}>
                 {renderAttachments()}
 
@@ -672,11 +600,11 @@ const CommentEdit = (props: Props) => {
                   <AttachmentAddPanel
                     style={styles.commentEditAttachmentsAttachButton}
                     isDisabled={
-                      state.isSaving ||
-                      state.isAttachFileDialogVisible ||
-                      state.mentionsLoading
+                      isSaving ||
+                      isAttachFileDialogVisible ||
+                      mentionsLoading
                     }
-                    showAddAttachDialog={() => toggleAttachFileDialog(true)}
+                    showAddAttachDialog={() => setAttachFileDialogVisible(true)}
                   />
                 )}
               </View>
@@ -697,9 +625,11 @@ const CommentEdit = (props: Props) => {
       {renderUserMentions()}
       {props.isEditMode ? renderEditComment() : renderAddNewComment()}
 
-      {state.isAttachFileDialogVisible && renderAttachFileDialog()}
+      {isAttachFileDialogVisible && renderAttachFileDialog()}
     </View>
   );
 };
 
-export default React.memo<Props>(CommentEdit);
+export default React.memo<Props>(CommentEdit, (prevProps, nextProps) => {
+  return isCommentEqual(prevProps.editingComment, nextProps.editingComment);
+});

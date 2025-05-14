@@ -1,12 +1,15 @@
 import React from 'react';
+
 import IssueCommentEdit from 'components/comment/comment-edit';
 import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import {attachmentActions} from './issue-activity__attachment-actions-and-types';
 import {createActivityCommentActions} from './issue-activity__comment-actions';
 import {getApi} from 'components/api/api__instance';
+
+import type {AppState} from 'reducers';
 import type {Attachment, IssueComment} from 'types/CustomFields';
 import type {IssueContextData, IssueFull} from 'types/Issue';
-import {NormalizedAttachment} from 'types/Attachment';
+import type {NormalizedAttachment} from 'types/Attachment';
 
 
 interface Props {
@@ -15,8 +18,8 @@ interface Props {
   onAddSpentTime?: () => void;
   onCommentChange: (comment: IssueComment, isAttachmentChange?: boolean) => Promise<IssueComment | null>;
   onSubmitComment: (comment: IssueComment) => Promise<void>;
-  header?: React.ReactElement<React.ComponentProps<any>, any>;
-  stateFieldName: string;
+  header?: React.ReactNode;
+  stateFieldName: keyof AppState;
 }
 
 const IssueActivityStreamCommentEdit = (props: Props) => {
@@ -33,6 +36,12 @@ const IssueActivityStreamCommentEdit = (props: Props) => {
     onAddSpentTime = null,
     stateFieldName,
   } = props;
+
+  const memoizedComment = React.useMemo(
+    () => ({...props.comment, issue: {id: issue.id}}),
+    [issue.id, props.comment]
+  );
+
   return (
     <IssueCommentEdit
       focus={true}
@@ -40,7 +49,7 @@ const IssueActivityStreamCommentEdit = (props: Props) => {
       onCommentChange={onCommentChange}
       getVisibilityOptions={() => getApi().issue.getVisibilityOptions(issue.id)}
       onSubmitComment={props.onSubmitComment}
-      editingComment={{...props.comment, issue: {id: issue.id}}}
+      editingComment={memoizedComment}
       getCommentSuggestions={(query: string) =>
         dispatch(
           createActivityCommentActions(stateFieldName).loadCommentSuggestions(
