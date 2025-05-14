@@ -1,8 +1,8 @@
 import React from 'react';
 
-import {ImageItemConfig} from 'react-native-ios-context-menu/src/types/ImageItemConfig';
-
-import type {MenuConfig, MenuActionConfig, IconConfig} from 'react-native-ios-context-menu';
+import type {ImageItemConfig} from 'react-native-ios-utilities';
+import type {IconConfig} from 'react-native-ios-context-menu/src/types/MenuIconConfig';
+import type {MenuConfig, MenuActionConfig} from 'react-native-ios-context-menu/src/types/MenuConfig';
 
 export interface ContextMenuConfigItem extends MenuActionConfig {
   execute: () => any;
