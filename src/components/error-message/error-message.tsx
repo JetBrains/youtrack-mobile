@@ -8,7 +8,7 @@ import {ICON_PICTOGRAM_DEFAULT_SIZE, IconNothingFound} from 'components/icon/ico
 
 import {styles} from './error-message.style';
 
-import type {CustomError, ErrorMessageData} from 'types/Error';
+import type {AnyError, CustomError, ErrorMessageData} from 'types/Error';
 import type {ViewStyleProp} from 'types/Internal';
 
 export type ErrorMessageProps = {
@@ -33,15 +33,15 @@ export default class ErrorMessage extends PureComponent<
   };
 
   async setError() {
-    let errorMessage: ErrorMessageData;
+    let errorMessage: ErrorMessageData = {title: ''};
 
     if (this.props.errorMessageData) {
       errorMessage = this.props.errorMessageData;
     } else if (this.props.error) {
-      const error: CustomError = await resolveError(this.props.error);
+      const error = await resolveError(this.props.error as unknown as AnyError);
       errorMessage = {
         title:
-          ERROR_MESSAGE_DATA[error.status || error.error]?.title ||
+          ERROR_MESSAGE_DATA[error.status || error.error || '']?.title ||
           error.message ||
           error.error_message ||
           '',

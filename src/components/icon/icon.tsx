@@ -39,7 +39,7 @@ import styles, {rotate45, rotate90} from './icon.styles';
 
 type IconStyle = TextStyleProp | TextStyleProp[];
 
-interface Props {
+export interface Icon {
   name?: string;
   size?: number;
   color?: string;
@@ -62,7 +62,7 @@ const defaultProps = () => ({
   isFontAwesome: false,
 });
 
-export function IconFont(props: Props): React.JSX.Element | null {
+export function IconFont(props: Icon): React.JSX.Element | null {
   if (!props.name) {
     return null;
   }
@@ -71,7 +71,7 @@ export function IconFont(props: Props): React.JSX.Element | null {
   return <Icon {...{...defaultProps(), ...props}} />;
 }
 
-export const IconAccountAlert = (props: Props) => (
+export const IconAccountAlert = (props: Icon) => (
   <IconFont
     {...{
       name: 'account-alert',
@@ -84,9 +84,9 @@ const mergeStyles = (style: IconStyle = [], extraStyle: IconStyle = []): IconSty
   return new Array<IconStyle>().concat(style).concat(extraStyle);
 };
 
-export const IconArrowUp = (props: Props) => <ArrowUp {...createSVGProps(props, 22)}/>;
+export const IconArrowUp = (props: Icon) => <ArrowUp {...createSVGProps(props, 22)}/>;
 
-export const IconShare = (props: Props) => (
+export const IconShare = (props: Icon) => (
   <IconFont
     {...{
       name: 'export-variant',
@@ -95,7 +95,7 @@ export const IconShare = (props: Props) => (
   />
 );
 
-export const IconCircle = (props: Props) => (
+export const IconCircle = (props: Icon) => (
   <IconFont
     {...{
       name: 'circle',
@@ -104,7 +104,7 @@ export const IconCircle = (props: Props) => (
   />
 );
 
-export const IconCircleOutline = (props: Props) => (
+export const IconCircleOutline = (props: Icon) => (
   <IconFont
     {...{
       name: 'checkbox-blank-circle-outline',
@@ -113,7 +113,7 @@ export const IconCircleOutline = (props: Props) => (
   />
 );
 
-export const IconFileText = (props: Props) => (
+export const IconFileText = (props: Icon) => (
   <IconFont
     {...{
       isFontAwesome: true,
@@ -123,7 +123,7 @@ export const IconFileText = (props: Props) => (
   />
 );
 
-export const IconAngleRight = (props: Props) => (
+export const IconAngleRight = (props: Icon) => (
   <IconFont
     {...{
       isFontAwesome: true,
@@ -133,7 +133,7 @@ export const IconAngleRight = (props: Props) => (
   />
 );
 
-export const IconCamera = (props: Props) => (
+export const IconCamera = (props: Icon) => (
   <IconFont
     {...{
       isFontAwesome: true,
@@ -143,7 +143,7 @@ export const IconCamera = (props: Props) => (
   />
 );
 
-export const IconCheckboxBlank = (props: Props) => (
+export const IconCheckboxBlank = (props: Icon) => (
   <IconFont
     {...{
       name: 'checkbox-blank-outline',
@@ -152,7 +152,7 @@ export const IconCheckboxBlank = (props: Props) => (
   />
 );
 
-export const IconCheckboxChecked = (props: Props) => (
+export const IconCheckboxChecked = (props: Icon) => (
   <IconFont
     {...{
       name: 'checkbox-marked',
@@ -161,7 +161,7 @@ export const IconCheckboxChecked = (props: Props) => (
   />
 );
 
-export const IconFileCheck = (props: Props) => (
+export const IconFileCheck = (props: Icon) => (
   <IconFont
     {...{
       name: 'file-check-outline',
@@ -170,7 +170,7 @@ export const IconFileCheck = (props: Props) => (
   />
 );
 
-export const IconClone = (props: Props) => (
+export const IconClone = (props: Icon) => (
   <IconFont
     {...{
       isFontAwesome: true,
@@ -180,7 +180,7 @@ export const IconClone = (props: Props) => (
   />
 );
 
-export const IconAngleDownRight = (props: Props & {isDown?: boolean}) => (
+export const IconAngleDownRight = (props: Icon & {isDown?: boolean}) => (
   <IconYTM
     {...{
       ...defaultProps(),
@@ -190,20 +190,20 @@ export const IconAngleDownRight = (props: Props & {isDown?: boolean}) => (
   />
 );
 
-export const IconPencil = (props: Props) => <IconYTM {...{...defaultProps(), name: 'pencil', ...props}} />;
+export const IconPencil = (props: Icon) => <IconYTM {...{...defaultProps(), name: 'pencil', ...props}} />;
 
-export const IconRemoveFilled = (props: Props) => <IconYTM {...{...defaultProps(), name: 'remove-filled', ...props}} />;
+export const IconRemoveFilled = (props: Icon) => <IconYTM {...{...defaultProps(), name: 'remove-filled', ...props}} />;
 
-export const IconWork = (props: Props) => <IconYTM {...{...defaultProps(), name: 'hourglass-20px', ...props}} />;
+export const IconWork = (props: Icon) => <IconYTM {...{...defaultProps(), name: 'hourglass-20px', ...props}} />;
 
-export const IconException = (props: Props) => <IconYTM {...{...defaultProps(), name: 'exception', ...props}} />;
+export const IconException = (props: Icon) => <IconYTM {...{...defaultProps(), name: 'exception', ...props}} />;
 
 /*
   SVG icons
  */
 
 const createSVGProps = (
-  props: Props,
+  props: Icon,
   defaultSize: number,
   style?: IconStyle
 ): {
@@ -214,48 +214,48 @@ const createSVGProps = (
   return {color, fill: color, width: size, height: size, style: mergeStyles(props?.style, style)};
 };
 
-export const IconLock = (props: Props) => <Lock {...createSVGProps(props, 16)} />;
+export const IconLock = (props: Icon) => <Lock {...createSVGProps(props, 16)} />;
 
-export const IconAdd = (props: Props, style: IconStyle) => <Plus {...createSVGProps(props, 22, style)} />;
+export const IconAdd = (props: Icon, style: IconStyle) => <Plus {...createSVGProps(props, 22, style)} />;
 
-export const IconAngleDown = (props: Props) => <ChevronSmallDown {...createSVGProps(props, 18)} />;
+export const IconAngleDown = (props: Icon) => <ChevronSmallDown {...createSVGProps(props, 18)} />;
 
-export const IconAngleUp = (props: Props) => <ChevronSmallUp {...createSVGProps(props, 18)} />;
+export const IconAngleUp = (props: Icon) => <ChevronSmallUp {...createSVGProps(props, 18)} />;
 
-export const IconChevronDownUp = (props: Props & {isDown?: boolean}) => {
+export const IconChevronDownUp = (props: Icon & {isDown?: boolean}) => {
   return props?.isDown ? IconAngleDown(props) : IconAngleUp(props);
 };
 
-export const IconBack = (props: Props) =>
+export const IconBack = (props: Icon) =>
   isAndroid ? <ArrowLeft {...createSVGProps(props, 25)} /> : <ChevronLeft {...createSVGProps(props, 25)} />;
 
-export const IconCheck = (props: Props) => <Checkmark {...createSVGProps(props, 25)} />;
+export const IconCheck = (props: Icon) => <Checkmark {...createSVGProps(props, 25)} />;
 
-export const IconClose = (props: Props) => IconAdd(props, rotate45);
+export const IconClose = (props: Icon) => IconAdd(props, rotate45);
 
-export const IconComment = (props: Props) => <Comment {...createSVGProps(props, 24)} />;
+export const IconComment = (props: Icon) => <Comment {...createSVGProps(props, 24)} />;
 
-export const IconHistory = (props: Props) => <History {...createSVGProps(props, 24)} />;
+export const IconHistory = (props: Icon) => <History {...createSVGProps(props, 24)} />;
 
-export const IconHourGlass = (props: Props) => <Time {...createSVGProps(props, 24)} />;
+export const IconHourGlass = (props: Icon) => <Time {...createSVGProps(props, 24)} />;
 
-export const IconMoreOptions = (props: Props) =>
+export const IconMoreOptions = (props: Icon) =>
   <More {...createSVGProps(props, isAndroid ? 20 : 19, isAndroid ? styles.iconMoreOptionsAndroid : [])} />;
 
-export const EllipsisVertical = (props: Props) => <Drag {...createSVGProps(props, 18)} />;
+export const EllipsisVertical = (props: Icon) => <Drag {...createSVGProps(props, 18)} />;
 
-export const IconVcs = (props: Props) => <Vcs {...createSVGProps(props, 22, rotate90)} />;
+export const IconVcs = (props: Icon) => <Vcs {...createSVGProps(props, 22, rotate90)} />;
 
-export const IconVote = (props: Props) => <Vote {...createSVGProps(props, 19)} />;
+export const IconVote = (props: Icon) => <Vote {...createSVGProps(props, 19)} />;
 
-export const IconLink = (props: Props) => <Link {...createSVGProps(props, 20)} />;
+export const IconLink = (props: Icon) => <Link {...createSVGProps(props, 20)} />;
 
-export const IconTag = (props: Props) => <Tag {...createSVGProps(props, 20)} />;
+export const IconTag = (props: Icon) => <Tag {...createSVGProps(props, 20)} />;
 
-export const IconAttachment = (props: Props) => <Attachment {...createSVGProps(props, 21)} />;
+export const IconAttachment = (props: Icon) => <Attachment {...createSVGProps(props, 21)} />;
 
-export const IconAddReaction = (props: Props, style: IconStyle) => <AddReaction {...createSVGProps(props, 19, style)} />;
+export const IconAddReaction = (props: Icon, style: IconStyle) => <AddReaction {...createSVGProps(props, 19, style)} />;
 
-export const IconTrash = (props: Props, style: IconStyle) => <Trash {...createSVGProps(props, 19, style)} />;
+export const IconTrash = (props: Icon, style: IconStyle) => <Trash {...createSVGProps(props, 19, style)} />;
 
-export const IconLogout = (props: Props, style: IconStyle) => <Entry {...createSVGProps(props, 24, style)} />;
+export const IconLogout = (props: Icon, style: IconStyle) => <Entry {...createSVGProps(props, 24, style)} />;

@@ -1,3 +1,6 @@
+import {Icon} from 'components/icon/icon';
+import React from 'react';
+
 export interface CustomError {
   status: number;
   error?: string;
@@ -23,7 +26,7 @@ export interface CustomError {
 export type ErrorMessageData = {
   title: string;
   description?: string | null | undefined;
-  icon?: Record<string, any>;
+  icon?: React.ComponentType<Icon>;
   iconSize?: number;
 };
 
