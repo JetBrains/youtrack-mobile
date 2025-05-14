@@ -21,17 +21,16 @@ import {updateActivityCommentReactions} from 'components/activity-stream/activit
 import type Api from 'components/api/api';
 import type IssueAPI from 'components/api/api__issue';
 import type {Activity, ActivityPositionData} from 'types/Activity';
+import type {ActivityGroup} from 'types/Activity';
 import type {AnyError} from 'types/Error';
+import type {AppState} from 'reducers';
 import type {IssueComment} from 'types/CustomFields';
 import type {IssueFull} from 'types/Issue';
+import type {IssueState} from 'views/issue/issue-base-reducer';
 import type {Reaction} from 'types/Reaction';
-import type {State as SingleIssueState} from '../issue-reducers';
-import type {UserGroup} from 'types/UserGroup';
-import type {User, UserMentions} from 'types/User';
-import type {ActivityGroup} from 'types/Activity';
-import type {AppState} from 'reducers';
-import type {IssueState} from '../issue-base-reducer';
 import type {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
+import type {User, UserMentions} from 'types/User';
+import type {VisibilityGroups} from 'types/Visibility';
 
 export function updateComment(comment: IssueComment): {
   comment: IssueComment;
@@ -153,7 +152,7 @@ export const createActivityCommentActions = (stateFieldName = DEFAULT_ISSUE_STAT
     },
     getDraftComment: (): ReduxAction<Promise<IssueComment | null>> =>
       async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
-        const issueState: SingleIssueState = getState()[stateFieldName as keyof AppState] as IssueState;
+        const issueState = getState()[stateFieldName as keyof AppState] as IssueState;
         const issueId: string = issueState.issueId || issueState?.issue?.id;
         let draftComment: IssueComment | null = null;
         if (issueId) {
@@ -168,7 +167,7 @@ export const createActivityCommentActions = (stateFieldName = DEFAULT_ISSUE_STAT
     updateDraftComment:
       (draftComment: IssueComment, doNotFlush: boolean = false): ReduxAction<Promise<IssueComment>> =>
       async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
-        const issueState: SingleIssueState = getState()[stateFieldName as keyof AppState] as IssueState;
+        const issueState = getState()[stateFieldName as keyof AppState] as IssueState;
         const issueId = draftComment?.issue?.id || issueState?.issueId || issueState?.issue?.id;
         if (draftComment && issueId) {
           const [error, draft] = await until<IssueComment>(getApi().issue.updateDraftComment(issueId, draftComment));
@@ -314,7 +313,7 @@ export const createActivityCommentActions = (stateFieldName = DEFAULT_ISSUE_STAT
         dispatch: ReduxThunkDispatch,
         getState: ReduxStateGetter,
         getApi: ReduxAPIGetter
-      ): Promise<Array<User | UserGroup>> => {
+      ): Promise<VisibilityGroups> => {
         const api: Api = getApi();
         const issueId: string = (getState()[stateFieldName as keyof AppState] as IssueState).issue.id;
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Open comment visibility select');
