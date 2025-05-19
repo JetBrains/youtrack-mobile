@@ -34,8 +34,6 @@ const IssueActivityStreamCommentAdd = (props: Props) => {
   const issuePermissions: IssuePermissions = issueContext.issuePermissions;
 
   const canAttach = issuePermissions.canAddAttachmentTo(issue);
-  const canCommentPublicly = issuePermissions.canCommentPublicly(issue);
-  const canUpdateCommentVisibility = issuePermissions.canUpdateCommentVisibility(issue);
   const isAgent = issuePermissions.helpdesk.isAgent(issue);
   const isHelpdeskProject = issuePermissions.helpdesk.isHelpdeskProject(issue);
 
@@ -69,8 +67,8 @@ const IssueActivityStreamCommentAdd = (props: Props) => {
         dispatch(createActivityCommentActions(props.stateFieldName).loadCommentSuggestions(query))
       }
       canAttach={canAttach}
-      canCommentPublicly={canCommentPublicly}
-      canUpdateCommentVisibility={canUpdateCommentVisibility}
+      canCommentPublicly={issuePermissions.canCommentPublicly(issue)}
+      canUpdateCommentVisibility={issuePermissions.canUpdateCommentVisibility(issue)}
       canRemoveAttach={() => canAttach}
       onAddSpentTime={props.onAddSpentTime}
       onAttach={doUploadFileToComment}
