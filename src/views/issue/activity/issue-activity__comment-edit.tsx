@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {useDispatch} from 'react-redux';
+
 import IssueCommentEdit from 'components/comment/comment-edit';
 import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import {attachmentActions} from './issue-activity__attachment-actions-and-types';
@@ -10,6 +12,7 @@ import type {AppState} from 'reducers';
 import type {Attachment, IssueComment} from 'types/CustomFields';
 import type {IssueContextData, IssueFull} from 'types/Issue';
 import type {NormalizedAttachment} from 'types/Attachment';
+import type {ReduxThunkDispatch} from 'types/Redux';
 
 
 interface Props {
@@ -25,7 +28,7 @@ interface Props {
 const IssueActivityStreamCommentEdit = (props: Props) => {
   const issue: IssueFull = props.issueContext.issue;
   const issuePermissions: IssuePermissions = props.issueContext.issuePermissions;
-  const dispatch: (...args: any[]) => any = props.issueContext.dispatcher;
+  const dispatch: ReduxThunkDispatch = useDispatch();
 
   const doUploadFileToComment = (files: NormalizedAttachment[], comment: IssueComment) => {
     return attachmentActions.doUploadFileToComment(false, files, issue, comment);

@@ -19,7 +19,6 @@ import type {UserGroup} from './UserGroup';
 import type {Visibility} from './Visibility';
 
 export type IssueContextData = {
-  dispatcher: () => any;
   isConnected: boolean;
   issue: IssueFull;
   issuePermissions: IssuePermissions;

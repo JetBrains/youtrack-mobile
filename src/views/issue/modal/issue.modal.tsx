@@ -195,7 +195,6 @@ export const issueModalActions = issueModalActionsCreator();
 const mapDispatchToProps = (dispatch: ReduxThunkDispatch) => {
   return {
     ...bindActionCreatorsExt(issueModalActions, dispatch),
-    dispatcher: dispatch,
     setIssueId: (issueId: string) => dispatch(dispatchActions.setIssueId(issueId)),
     setIssueSummaryCopy: (summary: string) =>
       dispatch(dispatchActions.setIssueSummaryCopy(summary)),

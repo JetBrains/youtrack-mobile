@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Clipboard, Share} from 'react-native';
 
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 import ApiHelper from 'components/api/api__helper';
 import CommentVisibilityControl from 'components/visibility/comment-visibility-control';
@@ -31,6 +31,7 @@ import type {CustomError} from 'types/Error';
 import type {Entity} from 'types/Entity';
 import type {IssueContextData, IssueFull} from 'types/Issue';
 import type {Reaction} from 'types/Reaction';
+import type {ReduxThunkDispatch} from 'types/Redux';
 
 type Props = ActivityStreamProps & {
   issueId: string;
@@ -48,6 +49,8 @@ interface IReactionState {
 }
 
 const IssueActivityStream: React.FC<Props> = (props: Props) => {
+  const dispatch: ReduxThunkDispatch = useDispatch();
+
   const configBackendUrl: string = useSelector((appState: AppState) => appState.app.auth?.config?.backendUrl || '');
   const issueContext: IssueContextData = useContext(IssueContext);
   const commentActions = createActivityCommentActions();
@@ -69,17 +72,19 @@ const IssueActivityStream: React.FC<Props> = (props: Props) => {
   const selectReaction = (comment: IssueComment, reaction: Reaction) => {
     usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'Add reaction to comment');
     hideReactionsPanel();
-    props.onReactionSelect(
-      props.issueId,
-      comment,
-      reaction,
-      activities,
-      (updatedActivities: Activity[], error: CustomError) => {
-        if (!error) {
-          setActivities(updatedActivities);
-        }
-      },
-    );
+    if (props.onReactionSelect && activities) {
+      props.onReactionSelect(
+        props.issueId,
+        comment,
+        reaction,
+        activities,
+        (updatedActivities: Activity[], error?: CustomError) => {
+          if (!error) {
+            setActivities(updatedActivities);
+          }
+        },
+      );
+    }
   };
 
   const hideReactionsPanel = (): void =>
@@ -91,7 +96,6 @@ const IssueActivityStream: React.FC<Props> = (props: Props) => {
   const createCommentActions = (): ActivityStreamCommentActions => {
     const issue: IssueFull = issueContext.issue;
     const issuePermissions: IssuePermissions = issueContext.issuePermissions;
-    const dispatch: (...args: any[]) => any = issueContext.dispatcher;
     const createContextMenuConfig = (comment: IssueComment, activityId?: string): ContextMenuConfig => {
       return {
         menuTitle: '',

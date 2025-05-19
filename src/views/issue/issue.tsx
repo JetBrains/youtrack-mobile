@@ -689,7 +689,6 @@ export class Issue<T extends IssueProps> extends IssueTabbed<IssueProps & T> {
       isAttachFileDialogVisible,
       isTagsSelectVisible,
       issuePermissions,
-      dispatcher,
       isConnected,
     } = this.props;
     return (
@@ -697,7 +696,6 @@ export class Issue<T extends IssueProps> extends IssueTabbed<IssueProps & T> {
         value={{
           issue,
           issuePermissions,
-          dispatcher,
           isConnected,
         }}
       >
@@ -769,7 +767,6 @@ export const issueActions = createIssueActions();
 const mapDispatchToProps = (dispatch: ReduxThunkDispatch) => {
   return {
     ...bindActionCreatorsExt(issueActions, dispatch),
-    dispatcher: dispatch,
     setIssueId: (issueId: string) => dispatch(dispatchActions.setIssueId(issueId)),
     setIssueSummaryCopy: (summary: string) => dispatch(dispatchActions.setIssueSummaryCopy(summary)),
     setIssueDescriptionCopy: (description: string) => dispatch(dispatchActions.setIssueDescriptionCopy(description)),
