@@ -4,7 +4,7 @@ module.exports = {
     [
       require.resolve('babel-plugin-module-resolver'),
       {
-        root: ['.', './src', '../..', '../../src'],
+        root: ['./src'],
         extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
         alias: {
           actions: './src/actions',
@@ -14,6 +14,7 @@ module.exports = {
           types: './src/types',
           util: './src/util',
           views: './src/views',
+          reducers: './src/reducers',
         },
       },
     ],
