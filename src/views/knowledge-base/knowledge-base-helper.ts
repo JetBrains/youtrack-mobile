@@ -12,10 +12,7 @@ export const createSortedProjects = (
   cachedArticleList: ArticlesList,
   expandAll?: boolean,
 ): ArticleProject[] => {
-  const cachedExpandedProjects: {
-    key: string;
-    value: ArticleProject;
-  } =
+  const cachedExpandedProjects =
     !expandAll && projects.length > 0 && cachedArticleList
       ? (cachedArticleList || [])
           .filter(
@@ -72,18 +69,20 @@ export const removeProjectData = (
   return updatedArticles;
 };
 export const createProjectDataFromArticles = (
-  articles: ProjectArticlesData[],
+  articles: Article[],
 ): ProjectArticlesData[] => {
-  const projectDataObj: Record<string, any> = (articles || []).reduce(
+  const projectDataObj: Record<string, ProjectArticlesData> = (articles || []).reduce(
     (data: Record<string, any>, article: Article) => {
-      if (!data[article.project.id]) {
-        data[article.project.id] = {
-          project: article.project,
-          articles: [],
-        };
-      }
+      if (article.project) {
+        if (!data[article.project.id]) {
+          data[article.project.id] = {
+            project: article.project,
+            articles: [],
+          };
+        }
 
-      data[article.project.id].articles.push(article);
+        data[article.project.id].articles.push(article);
+      }
       return data;
     },
     {},

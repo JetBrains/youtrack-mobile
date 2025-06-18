@@ -1,13 +1,13 @@
 import {createSlice} from '@reduxjs/toolkit';
 import type {ArticlesList, ProjectArticlesData} from 'types/Article';
-import type {CustomError} from 'types/Error';
+import type {AnyError} from 'types/Error';
 export type KnowledgeBaseState = {
   articles: ProjectArticlesData[] | null;
   articlesList: ArticlesList | null;
   isLoading: boolean;
   expandingProjectId: string | null;
   error:
-    | (CustomError & {
+    | (AnyError & {
         noFavoriteProjects?: boolean;
       })
     | null;
@@ -26,7 +26,7 @@ const {reducer, actions} = createSlice({
     setExpandingProjectId(
       state: KnowledgeBaseState,
       action: {
-        payload: string;
+        payload: string | null;
       },
     ) {
       state.expandingProjectId = action.payload;
@@ -35,7 +35,7 @@ const {reducer, actions} = createSlice({
     setError(
       state: KnowledgeBaseState,
       action: {
-        payload: CustomError | null;
+        payload: AnyError | null;
       },
     ) {
       state.error = action.payload;
@@ -53,7 +53,7 @@ const {reducer, actions} = createSlice({
     setArticles(
       state: KnowledgeBaseState,
       action: {
-        payload: ProjectArticlesData[];
+        payload: ProjectArticlesData[] | null;
       },
     ) {
       state.articles = action.payload;

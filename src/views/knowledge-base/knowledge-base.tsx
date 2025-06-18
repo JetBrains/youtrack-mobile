@@ -229,7 +229,7 @@ export class KnowledgeBase extends Component<Props, State> {
               hasStar={project.pinned}
               canStar={true}
               onStarToggle={async () => {
-                const hasPinnedProjects: boolean = await this.props.toggleProjectFavorite(section);
+                const hasPinnedProjects = await this.props.toggleProjectFavorite(section);
                 if (!hasPinnedProjects) {
                   this.updateFocusedArticle(null);
                 }
@@ -271,7 +271,7 @@ export class KnowledgeBase extends Component<Props, State> {
   );
 
   renderSubArticlesPage = async (article: ArticleSingle) => {
-    const childrenData: ArticleNodeList = await this.props.getArticleChildren(article.id);
+    const childrenData = (await this.props.getArticleChildren(article.id)) as unknown as ArticleNodeList;
     const title = this.renderHeader({
       leftButton: (
         <TouchableOpacity onPress={() => (this.state.isSplitView ? this.toggleModal(null) : Router.pop())}>

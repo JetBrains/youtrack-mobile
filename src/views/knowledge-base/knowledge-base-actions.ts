@@ -36,7 +36,7 @@ import type {
   ProjectArticlesData,
 } from 'types/Article';
 import type {ArticleDraft} from 'types/Article';
-import type {CustomError} from 'types/Error';
+import type {AnyError} from 'types/Error';
 import type {Folder} from 'types/User';
 import type {ReduxAction, ReduxThunkDispatch, ReduxStateGetter, ReduxAPIGetter} from 'types/Redux';
 import type {ShowActionSheetWithOptions} from 'components/action-sheet/action-sheet';
@@ -57,10 +57,8 @@ const loadCachedArticleList = (): ReduxAction => async (dispatch: ReduxThunkDisp
 
 const getArticlesQuery = (): string | null => getStorageState().articlesQuery;
 
-const createArticleList = (
-  articles: Article[],
-  isExpanded?: boolean,
-): ArticlesList => treeHelper.createArticleList(articles, isExpanded);
+const createArticleList = (articles: ProjectArticlesData[], isExpanded?: boolean): ArticlesList =>
+  treeHelper.createArticleList(articles, isExpanded);
 
 
 export const getPinnedNonTemplateProjects = async (
@@ -106,17 +104,11 @@ const getArticleList = (reset: boolean = true) => async (
     getState().app?.networkState?.isConnected === false;
 
   if (isOffline) {
-    const cachedProjectData:
-      | Array<ProjectArticlesData>
-      | null
-      | undefined = getStorageState().articles;
-    const cachedArticlesList:
-      | ArticlesList
-      | null
-      | undefined = getStorageState().articlesList;
+    const cachedArticles = getStorageState().articles;
+    const cachedArticlesList = getStorageState().articlesList;
 
-    if (cachedProjectData && cachedArticlesList) {
-      dispatch(setArticles(cachedProjectData));
+    if (cachedArticles && cachedArticlesList) {
+      dispatch(setArticles(cachedArticles));
       dispatch(setList(cachedArticlesList));
     }
 
@@ -142,19 +134,18 @@ const getArticleList = (reset: boolean = true) => async (
     dispatch(
       setError({
         noFavoriteProjects: true,
-      }),
+      } as unknown as AnyError),
     );
   } else {
     const sortedProjects: ArticleProject[] = helper.createSortedProjects(
       pinnedProjects,
       getCachedArticleList(),
     );
-    const [error, projectData]: [
-      CustomError | null | undefined,
-      ProjectArticlesData,
-    ] = await until(getProjectDataPromises(api, sortedProjects));
+    dispatch(setError(null));
+    const [error, projectData] = await until<ProjectArticlesData[], AnyError | null>(
+      getProjectDataPromises(api, sortedProjects)
+    );
     dispatch(setGlobalInProgress(false));
-    dispatch(setError(error || null));
 
     if (error) {
       dispatch(setError(error));
@@ -188,12 +179,12 @@ const getArticleChildren = (articleId: string): ReduxAction<Promise<ArticleNodeL
       message: 'Failed to load article children',
       isError: true,
     });
-    return arrayToTree([]);
+    return arrayToTree([]) as ArticleNodeList;
   } else {
     logEvent({
       message: 'Article children loaded',
     });
-    return arrayToTree(articleWithChildren.childArticles);
+    return arrayToTree(articleWithChildren.childArticles) as ArticleNodeList;
   }
 };
 
@@ -217,16 +208,13 @@ const filterArticles = (
   } else {
     setError(null);
     dispatch(setGlobalInProgress(true));
-    const [error, articles]: [
-      CustomError | null | undefined,
-      Array<Article>,
-    ] = await until(getApi().articles.getArticles(query));
+    const [error, articles] = await until<Article[]>(getApi().articles.getArticles(query));
     dispatch(setGlobalInProgress(false));
 
     if (error) {
       notifyError(error);
     } else {
-      const projectData: ProjectArticlesData[] = helper.createProjectDataFromArticles(
+      const projectData = helper.createProjectDataFromArticles(
         articles,
       );
       const articlesList: ArticlesList = createArticleList(projectData, true);
@@ -270,19 +258,19 @@ const toggleProjectVisibility = (
 
   setError(null);
   let updatedArticlesList: ArticlesList = articlesList.slice();
-  const project: ArticleProject = item.title;
+  const project = item.title;
 
-  if (project.articles.collapsed === false) {
+  if (project?.articles?.collapsed === false) {
     return toggleProject(item, updatedArticlesList, true);
   }
 
   if (item.dataCollapsed) {
     toggleProject(item, updatedArticlesList, false);
   } else {
-    dispatch(setExpandingProjectId(item.title?.id));
+    dispatch(setExpandingProjectId(item.title?.id || null));
   }
 
-  const updatedProjectData: ProjectArticlesData | null = await getUpdatedProjectData();
+  const updatedProjectData = await getUpdatedProjectData();
   dispatch(setExpandingProjectId(null));
 
   if (updatedProjectData) {
@@ -310,20 +298,20 @@ const toggleProjectVisibility = (
     }
 
     dispatch(storeArticlesList(updatedArticlesList));
-    const updatedProjectData: ArticlesList = articles.reduce(
+    const projectData = (articles || []).reduce(
       (list: ProjectArticlesData[], it: ProjectArticlesData) =>
         list.concat(
-          it.project.id === listItem.title.id
+          it.project.id === listItem.title?.id
             ? toggleProjectDataItem(it, isCollapsed)
             : it,
         ),
       [],
     );
-    dispatch(storeProjectData(updatedProjectData));
+    dispatch(storeProjectData(projectData));
   }
 
-  async function getUpdatedProjectData(): ProjectArticlesData | null {
-    const [error, projectData] = await until(
+  async function getUpdatedProjectData(): Promise<ProjectArticlesData[] | null> {
+    const [error, projectData] = await until<ProjectArticlesData[]>(
       getProjectDataPromises(api, [
         {...project, articles: {...project.articles, collapsed: false}},
       ]),
@@ -333,7 +321,7 @@ const toggleProjectVisibility = (
       notifyError(error);
     }
 
-    return projectData && projectData[0]
+    return projectData && projectData[0] && articles
       ? helper.replaceProjectData(articles, projectData[0])
       : null;
   }
@@ -341,7 +329,7 @@ const toggleProjectVisibility = (
 
 const toggleProjectFavorite = (
   item: ArticlesListItem,
-): ReduxAction => async (
+): ReduxAction<Promise<boolean>> => async (
   dispatch: ReduxThunkDispatch,
   getState: ReduxStateGetter,
   getApi: ReduxAPIGetter,
@@ -357,13 +345,14 @@ const toggleProjectFavorite = (
         getState().articles.articles || [];
       const prevArticles: ProjectArticlesData[] = articles.slice();
       animation.layoutAnimation();
+      const project = item.title as ArticleProject;
       const updatedData: ProjectArticlesData[] = helper.removeProjectData(
         articles,
-        item.title,
+        project,
       );
       update(updatedData);
       const [error] = await until(
-        api.projects.toggleFavorite(item.title.id, item.title.pinned),
+        api.projects.toggleFavorite(project.id, project.pinned),
       );
 
       if (error) {
@@ -371,9 +360,9 @@ const toggleProjectFavorite = (
         update(prevArticles);
         return true;
       } else {
-        const projects: ArticleProject[] = await dispatch(cacheProjects());
+        const projects = await dispatch(cacheProjects());
         const hasPinned: boolean = projects.some(
-          (it: ArticleProject) => it.pinned,
+          it => it.pinned,
         );
 
         if (!hasPinned) {
@@ -384,7 +373,7 @@ const toggleProjectFavorite = (
         return hasPinned;
       }
     })
-    .catch(() => {});
+    .catch(() => false);
 
   function update(data: ProjectArticlesData[] | null) {
     const hasData: boolean = data !== null && data?.length > 0;
@@ -487,7 +476,7 @@ const toggleAllProjects = (
     message: `${collapse ? 'Collapse' : 'Expand'} all Knowledge base projects`,
     analyticsId: ANALYTICS_ARTICLES_PAGE,
   });
-  const updatedProjectData: ArticlesList = (articles || []).reduce(
+  const updatedProjectData = (articles || []).reduce(
     (list: ProjectArticlesData[], item: ProjectArticlesData) =>
       list.concat(toggleProjectDataItem(item, true)),
     [],
@@ -574,7 +563,7 @@ function getProjectDataPromises(
   return projects.map(async (project: ArticleProject) => {
     if (project.articles.collapsed) {
       return {
-        ...{project},
+        project,
         articles: [],
       };
     }

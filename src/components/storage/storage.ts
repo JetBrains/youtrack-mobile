@@ -11,7 +11,7 @@ import {routeMap} from 'app-routes';
 import type {Activity, ActivityType} from 'types/Activity';
 import type {IssueOnList} from 'types/Issue';
 import type {AppConfig} from 'types/AppConfig';
-import type {Article, ArticleProject, ArticlesList} from 'types/Article';
+import type {Article, ArticleProject, ArticlesList, ProjectArticlesData} from 'types/Article';
 import type {Board, Sprint} from 'types/Agile';
 import type {Folder, UserCurrent} from 'types/User';
 import type {InboxThread, Notification, ThreadsStateFilterId} from 'types/Inbox';
@@ -50,7 +50,7 @@ type StorageStateKeys = Partial<Record<keyof StorageState, string>>;
 export type StorageState = TipsState & FeatureState & {
   [key in typeof storageStateAuthParamsKey]: string | null;
 } & {
-  articles: Article[] | null;
+  articles: ProjectArticlesData[] | null;
   articlesList: ArticlesList | null;
   articlesQuery: string | null;
   articleLastVisited: {
