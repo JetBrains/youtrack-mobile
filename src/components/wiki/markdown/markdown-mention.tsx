@@ -15,7 +15,7 @@ import type {User} from 'types/User';
 import styles from 'components/wiki/markdown/markdown.styles';
 
 const getLinkStyle = (m: Mention) => {
-  if ('resolved' in m) {
+  if ('resolved' in m && m.resolved !== null) {
     return styles.resolved;
   }
   return styles.link;
@@ -64,10 +64,10 @@ export function MarkdownMentionWithUserCard({
     if (hasType.user(m)) {
       return `@${getEntityPresentation(m)}`;
     }
-    if ('summary' in m) {
+    if ('summary' in m && m.summary) {
       return m.summary;
     }
-    if ('idReadable' in m) {
+    if ('idReadable' in m && m.idReadable) {
       return m.idReadable;
     }
     return '';
