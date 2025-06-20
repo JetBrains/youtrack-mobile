@@ -1,12 +1,12 @@
 import {isSLAField} from 'components/custom-field/custom-field-helper';
 
-import type {AnyIssue, IssueFull, IssueOnList, ListIssueField} from 'types/Issue';
+import type {AnyIssue, IssueFull, IssueOnListExtended, IssueOnListField} from 'types/Issue';
 import type {Article} from 'types/Article';
 import type {CustomField, CustomFieldBase} from 'types/CustomFields';
 
 function findIssueField(
   issue: AnyIssue,
-  predicate: (field: CustomFieldBase | CustomField | ListIssueField) => boolean
+  predicate: (field: CustomFieldBase | CustomField | IssueOnListField) => boolean
 ) {
   const fields = issue.fields || [];
 
@@ -26,7 +26,7 @@ function getPriorityField(issue: AnyIssue) {
   });
 }
 
-function getSLAFields(issue: IssueOnList) {
+function getSLAFields(issue: IssueOnListExtended) {
   return (issue.fields || []).filter(isSLAField);
 }
 
@@ -38,7 +38,7 @@ function getAssigneeField(issue: AnyIssue) {
   });
 }
 
-function getReadableID(entity: IssueOnList | IssueFull | Article) {
+function getReadableID(entity: IssueOnListExtended | IssueFull | Article) {
   return (!!entity && entity?.idReadable) || '';
 }
 

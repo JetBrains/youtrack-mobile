@@ -55,7 +55,7 @@ import styles from './agile-board.styles';
 
 import type IssuePermissions from 'components/issue-permissions/issue-permissions';
 import type {AgilePageState} from './board-reducers';
-import type {AnyIssue, IssueOnList} from 'types/Issue';
+import type {AnyIssue, IssueOnListExtended} from 'types/Issue';
 import type {AppState} from 'reducers';
 import type {CustomError} from 'types/Error';
 import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
@@ -243,7 +243,7 @@ class AgileBoard extends Component<Props, State> {
   }
 
   clearModalChildren = () => this.toggleModalChildren(null);
-  _onTapIssue = (issue: IssueOnList) => {
+  _onTapIssue = (issue: IssueOnListExtended) => {
     log.info(`Agile: Opening issue from Agile Board`);
     usage.trackEvent(CATEGORY_NAME, 'Open issue');
 
@@ -491,7 +491,7 @@ class AgileBoard extends Component<Props, State> {
         onTapCreateIssue={
           this.canCreateCard() && networkState?.isConnected === true
             ? async (cellColumnId: string, cellId: string) => {
-                const draft: Partial<IssueOnList> | null = await createCardForCell(cellColumnId, cellId);
+                const draft: Partial<IssueOnListExtended> | null = await createCardForCell(cellColumnId, cellId);
                 if (draft?.id) {
                   Router.CreateIssue({predefinedDraftId: draft.id, onHide: () => Router.AgileBoard()});
                 }

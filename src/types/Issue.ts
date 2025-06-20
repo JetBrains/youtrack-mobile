@@ -2,10 +2,12 @@ import IssuePermissions from 'components/issue-permissions/issue-permissions';
 
 import type {AnyCustomField} from 'components/custom-field/custom-field-helper';
 import type {Article} from 'types/Article';
+import type {Activity} from 'types/Activity';
 import type {
   Attachment,
   ColorField,
   CustomFieldBase,
+  CustomFieldBaseValue,
   ICustomFieldValue,
   IssueComment,
   IssueLink,
@@ -56,11 +58,11 @@ interface TimeTrackingSettings {
   };
 }
 
-export interface ListIssueFieldValue extends ICustomFieldValue {
+export interface IssueOnListFieldValue extends ICustomFieldValue {
   color: ColorField;
 }
 
-export interface ListIssueField {
+export interface IssueOnListField {
   $type: string;
   id: string;
   name: string;
@@ -68,10 +70,10 @@ export interface ListIssueField {
     $type: string;
     field: ICustomFieldValue;
   };
-  value: ListIssueFieldValue;
+  value: IssueOnListFieldValue;
 }
 
-export interface ListIssueProject extends ProjectBase {
+export interface IssueOnListProject extends ProjectBase {
   plugins: {
     $type: string;
     helpDeskSettings: ProjectHelpDeskSettingsBase;
@@ -81,9 +83,9 @@ export interface ListIssueProject extends ProjectBase {
 
 export interface IssueOnListS extends EntityBase {
   created: number;
-  fields: Array<ListIssueField>;
+  fields: Array<IssueOnListField>;
   idReadable: string;
-  project: ListIssueProject;
+  project: IssueOnListProject;
   reporter: UserBase;
   resolved: number | null;
   summary: string;
@@ -98,20 +100,28 @@ export interface IssueOnListL extends IssueOnListM {
   trimmedDescription: string | null;
 }
 
-export type ListIssue = IssueOnListS | IssueOnListM | IssueOnListL;
+export type IssueOnList = IssueOnListS | IssueOnListM | IssueOnListL;
 
-export type IssueOnList = ListIssue & {
-  fieldHash: {
-    key: string;
-    value: ListIssueFieldValue;
-  };
+export type IssueFieldHashValue = CustomFieldBaseValue | IssueOnListFieldValue;
+
+export interface IssueFieldHash {
+  [key: string]: IssueFieldHashValue;
+}
+
+export type IssueOnListExtended = IssueOnList & {
+  fieldHash: IssueFieldHash;
+  activityPage?: Activity[]
 };
+
+export interface IssueFullExtended extends IssueFull {
+  fieldHash: IssueFieldHash;
+}
 
 export interface IssueFull extends BaseIssue {
   attachments: Attachment[];
   comments?: IssueComment[];
   description: string;
-  fieldHash?: any;
+  fieldHash?: IssueFieldHash;
   _fields?: AnyCustomField[];
   updater: User;
   voters: {
@@ -145,7 +155,7 @@ export type IssueCreate = Omit<
   | 'wikifiedDescription'
 > & {project: Partial<Project>; canUpdateVisibility: boolean};
 
-export type AnyIssue = IssueOnList | IssueFull | IssueLink | IssueCreate;
+export type AnyIssue = IssueOnListExtended | IssueFullExtended | IssueLink | IssueCreate;
 
 export type TransformedSuggestion = {
   prefix: string;

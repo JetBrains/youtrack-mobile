@@ -5,37 +5,35 @@ import {getReadableID} from 'components/issue-formatter/issue-formatter';
 import {handleRelativeUrl} from 'components/config/config';
 import {toField} from 'util/to-field';
 
-import type {ICustomFieldValue} from 'types/CustomFields';
-import type {
+import {CustomFieldBase, ICustomFieldValue} from 'types/CustomFields';
+import {
   ServersideSuggestion,
   TransformedSuggestion,
   ServersideSuggestionLegacy,
-  ListIssue,
-  ListIssueField,
-  ListIssueFieldValue,
   IssueOnList,
+  IssueOnListExtended,
   IssueFull,
+  IssueFieldHash,
+  BaseIssue,
 } from 'types/Issue';
 
 interface Entity {
-  [key: string]: any
+  [key: string]: any;
 }
 
 const API = {
-  makeFieldHash: (issue: ListIssue): Record<string, any> => {
-    const fieldHash: {[key: string]: ListIssueFieldValue} = {};
-    issue.fields.forEach((field: ListIssueField) => {
-      const f: ICustomFieldValue = field.projectCustomField.field;
+  makeFieldHash: <T extends {fields: (IssueOnList | BaseIssue)['fields']}>(issue: T): IssueFieldHash => {
+    const fieldHash = {} as IssueFieldHash;
+    issue.fields.forEach(field => {
+      const f: ICustomFieldValue | CustomFieldBase = field.projectCustomField.field;
       fieldHash[f.localizedName || f.name] = field.value;
     });
     return fieldHash;
   },
-  fillIssuesFieldHash: (issues: ListIssue[] = []) => {
-    return issues.map(i => ({...i, fieldHash: API.makeFieldHash(i)})) as IssueOnList[];
+  fillIssuesFieldHash: <T extends IssueOnList>(issues: T[] = []): Array<T & {fieldHash: IssueFieldHash}> => {
+    return issues.map(i => ({...i, fieldHash: API.makeFieldHash(i)}));
   },
-  convertQueryAssistSuggestions: (
-    suggestions: ServersideSuggestion[],
-  ): TransformedSuggestion[] => {
+  convertQueryAssistSuggestions: (suggestions: ServersideSuggestion[]): TransformedSuggestion[] => {
     return suggestions.map((suggestion: ServersideSuggestion) => {
       return {
         prefix: suggestion.prefix || '',
@@ -80,7 +78,7 @@ const API = {
 
   toField: toField,
 
-  getIssueId(issue: IssueOnList | IssueFull): string {
+  getIssueId(issue: IssueOnListExtended | IssueFull): string {
     return getReadableID(issue);
   },
 
@@ -101,41 +99,17 @@ const API = {
     return commandPreview.replace(/<\/?[^>]+(>|$)/g, '');
   },
 
-  removeDuplicatesByPropName(
-    items: Array<Record<string, any>>,
-    valueName: string,
-  ) {
+  removeDuplicatesByPropName(items: Array<Record<string, any>>, valueName: string) {
     if (!valueName) {
       return items;
     }
 
-    return (items || []).filter(
-      (item, index, it) =>
-        index === it.findIndex(i => i[valueName] === item[valueName]),
-    );
-  },
-
-  equalsByProp(
-    a: Array<Record<string, any>>,
-    b: Array<Record<string, any>>,
-    propName: string,
-  ): boolean {
-    const _a = a.reduce((keys, it) => keys.concat(it[propName]), []);
-
-    const _b = b.reduce((keys, it) => keys.concat(it[propName]), []);
-
-    return (
-      _a.length === _b.length && _a.every((value: Record<string, any>, index: number) => value === _b[index])
-    );
+    return (items || []).filter((item, index, it) => index === it.findIndex(i => i[valueName] === item[valueName]));
   },
 };
 export default API;
 
-function convertRelativeUrl<T extends Entity>(
-  item: T,
-  urlField: string,
-  backendUrl: string,
-) {
+function convertRelativeUrl<T extends Entity>(item: T, urlField: string, backendUrl: string) {
   if (!item || !item[urlField]) {
     return item;
   }

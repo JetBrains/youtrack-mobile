@@ -65,7 +65,7 @@ import styles from './issues.styles';
 
 import type Api from 'components/api/api';
 import type Auth from 'components/auth/oauth2';
-import type {AnyIssue, IssueOnList} from 'types/Issue';
+import type {AnyIssue, IssueOnListExtended} from 'types/Issue';
 import type {AppState} from 'reducers';
 import type {ErrorMessageProps} from 'components/error-message/error-message';
 import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
@@ -187,8 +187,8 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
 
   initFocusedIssue(issueId?: string) {
     if (issueId) {
-      const targetIssue: IssueOnList | null = getIssueFromCache(issueId);
-      this.updateFocusedIssue(targetIssue || {id: issueId} as IssueOnList);
+      const targetIssue: IssueOnListExtended | null = getIssueFromCache(issueId);
+      this.updateFocusedIssue(targetIssue || {id: issueId} as IssueOnListExtended);
     }
   }
 
@@ -214,7 +214,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
     return this.state !== nextState;
   }
 
-  goToIssue(issue: IssueOnList) {
+  goToIssue(issue: IssueOnListExtended) {
     log.info(`Issues: Opening issue from the Issues`);
 
     if (!issue.id) {
@@ -295,7 +295,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
     ) : null;
   };
 
-  _renderRow = ({item}: { item: IssueOnList }) => {
+  _renderRow = ({item}: { item: IssueOnListExtended }) => {
     const {settings} = this.props;
     const {focusedIssue, isSplitView} = this.state;
 

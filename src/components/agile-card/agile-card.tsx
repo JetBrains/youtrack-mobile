@@ -12,7 +12,7 @@ import {UNIT} from 'components/variables';
 import styles from './agile-card.styles';
 
 import type {FieldStyle} from 'types/Agile';
-import type {IssueOnList} from 'types/Issue';
+import type {IssueOnListExtended} from 'types/Issue';
 import type {UITheme} from 'types/Theme';
 import type {ViewStyleProp} from 'types/Internal';
 import {CustomFieldBase, FieldValue} from 'types/CustomFields';
@@ -28,7 +28,7 @@ interface Props {
   };
   ghost?: boolean;
   // from <Draggable/>
-  issue: IssueOnList;
+  issue: IssueOnListExtended;
   style?: any;
   uiTheme: UITheme;
   zoomedIn?: boolean;

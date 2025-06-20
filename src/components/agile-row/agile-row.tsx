@@ -8,16 +8,16 @@ import {IconAngleDownRight} from '../icon/icon';
 import {isAllColumnsCollapsed} from 'views/agile-board/agile-board__helper';
 import styles from './agile-row.styles';
 import type {AgileBoardRow, BoardCell, BoardColumn} from 'types/Agile';
-import type {IssueOnList} from 'types/Issue';
+import type {IssueOnListExtended} from 'types/Issue';
 import type {ViewStyleProp} from 'types/Internal';
 import type {UITheme} from 'types/Theme';
 
-type RenderIssueCard = (issue: IssueOnList) => any;
+type RenderIssueCard = (issue: IssueOnListExtended) => any;
 type Props = {
   style?: ViewStyleProp;
   row: AgileBoardRow;
   collapsedColumnIds: string[];
-  onTapIssue: (issue: IssueOnList) => any;
+  onTapIssue: (issue: IssueOnListExtended) => any;
   onTapCreateIssue?: (columnId: string, cellId: string) => any;
   onCollapseToggle: (row: AgileBoardRow) => any;
   renderIssueCard: RenderIssueCard;
@@ -26,7 +26,7 @@ type Props = {
   uiTheme: UITheme;
 };
 
-function renderCollapsedCard(issue: IssueOnList) {
+function renderCollapsedCard(issue: IssueOnListExtended) {
   const priorityField = getPriorityField(issue);
   const color = priorityField?.value?.color;
   return (

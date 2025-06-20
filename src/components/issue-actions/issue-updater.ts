@@ -3,7 +3,7 @@ import {getApi} from 'components/api/api__instance';
 import {until} from 'util/util';
 
 import type Api from 'components/api/api';
-import type {IssueFull, IssueOnList} from 'types/Issue';
+import type {IssueFull, IssueOnListExtended} from 'types/Issue';
 
 export const loadIssue = async (issueId: string): Promise<IssueFull> => {
   const api: Api = getApi();
@@ -18,10 +18,10 @@ export const loadIssue = async (issueId: string): Promise<IssueFull> => {
   }
 };
 
-export const updateIssueInIssues = (issueToUpdate: IssueFull, currentIssues: IssueOnList[]): IssueOnList[] => {
-  return (currentIssues || []).reduce((issues: IssueOnList[], issue: IssueOnList) => {
+export const updateIssueInIssues = (issueToUpdate: IssueFull, currentIssues: IssueOnListExtended[]): IssueOnListExtended[] => {
+  return (currentIssues || []).reduce((issues: IssueOnListExtended[], issue: IssueOnListExtended) => {
     return issues.concat([
-      issue.id === issueToUpdate.id ? ({...issue, ...issueToUpdate} as unknown as IssueOnList) : issue,
+      issue.id === issueToUpdate.id ? ({...issue, ...issueToUpdate} as unknown as IssueOnListExtended) : issue,
     ]);
   }, []);
 };

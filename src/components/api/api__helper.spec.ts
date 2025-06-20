@@ -1,9 +1,9 @@
 import ApiHelper from './api__helper';
-import {IssueOnList} from 'types/Issue';
+import {IssueOnListExtended} from 'types/Issue';
 
 describe('Api helper', () => {
   describe('fieldHash', () => {
-    let issue: IssueOnList;
+    let issue: IssueOnListExtended;
     beforeEach(() => {
       issue = {
         fields: [
@@ -18,7 +18,7 @@ describe('Api helper', () => {
             },
           },
         ],
-      } as IssueOnList;
+      } as IssueOnListExtended;
     });
 
     it('should convert fields array to field hash object', () => {

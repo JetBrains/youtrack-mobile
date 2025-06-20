@@ -1,12 +1,12 @@
 import type {EntityBase} from 'types/Entity.ts';
 import type {ICustomField, Tag} from 'types/CustomFields';
-import type {IssueFull, IssueOnList, ListIssueFieldValue} from './Issue';
+import type {IssueFull, IssueOnListExtended, IssueOnListFieldValue} from './Issue';
 import type {ProjectWithPlugins} from 'types/Project';
 
 export interface Cell {
   id: string;
   column: AgileColumn;
-  issues: IssueOnList[];
+  issues: IssueOnListExtended[];
 }
 
 export interface Swimlane {
@@ -52,13 +52,13 @@ export interface BoardCell {
   column: {
     id: string;
   };
-  issues: IssueOnList[];
+  issues: IssueOnListExtended[];
 }
 
 export interface AgileBoardRow extends EntityBase {
   name: string;
   collapsed: boolean;
-  issue: IssueOnList;
+  issue: IssueOnListExtended;
   cells: BoardCell[];
 }
 
@@ -195,6 +195,6 @@ export interface SprintIssue extends EntityBase {
       id: string;
       field: Omit<ICustomField, 'localizedName'>;
     };
-    value: Omit<ListIssueFieldValue, 'localizedName'> | null | [];
+    value: Omit<IssueOnListFieldValue, 'localizedName'> | null | [];
   }>;
 }

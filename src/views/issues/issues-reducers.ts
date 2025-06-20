@@ -7,7 +7,7 @@ import {ISSUE_UPDATED} from '../issue/issue-action-types';
 import {IssuesSettings, issuesSettingsDefault} from 'views/issues/index';
 import {LOG_OUT, SET_PROGRESS} from 'actions/action-types';
 
-import type {AssistSuggest, IssueOnList} from 'types/Issue';
+import type {AssistSuggest, IssueOnListExtended} from 'types/Issue';
 import type {Folder} from 'types/User';
 import {CustomError} from 'types/Error';
 import {ISelectProps} from 'components/select/select';
@@ -27,7 +27,7 @@ export interface IssuesState {
   isRefreshing: boolean;
   isIssuesContextOpen: boolean;
   issuesCount: number | null;
-  issues: IssueOnList[];
+  issues: IssueOnListExtended[];
   selectProps: (Partial<ISelectProps> | ISelectProps | ISSWithItemActionsProps & { isSectioned?: boolean }) | null;
   searchContext: Folder;
   isSearchContextPinned: boolean;
@@ -84,7 +84,7 @@ const {reducer, actions} = createSlice({
     STOP_LOADING_MORE(state: IssuesState) {
       state.isLoadingMore = false;
     },
-    RECEIVE_ISSUES(state: IssuesState, action: PayloadAction<IssueOnList[]>) {
+    RECEIVE_ISSUES(state: IssuesState, action: PayloadAction<IssueOnListExtended[]>) {
       state.issues = action.payload;
       state.isInitialized = true;
     },
@@ -138,7 +138,7 @@ const {reducer, actions} = createSlice({
     [ISSUE_CREATED]: (
       state: IssuesState,
       action: {
-        issue: IssueOnList;
+        issue: IssueOnListExtended;
       },
     ): IssuesState => {
       return {...state, issues: [action.issue, ...state.issues]};
@@ -165,18 +165,18 @@ const {reducer, actions} = createSlice({
     [ISSUE_UPDATED]: (
       state: IssuesState,
       action: {
-        issue: IssueOnList;
+        issue: IssueOnListExtended;
       },
     ) => {
-      const sourceIssue: IssueOnList = action.issue;
+      const sourceIssue: IssueOnListExtended = action.issue;
 
-      function updateIssue(issue: IssueOnList): IssueOnList {
-        return Object.keys(issue).reduce((updated: IssueOnList, key: string) => {
-          return {...updated, [key]: sourceIssue[key as keyof IssueOnList]};
-        }, {} as IssueOnList);
+      function updateIssue(issue: IssueOnListExtended): IssueOnListExtended {
+        return Object.keys(issue).reduce((updated: IssueOnListExtended, key: string) => {
+          return {...updated, [key]: sourceIssue[key as keyof IssueOnListExtended]};
+        }, {} as IssueOnListExtended);
       }
 
-      const issues: IssueOnList[] = state.issues.map((issue: IssueOnList) =>
+      const issues: IssueOnListExtended[] = state.issues.map((issue: IssueOnListExtended) =>
         issue.id === sourceIssue?.id ? updateIssue(issue) : issue,
       );
       return {...state, issues};

@@ -2,7 +2,7 @@ import log from 'components/log/log';
 import {i18n} from 'components/i18n/i18n';
 import {notify} from 'components/notification/notification';
 import type {BoardCell, AgileBoardRow, Board, AgileColumn} from 'types/Agile';
-import type {IssueOnList, IssueFull} from 'types/Issue';
+import type {IssueOnListExtended, IssueFull} from 'types/Issue';
 export function updateRowCollapsedState(
   board: Board,
   row: AgileBoardRow,
@@ -24,7 +24,7 @@ export function updateRowCollapsedState(
 function updateCellsIssuesIfNeeded(
   cells: BoardCell[],
   issueId: string,
-  updateIssues: (arg0: IssueOnList[]) => Array<IssueOnList>,
+  updateIssues: (arg0: IssueOnListExtended[]) => Array<IssueOnListExtended>,
 ) {
   const isTargetIssueHere = cells.some(cell =>
     cell.issues.some(issue => issue.id === issueId),
@@ -35,7 +35,7 @@ function updateCellsIssuesIfNeeded(
   }
 
   return cells.map((cell: BoardCell) => {
-    if (cell.issues.some((issue: IssueOnList) => issue.id === issueId)) {
+    if (cell.issues.some((issue: IssueOnListExtended) => issue.id === issueId)) {
       return {...cell, issues: updateIssues(cell.issues)};
     }
 
@@ -79,10 +79,10 @@ export function addCardToBoard(
 }
 
 function fillIssueFromAnotherIssue(
-  issue: IssueOnList,
+  issue: IssueOnListExtended,
   sourceIssue: IssueFull,
-): IssueOnList {
-  return Object.keys(issue).reduce((updated: IssueOnList, key: string) => {
+): IssueOnListExtended {
+  return Object.keys(issue).reduce((updated: IssueOnListExtended, key: string) => {
     return {...updated, [key]: sourceIssue[key]};
   }, {});
 }
@@ -94,7 +94,7 @@ export function findIssueOnBoard(
   | {
       cell: BoardCell;
       row: AgileBoardRow;
-      issue: IssueOnList;
+      issue: IssueOnListExtended;
       column: AgileColumn;
     }
   | null
@@ -195,15 +195,15 @@ export function removeIssueFromBoard(board: Board, issueId: string): Board {
 }
 
 function reorderCollection(
-  collection: Array<IssueOnList | AgileBoardRow>,
+  collection: Array<IssueOnListExtended | AgileBoardRow>,
   leadingId: string | null | undefined,
   movedId: string,
-): Array<IssueOnList | AgileBoardRow> {
+): Array<IssueOnListExtended | AgileBoardRow> {
   const moved = collection.filter(
-    (s: IssueOnList | AgileBoardRow) => s.id === movedId,
+    (s: IssueOnListExtended | AgileBoardRow) => s.id === movedId,
   )[0];
   const updated = collection.filter(
-    (s: IssueOnList | AgileBoardRow) => s !== moved,
+    (s: IssueOnListExtended | AgileBoardRow) => s !== moved,
   );
   const leadingIndex = updated.findIndex(s => s.id === leadingId);
   updated.splice(leadingIndex + 1, 0, moved);
@@ -220,7 +220,7 @@ function reorderCardsInRow(
     cells: updateCellsIssuesIfNeeded(
       row.cells,
       movedId,
-      (issues: IssueOnList[]) =>
+      (issues: IssueOnListExtended[]) =>
         reorderCollection(issues, leadingId, movedId),
     ),
   };
@@ -256,7 +256,7 @@ export function reorderEntitiesOnBoard(
 }
 export function addOrUpdateCell(
   board: Board,
-  issue: IssueOnList,
+  issue: IssueOnListExtended,
   rowId: string,
   columnId: string,
 ): Board {

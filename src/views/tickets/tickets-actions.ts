@@ -5,7 +5,7 @@ import {RECEIVE_ISSUES, SET_HELPDESK_PROJECTS} from 'views/issues/issues-reducer
 import {SET_HELPDESK_CONTEXT, SET_HELPDESK_MODE} from 'views/issues/issues-reducers';
 import {until} from 'util/util';
 
-import {IssueOnList} from 'types/Issue';
+import {IssueOnListExtended} from 'types/Issue';
 import {ProjectHelpdesk} from 'types/Project';
 import {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
 
@@ -16,7 +16,7 @@ const setHelpDeskMode = (): ReduxAction => (dispatch: ReduxThunkDispatch, getSta
 };
 
 const setTicketsFromCache = (): ReduxAction => async (dispatch: ReduxThunkDispatch) => {
-  const cachedTickets: IssueOnList[] = getStorageState().helpdeskCache || [];
+  const cachedTickets: IssueOnListExtended[] = getStorageState().helpdeskCache || [];
   if (cachedTickets.length > 0) {
     log.info(`Tickets: Cached tickets loaded`);
     dispatch(RECEIVE_ISSUES(cachedTickets));

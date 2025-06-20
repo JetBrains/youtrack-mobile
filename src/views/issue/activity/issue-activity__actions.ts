@@ -16,7 +16,7 @@ import {WORK_ITEM_CREATE, WORK_ITEM_UPDATE} from 'components/issue-permissions/i
 
 import type Api from 'components/api/api';
 import type {Activity, ActivityType} from 'types/Activity';
-import type {AnyIssue, ListIssueProject} from 'types/Issue';
+import type {AnyIssue, IssueOnListProject} from 'types/Issue';
 import type {DraftWorkItem, ProjectTimeTrackingSettings, TimeTracking} from 'types/Work';
 import type {Entity} from 'types/Entity';
 import type {IssueState} from 'views/issue/issue-base-reducer';
@@ -60,7 +60,7 @@ export interface IssueActivityActions {
     issueActivityTypes: ActivityType[];
     type: string;
   };
-  setDefaultProjectTeam: (project: Project | ListIssueProject) => ReduxAction;
+  setDefaultProjectTeam: (project: Project | IssueOnListProject) => ReduxAction;
   loadActivitiesPage: (doNotReset?: boolean, issueId?: string, commentsOnly?: boolean) => ReduxAction;
   doUpdateWorkItem: (workItem: WorkItem) => ReduxAction;
   submitWorkItem: (draft: WorkItem | DraftWorkItem, issueId?: string) => ReduxAction<Promise<WorkItem | null>>;
@@ -278,7 +278,7 @@ export const createIssueActivityActions = (stateFieldName = DEFAULT_ISSUE_STATE_
         });
       };
     },
-    setDefaultProjectTeam: function (project: Project | ListIssueProject): ReduxAction {
+    setDefaultProjectTeam: function (project: Project | IssueOnListProject): ReduxAction {
       return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
         let team: ProjectTeam | undefined;
         if (isHelpdeskProject({project} as Entity)) {

@@ -23,7 +23,7 @@ import {issuesSettingsIssueSizes, issuesSettingsSearch} from 'views/issues/index
 import {SET_PROGRESS} from 'actions/action-types';
 
 import type Auth from 'components/auth/oauth2';
-import {IssueOnList} from 'types/Issue';
+import {IssueOnListExtended} from 'types/Issue';
 import {Folder} from 'types/User';
 
 jest.mock('components/api/api', () => {
@@ -106,7 +106,7 @@ describe('Issues', () => {
         {
           id: 'test',
         },
-      ] as IssueOnList[];
+      ] as IssueOnListExtended[];
 
       await store.dispatch(actions.RECEIVE_ISSUES(issues));
 

@@ -19,7 +19,7 @@ import type {
   Board,
   AgileUserProfile,
 } from 'types/Agile';
-import type {IssueOnList, IssueFull, TransformedSuggestion} from 'types/Issue';
+import type {IssueOnListExtended, IssueFull, TransformedSuggestion} from 'types/Issue';
 import type {CustomError} from 'types/Error';
 type BoardState = Board;
 export type AgilePageState = {
@@ -184,7 +184,7 @@ const boardReducer = createReducer(
     [types.ADD_OR_UPDATE_CELL_ON_BOARD](
       state: BoardState,
       action: {
-        issue: IssueOnList;
+        issue: IssueOnListExtended;
         rowId: string;
         columnId: string;
       },

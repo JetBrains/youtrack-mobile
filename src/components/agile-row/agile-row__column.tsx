@@ -9,13 +9,13 @@ import {isSplitView} from 'components/responsive/responsive-helper';
 import styles from './agile-row.styles';
 
 import type {BoardCell} from 'types/Agile';
-import type {IssueOnList} from 'types/Issue';
+import type {IssueOnListExtended} from 'types/Issue';
 
 interface ColumnProps {
   cell: BoardCell;
   onTapCreateIssue?: (cellColumnId: string, cellId: string) => void;
   lastColumn: boolean;
-  renderIssueCard: (issue: IssueOnList) => React.ReactNode;
+  renderIssueCard: (issue: IssueOnListExtended) => React.ReactNode;
   zoomedIn?: boolean;
   columnsLength: number;
   testID?: string;

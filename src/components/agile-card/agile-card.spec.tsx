@@ -6,10 +6,10 @@ import AgileCard from './agile-card';
 import Mocks from 'test/mocks';
 import {DEFAULT_THEME} from 'components/theme/theme';
 
-import {IssueOnList} from 'types/Issue';
+import {IssueOnListExtended} from 'types/Issue';
 
 describe('<AgileCard/>', () => {
-  let issueMock: IssueOnList;
+  let issueMock: IssueOnListExtended;
 
   beforeEach(() => {
     cleanup();

@@ -23,16 +23,16 @@ import {ThemeContext} from 'components/theme/theme-context';
 import styles from './linked-issues.style';
 
 import type {IssueLink} from 'types/CustomFields';
-import type {IssueOnList} from 'types/Issue';
+import type {IssueOnListExtended} from 'types/Issue';
 import type {LinksListData} from './linked-issues-helper';
 import type {Theme} from 'types/Theme';
 import type {ViewStyleProp} from 'types/Internal';
 
 interface Props {
-  canLink?: (issue: IssueOnList) => boolean;
+  canLink?: (issue: IssueOnListExtended) => boolean;
   issuesGetter: (linkTypeName: string, query: string) => any;
   linksGetter: () => any;
-  onUnlink: (linkedIssue: IssueOnList, linkTypeId: string) => any;
+  onUnlink: (linkedIssue: IssueOnListExtended, linkTypeId: string) => any;
   onLinkIssue: (linkedIssueId: string, linkTypeName: string) => any;
   onUpdate: (linkedIssues?: IssueLink[]) => void;
   style?: ViewStyleProp;
@@ -40,7 +40,7 @@ interface Props {
   onHide: () => void;
   onAddLink?: (params: any | any[]) => any;
   closeIcon?: any;
-  onIssueLinkPress?: (issue: IssueOnList) => any;
+  onIssueLinkPress?: (issue: IssueOnListExtended) => any;
 }
 
 const LinkedIssues = (props: Props) => {
@@ -63,14 +63,14 @@ const LinkedIssues = (props: Props) => {
   }, []);
 
   const doUpdateSections = (
-    removedLinkedIssue: IssueOnList,
+    removedLinkedIssue: IssueOnListExtended,
     linkTypeId: string,
   ): LinksListData[] => {
     const _sections: LinksListData[] = sections
       .map((it: LinksListData) => {
         if (it.linkTypeId === linkTypeId) {
           it.data = it.data.filter(
-            (il: IssueOnList) => il.id !== removedLinkedIssue.id,
+            (il: IssueOnListExtended) => il.id !== removedLinkedIssue.id,
           );
         }
 
@@ -83,7 +83,7 @@ const LinkedIssues = (props: Props) => {
     return _sections;
   };
 
-  const renderLinkedIssue = (linkedIssue: IssueOnList, linkTypeId: string) => {
+  const renderLinkedIssue = (linkedIssue: IssueOnListExtended, linkTypeId: string) => {
     const isButtonPressed: boolean = pressedButtonId !== null;
     const isCurrentButtonPressed: boolean = isButtonPressed && pressedButtonId === linkedIssue.id + linkTypeId;
     return (
@@ -200,7 +200,7 @@ const LinkedIssues = (props: Props) => {
         contentContainerStyle={styles.linkedList}
         sections={sections}
         scrollEventThrottle={10}
-        keyExtractor={(issue: IssueOnList) => issue.id}
+        keyExtractor={(issue: IssueOnListExtended) => issue.id}
         renderItem={(info) => renderLinkedIssue(info.item, info.section.linkTypeId)}
         renderSectionHeader={renderSectionTitle}
         ItemSeparatorComponent={() => <View style={styles.separator} />}

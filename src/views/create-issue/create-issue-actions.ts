@@ -17,7 +17,7 @@ import {showActionSheet} from 'components/action-sheet/action-sheet';
 import {until} from 'util/util';
 
 import type Api from 'components/api/api';
-import type {AnyIssue, CommandSuggestionResponse, IssueCreate, IssueOnList} from 'types/Issue';
+import type {AnyIssue, CommandSuggestionResponse, IssueCreate, IssueOnListExtended} from 'types/Issue';
 import {
   Attachment,
   CustomField,
@@ -408,7 +408,7 @@ export function loadIssuesXShort(
   linkTypeName: string,
   query: string = '',
   page?: number
-): ReduxAction<Promise<IssueOnList>> {
+): ReduxAction<Promise<IssueOnListExtended>> {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     const issue: IssueCreate = getState().creation.issue;
     const searchQuery: string = encodeURIComponent(
@@ -434,7 +434,7 @@ export function loadLinkedIssues(): ReduxAction<Promise<Array<IssueLink>>> {
 }
 
 export function onUnlinkIssue(
-  linkedIssue: IssueOnList,
+  linkedIssue: IssueOnListExtended,
   linkTypeId: string
 ): ReduxAction<Promise<boolean>> {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {

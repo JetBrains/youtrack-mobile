@@ -46,7 +46,7 @@ describe('Issue view actions', () => {
         submitDraftComment: jest.fn(),
         getActivitiesPage: jest.fn(),
       },
-    };
+    } as unknown as API;
     store = mockStore({
       issueState: {
         issueId: ISSUE_ID,
@@ -75,7 +75,7 @@ describe('Issue view actions', () => {
     expect(dispatched[1]).toEqual({
       type: actions.RECEIVE_ISSUE.type,
       payload: {
-        issue: issueMock,
+        issue: {...issueMock, fieldHash: {}},
       },
     });
   });

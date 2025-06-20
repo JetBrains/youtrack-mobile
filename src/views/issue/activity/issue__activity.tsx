@@ -49,7 +49,7 @@ import type {CustomError} from 'types/Error';
 import type {EventSubscription} from 'react-native';
 import type {IssueActivityActions} from './issue-activity__actions';
 import type {IssueComment} from 'types/CustomFields';
-import type {IssueContextData, IssueFull, IssueOnList} from 'types/Issue';
+import type {IssueContextData, IssueFull, IssueOnListExtended} from 'types/Issue';
 import type {RequestHeaders} from 'types/Auth';
 import type {State as IssueActivityState} from './issue-activity__reducers';
 import type {State as IssueCommentActivityState} from './issue-activity__comment-reducers';
@@ -139,7 +139,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
     this.goOnlineSubscription?.remove();
   }
 
-  load = async (issue: IssueFull | IssueOnList) => {
+  load = async (issue: IssueFull | IssueOnListExtended) => {
     if (issue?.id) {
       this.loadIssueActivities(false, issue.id);
       this.loadDraftComment();

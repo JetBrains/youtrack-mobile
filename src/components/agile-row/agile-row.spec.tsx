@@ -7,7 +7,7 @@ import BoardRow from './agile-row';
 import {DEFAULT_THEME} from 'components/theme/theme';
 
 import type {AgileBoardRow, BoardCell, BoardColumn} from 'types/Agile';
-import type {IssueOnList} from 'types/Issue';
+import type {IssueOnListExtended} from 'types/Issue';
 import {DragContext} from 'components/draggable/drag-container';
 
 const cellMock = {
@@ -23,7 +23,7 @@ const cellMock = {
 };
 
 describe('<BoardRow/>', () => {
-  let issueMock: IssueOnList;
+  let issueMock: IssueOnListExtended;
   beforeEach(() => {
     issueMock = mocks.createIssueMock();
   });

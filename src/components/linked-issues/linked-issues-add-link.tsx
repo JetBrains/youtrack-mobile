@@ -32,7 +32,7 @@ import {View as AnimatedView} from 'react-native-animatable';
 
 import styles from './linked-issues.style';
 
-import type {AssistSuggest, IssueOnList} from 'types/Issue';
+import type {AssistSuggest, IssueOnListExtended} from 'types/Issue';
 import type {IssueLinkTypeExtended} from './linked-issues-helper';
 import type {IssueLinkType} from 'types/CustomFields';
 import type {Theme} from 'types/Theme';
@@ -52,7 +52,7 @@ const LinkedIssuesAddLink = (props: Props): JSX.Element => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const theme: Theme = useContext(ThemeContext);
 
-  const [issues, updateIssues] = useState<IssueOnList[]>([]);
+  const [issues, updateIssues] = useState<IssueOnListExtended[]>([]);
   const [isLoading, updateLoading] = useState<boolean>(false);
   const [issueLinkTypes, updateIssueLinkTypes] = useState<IssueLinkTypeExtended[]>([]);
   const [
@@ -71,7 +71,7 @@ const LinkedIssuesAddLink = (props: Props): JSX.Element => {
     return await issueCommonLinksActions({}).loadIssueLinkTypes();
   }, []);
   const doLinkIssue = useCallback(
-    async (issue: IssueOnList) => {
+    async (issue: IssueOnListExtended) => {
       if (currentIssueLinkTypeExtended) {
         updateLoading(true);
         await props.onLinkIssue(
@@ -85,8 +85,8 @@ const LinkedIssuesAddLink = (props: Props): JSX.Element => {
     },
     [currentIssueLinkTypeExtended, props],
   );
-  const getIssueToLink = useCallback((q: string, _issues: IssueOnList[]):
-    | IssueOnList
+  const getIssueToLink = useCallback((q: string, _issues: IssueOnListExtended[]):
+    | IssueOnListExtended
     | null
     | undefined => {
     const issueToLinkIdReadable: string = (q[0] === '#' ? q.slice(1) : q)
@@ -100,7 +100,7 @@ const LinkedIssuesAddLink = (props: Props): JSX.Element => {
         .split('')
         .some((char: string) => char >= '0' && char <= '9');
     return isSingleIssueQuery
-      ? _issues.find((issue: IssueOnList) => issue.idReadable?.toLowerCase() === issueToLinkIdReadable)
+      ? _issues.find((issue: IssueOnListExtended) => issue.idReadable?.toLowerCase() === issueToLinkIdReadable)
       : null;
   }, []);
   const doSearch = useCallback(
@@ -111,12 +111,12 @@ const LinkedIssuesAddLink = (props: Props): JSX.Element => {
       if (linkType) {
         updateLoading(true);
 
-        const _issues: IssueOnList[] = await props.issuesGetter(
+        const _issues: IssueOnListExtended[] = await props.issuesGetter(
           linkType.getName(),
           q,
         );
 
-        const issueToLink: IssueOnList | null | undefined = getIssueToLink(
+        const issueToLink: IssueOnListExtended | null | undefined = getIssueToLink(
           q,
           _issues,
         );
@@ -209,7 +209,7 @@ const LinkedIssuesAddLink = (props: Props): JSX.Element => {
     }
   };
 
-  const renderIssue = (issue: IssueOnList) => {
+  const renderIssue = (issue: IssueOnListExtended) => {
     return (
       <AnimatedView useNativeDriver duration={500} animation="fadeIn">
         <IssueRow
@@ -289,7 +289,7 @@ const LinkedIssuesAddLink = (props: Props): JSX.Element => {
           />
         }
         scrollEventThrottle={50}
-        keyExtractor={(issue: Partial<IssueOnList>): string => issue.id as string}
+        keyExtractor={(issue: Partial<IssueOnListExtended>): string => issue.id as string}
         renderItem={(info: {item: any}) => renderIssue(info.item)}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
         ListFooterComponent={

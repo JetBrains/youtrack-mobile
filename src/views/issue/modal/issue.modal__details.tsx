@@ -8,7 +8,7 @@ import {IconBack, IconClose} from 'components/icon/icon';
 import {ThemeContext} from 'components/theme/theme-context';
 import styles from '../issue.styles';
 import stylesModal from './issue.modal.styles';
-import type {AnyIssue, IssueOnList} from 'types/Issue';
+import type {AnyIssue, IssueOnListExtended} from 'types/Issue';
 import type {IssueDetailsProps} from '../issue__details';
 import type {IssueLink} from 'types/CustomFields';
 import type {Theme} from 'types/Theme';
@@ -69,7 +69,7 @@ export default class IssueModalDetails extends IssueDetails<
               renderAddLink(() => this.toggleModalChildren(prevModalData)),
             );
           }}
-          onIssueLinkPress={(linkedIssue: IssueOnList) => {
+          onIssueLinkPress={(linkedIssue: IssueOnListExtended) => {
             const prevModalData: any = this.state.modalChildren;
             this.toggleModalChildren(
               <IssueModal

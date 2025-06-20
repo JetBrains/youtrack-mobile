@@ -20,15 +20,15 @@ import {ytDate} from 'components/date/date';
 
 import styles, {DUAL_AVATAR_SIZE} from './issues.styles';
 
-import {BaseIssue, IssueOnList} from 'types/Issue';
+import {BaseIssue, IssueOnListExtended} from 'types/Issue';
 import {BundleValue, CustomFieldBase} from 'types/CustomFields';
 import {FieldValue} from 'types/CustomFields';
 import {TextStyleProp, ViewStyleProp} from 'types/Internal';
 
 interface Props {
   hideId?: boolean;
-  issue: IssueOnList;
-  onClick: (issue: IssueOnList) => void;
+  issue: IssueOnListExtended;
+  onClick: (issue: IssueOnListExtended) => void;
   onTagPress?: (query: string) => void;
   style?: ViewStyleProp;
   settings?: IssuesSettings;

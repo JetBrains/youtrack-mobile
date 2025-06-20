@@ -41,7 +41,7 @@ import type {
   Swimlane,
 } from 'types/Agile';
 import type {CustomError} from 'types/Error';
-import type {IssueFull, IssueOnList} from 'types/Issue';
+import type {IssueFull, IssueOnListExtended} from 'types/Issue';
 import {AppState} from 'reducers';
 import {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
 
@@ -725,12 +725,12 @@ export function reorderSwimlanesOrCells(
   };
 }
 export function addOrUpdateCellOnBoard(
-  issue: IssueOnList,
+  issue: IssueOnListExtended,
   rowId: string,
   columnId: string,
 ): {
   columnId: string;
-  issue: IssueOnList;
+  issue: IssueOnListExtended;
   rowId: string;
   type: any;
 } {
@@ -769,7 +769,7 @@ export function storeCreatingIssueDraft(
 export function createCardForCell(
   columnId: string,
   cellId: string,
-): ReduxAction<Promise<Partial<IssueOnList> | null>> {
+): ReduxAction<Promise<Partial<IssueOnListExtended> | null>> {
   return async (
     dispatch: ReduxThunkDispatch,
     getState: ReduxStateGetter,
@@ -779,7 +779,7 @@ export function createCardForCell(
     const api: Api = getApi();
 
     try {
-      const draft: Partial<IssueOnList> = await api.agile.getIssueDraftForAgileCell(
+      const draft: Partial<IssueOnListExtended> = await api.agile.getIssueDraftForAgileCell(
         sprint.agile.id,
         sprint.id,
         columnId,

@@ -39,7 +39,7 @@ import type {
   AnyIssue,
   CommandSuggestionResponse,
   IssueFull,
-  IssueOnList,
+  IssueOnListExtended,
   IssueSprint,
   OpenNestedViewParams,
 } from 'types/Issue';
@@ -97,7 +97,7 @@ export const createActions = (
         );
       };
     },
-    loadIssue: function (issuePlaceholder?: IssueOnList): ReduxAction<Promise<IssueFull | undefined>> {
+    loadIssue: function (issuePlaceholder?: IssueOnListExtended): ReduxAction<Promise<IssueFull | undefined>> {
       return async (
         dispatch: ReduxThunkDispatch,
         getState: ReduxStateGetter,
@@ -111,10 +111,10 @@ export const createActions = (
         const [error, issue] = await until<IssueFull>(api.issue.getIssue(issueId));
         if (!error) {
           log.info('Issue Actions: Issue loaded');
-          issue.fieldHash = ApiHelper.makeFieldHash(issue);
-          doUpdate(issue);
-          updateCache(issue);
-          return issue;
+          const issueExtended = {...issue, fieldHash: ApiHelper.makeFieldHash(issue)};
+          doUpdate(issueExtended);
+          updateCache(issueExtended);
+          return issueExtended;
         } else if (getState().app?.networkState?.isConnected === true) {
           log.warn('Failed to load issue', error);
           dispatch(dispatchActions.setError(await resolveError(error)));
@@ -145,7 +145,7 @@ export const createActions = (
       };
     },
     onUnlinkIssue: function (
-      linkedIssue: IssueOnList,
+      linkedIssue: IssueOnListExtended,
       linkTypeId: string,
     ): ReduxAction<Promise<boolean>> {
       return async (
@@ -164,7 +164,7 @@ export const createActions = (
       linkTypeName: string,
       query: string = '',
       page?: number,
-    ): ReduxAction<Promise<IssueOnList>> {
+    ): ReduxAction<Promise<IssueOnListExtended>> {
       return async (
         dispatch: ReduxThunkDispatch,
         getState: ReduxStateGetter,
@@ -269,7 +269,7 @@ export const createActions = (
         getApi: ReduxAPIGetter,
       ) => {
         const api: Api = getApi();
-        const {issue} = getState()[stateFieldName] as IssueState;
+        const issue = (getState()[stateFieldName] as IssueState).issue;
         dispatch(
           dispatchActions.setIssueSummaryAndDescription(
             issue.summary,
@@ -354,15 +354,15 @@ export const createActions = (
       ) => {
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Update project');
         const api: Api = getApi();
-        const {issue} = getState()[stateFieldName] as IssueState;
+        const state = getState()[stateFieldName] as IssueState;
         dispatch(dispatchActions.setProject(project));
 
         try {
-          await api.issue.updateProject(issue, project);
+          await api.issue.updateProject(state.issue.id, project);
           log.info('Issue Actions: Project updated');
           await dispatch(actions.loadIssue());
           dispatch(
-            dispatchActions.issueUpdated((getState()[stateFieldName] as IssueState).issue),
+            dispatchActions.issueUpdated(state.issue),
           );
         } catch (err) {
           notifyError(err as AnyError);
@@ -379,7 +379,7 @@ export const createActions = (
         getApi: ReduxAPIGetter,
       ) => {
         const api: Api = getApi();
-        const {issue} = getState()[stateFieldName] as IssueState;
+        const issue = (getState()[stateFieldName] as IssueState).issue;
         dispatch(dispatchActions.setVoted(voted));
         usage.trackEvent(
           ANALYTICS_ISSUE_PAGE,
@@ -403,7 +403,7 @@ export const createActions = (
         getApi: ReduxAPIGetter,
       ) => {
         const api: Api = getApi();
-        const {issue} = getState()[stateFieldName] as IssueState;
+        const issue = (getState()[stateFieldName] as IssueState).issue;
         dispatch(dispatchActions.setStarred(starred));
 
         try {

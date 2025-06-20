@@ -5,15 +5,15 @@ import {AGILE_TABLET_CARD_WIDTH} from 'components/agile-common/agile-common';
 import Draggable from 'components/draggable/draggable';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import type {AgileBoardRow, Board, SprintFull} from 'types/Agile';
-import type {IssueOnList} from 'types/Issue';
+import type {IssueOnListExtended} from 'types/Issue';
 import type {UIThemeName, UIThemeColors, BarStyle} from 'types/Theme';
 import type {UITheme} from 'types/Theme';
 
 interface Props {
   sprint: SprintFull;
   zoomedIn: boolean;
-  canRunCommand: (issue: IssueOnList) => boolean;
-  onTapIssue: (issue: IssueOnList) => void;
+  canRunCommand: (issue: IssueOnListExtended) => boolean;
+  onTapIssue: (issue: IssueOnListExtended) => void;
   onTapCreateIssue?: (columnId: string, cellId: string) => void;
   onCollapseToggle: (row: AgileBoardRow) => void;
   uiTheme: UITheme;
@@ -38,8 +38,8 @@ export default class AgileBoardSprint extends Component<Props, void> {
     collapsedColumnIds: string[];
     onCollapseToggle: (row: AgileBoardRow) => void;
     onTapCreateIssue?: (columnId: string, cellId: string) => void;
-    onTapIssue: (issue: IssueOnList) => void;
-    renderIssueCard: (issue: IssueOnList) => React.ReactNode;
+    onTapIssue: (issue: IssueOnListExtended) => void;
+    renderIssueCard: (issue: IssueOnListExtended) => React.ReactNode;
     uiTheme: {
       androidSummaryFontWeight: string;
       barStyle: BarStyle;
@@ -65,7 +65,7 @@ export default class AgileBoardSprint extends Component<Props, void> {
     };
   };
 
-  renderCard = (issue: IssueOnList) => {
+  renderCard = (issue: IssueOnListExtended) => {
     const {sprint, zoomedIn, canRunCommand, onTapIssue, uiTheme} = this.props;
     const canDrag: boolean = sprint.agile.isUpdatable || canRunCommand(issue);
     const cardWidth: number | null | undefined =

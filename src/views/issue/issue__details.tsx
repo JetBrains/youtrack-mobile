@@ -49,7 +49,7 @@ import type {
   FieldValue,
   IssueLink,
 } from 'types/CustomFields';
-import type {IssueFull, IssueOnList} from 'types/Issue';
+import type {IssueFull, IssueOnListExtended} from 'types/Issue';
 import type {NormalizedAttachment} from 'types/Attachment';
 import type {Project} from 'types/Project';
 import type {ScrollData} from 'types/Markdown';
@@ -71,7 +71,7 @@ export interface IssueDetailsProps {
   updateProject: (project: Project) => void;
   onUpdateSprints: () => void;
   issue: IssueFull;
-  issuePlaceholder: IssueOnList;
+  issuePlaceholder: IssueOnListExtended;
   issueLoaded: boolean;
   editMode: boolean;
   isSavingEditedIssue: boolean;
@@ -96,7 +96,7 @@ export interface IssueDetailsProps {
   getIssueLinksTitle: (linkedIssues?: IssueLink[]) => void;
   issuesGetter: (linkTypeName: string, q: string) => void;
   linksGetter: () => void;
-  onUnlink: (linkedIssue: IssueOnList, linkTypeId: string) => void;
+  onUnlink: (linkedIssue: IssueOnListExtended, linkTypeId: string) => void;
   onLinkIssue: (
     linkedIssueIdReadable: string,
     linkTypeName: string,

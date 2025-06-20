@@ -18,7 +18,7 @@ import {issuePermissionsNull} from './issue-permissions-helper';
 import PermissionsStore from 'components/permissions-store/permissions-store';
 import {CustomField, IssueComment} from 'types/CustomFields';
 import {Entity} from 'types/Entity';
-import {IssueOnList} from 'types/Issue';
+import {IssueOnListExtended} from 'types/Issue';
 import {PermissionCacheItem} from 'types/Permission';
 import {Project, ProjectTimeTrackingTimeSpent} from 'types/Project';
 import {User, UserHelpdeskProfile} from 'types/User';
@@ -55,7 +55,7 @@ describe('IssuePermissions', function () {
           },
         },
       },
-    } as IssueOnList;
+    } as IssueOnListExtended;
     commentMock = {
       author: {
         ringId: USER_ID,
@@ -374,7 +374,7 @@ describe('IssuePermissions', function () {
       });
 
       expect(
-        issuePermissions.canVote({reporter: currentUserMock} as IssueOnList)
+        issuePermissions.canVote({reporter: currentUserMock} as IssueOnListExtended)
       ).toEqual(false);
     });
 

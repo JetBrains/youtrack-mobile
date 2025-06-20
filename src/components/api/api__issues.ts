@@ -8,7 +8,7 @@ import {issuesViewSettingMode} from 'views/issues';
 import {routeMap} from 'app-routes';
 
 import type {Folder} from 'types/User';
-import type {IssueOnList} from 'types/Issue';
+import type {IssueOnListExtended} from 'types/Issue';
 import {IssueFull} from 'types/Issue';
 
 export interface SortedIssues {
@@ -21,7 +21,7 @@ export default class IssuesAPI extends ApiBase {
     $top: number,
     $skip: number = 0,
     fields: string,
-  ): Promise<Array<IssueOnList>> {
+  ): Promise<Array<IssueOnListExtended>> {
     const q: string = qs.stringify(
       {
         $top,
@@ -81,7 +81,7 @@ export default class IssuesAPI extends ApiBase {
     query: string = '',
     $top: number,
     $skip?: number,
-  ): Promise<Array<Partial<IssueOnList>>> {
+  ): Promise<Array<Partial<IssueOnListExtended>>> {
     return await this._getIssues(
       query,
       $top,

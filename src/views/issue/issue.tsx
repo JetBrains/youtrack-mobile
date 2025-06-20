@@ -42,7 +42,7 @@ import {ThemeContext} from 'components/theme/theme-context';
 import styles from './issue.styles';
 
 import type IssuePermissions from 'components/issue-permissions/issue-permissions';
-import type {AnyIssue, IssueFull, IssueOnList, IssueSprint, TabRoute} from 'types/Issue';
+import type {AnyIssue, IssueFull, IssueOnListExtended, IssueSprint, TabRoute} from 'types/Issue';
 import type {Attachment, IssueLink, Tag} from 'types/CustomFields';
 import type {AttachmentActions} from 'components/attachments-row/attachment-actions';
 import type {EventSubscription} from 'react-native';
@@ -57,7 +57,7 @@ import type {User, UserCC} from 'types/User';
 
 type AdditionalProps = {
   issuePermissions: IssuePermissions;
-  issuePlaceholder: IssueOnList;
+  issuePlaceholder: IssueOnListExtended;
   uploadIssueAttach: (files: NormalizedAttachment[]) => void;
   loadAttachments: () => void;
   hideAddAttachDialog: () => void;

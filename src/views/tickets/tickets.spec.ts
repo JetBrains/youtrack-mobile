@@ -12,7 +12,7 @@ import Store from 'store';
 import {deepmerge} from 'deepmerge-ts';
 import {issuesSettingsDefault} from 'views/issues';
 
-import {IssueOnList} from 'types/Issue';
+import {IssueOnListExtended} from 'types/Issue';
 
 let queryMock: string;
 let issueListQueryMock: string;
@@ -49,7 +49,7 @@ describe('Tickets', () => {
   });
 
   it('should set tickets from the cache', async () => {
-    const helpdeskCache: IssueOnList[] = [mocks.createIssueMock()];
+    const helpdeskCache: IssueOnListExtended[] = [mocks.createIssueMock()];
     await storage.flushStoragePart({helpdeskCache});
 
     await store.dispatch(ticketsActions.setTicketsFromCache());

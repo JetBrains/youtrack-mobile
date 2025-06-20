@@ -1,5 +1,5 @@
 import type {Activity} from './Activity';
-import type {AnyIssue, IssueOnList} from './Issue';
+import type {AnyIssue, IssueOnListExtended} from './Issue';
 import type {Article} from './Article';
 import type {User} from './User';
 import {Entity} from 'types/Entity';
@@ -74,7 +74,7 @@ export type Metadata = {
   type: string;
   initialNotification: boolean;
   onlyViaDuplicate: boolean;
-  issue?: IssueOnList;
+  issue?: IssueOnListExtended;
   change: IssueChange;
   subject?: string;
   body?: string;

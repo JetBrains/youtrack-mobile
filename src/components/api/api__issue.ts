@@ -22,7 +22,7 @@ import type {
   IssueLinkType,
   Tag,
 } from 'types/CustomFields';
-import type {AnyIssue, IssueCreate, IssueFull, IssueOnList, IssueSprint} from 'types/Issue';
+import type {AnyIssue, IssueCreate, IssueFull, IssueOnListExtended, IssueSprint} from 'types/Issue';
 import type {NormalizedAttachment} from 'types/Attachment';
 import type {Project} from 'types/Project';
 import type {UserCC} from 'types/User';
@@ -162,7 +162,7 @@ export default class IssueAPI extends ApiBase {
     return comments;
   }
 
-  async createIssue(draftId: string): Promise<IssueOnList> {
+  async createIssue(draftId: string): Promise<IssueOnListExtended> {
     const queryString = qs.stringify({
       draftId,
       fields: issueFields.issuesOnList.toString(),
@@ -538,13 +538,13 @@ export default class IssueAPI extends ApiBase {
     );
   }
 
-  async updateProject(issue: AnyIssue, project: Project) {
+  async updateProject(issueId: string, project: Project) {
     return await this.makeAuthorizedRequest(
-      `${this.youTrackIssueUrl}/${issue.id}`,
+      `${this.youTrackIssueUrl}/${issueId}`,
       'POST',
       {
-        id: issue.id,
-        project: project,
+        id: issueId,
+        project,
       },
     );
   }

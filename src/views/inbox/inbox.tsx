@@ -45,7 +45,7 @@ import type {AppConfig} from 'types/AppConfig';
 import type {AppState} from '../../reducers';
 import type {InboxState} from './inbox-reducers';
 import type {IssueComment} from 'types/CustomFields';
-import type {IssueOnList} from 'types/Issue';
+import type {IssueOnListExtended} from 'types/Issue';
 import type {
   ChangeEvent,
   ChangeValue,
@@ -125,7 +125,7 @@ class Inbox extends Component<Props, State> {
     this.props.loadInbox();
   };
 
-  goToIssue(issue: IssueOnList, navigateToActivity: boolean = false) {
+  goToIssue(issue: IssueOnListExtended, navigateToActivity: boolean = false) {
     usage.trackEvent(ANALYTICS_NOTIFICATIONS_PAGE, 'Navigate to issue');
 
     if (!issue?.id) {
@@ -527,7 +527,7 @@ class Inbox extends Component<Props, State> {
   };
 
   renderIssue(
-    issue: IssueOnList,
+    issue: IssueOnListExtended,
     isSummaryOrDescriptionChange: boolean,
     notificationId: string,
   ) {
@@ -558,7 +558,7 @@ class Inbox extends Component<Props, State> {
     timestamp: number;
   }) => {
     const {added, comment, timestamp, reaction} = reactionData;
-    const issue: IssueOnList = (comment.issue as any) as IssueOnList;
+    const issue: IssueOnListExtended = (comment.issue as any) as IssueOnListExtended;
     return (
       <View
         testID="test:id/notification-row"
@@ -762,7 +762,7 @@ class Inbox extends Component<Props, State> {
       return items?.length === 0 ? null : this.renderSelectIssueIcon();
     }
 
-    const issue: Partial<IssueOnList> =
+    const issue: Partial<IssueOnListExtended> =
       notification?.metadata?.issue || notification?.comment?.issue;
     return issue ? (
       <Issue

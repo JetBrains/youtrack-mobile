@@ -34,12 +34,12 @@ import {
 } from 'actions/app-actions';
 import {whiteSpacesRegex} from 'components/wiki/util/patterns';
 
-import type {ActivityItem} from 'types/Activity';
-import type {CustomError} from 'types/Error';
+import type {Activity} from 'types/Activity';
+import type {AnyError, CustomError} from 'types/Error';
 import type {FilterField, FilterFieldValue} from 'types/Sorting';
 import type {Folder, User, UserProfiles} from 'types/User';
 import type {ISelectProps} from 'components/select/select';
-import type {IssueOnList, ListIssue} from 'types/Issue';
+import type {IssueOnListExtended, IssueOnList} from 'types/Issue';
 import type {ISSWithItemActionsProps} from 'components/select/select-sectioned-with-item-and-star';
 import type {ProjectHelpdesk} from 'types/Project';
 import type {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
@@ -152,16 +152,16 @@ const setIssuesError = (error: CustomError): ReduxAction => async (dispatch: Red
   dispatch(issuesActions.LOADING_ISSUES_ERROR(error));
 };
 
-const cacheIssues = (issues: IssueOnList[]): ReduxAction => (dispatch: ReduxThunkDispatch) => {
-  let updatedCache: IssueOnList[] = issues;
+const cacheIssues = (issues: IssueOnListExtended[]): ReduxAction => (dispatch: ReduxThunkDispatch) => {
+  let updatedCache: IssueOnListExtended[] = issues;
   const isHelpdeskMode = dispatch(isHelpDeskMode());
-  const cachedIssues: IssueOnList[] | null = isHelpdeskMode
+  const cachedIssues: IssueOnListExtended[] | null = isHelpdeskMode
     ? getStorageState().helpdeskCache
     : getStorageState().issuesCache;
 
   if (cachedIssues) {
-    const issueActivityMap: Record<string, ActivityItem[]> = cachedIssues.reduce(
-      (map: Record<string, ActivityItem[]>, it: IssueOnList) => {
+    const issueActivityMap: Record<string, Activity[]> = cachedIssues.reduce(
+      (map: Record<string, Activity[]>, it: IssueOnListExtended) => {
         if (it.activityPage) {
           map[it.id] = it.activityPage;
         }
@@ -170,7 +170,7 @@ const cacheIssues = (issues: IssueOnList[]): ReduxAction => (dispatch: ReduxThun
       },
       {},
     );
-    updatedCache = issues.map((it: IssueOnList) => {
+    updatedCache = issues.map((it: IssueOnListExtended) => {
       if (issueActivityMap[it.id]) {
         it.activityPage = issueActivityMap[it.id];
       }
@@ -194,7 +194,7 @@ const loadIssues = (query: string): ReduxAction => async (
       log.info(`Issues Actions: Loading ${entityType}...`);
     }
     const pageSize: number = dispatch(getPageSize());
-    const issues: IssueOnList[] = await dispatch(doLoadIssues(query, pageSize));
+    const issues: IssueOnListExtended[] = await dispatch(doLoadIssues(query, pageSize));
     log.info(`Issues Actions: more ${entityType} loaded`);
 
     dispatch(issuesActions.RECEIVE_ISSUES(issues));
@@ -351,7 +351,7 @@ const onOpenHelpDeskProjectsSelect = (): ReduxAction => {
   ) => {
     trackEvent('Tickets: select create project', ANALYTICS_TICKETS_PAGE);
     const onCancel = () => dispatch(issuesActions.CLOSE_SEARCH_CONTEXT_SELECT());
-    const selectProps: ISelectProps = {
+    const selectProps: ISelectProps<ProjectHelpdesk> = {
       placeholder: i18n('Filter projects'),
       getValue: (project: ProjectHelpdesk) => `${project.name} (${project.shortName})`,
       dataSource: async (q: string = ''): Promise<ProjectHelpdesk[]> => {
@@ -401,7 +401,7 @@ const openFilterFieldSelect = (filterSetting: FilterFieldSetting): ReduxAction =
   trackEvent(`${isHelpDeskMode() ? 'Tickets' : 'Issues'} settings: changed filter`);
   const settings: IssuesSettings = dispatch(getIssuesSettings());
   const selectedItems: { name: string; id: string }[] = filterSetting.selectedValues.map(i => ({id: i, name: i}));
-  const selectProps: Partial<ISelectProps> = {
+  const selectProps: Partial<ISelectProps<{ name: string; id: string }>> = {
     multi: true,
     getTitle: getEntityPresentation,
     dataSource: async (prefix: string = '') => {
@@ -481,17 +481,17 @@ const resetFilterFields = (): ReduxAction => async (
   dispatch(refreshIssues());
 };
 
-const doLoadIssues = (query: string, pageSize: number, skip = 0): ReduxAction<Promise<IssueOnList[]>> => async (
+const doLoadIssues = (query: string, pageSize: number, skip = 0): ReduxAction<Promise<IssueOnListExtended[]>> => async (
   dispatch: ReduxThunkDispatch,
   getState: ReduxStateGetter,
   getApi: ReduxAPIGetter,
 ) => {
-  const handleError = (e: CustomError) => {
+  const handleError = (e: AnyError) => {
     throw e;
   };
 
   const api = getApi();
-  let listIssues: IssueOnList[] = [];
+  let listIssues: IssueOnListExtended[] = [];
   const appState = getState();
   const contextFolder = dispatch(getSearchContext());
   const [error, sortedIssues] = await until<SortedIssues>(
@@ -502,13 +502,13 @@ const doLoadIssues = (query: string, pageSize: number, skip = 0): ReduxAction<Pr
   }
 
   if (Array.isArray(sortedIssues?.tree) && sortedIssues.tree.length > 0) {
-    const [err, issues] = await until<ListIssue[]>(
+    const [err, issues] = await until<IssueOnList[]>(
       api.issues.issuesGetter(sortedIssues.tree, appState.issueList.settings.view.mode),
     );
     if (err) {
       handleError(err);
     }
-    listIssues = ApiHelper.fillIssuesFieldHash(issues);
+    listIssues = ApiHelper.fillIssuesFieldHash<IssueOnList>(issues);
   }
 
   return listIssues;
@@ -536,11 +536,11 @@ const updateIssue = (issueId: string): ReduxAction => async (
   const issueToUpdate = await issueUpdater.loadIssue(issueId);
 
   if (issueToUpdate) {
-    const updatedIssues: IssueOnList[] = issueUpdater.updateIssueInIssues(
+    const updatedIssues: IssueOnListExtended[] = issueUpdater.updateIssueInIssues(
       issueToUpdate,
       currentIssues,
     );
-    dispatch(issuesActions.RECEIVE_ISSUES(updatedIssues as IssueOnList[]));
+    dispatch(issuesActions.RECEIVE_ISSUES(updatedIssues as IssueOnListExtended[]));
     dispatch(cacheIssues(updatedIssues));
   }
 };
@@ -701,7 +701,7 @@ const setIssuesMode = (): ReduxAction => async (dispatch: ReduxThunkDispatch) =>
 };
 
 const setIssuesFromCache = (): ReduxAction => async (dispatch: ReduxThunkDispatch) => {
-  const cachedIssues: IssueOnList[] = getStorageState().issuesCache || [];
+  const cachedIssues: IssueOnListExtended[] = getStorageState().issuesCache || [];
   if (cachedIssues.length > 0) {
     log.info(`Issues Actions: Cached issues are loaded`);
     dispatch(issuesActions.RECEIVE_ISSUES(cachedIssues));
@@ -760,13 +760,13 @@ const loadMoreIssues = (): ReduxAction => async (
 
     try {
       const searchQuery = await dispatch(composeSearchQuery());
-      let moreIssues: IssueOnList[] = await dispatch(doLoadIssues(searchQuery, pageSize, newSkip));
+      let moreIssues = await dispatch(doLoadIssues(searchQuery, pageSize, newSkip));
       log.info(`Issues Actions: Loaded more ${entityType}.`);
-      moreIssues = ApiHelper.fillIssuesFieldHash(moreIssues) as IssueOnList[];
-      const updatedIssues: IssueOnList[] = ApiHelper.removeDuplicatesByPropName(
+      moreIssues = ApiHelper.fillIssuesFieldHash<IssueOnListExtended>(moreIssues);
+      const updatedIssues = ApiHelper.removeDuplicatesByPropName(
         issues.concat(moreIssues),
         'id',
-      ) as IssueOnList[];
+      ) as IssueOnListExtended[];
       dispatch(issuesActions.RECEIVE_ISSUES(updatedIssues));
       dispatch(cacheIssues(updatedIssues));
 

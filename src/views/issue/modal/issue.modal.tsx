@@ -16,7 +16,7 @@ import {Issue} from '../issue';
 
 import styles from '../issue.styles';
 
-import type {IssueOnList} from 'types/Issue';
+import type {IssueOnListExtended} from 'types/Issue';
 import type {IssueProps, OwnProps} from '../issue';
 import type {ReduxThunkDispatch} from 'types/Redux';
 import type {RootState} from 'reducers/app-reducer';
@@ -28,7 +28,7 @@ type Props = IssueProps & {
   onHide: () => any;
   onBack?: () => any;
   backIcon?: any;
-  onNavigate?: (issue: IssueOnList) => any;
+  onNavigate?: (issue: IssueOnListExtended) => any;
   stacked?: boolean;
   onCommandApply: () => any;
 };

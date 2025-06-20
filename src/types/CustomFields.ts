@@ -1,6 +1,6 @@
 import type {ColorCoding} from 'components/color-field/color-field';
 import type {Entity, EntityBase} from 'types/Entity';
-import type {IssueFull, IssueOnList} from './Issue';
+import type {IssueFull, IssueOnListExtended} from './Issue';
 import type {Mentions} from 'components/wiki/markdown-view-rules';
 import type {Reaction} from './Reaction';
 import type {User} from './User';
@@ -201,7 +201,7 @@ export type IssueLink = {
   fields: CustomField[];
   direction: string;
   linkType: IssueLinkType;
-  trimmedIssues: IssueOnList[];
+  trimmedIssues: IssueOnListExtended[];
   resolved: boolean;
   issuesSize: number;
   unresolvedIssuesSize: number;

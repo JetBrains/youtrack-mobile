@@ -1,9 +1,9 @@
 import type {IssueLink, IssueLinkType} from 'types/CustomFields';
-import type {IssueOnList} from 'types/Issue';
+import type {IssueOnListExtended} from 'types/Issue';
 export type LinksMap = Record<string, IssueLink>;
 export type LinksListData = {
   title: string;
-  data: IssueOnList[];
+  data: IssueOnListExtended[];
   linkTypeId: string;
   unresolvedIssuesSize: number;
 };

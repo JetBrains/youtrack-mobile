@@ -9,19 +9,19 @@ import type API from 'components/api/api';
 import type {AnyError} from 'types/Error.ts';
 import type {EntityBase} from 'types/Entity';
 import type {IssueLink, IssueLinkType} from 'types/CustomFields';
-import type {IssueOnList} from 'types/Issue';
+import type {IssueOnListExtended} from 'types/Issue';
 
 const issueCommonLinksActions = (issue: EntityBase): {
   getIssueLinksTitle: (links?: IssueLink[]) => Promise<Array<IssueLink>>;
   loadIssueLinksTitle: () => Promise<Array<IssueLink>>;
-  loadIssuesXShort: (query: string, page?: number) => Promise<IssueOnList>;
+  loadIssuesXShort: (query: string, page?: number) => Promise<IssueOnListExtended>;
   loadLinkedIssues: () => Promise<Array<IssueLink>>;
   onLinkIssue: (
     linkedIssueIdReadable: string,
     linkTypeName: string,
   ) => Promise<boolean>;
   onUnlinkIssue: (
-    linkedIssue: IssueOnList,
+    linkedIssue: IssueOnListExtended,
     linkTypeId: string,
   ) => Promise<boolean>;
   loadIssueLinkTypes: () => Promise<Array<IssueLinkType>>;
@@ -31,7 +31,7 @@ const issueCommonLinksActions = (issue: EntityBase): {
     loadIssuesXShort: async (
       query: string,
       page: number = 50,
-    ): Promise<IssueOnList> => {
+    ): Promise<IssueOnListExtended> => {
       const [error, issues] = await until(
         api.issues.getIssuesXShort(query, page),
       );
@@ -40,7 +40,7 @@ const issueCommonLinksActions = (issue: EntityBase): {
         notifyError(error);
       }
 
-      return (issues || []).filter((it: IssueOnList) => it.id !== issue.id);
+      return (issues || []).filter((it: IssueOnListExtended) => it.id !== issue.id);
     },
     onLinkIssue: async (
       linkedIssueIdReadable: string,
@@ -76,7 +76,7 @@ const issueCommonLinksActions = (issue: EntityBase): {
       return issueLinks;
     },
     onUnlinkIssue: async (
-      linkedIssue: IssueOnList,
+      linkedIssue: IssueOnListExtended,
       linkTypeId: string,
     ): Promise<boolean> => {
       const [error] = await until(

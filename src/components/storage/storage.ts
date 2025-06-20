@@ -9,7 +9,7 @@ import {notify} from 'components/notification/notification';
 import {routeMap} from 'app-routes';
 
 import type {Activity, ActivityType} from 'types/Activity';
-import type {IssueOnList} from 'types/Issue';
+import type {IssueOnListExtended} from 'types/Issue';
 import type {AppConfig} from 'types/AppConfig';
 import type {Article, ArticleProject, ArticlesList, ProjectArticlesData} from 'types/Article';
 import type {Board, Sprint} from 'types/Agile';
@@ -69,8 +69,8 @@ export type StorageState = TipsState & FeatureState & {
   searchContext: Folder | null;
   helpdeskSearchContext: Folder | null;
   lastQueries: string[] | null;
-  issuesCache: (IssueOnList & {activityPage: Activity[]})[] | null;
-  helpdeskCache: IssueOnList[] | null;
+  issuesCache: IssueOnListExtended[] | null;
+  helpdeskCache: IssueOnListExtended[] | null;
   inboxCache: Notification[] | null;
   inboxThreadsCache: InboxThreadsCache | null;
   isRegisteredForPush: boolean;
