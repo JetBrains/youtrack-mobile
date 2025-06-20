@@ -10,7 +10,6 @@ import {IconFileText} from 'components/icon/icon';
 import {useBottomSheetContext} from 'components/bottom-sheet';
 
 import type {Mention} from 'components/wiki/markdown-view-rules';
-import type {User} from 'types/User';
 
 import styles from 'components/wiki/markdown/markdown.styles';
 
@@ -37,32 +36,15 @@ export default function MarkdownMention({
   );
 }
 
-export function MarkdownMentionWithUserCard({
-  mention,
-  style,
-}: {
-  mention: Mention;
-  style: TextStyle | TextStyle[];
-}) {
+export function MarkdownMentionWithUserCard({mention, style}: {mention: Mention; style: TextStyle | TextStyle[]}) {
   const {openBottomSheet} = useBottomSheetContext();
 
   const isArticle = () => hasType.article(mention);
-
-  const getMentionIcon = (m: Mention) => {
-    if (isArticle()) {
-      return (
-        <Text>
-          <IconFileText size={15} color={getLinkStyle(m).color} />
-          {'\u00A0'}
-        </Text>
-      );
-    }
-    return null;
-  };
+  const isUser = () => hasType.user(mention);
 
   const getMentionPresentation = (m: Mention): string => {
     let presentation = '';
-    if (hasType.user(m)) {
+    if (isUser()) {
       presentation = `@${getEntityPresentation(m)}`;
     }
     if ('summary' in m && isArticle()) {
@@ -77,22 +59,29 @@ export function MarkdownMentionWithUserCard({
   return (
     <Text
       onPress={() => {
-        if (hasType.article(mention)) {
-          Router.Article({articlePlaceholder: {id: mention.id}, storePrevArticle: true});
-        } else if (hasType.issue(mention)) {
-          Router.Issue({issueId: mention.id});
-        }
-        if (hasType.user(mention)) {
+        if (isUser() && 'login' in mention) {
           openBottomSheet({
             withHandle: false,
-            children: <UserCard user={mention as User} />,
+            children: <UserCard user={mention} />,
           });
+        }
+        if ('idReadable' in mention) {
+          if (isArticle()) {
+            Router.Article({articlePlaceholder: {id: mention.idReadable}, storePrevArticle: true});
+          } else if (hasType.issue(mention)) {
+            Router.Issue({issueId: mention.idReadable});
+          }
         }
       }}
       selectable={true}
       style={[style, getLinkStyle(mention)]}
     >
-      {getMentionIcon(mention)}
+      {isArticle() && (
+        <Text>
+          <IconFileText size={15} color={getLinkStyle(mention).color} />
+          {'\u00A0'}
+        </Text>
+      )}
       {getMentionPresentation(mention)}
     </Text>
   );
