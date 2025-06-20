@@ -6,7 +6,7 @@ import UserCard from 'components/user/user-card';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {guid} from 'util/util';
 import {hasType} from 'components/api/api__resource-types';
-import {IconFileCheck, IconFileText} from 'components/icon/icon';
+import {IconFileText} from 'components/icon/icon';
 import {useBottomSheetContext} from 'components/bottom-sheet';
 
 import type {Mention} from 'components/wiki/markdown-view-rules';
@@ -29,7 +29,7 @@ export default function MarkdownMention({
   mention: string;
   onPress: () => void;
   style: TextStyle | TextStyle[];
-}): React.ReactNode {
+}) {
   return (
     <Text key={guid()} onPress={onPress} selectable={true} style={style}>
       {mention}
@@ -43,34 +43,35 @@ export function MarkdownMentionWithUserCard({
 }: {
   mention: Mention;
   style: TextStyle | TextStyle[];
-}): React.ReactNode {
+}) {
   const {openBottomSheet} = useBottomSheetContext();
 
+  const isArticle = () => hasType.article(mention);
+
   const getMentionIcon = (m: Mention) => {
-    const color: string = getLinkStyle(m).color;
-    if (hasType.article(m)) {
+    if (isArticle()) {
       return (
         <Text>
-          <IconFileText size={15} color={color} />
+          <IconFileText size={15} color={getLinkStyle(m).color} />
           {'\u00A0'}
         </Text>
       );
-    } else {
-      return hasType.issue(m) ? <IconFileCheck size={18} color={color} /> : null;
     }
+    return null;
   };
 
   const getMentionPresentation = (m: Mention): string => {
+    let presentation = '';
     if (hasType.user(m)) {
-      return `@${getEntityPresentation(m)}`;
+      presentation = `@${getEntityPresentation(m)}`;
     }
-    if ('summary' in m && m.summary) {
-      return m.summary;
+    if ('summary' in m && isArticle()) {
+      presentation = m.summary;
     }
-    if ('idReadable' in m && m.idReadable) {
-      return m.idReadable;
+    if ('idReadable' in m) {
+      presentation = m.idReadable;
     }
-    return '';
+    return presentation;
   };
 
   return (
