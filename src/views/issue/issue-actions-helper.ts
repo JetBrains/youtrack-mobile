@@ -2,9 +2,10 @@ import {attachmentActionMap} from 'components/attachments-row/attachment-helper'
 import {commandDialogActionMap} from 'components/command-dialog/command-dialog-action-types';
 
 import type {AttachmentActions} from 'components/attachments-row/attachment-actions';
-import type {CommandSuggestionResponse, IssueFull, IssueOnListExtended, IssueSprint} from 'types/Issue';
+import type {CommandSuggestionResponse, IssueFull, IssueSprint} from 'types/Issue';
 import type {CustomError} from 'types/Error';
-import type {CustomField, FieldValue} from 'types/CustomFields';
+import type {CustomField, FieldValue, IssueLink} from 'types/CustomFields';
+import type {IItem, ISelectProps} from 'components/select/select';
 import type {IssueBaseActions} from './issue-base-reducer';
 import type {Attachment, NormalizedAttachment} from 'types/Attachment';
 import type {Project} from 'types/Project';
@@ -16,257 +17,88 @@ export const createDispatchActions = (
   actions: IssueBaseActions,
   commandDialogTypes: typeof commandDialogActionMap,
   attachmentActions: AttachmentActions,
-  attachmentTypes: Record<keyof typeof attachmentActionMap, string>,
+  attachmentTypes: Record<keyof typeof attachmentActionMap, string>
 ) => ({
-  setIssueId: (
-    issueId: string,
-  ): {
-    issueId: string;
-    type: any;
-  } => {
-    return actions.SET_ISSUE_ID({
-      issueId,
-    });
-  },
-  startIssueRefreshing: (): {
-    type: any;
-  } => {
-    return actions.START_ISSUE_REFRESHING();
-  },
-  stopIssueRefreshing: (): {
-    type: any;
-  } => {
-    return actions.START_ISSUE_REFRESHING();
-  },
-  receiveIssue: (
-    issue: IssueFull,
-  ): {
-    issue: IssueFull;
-    type: any;
-  } => {
-    return actions.RECEIVE_ISSUE({
-      issue,
-    });
-  },
-  setIssueFieldValue: (
-    field: CustomField,
-    value: FieldValue,
-  ): {
-    field: CustomField;
-    type: any;
-    value: FieldValue;
-  } => {
-    return actions.SET_ISSUE_FIELD_VALUE({
-      field,
-      value,
-    });
-  },
-  setProject: (
-    project: Project,
-  ): {
-    project: Project;
-    type: any;
-  } => {
-    return actions.SET_PROJECT({
-      project,
-    });
-  },
-  startEditingIssue: (): {
-    type: any;
-  } => {
-    return actions.START_EDITING_ISSUE();
-  },
-  stopEditingIssue: (): {
-    type: any;
-  } => {
-    return actions.STOP_EDITING_ISSUE();
-  },
-  setIssueSummaryAndDescription: (
-    summary: string,
-    description: string,
-  ): {
-    description: string;
-    summary: string;
-    type: any;
-  } => {
-    return actions.SET_ISSUE_SUMMARY_AND_DESCRIPTION({
+  setIssueId: (issueId: string) => actions.SET_ISSUE_ID({issueId}),
+
+  startIssueRefreshing: () => actions.START_ISSUE_REFRESHING(),
+
+  stopIssueRefreshing: () => actions.START_ISSUE_REFRESHING(),
+
+  receiveIssue: (issue: IssueFull) => actions.RECEIVE_ISSUE({issue}),
+
+  setIssueFieldValue: (field: CustomField, value: FieldValue) => actions.SET_ISSUE_FIELD_VALUE({field, value}),
+
+  setProject: (project: Project) => actions.SET_PROJECT({project}),
+
+  startEditingIssue: () => actions.START_EDITING_ISSUE(),
+
+  stopEditingIssue: () => actions.STOP_EDITING_ISSUE(),
+
+  setIssueSummaryAndDescription: (summary: string, description: string) =>
+    actions.SET_ISSUE_SUMMARY_AND_DESCRIPTION({
       summary,
       description,
-    });
-  },
-  setIssueSummaryCopy: (
-    summary: string,
-  ): {
-    summary: string;
-    type: any;
-  } => {
-    return actions.SET_ISSUE_SUMMARY_COPY({
-      summary,
-    });
-  },
-  setIssueDescriptionCopy: (
-    description: string,
-  ): {
-    description: string;
-    type: any;
-  } => {
-    return actions.SET_ISSUE_DESCRIPTION_COPY({
-      description,
-    });
-  },
-  startSavingEditedIssue: (): {
-    type: any;
-  } => {
-    return actions.START_SAVING_EDITED_ISSUE();
-  },
-  stopSavingEditedIssue: (): {
-    type: any;
-  } => {
-    return actions.STOP_SAVING_EDITED_ISSUE();
-  },
-  setVoted: (
-    voted: boolean,
-  ): {
-    type: any;
-    voted: boolean;
-  } => {
-    return actions.SET_VOTED({
-      voted,
-    });
-  },
-  setStarred: (
-    starred: boolean,
-  ): {
-    starred: boolean;
-    type: any;
-  } => {
-    return actions.SET_STARRED({
-      starred,
-    });
-  },
-  issueUpdated: (
-    issue: IssueFull,
-  ): {
-    issue: IssueFull;
-    type: any;
-  } => {
-    return actions.RECEIVE_ISSUE({
-      issue,
-    });
-  },
-  unloadActiveIssueView: (): {
-    type: any;
-  } => {
-    return actions.UNLOAD_ACTIVE_ISSUE_VIEW();
-  },
-  openTagsSelect: (selectProps: any) => {
-    return actions.OPEN_ISSUE_SELECT({
-      selectProps,
-    });
-  },
-  closeTagsSelect: (): {
-    selectProps: null;
-    isTagsSelectVisible: boolean;
-  } => {
-    return actions.CLOSE_ISSUE_SELECT({
-      selectProps: null,
-    });
-  },
+    }),
 
-  setError(error: CustomError) {
-    return actions.RECEIVE_ISSUE_ERROR({
-      error,
-    });
-  },
+  setIssueSummaryCopy: (summary: string) => actions.SET_ISSUE_SUMMARY_COPY({summary}),
 
-  openCommandDialog: (
-    initialCommand: string = '',
-  ): {
-    initialCommand: string;
-    type: any;
-  } => {
-    return {
-      type: commandDialogTypes.OPEN_COMMAND_DIALOG,
-      initialCommand,
-    };
-  },
-  closeCommandDialog: (): {
-    type: any;
-  } => {
-    return {
-      type: commandDialogTypes.CLOSE_COMMAND_DIALOG,
-    };
-  },
-  receiveCommandSuggestions: (
-    suggestions: CommandSuggestionResponse,
-  ): {
-    suggestions: CommandSuggestionResponse;
-    type: any;
-  } => {
-    return {
-      type: commandDialogTypes.RECEIVE_COMMAND_SUGGESTIONS,
-      suggestions,
-    };
-  },
-  startApplyingCommand: (): {
-    type: any;
-  } => {
-    return {
-      type: commandDialogTypes.START_APPLYING_COMMAND,
-    };
-  },
-  stopApplyingCommand: (): {
-    type: any;
-  } => {
-    return {
-      type: commandDialogTypes.STOP_APPLYING_COMMAND,
-    };
-  },
-  receiveIssueVisibility: (
-    visibility: Visibility,
-  ): {
-    type: any;
-    visibility: Visibility;
-  } => {
-    return actions.RECEIVE_ISSUE_VISIBILITY({
-      visibility,
-    });
-  },
-  receiveAllAttachments: (
-    attachments: Attachment[],
-  ): {
-    type: any;
-    attachments: Attachment[];
-  } => {
-    return {
-      type: attachmentTypes.ATTACH_RECEIVE_ALL_ATTACHMENTS,
-      attachments,
-    };
-  },
-  receiveIssueLinks: (links: IssueOnListExtended[]) => {
-    return actions.RECEIVE_ISSUE_LINKS({
-      links,
-    });
-  },
-  toggleAttachFileDialog: (isVisible: boolean) => {
-    return attachmentActions.toggleAttachFileDialog(isVisible);
-  },
-  cancelImageAttaching: attach => {
-    return attachmentActions.cancelImageAttaching(attach);
-  },
-  loadIssueAttachments: issueId => {
-    return attachmentActions.loadIssueAttachments(issueId);
-  },
-  removeAttachment: (attach, issueId) => {
-    return attachmentActions.removeAttachment(attach, issueId);
-  },
-  uploadFile: (files: NormalizedAttachment[], issue: IssueFull) => {
-    return attachmentActions.doUploadFile(false, files, issue);
-  },
-  setUserCC: (users: UserCC[]) => {
-    return actions.SET_USERS_CC(users);
-  },
-  setIssueSprints: (sprints: IssueSprint[]) => {
-    return actions.SET_ISSUE_SPRINTS(sprints);
-  },
+  setIssueDescriptionCopy: (description: string) => actions.SET_ISSUE_DESCRIPTION_COPY({description}),
+
+  startSavingEditedIssue: () => actions.START_SAVING_EDITED_ISSUE(),
+
+  stopSavingEditedIssue: () => actions.STOP_SAVING_EDITED_ISSUE(),
+
+  setVoted: (voted: boolean) => actions.SET_VOTED({voted}),
+
+  setStarred: (starred: boolean) => actions.SET_STARRED({starred}),
+
+  issueUpdated: (issue: IssueFull) => actions.RECEIVE_ISSUE({issue}),
+
+  unloadActiveIssueView: () => actions.UNLOAD_ACTIVE_ISSUE_VIEW(),
+
+  openTagsSelect: (selectProps: ISelectProps<IItem>) => actions.OPEN_ISSUE_SELECT({selectProps}),
+
+  closeTagsSelect: () => actions.CLOSE_ISSUE_SELECT({selectProps: null}),
+
+  setError: (error: CustomError) => actions.RECEIVE_ISSUE_ERROR({error}),
+
+  openCommandDialog: (initialCommand: string = '') => ({
+    type: commandDialogTypes.OPEN_COMMAND_DIALOG,
+    initialCommand,
+  }),
+
+  closeCommandDialog: () => ({type: commandDialogTypes.CLOSE_COMMAND_DIALOG}),
+
+  receiveCommandSuggestions: (suggestions: CommandSuggestionResponse) => ({
+    type: commandDialogTypes.RECEIVE_COMMAND_SUGGESTIONS,
+    suggestions,
+  }),
+
+  startApplyingCommand: () => ({type: commandDialogTypes.START_APPLYING_COMMAND}),
+
+  stopApplyingCommand: () => ({type: commandDialogTypes.STOP_APPLYING_COMMAND}),
+
+  receiveIssueVisibility: (visibility: Visibility) => actions.RECEIVE_ISSUE_VISIBILITY({visibility}),
+
+  receiveAllAttachments: (attachments: Attachment[]) => ({
+    type: attachmentTypes.ATTACH_RECEIVE_ALL_ATTACHMENTS,
+    attachments,
+  }),
+
+  receiveIssueLinks: (links: IssueLink[]) => actions.RECEIVE_ISSUE_LINKS({links}),
+
+  toggleAttachFileDialog: (isVisible: boolean) => attachmentActions.toggleAttachFileDialog(isVisible),
+
+  cancelImageAttaching: (attach: Attachment) => attachmentActions.cancelImageAttaching(attach),
+
+  loadIssueAttachments: (issueId: string) => attachmentActions.loadIssueAttachments(issueId),
+
+  removeAttachment: (attach: Attachment, issueId: string) => attachmentActions.removeAttachment(attach, issueId),
+
+  uploadFile: (files: NormalizedAttachment[], issue: IssueFull) => attachmentActions.doUploadFile(false, files, issue),
+
+  setUserCC: (users: UserCC[]) => actions.SET_USERS_CC(users),
+
+  setIssueSprints: (sprints: IssueSprint[]) => actions.SET_ISSUE_SPRINTS(sprints),
 });

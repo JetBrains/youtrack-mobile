@@ -11,6 +11,8 @@ import type {Project} from 'types/Project';
 import type {SliceCaseReducers} from '@reduxjs/toolkit';
 import type {User, UserCC} from 'types/User';
 import type {Visibility} from 'types/Visibility';
+import {IItem, ISelectProps} from 'components/select/select';
+import {CustomError} from 'types/Error';
 
 export type IssueState = {
   attachingImage: Record<string, any> | null | undefined;
@@ -71,79 +73,54 @@ export const initialState: IssueState = {
 };
 export type IssueBaseActions = {
   SET_ISSUE_ID: (action: {
-    payload: {
-      issueId: string;
-    };
+    issueId: string;
   }) => IssueState;
   START_ISSUE_REFRESHING: () => IssueState;
   STOP_ISSUE_REFRESHING: () => IssueState;
   RECEIVE_ISSUE: (action: {
-    payload: {
-      issue: IssueFull;
-    };
+    issue: IssueFull;
   }) => IssueState;
   RECEIVE_ISSUE_LINKS: (action: {
-    payload: {
-      links: IssueLink[];
-    };
+    links: IssueLink[];
   }) => IssueState;
   RECEIVE_ISSUE_VISIBILITY: (action: {
-    payload: {
-      visibility: Visibility;
-    };
+    visibility: Visibility;
   }) => IssueState;
   RECEIVE_ISSUE_ERROR: (action: {
-    payload: {
-      error: Error;
-    };
+    error: CustomError;
   }) => IssueState;
   START_EDITING_ISSUE: () => IssueState;
   STOP_EDITING_ISSUE: () => IssueState;
   SET_ISSUE_SUMMARY_AND_DESCRIPTION: (
-    state: IssueState,
     action: {
-      payload: {
-        summary: string;
-        description: string;
-      };
-    },
+      summary: string;
+      description: string;
+    }
   ) => IssueState;
   SET_ISSUE_SUMMARY_COPY: (action: {
-    payload: {
-      summary: string;
-    };
+    summary: string;
   }) => IssueState;
   SET_ISSUE_DESCRIPTION_COPY: (action: {
-    payload: {
-      description: string;
-    };
+    description: string;
   }) => IssueState;
   START_SAVING_EDITED_ISSUE: () => IssueState;
   STOP_SAVING_EDITED_ISSUE: () => IssueState;
   SET_ISSUE_FIELD_VALUE: (action: {
-    payload: {
-      field: CustomField;
-      value: FieldValue;
-    };
+    field: CustomField;
+    value: FieldValue;
   }) => IssueState;
   SET_PROJECT: (action: {
-    payload: {
-      project: Project;
-    };
+    project: Project;
   }) => IssueState;
   SET_VOTED: (action: {
-    payload: {
-      voted: boolean;
-    };
+    voted: boolean;
   }) => IssueState;
   SET_STARRED: (action: {
-    payload: {
-      starred: boolean;
-    };
+    starred: boolean;
   }) => IssueState;
   UNLOAD_ACTIVE_ISSUE_VIEW: () => IssueState;
-  OPEN_ISSUE_SELECT: (action: {payload: any}) => IssueState;
-  CLOSE_ISSUE_SELECT: (action: {payload: any}) => IssueState;
+  OPEN_ISSUE_SELECT: (action: {selectProps: ISelectProps<IItem>}) => IssueState;
+  CLOSE_ISSUE_SELECT: (action: {selectProps: null}) => IssueState;
   SET_USERS_CC: (action: UserCC[]) => IssueState;
   SET_ISSUE_SPRINTS: (action: IssueSprint[]) => IssueState;
 };
@@ -153,7 +130,7 @@ export const createAttachmentReducer = (types: Record<keyof typeof attachmentAct
     state: IssueState,
     action: {
       attachingImage: Record<string, any>;
-    },
+    }
   ): IssueState {
     const {attachingImage} = action;
     return {
@@ -170,7 +147,7 @@ export const createAttachmentReducer = (types: Record<keyof typeof attachmentAct
     state: IssueState,
     action: {
       attachingImage: Record<string, any>;
-    },
+    }
   ): IssueState {
     const {attachingImage} = action;
     return {
@@ -178,7 +155,7 @@ export const createAttachmentReducer = (types: Record<keyof typeof attachmentAct
       issue: {
         ...state.issue,
         attachments: state.issue.attachments.filter(
-          attachment => attachment !== attachingImage,
+          attachment => attachment !== attachingImage
         ),
       },
       attachingImage: null,
@@ -189,14 +166,14 @@ export const createAttachmentReducer = (types: Record<keyof typeof attachmentAct
     state: IssueState,
     action: {
       attachmentId: string;
-    },
+    }
   ): IssueState {
     return {
       ...state,
       issue: {
         ...state.issue,
         attachments: state.issue.attachments.filter(
-          attach => attach.id !== action.attachmentId,
+          attach => attach.id !== action.attachmentId
         ),
       },
     };
@@ -210,7 +187,7 @@ export const createAttachmentReducer = (types: Record<keyof typeof attachmentAct
     state: IssueState,
     action: {
       isAttachFileDialogVisible: boolean;
-    },
+    }
   ): IssueState {
     return {
       ...state,
@@ -222,14 +199,14 @@ export const createAttachmentReducer = (types: Record<keyof typeof attachmentAct
     state: IssueState,
     action: {
       attachments: boolean;
-    },
+    }
   ): IssueState {
     return {...state, issue: {...state.issue, attachments: action.attachments}};
   },
 });
 export const createIssueReduxSlice: (
   namespace: string,
-  extraReducers: Record<string, any>,
+  extraReducers: Record<string, any>
 ) => {
   actions: IssueBaseActions;
   reducer: SliceCaseReducers<IssueState>;
@@ -245,7 +222,7 @@ export const createIssueReduxSlice: (
           payload: {
             issueId: string;
           };
-        },
+        }
       ) => {
         state.issueId = action.payload.issueId;
       },
@@ -261,7 +238,7 @@ export const createIssueReduxSlice: (
           payload: {
             issue: IssueFull;
           };
-        },
+        }
       ) => {
         state.issue = action.payload.issue;
         state.issueLoaded = true;
@@ -274,7 +251,7 @@ export const createIssueReduxSlice: (
           payload: {
             links: IssueLink[];
           };
-        },
+        }
       ) => {
         state.issue = {...state.issue, links: action.payload.links};
       },
@@ -284,7 +261,7 @@ export const createIssueReduxSlice: (
           payload: {
             visibility: Visibility;
           };
-        },
+        }
       ) => {
         state.issue = {...state.issue, visibility: action.payload.visibility};
       },
@@ -294,7 +271,7 @@ export const createIssueReduxSlice: (
           payload: {
             error: Error;
           };
-        },
+        }
       ) => {
         state.issueLoadingError = action.payload.error;
       },
@@ -319,7 +296,7 @@ export const createIssueReduxSlice: (
             summary: string;
             description: string;
           };
-        },
+        }
       ) => {
         state.issue = {
           ...state.issue,
@@ -333,7 +310,7 @@ export const createIssueReduxSlice: (
           payload: {
             summary: string;
           };
-        },
+        }
       ) => {
         state.summaryCopy = action.payload.summary;
       },
@@ -343,7 +320,7 @@ export const createIssueReduxSlice: (
           payload: {
             description: string;
           };
-        },
+        }
       ) => {
         state.descriptionCopy = action.payload.description;
       },
@@ -360,7 +337,7 @@ export const createIssueReduxSlice: (
             field: CustomField;
             value: FieldValue;
           };
-        },
+        }
       ) => {
         state.issue = {
           ...state.issue,
@@ -378,7 +355,7 @@ export const createIssueReduxSlice: (
           payload: {
             project: Project;
           };
-        },
+        }
       ) => {
         state.issue = {...state.issue, project: action.payload.project};
       },
@@ -388,7 +365,7 @@ export const createIssueReduxSlice: (
           payload: {
             voted: boolean;
           };
-        },
+        }
       ) => {
         const voted: boolean = action.payload.voted;
         const votes: number = (state.issue?.votes || 0) + (voted ? 1 : -1);
@@ -407,7 +384,7 @@ export const createIssueReduxSlice: (
           payload: {
             starred: boolean;
           };
-        },
+        }
       ) => {
         state.issue = {
           ...state.issue,
@@ -427,7 +404,7 @@ export const createIssueReduxSlice: (
           payload: {
             selectProps: Record<string, any>;
           };
-        },
+        }
       ) => {
         state.selectProps = action.payload.selectProps;
         state.isTagsSelectVisible = true;
@@ -438,7 +415,7 @@ export const createIssueReduxSlice: (
           payload: {
             selectProps: Record<string, any>;
           };
-        },
+        }
       ) => {
         state.selectProps = action.payload.selectProps;
         state.isTagsSelectVisible = false;
