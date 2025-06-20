@@ -224,16 +224,13 @@ export const createActions = (
       ) => {
         const api: Api = getApi();
         const issueState = getState()[stateFieldName] as IssueState;
-        const {issue} = issueState;
+        const issue = issueState.issue;
         const {summaryCopy, descriptionCopy} = issueState;
         const textCustomFields: CustomFieldText[] = getIssueTextCustomFields(
           issue.fields,
         );
         dispatch(
-          dispatchActions.setIssueSummaryAndDescription(
-            summaryCopy,
-            descriptionCopy,
-          ),
+          dispatchActions.setIssueSummaryAndDescription(summaryCopy, descriptionCopy),
         );
         dispatch(dispatchActions.startSavingEditedIssue());
 
@@ -249,7 +246,7 @@ export const createActions = (
           await dispatch(actions.loadIssue());
           dispatch(dispatchActions.stopEditingIssue());
           dispatch(
-            dispatchActions.issueUpdated((issueState as IssueState).issue),
+            dispatchActions.issueUpdated({...issue, summary: summaryCopy, description: descriptionCopy}),
           );
         } catch (err) {
           notifyError(err as AnyError);

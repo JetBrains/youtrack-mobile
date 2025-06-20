@@ -36,10 +36,7 @@ export const createDispatchActions = (
   stopEditingIssue: () => actions.STOP_EDITING_ISSUE(),
 
   setIssueSummaryAndDescription: (summary: string, description: string) =>
-    actions.SET_ISSUE_SUMMARY_AND_DESCRIPTION({
-      summary,
-      description,
-    }),
+    actions.SET_ISSUE_SUMMARY_AND_DESCRIPTION({summary, description}),
 
   setIssueSummaryCopy: (summary: string) => actions.SET_ISSUE_SUMMARY_COPY({summary}),
 
