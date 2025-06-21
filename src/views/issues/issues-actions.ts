@@ -430,15 +430,16 @@ const openFilterFieldSelect = (filterSetting: FilterFieldSetting): ReduxAction =
     onSelect: async (selected: { id: string; name: string }[]) => {
       try {
         dispatch(issuesActions.CLOSE_SEARCH_CONTEXT_SELECT());
-        const key: string = getFilterFieldName(filterSetting.filterField[0]);
+        const name: string = getFilterFieldName(filterSetting.filterField[0]);
         const issuesSettings: IssuesSettings = {
           ...settings,
           search: {
             ...settings.search,
             filters: {
               ...settings.search.filters,
-              [key]: {
-                key,
+              [name]: {
+                id: filterSetting.id,
+                name,
                 filterField: filterSetting.filterField,
                 selectedValues: selected.map(i => i.id),
               },

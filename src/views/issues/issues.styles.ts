@@ -329,6 +329,7 @@ export default EStyleSheet.create({
   filtersButtonText: {
     ...secondaryText,
     color: '$text',
+    textTransform: 'capitalize',
   },
   filtersIcon: {
     marginRight: -UNIT,

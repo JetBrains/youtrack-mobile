@@ -82,7 +82,7 @@ const IssuesFiltersSettingList = ({
     };
   };
 
-  const renderItem = ({item, move, isActive}: {item: FilterFieldSetting; move: () => any; isActive: boolean}) => {
+  const renderItem = ({item, move, isActive}: {item: FilterFieldSetting; move: () => void; isActive: boolean}) => {
     return (
       <AnimatedView animation="fadeIn" duration={500} useNativeDriver>
         <TouchableOpacity
@@ -108,6 +108,10 @@ const IssuesFiltersSettingList = ({
     );
   };
 
+  const renderAddItemTitle = (el: FilterFieldSetting) => (
+    <Text style={styles.sortByListItemText}>{el.name}</Text>
+  );
+
   const renderAddItemComponent = () => {
     const Container: React.ElementType = isSplitViewMode ? SelectModal : Select;
     setAddFilterComponent(
@@ -115,6 +119,7 @@ const IssuesFiltersSettingList = ({
         multi={true}
         selectedItems={sorted}
         onCancel={() => setAddFilterComponent(null)}
+        titleRenderer={renderAddItemTitle}
         dataSource={async (q: string) => {
           let _filters;
           if (cachedFilterFields.current) {
