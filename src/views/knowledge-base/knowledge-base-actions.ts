@@ -65,12 +65,11 @@ export const getPinnedNonTemplateProjects = async (
   api: Api,
 ): Promise<Array<Folder>> => {
   const [error, pinnedFolders] = await until<Folder[]>(api.issueFolder.getPinnedIssueFolder());
-
   if (error) {
     notifyError(error);
     return [];
   } else {
-    return ((pinnedFolders as any) as Array<Folder>)
+    return (pinnedFolders || [])
       .filter((it: Folder) => !it.template)
       .filter(hasType.project);
   }
