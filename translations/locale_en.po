@@ -235,7 +235,7 @@ msgstr "Camera"
 #: src/views/inbox-threads/inbox-threads.tsx:278
 #: src/views/issue/issue-base-actions-creater.ts:597
 #: src/views/issue/issue-base-actions-creater.ts:629
-#: src/views/knowledge-base/knowledge-base-actions.ts:447
+#: src/views/knowledge-base/knowledge-base-actions.ts:446
 #: src/views/settings/settings__feedback-form.tsx:79
 msgid "Cancel"
 msgstr "Cancel"
@@ -561,7 +561,7 @@ msgstr "Filter projects"
 msgid "Filter projects, saved searches, and tags"
 msgstr "Filter projects, saved searches, and tags"
 
-#: src/views/issues/issues__filters-settings__list.tsx:158
+#: src/views/issues/issues__filters-settings__list.tsx:163
 #: src/views/issues/issues__settings.tsx:110
 msgid "Filter Settings"
 msgstr "Filter Settings"
@@ -712,7 +712,7 @@ msgstr "Log in with Browser"
 msgid "Logs"
 msgstr "Logs"
 
-#: src/views/knowledge-base/knowledge-base-actions.ts:443
+#: src/views/knowledge-base/knowledge-base-actions.ts:442
 #: src/views/knowledge-base/knowledge-base.tsx:417
 msgid "Manage Favorite Projects"
 msgstr "Manage Favorite Projects"
@@ -768,7 +768,7 @@ msgstr "merged the pull request"
 msgid "Mute thread"
 msgstr "Mute thread"
 
-#: src/views/knowledge-base/knowledge-base-actions.ts:456
+#: src/views/knowledge-base/knowledge-base-actions.ts:455
 msgid "New Article"
 msgstr "New Article"
 
@@ -886,11 +886,11 @@ msgstr "Project"
 msgid "Projects"
 msgstr "Projects"
 
-#: src/views/knowledge-base/knowledge-base-actions.ts:492
+#: src/views/knowledge-base/knowledge-base-actions.ts:491
 msgid "Projects collapsed"
 msgstr "Projects collapsed"
 
-#: src/views/knowledge-base/knowledge-base-actions.ts:492
+#: src/views/knowledge-base/knowledge-base-actions.ts:491
 msgid "Projects expanded"
 msgstr "Projects expanded"
 
@@ -907,7 +907,7 @@ msgid "Recommended groups and teams"
 msgstr "Recommended groups and teams"
 
 #: src/components/custom-field/Issue-sprints-field.tsx:139
-#: src/views/knowledge-base/knowledge-base-actions.ts:341
+#: src/views/knowledge-base/knowledge-base-actions.ts:340
 msgid "Remove"
 msgstr "Remove"
 
@@ -915,7 +915,7 @@ msgstr "Remove"
 msgid "Remove favorite"
 msgstr "Remove favorite"
 
-#: src/views/knowledge-base/knowledge-base-actions.ts:341
+#: src/views/knowledge-base/knowledge-base-actions.ts:340
 msgid "Remove project from favorites?"
 msgstr "Remove project from favorites?"
 
