@@ -35,11 +35,11 @@ const IssuesFilters = (): React.JSX.Element | null => {
     >
       <View style={styles.filters}>
         {
-          getSearchFiltersKeys().map((it: string, i: number) => {
+          getSearchFiltersKeys().map((it: string) => {
             const fs: FilterFieldSetting = getSearchFilters()[it];
             return fs.filterField[0] ? (
               <IssuesFilterField
-                key={`searchFilters-${i}`}
+                key={fs.id}
                 filterSetting={fs}
                 disabled={disabled}
                 onPress={(filterSetting: FilterFieldSetting) => {
