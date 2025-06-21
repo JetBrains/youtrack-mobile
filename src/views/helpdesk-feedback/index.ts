@@ -126,7 +126,7 @@ export const createFormBlock = (
       const isAdmin = issuePermissions.isAgentInProject(project);
       const userTypeId = currentUser.userType.id;
       const isAgent = userTypeId === UserTypeId.AGENT && isAdmin;
-      const isRestrictedProject = project.restricted;
+      const isRestrictedProject = project?.restricted || false;
       if (isAgent) {
         label = (isAdmin && isRestrictedProject) || !isRestrictedProject ? 'Reporter or email address' : 'Reporter';
       } else {
