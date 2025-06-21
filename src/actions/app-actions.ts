@@ -871,7 +871,7 @@ export function handleURL(uri: string = ''): ReduxAction {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     const backendUrl = getApi().config.backendUrl;
     const url = uri.trim();
-    if (url) {
+    if (url && backendUrl) {
       const issueId = extractIssueId(url) ?? undefined;
       const articleId = extractArticleId(url) ?? undefined;
       const helpdeskFormId = extractHelpdeskFormId(url) ?? undefined;
