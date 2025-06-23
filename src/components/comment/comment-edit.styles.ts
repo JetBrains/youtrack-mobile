@@ -85,6 +85,11 @@ export default EStyleSheet.create({
     flex: 1,
     maxHeight: 106,
     padding: 0,
+    ...Platform.select({
+      ios: {
+        paddingTop: UNIT / 2,
+      },
+    }),
     ...mainText,
     color: '$text',
   },
