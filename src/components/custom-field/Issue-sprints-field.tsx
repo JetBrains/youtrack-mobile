@@ -55,27 +55,41 @@ export default function IssueSprintsField({projectId, onUpdate}: {projectId: str
     [dispatch, issueId, onUpdate]
   );
 
+  const sprintSelectTitleRenderer = (b: BoardOnIssue) => (
+    <View style={styles.selectItem}>
+      <Text style={styles.valueTagText}>{b.name}</Text>
+    </View>
+  );
+
+  const selectBoardTitleRenderer = (b: BoardOnIssue) => (
+    <View style={styles.selectItem}>
+      <Text style={styles.valueTagText}>{b.name}</Text>
+      {!b.sprintsSettings.disableSprints && (
+        <View style={styles.selectItemSecondary}>
+          <Text style={styles.selectItemSecondaryText}>{i18n('select sprint')}</Text>
+          <IconAngleRight size={24} color={styles.selectItemSecondaryText.color} />
+        </View>
+      )}
+    </View>
+  );
+
   const renderSprintList = (board: BoardOnIssue) => {
     return (
       <Select
         closeIcon={IconBack}
         getWrapperComponent={() => View}
-        dataSource={async (q: string) => {
+        dataSource={async (query: string) => {
           const sprints: SprintOnIssue[] = await loadSprints(board.id);
           return sprints
             .filter(s => !issueSprints.find(is => is.id === s.id))
-            .filter(s => s.name.toLowerCase().includes(q.toLowerCase()));
+            .filter(s => s.name.toLowerCase().includes(query.toLowerCase()));
         }}
         onSelect={(s: SprintOnIssue) => {
           addToBoard(board.name, s.name);
         }}
         onCancel={() => Router.pop()}
         selectedItems={[]}
-        titleRenderer={(b: BoardOnIssue) => (
-          <View style={styles.selectItem}>
-            <Text style={styles.valueTagText}>{b.name}</Text>
-          </View>
-        )}
+        titleRenderer={sprintSelectTitleRenderer}
       />
     );
   };
@@ -100,17 +114,7 @@ export default function IssueSprintsField({projectId, onUpdate}: {projectId: str
         }}
         onCancel={() => Router.pop()}
         selectedItems={[]}
-        titleRenderer={(b: BoardOnIssue) => (
-          <View style={styles.selectItem}>
-            <Text style={styles.valueTagText}>{b.name}</Text>
-            {!b.sprintsSettings.disableSprints && (
-              <View style={styles.selectItemSecondary}>
-                <Text style={styles.selectItemSecondaryText}>{i18n('select sprint')}</Text>
-                <IconAngleRight size={24} color={styles.selectItemSecondaryText.color} />
-              </View>
-            )}
-          </View>
-        )}
+        titleRenderer={selectBoardTitleRenderer}
       />
     );
   };

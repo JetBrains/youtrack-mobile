@@ -26,9 +26,7 @@ const TagAddSelect = (props: Props) => {
     placeholder: i18n('Filter tags'),
     multi: true,
     dataSource: async (q: string) => {
-      const [error, relevantTags] = await until(
-        getApi().issueFolder.getProjectRelevantTags(projectId, q),
-      );
+      const [error, relevantTags] = await until(getApi().issueFolder.getProjectRelevantTags(projectId, q));
       return error ? [] : relevantTags.filter((it: Tag) => it.id !== props.starId);
     },
     selectedItems: existed,
@@ -38,18 +36,14 @@ const TagAddSelect = (props: Props) => {
       await onAdd(tags || []);
       onHide();
     },
-    titleRenderer: (tag: Tag) => {
-      return (
-        <ColorField
-          fullText={true}
-          text={tag.name}
-          color={tag.color}
-          style={styles.tagSelectItem}
-        />
-      );
-    },
+    titleRenderer: titleRenderer,
   };
+
   return <Select {...selectProps} />;
 };
+
+function titleRenderer(tag: Tag) {
+  return <ColorField fullText={true} text={tag.name} color={tag.color} style={styles.tagSelectItem} />;
+}
 
 export default React.memo<Props>(TagAddSelect);
