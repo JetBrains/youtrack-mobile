@@ -4,7 +4,8 @@ import {Text} from 'react-native';
 import ModalPortal from 'components/modal-view/modal-portal';
 import SelectSectioned, {
   ISectionedProps,
-  ISectionedState, SelectSectionedModal,
+  ISectionedState,
+  SelectSectionedModal,
 } from 'components/select/select-sectioned';
 import Star from 'components/star/star';
 import {notifyError} from 'components/notification/notification';
@@ -12,20 +13,21 @@ import {until} from 'util/util';
 
 import styles from './select.styles';
 
-import {CustomError} from 'types/Error';
-import {IItem} from 'components/select/select';
+import type {AnyError} from 'types/Error';
+import type {IItem} from 'components/select/select';
+import type {Tag} from 'types/CustomFields';
 
 
 export interface ISSWithItemActionsProps extends ISectionedProps {
-  onStar(item: any): void;
-  hasStar(item: any): boolean;
+  onStar(item: IItem): Promise<AnyError | Tag>;
+  hasStar(item: IItem): boolean;
 }
 
 interface ISSWithItemActionsState extends ISectionedState {
   visible: boolean;
 }
 
-export class SectionedSelectWithItemActions<P extends ISSWithItemActionsProps, S extends ISSWithItemActionsState> extends SelectSectioned<P, S> {
+export class SectionedSelectWithItemActions<S extends ISSWithItemActionsState = ISSWithItemActionsState> extends SelectSectioned<S> {
   _renderTitle(item: IItem) {
     const name: string = `${item.name}${item.shortName ? ` (${item.shortName})` : ''}`;
     return (
@@ -33,9 +35,9 @@ export class SectionedSelectWithItemActions<P extends ISSWithItemActionsProps, S
         {!!item.id && <Star
           style={styles.itemStar}
           canStar={true}
-          hasStar={this.props.hasStar(item)}
+          hasStar={(this.props as ISSWithItemActionsProps).hasStar(item)}
           onStarToggle={async () => {
-            const [error]: [CustomError | null, any] = await until(this.props.onStar(item)) as [CustomError | null, any];
+            const [error] = await until((this.props as ISSWithItemActionsProps).onStar(item));
             if (error) {
               notifyError(error);
             } else {
@@ -50,7 +52,7 @@ export class SectionedSelectWithItemActions<P extends ISSWithItemActionsProps, S
   }
 }
 
-export class SectionedSelectWithItemActionsModal<P extends ISSWithItemActionsProps, S extends ISSWithItemActionsState> extends SelectSectionedModal<P, S> implements SectionedSelectWithItemActions<P, S> {
+export class SectionedSelectWithItemActionsModal<S extends ISSWithItemActionsState = ISSWithItemActionsState> extends SelectSectionedModal<S> {
   render = () => {
     return (
       <ModalPortal

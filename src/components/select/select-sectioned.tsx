@@ -9,31 +9,26 @@ import styles from './select.styles';
 import {SectionListData} from 'react-native/Libraries/Lists/SectionList';
 
 
-export interface SLItem {
-  [key: string]: any;
-}
-
-interface Section extends SectionListData<SLItem, SLItem>{
+interface Section extends SectionListData<IItem, IItem>{
   title: string;
-  data: SLItem[];
+  data: IItem[];
 }
 
-export type ISectionedState = Omit<ISelectState, 'filteredItems' | 'items' | 'selectedItems'> & {
+export type ISectionedState = Omit<ISelectState<IItem>, 'filteredItems' | 'items' | 'selectedItems'> & {
   filteredItems: Section[];
-  items: SLItem[];
-  selectedItems: SLItem[];
+  items: IItem[];
+  selectedItems: IItem[];
 }
 
-export interface ISectionedProps extends Omit<ISelectProps, 'dataSource'> {
-  dataSource: (query: string) => Promise<SLItem[]>;
+export interface ISectionedProps extends Omit<ISelectProps<IItem>, 'dataSource'> {
+  dataSource: (query: string) => Promise<IItem[]>;
 }
 
 
-export default class SelectSectioned<P extends ISectionedProps, S extends ISectionedState> extends Select<P, S> {
+export default class SelectSectioned<S extends ISectionedState = ISectionedState> extends Select<IItem, S> {
 
-  constructor(props: P) {
+  constructor(props: ISectionedProps) {
     super(props);
-    // @ts-ignore
     this.state = {
       filteredItems: [],
       items: [],
@@ -44,7 +39,7 @@ export default class SelectSectioned<P extends ISectionedProps, S extends ISecti
     };
   }
 
-  renderSectionHeader = ({section}: { section: SLItem }) => {
+  renderSectionHeader = ({section}: { section: IItem }) => {
     return section.title ? (
       <View style={[styles.sectionHeader, !section.title.trim() && styles.sectionHeaderEmpty]}>
         <Text style={styles.sectionHeaderText}>{section.title}</Text>
@@ -52,7 +47,7 @@ export default class SelectSectioned<P extends ISectionedProps, S extends ISecti
     ) : null;
   };
 
-  removeDuplicateItems(source: SLItem[], duplicates: IItem[]): Section[] {
+  removeDuplicateItems(source: IItem[], duplicates: IItem[]): Section[] {
     const selectedMap: Record<string, string> = duplicates.reduce(
       (akk: Record<string, string>, it: IItem) => (
         {...akk, [it.id]: it.id}),
@@ -62,29 +57,29 @@ export default class SelectSectioned<P extends ISectionedProps, S extends ISecti
       ?.reduce((akk, it) => {
         akk.push({
           ...it,
-          data: it.data.filter((it: IItem) => !(it.id in selectedMap)),
+          data: it.data.filter((i: IItem) => !(i.id in selectedMap)),
         });
         return akk;
       }, [])
-      .filter((it: SLItem) => it.data.length > 0);
+      .filter((it: IItem) => it.data.length > 0);
   }
 
-  getFilteredItems(items: SLItem[], selected?: SLItem[]): Section[] {
+  getFilteredItems(items: IItem[], query?: string): Section[] {
     const {selectedItems} = this.state;
-    let _selectedItems: SLItem[] = selected || selectedItems;
+    let _selectedItems: IItem[] = selectedItems;
 
     if (_selectedItems?.length) {
-      const itemsMap: Record<string, SLItem> = items.reduce((akk, it: SLItem) => {
+      const itemsMap: Record<string, IItem> = items.reduce((akk, it: IItem) => {
         if (it?.data) {
           akk = {
             ...akk,
-            ...it.data.reduce((a,i) => ({...a, [i.id]: i}), {}),
+            ...it.data.reduce((a: Record<string, IItem>, i: IItem) => ({...a, [i.id]: i}), {}),
           };
         }
         return akk;
       }, {});
 
-      _selectedItems = _selectedItems.reduce((akk: SLItem[], it: SLItem) => {
+      _selectedItems = _selectedItems.reduce((akk: IItem[], it: IItem) => {
         return [...akk, itemsMap[it.id] ? {...it, ...itemsMap[it.id]} : it];
       }, []);
     }
@@ -95,8 +90,8 @@ export default class SelectSectioned<P extends ISectionedProps, S extends ISecti
   }
 
   async onSearch(query: string) {
-    const filterByLabel = (data: SLItem[]): SLItem[] => (data || []).filter(
-      (it: SLItem) => this.filterItemByLabel(it, query)
+    const filterByLabel = (data: IItem[]): IItem[] => (data || []).filter(
+      (it: IItem) => this.filterItemByLabel(it, query)
     );
     const doSearch = (): Section[] => (
       this.getFilteredItems(this.state.items).reduce((akk: Section[], it: IItem) => {
@@ -119,10 +114,10 @@ export default class SelectSectioned<P extends ISectionedProps, S extends ISecti
     return null;
   }
 
-  _onTouchItem(item: IItem) {
+  _onTouchItem(item: IItem): IItem[] {
     const selectedItems: IItem[] = super._onTouchItem(item);
     this.setState({
-      filteredItems: this.getFilteredItems(this.state.items, selectedItems),
+      filteredItems: this.getFilteredItems(this.state.items),
     });
     return selectedItems;
   }
@@ -154,8 +149,8 @@ export default class SelectSectioned<P extends ISectionedProps, S extends ISecti
 
 export type ISelectionedStateModal = ISectionedState & { visible: boolean };
 
-export class SelectSectionedModal<P extends ISectionedProps, S extends ISelectionedStateModal> extends SelectSectioned<P, S> {
-  constructor(props: P) {
+export class SelectSectionedModal<S extends ISelectionedStateModal = ISelectionedStateModal> extends SelectSectioned<S> {
+  constructor(props: ISectionedProps) {
     super(props);
     this.state = {...this.state, visible: true};
   }
@@ -166,14 +161,14 @@ export class SelectSectionedModal<P extends ISectionedProps, S extends ISelectio
     });
   };
   onCancel = () => {
-    this.props.onCancel();
+    this.props?.onCancel?.();
     this.onHide();
   };
-  onSelect = (item: IItem) => {
+  onSelect = (item: IItem | IItem[] | null) => {
     this.props.onSelect(item);
     this.onHide();
   };
-  getWrapperProps = (): IItem | null => {
+  getWrapperProps = () => {
     return null;
   };
   getWrapperComponent = () => {

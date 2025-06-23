@@ -56,7 +56,7 @@ export interface ISelectState<T> {
 }
 
 
-export class Select<T extends ISelectProps<T>, S extends ISelectState<T>> extends React.PureComponent<T, S> {
+export class Select<T extends IItem, S extends ISelectState<T> = ISelectState<T>> extends React.PureComponent<ISelectProps<T>, S> {
   static defaultProps = {
     autoFocus: false,
     noFilter: false,
@@ -82,7 +82,7 @@ export class Select<T extends ISelectProps<T>, S extends ISelectState<T>> extend
     return <View style={styles.rowSeparator}/>;
   }
 
-  constructor(props: T) {
+  constructor(props: ISelectProps<T>) {
     super(props);
     this.state = {
       query: '',
@@ -397,8 +397,8 @@ export class Select<T extends ISelectProps<T>, S extends ISelectState<T>> extend
 }
 
 
-export class SelectModal<T extends ISelectProps<T>, S extends ISelectState<T> & {visible: boolean}> extends Select<T, S> {
-  constructor(props: T) {
+export class SelectModal<T extends IItem, S extends ISelectState<T> & {visible: boolean} = ISelectState<T> & {visible: boolean}> extends Select<T, S> {
+  constructor(props: ISelectProps<T>) {
     super(props);
     this.state = {...this.state, visible: true};
   }
@@ -412,7 +412,7 @@ export class SelectModal<T extends ISelectProps<T>, S extends ISelectState<T> & 
     this?.props?.onCancel?.();
     this.onHide();
   };
-  onSelect = (item: T) => {
+  onSelect = (item: T | T[] | null) => {
     this.props.onSelect(item);
     this.onHide();
   };
