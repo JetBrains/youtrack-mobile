@@ -204,7 +204,7 @@ msgstr "Attachment name"
 msgid "Author"
 msgstr "Author"
 
-#: src/components/custom-field/Issue-sprints-field.tsx:122
+#: src/components/custom-field/Issue-sprints-field.tsx:126
 msgid "Boards"
 msgstr "Boards"
 
@@ -226,7 +226,7 @@ msgstr "Camera"
 
 #: src/components/account/accounts.tsx:51
 #: src/components/confirmation/confirmation.ts:19
-#: src/components/custom-field/Issue-sprints-field.tsx:142
+#: src/components/custom-field/Issue-sprints-field.tsx:146
 #: src/components/tags/tags.tsx:53
 #: src/views/article/arcticle-actions.ts:306
 #: src/views/article/arcticle-actions.ts:626
@@ -906,7 +906,7 @@ msgstr "Recent searches"
 msgid "Recommended groups and teams"
 msgstr "Recommended groups and teams"
 
-#: src/components/custom-field/Issue-sprints-field.tsx:139
+#: src/components/custom-field/Issue-sprints-field.tsx:143
 #: src/views/knowledge-base/knowledge-base-actions.ts:340
 msgid "Remove"
 msgstr "Remove"
@@ -995,7 +995,7 @@ msgstr "Select an issue from the list"
 msgid "Select an option"
 msgstr "Select an option"
 
-#: src/components/custom-field/Issue-sprints-field.tsx:108
+#: src/components/custom-field/Issue-sprints-field.tsx:69
 msgid "select sprint"
 msgstr "select sprint"
 
