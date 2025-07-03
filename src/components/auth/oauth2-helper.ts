@@ -71,7 +71,7 @@ const doAuthorize = async (config: AppConfig): Promise<AuthParams> => {
     return {
       access_token: authResult.accessToken,
       refresh_token: authResult.refreshToken,
-      scope: config.auth.scopes,
+      scope: authResult.scopes && authResult.scopes.length > 0 ? authResult.scopes.join(' ') : config.auth.scopes,
       token_type: authResult.tokenType,
     };
   } catch (error) {

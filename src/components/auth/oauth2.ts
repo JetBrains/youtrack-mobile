@@ -5,6 +5,7 @@ import {getAuthParamsKey} from 'components/storage/storage__oauth';
 import {getErrorMessage} from 'components/error/error-resolver';
 import {logEvent} from 'components/log/log-helper';
 
+import type {AnyError} from 'types/Error';
 import type {AppConfig} from 'types/AppConfig';
 import type {AuthParams} from 'types/Auth';
 import type {RefreshResult} from 'react-native-app-auth';
@@ -33,33 +34,34 @@ export default class OAuth2 extends AuthBase {
     this.authParams = authParams;
   }
 
-  getAuthParams(): AuthParams {
-    return this.authParams!;
+  getAuthParams(): AuthParams | null {
+    return this.authParams;
   }
 
   async refreshToken(): Promise<AuthParams> {
-    let refreshResult: RefreshResult;
-    let prevAuthParams: AuthParams | null = this.getAuthParams();
+    let prevAuthParams = this.getAuthParams();
     if (!prevAuthParams) {
       prevAuthParams = await this.getCachedAuthParams();
     }
 
+    let refreshResult: RefreshResult;
     try {
       log.info('OAuth2(refreshToken) token refresh start...');
       refreshResult = await refreshToken(this.config, prevAuthParams.refresh_token);
       log.info('OAuth2(refreshToken) token refresh success');
-    } catch (e: any) {
-      const message: string = `OAuth2(refreshToken) token refresh failed. ${getErrorMessage(e) || e}`;
+    } catch (e) {
+      const message: string = `OAuth2(refreshToken) token refresh failed. ${getErrorMessage(e as AnyError) || e}`;
       logEvent({message, isError: true});
       throw e;
     }
 
-    let authParams = this.getAuthParams()!;
+    let authParams = prevAuthParams;
     if (refreshResult) {
       authParams = {
+        ...prevAuthParams,
         access_token: refreshResult.accessToken,
-        refresh_token: refreshResult.refreshToken || this.getAuthParams()!.refresh_token,
-        scope: this.getAuthParams()!.scope,
+        refresh_token: refreshResult.refreshToken || prevAuthParams.refresh_token,
+        scope: prevAuthParams.scope,
         token_type: refreshResult.tokenType,
       };
       this.setAuthParams(authParams);
