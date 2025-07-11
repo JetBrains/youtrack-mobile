@@ -338,13 +338,13 @@ export function removeAttachment(attach: Attachment): ReduxAction {
   };
 }
 
-export function updateVisibility(visibility: Visibility): ReduxAction {
+export function updateVisibility(visibility: Visibility | null): ReduxAction {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     const draftIssue: IssueCreate = getState().creation.issue;
-    const draftIssueCopy: IssueCreate = {...draftIssue};
+    const draftIssueCopy = {...draftIssue};
 
     try {
-      const draftWithVisibility: Visibility = await getApi().issue.updateVisibility(draftIssue.id, visibility);
+      const draftWithVisibility = await getApi().issue.updateVisibility(draftIssue.id, visibility);
       dispatch(actions.setIssueDraft({issue: draftWithVisibility}));
     } catch (err) {
       dispatch(actions.setIssueDraft({issue: draftIssueCopy}));

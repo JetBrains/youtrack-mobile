@@ -6,7 +6,7 @@ import {createIssueNamespace} from './create-issue-action-types';
 import {LOG_OUT} from 'actions/action-types';
 
 import {Attachment, CustomField, CustomFieldBaseValue, IssueLink} from 'types/CustomFields';
-import type {CommandSuggestionResponse, IssueCreate, IssueFull} from 'types/Issue';
+import type {CommandSuggestionResponse, IssueCreate} from 'types/Issue';
 import type {Project} from 'types/Project';
 
 export type CreateIssueState = {
@@ -60,7 +60,7 @@ const slice = createSlice({
     setIssuePredefinedDraftId: (state: CreateIssueState, action: PayloadAction<{preDefinedDraftId: string}>) => {
       state.predefinedDraftId = action.payload.preDefinedDraftId;
     },
-    setIssueDraft: (state: CreateIssueState, action: PayloadAction<{issue: IssueFull}>) => {
+    setIssueDraft: (state: CreateIssueState, action: PayloadAction<{issue: IssueCreate | Partial<IssueCreate>}>) => {
       state.issue = {...state.issue, ...action.payload.issue};
     },
     resetIssueDraftId: (state: CreateIssueState) => {

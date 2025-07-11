@@ -1,13 +1,13 @@
 export type UserGroup = {
   $type: string;
   allUsersGroup?: boolean;
-  icon?: string;
+  icon?: string | null;
   id: string;
   name: string;
-  ringId: string;
+  ringId?: string;
   team?: {
     id: string;
     name: string;
   };
-  usersCount: number;
+  usersCount?: number;
 };

@@ -805,14 +805,12 @@ export const createActions = (
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Update visibility');
 
         try {
-          const issueWithUpdatedVisibility: { id: string; visibility: Visibility } = await getApi().issue.updateVisibility(
+          const issueWithUpdatedVisibility = await getApi().issue.updateVisibility(
             issueState.issueId,
             visibility,
           );
           dispatch(
-            dispatchActions.receiveIssueVisibility(
-              issueWithUpdatedVisibility.visibility,
-            ),
+            dispatchActions.receiveIssueVisibility(issueWithUpdatedVisibility.visibility),
           );
         } catch (err) {
           dispatch(

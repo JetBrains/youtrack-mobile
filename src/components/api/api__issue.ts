@@ -25,9 +25,10 @@ import type {
 import type {AnyIssue, IssueCreate, IssueFull, IssueOnListExtended, IssueSprint} from 'types/Issue';
 import type {NormalizedAttachment} from 'types/Attachment';
 import type {Project} from 'types/Project';
-import type {UserCC} from 'types/User';
 import type {Visibility, VisibilityGroups} from 'types/Visibility';
 import type {DraftWorkItem, WorkItem} from 'types/Work';
+import type {User, UserCC} from 'types/User';
+import type {UserGroup} from 'types/UserGroup';
 
 export default class IssueAPI extends ApiBase {
   draftsURL: string = `${this.youTrackApiUrl}${
@@ -128,18 +129,27 @@ export default class IssueAPI extends ApiBase {
     );
   }
 
-  async updateVisibility(
-    issueId: string,
-    visibility: Visibility | null,
-  ) {
+  async updateVisibility(issueId: string, visibility: Visibility | null): Promise<{
+    id: string;
+    visibility: {
+      $type: string;
+      permittedGroups: {
+        $type: string;
+        id: string;
+        name: string;
+      },
+      permittedUsers: {
+        $type: string;
+        id: string;
+        name: string;
+      }
+    }
+  }> {
     const queryString = qs.stringify({
-      fields:
-        'id,visibility($type,permittedGroups($type,id,name),permittedUsers($type,id,name))',
+      fields: 'id,visibility($type,permittedGroups($type,id,name),permittedUsers($type,id,name))',
     });
     const url = `${this.youTrackIssueUrl}/${issueId}?${queryString}`;
-    return await this.makeAuthorizedRequest(url, 'POST', {
-      visibility,
-    });
+    return await this.makeAuthorizedRequest(url, 'POST', {visibility});
   }
 
   setCommentVisibility = async (visibility: VisibilityGroups | null, issueId: string, commentId: string) => {
@@ -554,7 +564,12 @@ export default class IssueAPI extends ApiBase {
     prefix: string = '',
     skip: number = 0,
     top: number = 20
-  ): Promise<VisibilityGroups> => {
+  ): Promise<{
+    groupsWithoutRecommended: UserGroup[];
+    recommendedGroups: UserGroup[];
+    visibilityGroups: UserGroup[];
+    visibilityUsers: User[];
+  }> => {
     const queryString = qs.stringify({
       $top: 50,
       fields: issueFields.getVisibility.toString(),

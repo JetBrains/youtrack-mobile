@@ -308,12 +308,17 @@ export const createActivityCommentActions = (stateFieldName = DEFAULT_ISSUE_STAT
         }
       };
     },
-    getCommentVisibilityOptions: function (): ReduxAction {
+    getCommentVisibilityOptions: function (): ReduxAction<Promise<{
+      groupsWithoutRecommended: UserGroup[];
+      recommendedGroups: UserGroup[];
+      visibilityGroups: UserGroup[];
+      visibilityUsers: User[];
+    }>> {
       return (
         dispatch: ReduxThunkDispatch,
         getState: ReduxStateGetter,
         getApi: ReduxAPIGetter
-      ): Promise<Array<User | UserGroup>> => {
+      ) => {
         const api: Api = getApi();
         const issueId: string = (getState()[stateFieldName as keyof AppState] as IssueState).issue.id;
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Open comment visibility select');

@@ -140,20 +140,7 @@ export interface IssueFull extends BaseIssue {
   mentionedUsers: User[];
 }
 
-export type IssueCreate = Omit<
-  IssueFull,
-  | 'comments'
-  | 'hasEmail'
-  | 'idReadable'
-  | 'project'
-  | 'reporter'
-  | 'resolved'
-  | 'updated'
-  | 'updater'
-  | 'voters'
-  | 'watchers'
-  | 'wikifiedDescription'
-> & {project: Partial<Project>; canUpdateVisibility: boolean};
+export type IssueCreate = IssueFull & {canUpdateVisibility: boolean};
 
 export type AnyIssue = IssueOnListExtended | IssueFullExtended | IssueLink | IssueCreate;
 
