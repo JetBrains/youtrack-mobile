@@ -153,7 +153,7 @@ export const initialTipsState: Readonly<TipsState> = {
 export const initialFeaturesState: Readonly<FeatureState> = {
   mergedNotifications: null,
   forceHandsetMode: null,
-  notificationsSwipe: null,
+  notificationsSwipe: true,
 };
 
 export const initialState: Readonly<StorageState> = {
