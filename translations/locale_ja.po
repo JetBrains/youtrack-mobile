@@ -1136,6 +1136,10 @@ msgstr "概要"
 msgid "Summary changed"
 msgstr "概要が変更されました"
 
+#: src/views/settings/settings.tsx
+msgid "Swipe Actions in Notifications"
+msgstr ""
+
 #: src/views/settings/settings__appearance.tsx
 msgid "Sync with OS"
 msgstr "OS と同期"

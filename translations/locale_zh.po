@@ -1136,6 +1136,10 @@ msgstr "摘要"
 msgid "Summary changed"
 msgstr "摘要已更改"
 
+#: src/views/settings/settings.tsx
+msgid "Swipe Actions in Notifications"
+msgstr ""
+
 #: src/views/settings/settings__appearance.tsx
 msgid "Sync with OS"
 msgstr "与操作系统同步"

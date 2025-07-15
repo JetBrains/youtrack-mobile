@@ -1146,6 +1146,10 @@ msgstr "Riepilogo"
 msgid "Summary changed"
 msgstr "Riepilogo modificato"
 
+#: src/views/settings/settings.tsx
+msgid "Swipe Actions in Notifications"
+msgstr ""
+
 #: src/views/settings/settings__appearance.tsx
 msgid "Sync with OS"
 msgstr "Sincronizza con il SO"
