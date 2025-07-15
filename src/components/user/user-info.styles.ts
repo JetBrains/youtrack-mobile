@@ -6,7 +6,6 @@ import {MAIN_FONT_SIZE, secondaryText, UNIT} from 'components/common-styles';
 export const rowStyles = {
   user: {
     flexDirection: 'row',
-    marginLeft: -UNIT / 2,
   },
   userName: {
     flexGrow: 1,

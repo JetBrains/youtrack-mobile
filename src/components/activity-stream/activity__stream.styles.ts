@@ -13,7 +13,7 @@ export const rowStyles = {
   activityMergedConnector: {
     position: 'absolute',
     zIndex: -1,
-    left: 23,
+    left: 27,
     top: 20,
     bottom: -20,
     width: 2,
@@ -24,7 +24,7 @@ export const rowStyles = {
     top: 50,
   },
   activityMergedLeaf: {
-    left: 17,
+    left: 21,
     top: 7,
     width: 14,
     height: 14,

@@ -35,6 +35,7 @@ export type InboxThreadsCache = {
 
 const tipsKeys = {
   dismissActivityActionAccessTouch: 'YT_dismissActivityActionAccessTouch',
+  dismissNotificationSwipe: 'YT_dismissNotificationSwipe',
 };
 type TipsState = Record<keyof typeof tipsKeys, boolean | null>
 
@@ -146,6 +147,7 @@ const hasValue = (v: any): boolean => v !== null && v !== undefined;
 
 export const initialTipsState: Readonly<TipsState> = {
   dismissActivityActionAccessTouch: null,
+  dismissNotificationSwipe: null,
 };
 
 export const initialFeaturesState: Readonly<FeatureState> = {

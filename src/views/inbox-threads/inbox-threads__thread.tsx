@@ -4,10 +4,13 @@ import {TouchableOpacity, View} from 'react-native';
 import {useActionSheet} from '@expo/react-native-action-sheet';
 import {useDispatch, useSelector} from 'react-redux';
 
+import animation from 'components/animation/animation';
 import InboxEntity from '../inbox/inbox__entity';
 import InboxThreadItemSubscription from './inbox-threads__subscription';
 import InboxThreadMention from './inbox-threads__mention';
 import InboxThreadReaction from './inbox-threads__reactions';
+import InboxThreadReadToggleButton from 'views/inbox-threads/inbox-threads__read-toggle-button';
+import SwipeableRow, {SwipeableRowWithHint} from 'components/swipeable/swipeable-row';
 import {defaultActionsOptions} from 'components/action-sheet/action-sheet';
 import {getStorageState} from 'components/storage/storage';
 import {getThreadTypeData, ThreadTypeData} from 'views/inbox-threads/inbox-threads-helper';
@@ -25,11 +28,10 @@ import styles from './inbox-threads.styles';
 
 import type {AppState} from 'reducers';
 import type {InboxThread, InboxThreadMessage, ThreadData} from 'types/Inbox';
+import type {ReduxThunkDispatch} from 'types/Redux';
 import type {UITheme} from 'types/Theme';
 import type {User} from 'types/User';
-import InboxThreadReadToggleButton from 'views/inbox-threads/inbox-threads__read-toggle-button';
-import SwipeableRow from 'components/swipeable/swipeable-row';
-import {ReduxThunkDispatch} from 'types/Redux';
+import type {ViewStyleProp} from 'types/Internal';
 
 type Props = {
   currentUser: User;
@@ -40,6 +42,10 @@ type Props = {
   ) => any;
   thread: InboxThread;
   uiTheme: UITheme;
+  showSwipeHint: boolean;
+  hintDistance: number;
+  style?: ViewStyleProp[] | ViewStyleProp,
+  onDismiss: () => void,
 };
 
 function Thread({
@@ -47,7 +53,10 @@ function Thread({
   currentUser,
   uiTheme,
   onNavigate,
-  ...otherProps
+  showSwipeHint,
+  hintDistance,
+  style,
+  onDismiss,
 }: Props): React.ReactElement<React.ComponentProps<any>, any> | null {
   const isMergedNotifications: React.MutableRefObject<boolean> = React.useRef(!!getStorageState().mergedNotifications);
   const isSwipeEnabled: React.MutableRefObject<boolean> = React.useRef(!!getStorageState().notificationsSwipe);
@@ -55,10 +64,11 @@ function Thread({
   const isOnline: boolean = useSelector((state: AppState) => !!state.app.networkState?.isConnected);
 
   const dispatch: ReduxThunkDispatch = useDispatch();
-  const [_thread, updateThread]: [
-    InboxThread,
-    (...args: any[]) => any,
-  ] = useState(thread);
+
+  const Swipeable = React.useMemo(() => (showSwipeHint ? SwipeableRowWithHint : SwipeableRow), [showSwipeHint]);
+
+  const [_thread, updateThread] = useState(thread);
+
   useEffect(() => {
     updateThread(thread);
   }, [thread]);
@@ -93,6 +103,7 @@ function Thread({
     dispatch(
       updateThreadsStateAndCache(updatedThread, toggleThread && read === true),
     );
+    animation.layoutAnimation();
   };
 
   const threadData: ThreadData = createThreadData(_thread, isMergedNotifications.current);
@@ -129,12 +140,13 @@ function Thread({
       )}
     </>
   );
+
   return (
     <View
       testID="test:id/inboxThreadsListThread"
       accessibilityLabel="inboxThreadsListThread"
       accessible={true}
-      {...otherProps}
+      style={style}
     >
       {!threadData.entityAtBottom && (
         <View style={hasSettings && styles.threadTitleContainer}>
@@ -157,17 +169,21 @@ function Thread({
 
       {(!isMergedNotifications.current && !isSwipeEnabled.current) && renderedComponent}
       {(isMergedNotifications.current || isSwipeEnabled.current) && (
-        <SwipeableRow
+        <Swipeable
           enabled={hasMarkReadField}
           leftActionText={i18n('Mark as unread')}
           onSwipeLeft={() => doToggleMessagesRead(_thread.messages, false)}
           onSwipeRight={() => doToggleMessagesRead(_thread.messages, true)}
           rightActionText={i18n('Mark as read')}
+          showHint={showSwipeHint}
+          hintDistance={hintDistance}
+          hintDirection="right"
+          onDismiss={onDismiss}
         >
           <View style={styles.threadContainer}>
             {renderedComponent}
           </View>
-        </SwipeableRow>
+        </Swipeable>
       )}
     </View>
   );

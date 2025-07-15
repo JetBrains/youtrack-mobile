@@ -8,7 +8,7 @@ import ErrorMessage from 'components/error-message/error-message';
 import InboxThreadsProgressPlaceholder from './inbox-threads__progress-placeholder';
 import Thread from './inbox-threads__thread';
 import {folderIdAllKey} from './inbox-threads-helper';
-import {getStorageState} from 'components/storage/storage';
+import {flushStoragePart, getStorageState} from 'components/storage/storage';
 import {i18n} from 'components/i18n/i18n';
 import {IconNoNotifications} from 'components/icon/icon-pictogram';
 import {isUnreadOnly} from './inbox-threads-actions';
@@ -87,6 +87,11 @@ const InboxThreadsList = ({folderId, onNavigate, merger, onScroll}: Props): JSX.
         currentUser={currentUser}
         uiTheme={theme.uiTheme}
         onNavigate={onNavigate}
+        showSwipeHint={index === 0 && !getStorageState().dismissNotificationSwipe}
+        hintDistance={150}
+        onDismiss={() => {
+          flushStoragePart({dismissNotificationSwipe: true});
+        }}
       />
     );
   };

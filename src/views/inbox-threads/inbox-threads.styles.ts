@@ -45,9 +45,9 @@ export default EStyleSheet.create({
   },
   thread: {
     marginTop: UNIT * 1.5,
-    marginLeft: UNIT * 1.5,
   },
   threadContainer: {
+    paddingLeft: UNIT * 1.5,
     backgroundColor: '$background',
   },
   threadFirstMerged: {
@@ -66,7 +66,7 @@ export default EStyleSheet.create({
     position: 'absolute',
     zIndex: -1,
     top: UNIT / 2,
-    left: 15,
+    left: 19,
     width: 2,
     height: '98.5%',
     paddingBottom: UNIT * 2,
@@ -74,6 +74,7 @@ export default EStyleSheet.create({
     backgroundColor: '$iconAction',
   },
   threadTitleContainer: {
+    paddingLeft: UNIT * 2,
     alignItems: 'baseline',
   },
   threadTitleContent: {

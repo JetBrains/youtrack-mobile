@@ -1,4 +1,5 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
+import {UNIT} from 'components/variables';
 
 export default EStyleSheet.create({
   container: {
@@ -9,9 +10,8 @@ export default EStyleSheet.create({
     backgroundColor: '$background',
   },
   leftAction: {
-    position: 'relative',
-    zIndex: 2,
     flexGrow: 1,
+    paddingLeft: UNIT,
     alignItems: 'flex-start',
     justifyContent: 'center',
     backgroundColor: '$blueBackground',
@@ -21,6 +21,7 @@ export default EStyleSheet.create({
   },
   rightAction: {
     flexGrow: 1,
+    paddingRight: UNIT,
     alignItems: 'flex-end',
     justifyContent: 'center',
     backgroundColor: '$greenBackground',
