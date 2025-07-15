@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, Linking} from 'react-native';
 
+// @ts-ignore
 import Switch from 'react-native-switch-pro';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -16,6 +17,7 @@ import SettingsFeedbackForm from './settings__feedback-form';
 import usage, {VERSION_STRING} from 'components/usage/usage';
 import {ANALYTICS_SETTINGS_PAGE} from 'components/analytics/analytics-ids';
 import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
+import {flushStoragePart, getStorageState} from 'components/storage/storage';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
 import {isIssueActivitiesAPIEnabled} from 'views/issue/activity/issue-activity__helper';
@@ -45,6 +47,8 @@ export default function Settings() {
 
   const isChangingAccount = useSelector((state: AppState) => state.app.isChangingAccount);
   const otherAccounts = useSelector((state: AppState) => state.app.otherAccounts || []);
+
+  const [swipeNotification, setSwipeNitification] = React.useState<boolean>(!!getStorageState().notificationsSwipe);
 
   React.useEffect(() => {
     usage.trackScreenView(ANALYTICS_SETTINGS_PAGE);
@@ -108,6 +112,21 @@ export default function Settings() {
               />
             </View>
           )}
+
+          <View style={styles.settingsListItem}>
+            <Text style={styles.settingsListItemTitleText}>{i18n('Swipe Actions in Notifications')}</Text>
+            <Switch
+              width={40}
+              height={25}
+              backgroundActive={uiTheme.colors.$link}
+              value={swipeNotification}
+              disabled={false}
+              onSyncPress={async (notificationsSwipe: boolean) => {
+                setSwipeNitification(notificationsSwipe);
+                await flushStoragePart({notificationsSwipe});
+              }}
+            />
+          </View>
 
           <View style={styles.separator} />
 
