@@ -290,6 +290,8 @@ describe('Inbox Thread', () => {
     return render(
       <Provider store={storeMock}>
         <Thread
+          showSwipeHint={false}
+          onAfterHintShow={jest.fn()}
           onNavigate={jest.fn()}
           thread={thread}
           currentUser={mocks.createUserMock()}

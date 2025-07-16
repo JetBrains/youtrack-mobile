@@ -100,6 +100,9 @@ export interface InboxThreadMessage {
 export type InboxThreadTarget = {
   $type: string,
   id: string,
+  idReadable?: string,
+  summary?: string,
+  resolved?: string,
   issue?: AnyIssue,
   article?: Article,
 };
