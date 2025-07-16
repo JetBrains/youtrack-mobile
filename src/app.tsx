@@ -35,19 +35,21 @@ import {onNavigateBack, setAccount} from 'actions/app-actions';
 import {rootRoutesList, routeMap} from 'app-routes';
 import {setNotificationComponent} from 'components/notification/notification';
 
+import type {ActionSheetProps} from '@expo/react-native-action-sheet';
 import type {ActionSheetProviderRef} from '@expo/react-native-action-sheet';
 import type {NavigationNavigateActionPayload} from 'react-navigation';
 import type {NotificationRouteData} from 'types/Notification';
+import type {ReduxThunkDispatch} from 'types/Redux';
 
 if (UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-class YouTrackMobile extends Component<void, void> {
+class YouTrackMobile extends Component<ActionSheetProps, {}> {
   routeHomeName = 'Home';
 
-  constructor() {
-    super();
+  constructor(p: ActionSheetProps) {
+    super(p);
     this.registerRoutes();
     YouTrackMobile.init(YouTrackMobile.getNotificationData);
 
@@ -67,13 +69,14 @@ class YouTrackMobile extends Component<void, void> {
   }
 
   static async init(getNotificationRouteData: () => Promise<NotificationRouteData | null>) {
-    let notificationRouteData: NotificationRouteData | null;
+    let notificationRouteData: NotificationRouteData | null = null;
 
     if (getNotificationRouteData) {
       notificationRouteData = await getNotificationRouteData();
     }
 
-    store.dispatch(setAccount(notificationRouteData));
+    const dispatch: ReduxThunkDispatch = store.dispatch;
+    dispatch(setAccount(notificationRouteData));
   }
 
   registerRoutes() {
