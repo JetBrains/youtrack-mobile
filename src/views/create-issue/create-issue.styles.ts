@@ -114,4 +114,8 @@ export default EStyleSheet.create({
   draftsItem: {
     backgroundColor: '$background',
   },
+  dangerous: {
+    color: '$textButton',
+    backgroundColor: '$error',
+  },
 });

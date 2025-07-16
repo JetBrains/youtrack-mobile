@@ -14,7 +14,7 @@ import InboxThreadMention from './inbox-threads__mention';
 import {InboxThread, InboxThreadMessage} from 'types/Inbox';
 import {Store} from 'redux';
 
-jest.mock('components/swipeable/swipeable-row');
+jest.mock('components/swipeable/swipeable');
 jest.mock('@expo/react-native-action-sheet', () => ({
   ...jest.requireActual('@expo/react-native-action-sheet'),//https://github.com/jestjs/jest/issues/6914
 }));

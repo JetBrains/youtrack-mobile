@@ -7,19 +7,21 @@ import {useDispatch, useSelector} from 'react-redux';
 import Header from 'components/header/header';
 import Router from 'components/router/router';
 import Select from 'components/select/select';
-import SwipeableRow from 'components/swipeable/swipeable-row';
+import SwipeableRow from 'components/swipeable/swipeable';
 import {confirmation, deleteButtonText} from 'components/confirmation/confirmation';
 import {deleteAllDrafts, deleteDraft} from 'views/create-issue/create-issue-actions';
 import {i18n} from 'components/i18n/i18n';
 import {IconBack} from 'components/icon/icon';
 import {IssueRowDraft} from 'views/issues/issues__row';
 import {SELECT_ITEM_HEIGHT} from 'components/select/select.styles';
+import {swipeDirection} from 'components/swipeable';
 import {useTheme} from 'components/theme/use-theme';
 
 import styles from 'views/create-issue/create-issue.styles';
 
 import type {AppState} from 'reducers';
 import type {IssueCreate} from 'types/Issue';
+import type {ReduxThunkDispatch} from 'types/Redux';
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 
@@ -27,7 +29,7 @@ const IssueDrafts = ({onHide}: { onHide: () => void }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const theme = useTheme();
 
-  const dispatch = useDispatch();
+  const dispatch: ReduxThunkDispatch = useDispatch();
   const drafts: IssueCreate[] = useSelector((state: AppState) => state.creation.drafts);
   const [current, setCurrent] = React.useState<string | null>(null);
   const height = useSharedValue(SELECT_ITEM_HEIGHT);
@@ -35,8 +37,14 @@ const IssueDrafts = ({onHide}: { onHide: () => void }) => {
   const listItem = ({item} : {item: IssueCreate}) => {
     return (
       <SwipeableRow
-        rightActionText={i18n('Delete')}
-        onSwipeRight={async () => {
+        enabled={true}
+        direction={swipeDirection.right}
+        actionText={[i18n('Delete'), '']}
+        actionColor={[
+          null,
+          {color: styles.dangerous.color, backgroundColor: styles.dangerous.backgroundColor},
+        ]}
+        onSwipe={async () => {
           setCurrent(item.id);
           height.value = withSpring(0);
           await dispatch(deleteDraft(item.id));

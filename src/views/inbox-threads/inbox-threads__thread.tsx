@@ -10,7 +10,6 @@ import InboxThreadItemSubscription from './inbox-threads__subscription';
 import InboxThreadMention from './inbox-threads__mention';
 import InboxThreadReaction from './inbox-threads__reactions';
 import InboxThreadReadToggleButton from 'views/inbox-threads/inbox-threads__read-toggle-button';
-import SwipeableRow, {SwipeableRowWithHint} from 'components/swipeable/swipeable-row';
 import {defaultActionsOptions} from 'components/action-sheet/action-sheet';
 import {getStorageState} from 'components/storage/storage';
 import {getThreadTypeData, ThreadTypeData} from 'views/inbox-threads/inbox-threads-helper';
@@ -23,6 +22,8 @@ import {
   readMessageToggle,
   updateThreadsStateAndCache,
 } from './inbox-threads-actions';
+import {SwipeableRowWithHint} from 'components/swipeable/swipeable';
+import {swipeDirection} from 'components/swipeable';
 
 import styles from './inbox-threads.styles';
 
@@ -43,9 +44,8 @@ type Props = {
   thread: InboxThread;
   uiTheme: UITheme;
   showSwipeHint: boolean;
-  hintDistance: number;
   style?: ViewStyleProp[] | ViewStyleProp,
-  onDismiss: () => void,
+  onAfterHintShow: () => void,
 };
 
 function Thread({
@@ -54,18 +54,15 @@ function Thread({
   uiTheme,
   onNavigate,
   showSwipeHint,
-  hintDistance,
   style,
-  onDismiss,
-}: Props): React.ReactElement<React.ComponentProps<any>, any> | null {
+  onAfterHintShow,
+}: Props) {
   const isMergedNotifications: React.MutableRefObject<boolean> = React.useRef(!!getStorageState().mergedNotifications);
   const isSwipeEnabled: React.MutableRefObject<boolean> = React.useRef(!!getStorageState().notificationsSwipe);
   const {showActionSheetWithOptions} = useActionSheet();
   const isOnline: boolean = useSelector((state: AppState) => !!state.app.networkState?.isConnected);
 
   const dispatch: ReduxThunkDispatch = useDispatch();
-
-  const Swipeable = React.useMemo(() => (showSwipeHint ? SwipeableRowWithHint : SwipeableRow), [showSwipeHint]);
 
   const [_thread, updateThread] = useState(thread);
 
@@ -77,7 +74,7 @@ function Thread({
     return null;
   }
 
-  const doToggleMessagesRead = async (
+  const doToggleMessagesRead = (
     messages: InboxThreadMessage[],
     read: boolean,
     toggleThread: boolean = false,
@@ -141,6 +138,7 @@ function Thread({
     </>
   );
 
+  const hasUnreadMessage = _thread.messages.some(it => it.read === false);
   return (
     <View
       testID="test:id/inboxThreadsListThread"
@@ -168,31 +166,30 @@ function Thread({
       )}
 
       {(!isMergedNotifications.current && !isSwipeEnabled.current) && renderedComponent}
-      {(isMergedNotifications.current || isSwipeEnabled.current) && (
-        <Swipeable
-          enabled={hasMarkReadField}
-          leftActionText={i18n('Mark as unread')}
-          onSwipeLeft={() => doToggleMessagesRead(_thread.messages, false)}
-          onSwipeRight={() => doToggleMessagesRead(_thread.messages, true)}
-          rightActionText={i18n('Mark as read')}
-          showHint={showSwipeHint}
-          hintDistance={hintDistance}
-          hintDirection="right"
-          onDismiss={onDismiss}
-        >
-          <View style={styles.threadContainer}>
-            {renderedComponent}
-          </View>
-        </Swipeable>
+
+      {isSwipeEnabled.current && (
+        (() => {
+          const actionText: [string, string] = [i18n('Mark as read'), i18n('Mark as unread')];
+          return (
+            <SwipeableRowWithHint
+              enabled={hasMarkReadField}
+              direction={swipeDirection.left}
+              actionText={actionText}
+              onSwipe={() => doToggleMessagesRead(_thread.messages, hasUnreadMessage)}
+              showHint={showSwipeHint}
+              hintDistance={150}
+              hintDirection={swipeDirection.left}
+              onAfterHintShow={onAfterHintShow}
+            >
+              <View style={styles.threadContainer}>{renderedComponent}</View>
+            </SwipeableRowWithHint>
+          );
+        })()
       )}
     </View>
   );
 
   function renderSettings() {
-    const hasUnreadMessage: boolean = _thread.messages.some(
-      it => it.read === false,
-    );
-
     const options = [
       {
         title: _thread.muted ? i18n('Unmute thread') : i18n('Mute thread'),

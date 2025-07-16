@@ -88,10 +88,7 @@ const InboxThreadsList = ({folderId, onNavigate, merger, onScroll}: Props): JSX.
         uiTheme={theme.uiTheme}
         onNavigate={onNavigate}
         showSwipeHint={index === 0 && !getStorageState().dismissNotificationSwipe}
-        hintDistance={150}
-        onDismiss={() => {
-          flushStoragePart({dismissNotificationSwipe: true});
-        }}
+        onAfterHintShow={() => flushStoragePart({dismissNotificationSwipe: true})}
       />
     );
   };

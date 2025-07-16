@@ -10,7 +10,7 @@ import {DEFAULT_THEME} from 'components/theme/theme';
 
 import {InboxThread} from 'types/Inbox';
 
-jest.mock('components/swipeable/swipeable-row');
+jest.mock('components/swipeable/swipeable');
 
 let apiMock;
 let storeMock;
