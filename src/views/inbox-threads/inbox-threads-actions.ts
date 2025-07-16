@@ -55,7 +55,7 @@ const trackEvent = (event: string, params?: Object) => {
 
 const getCachedData = (): InboxThreadsCache => getStorageState().inboxThreadsCache || DEFAULT_CACHE_DATA;
 
-const getFolderCachedThreads = (folderId: string = folderIdAllKey): InboxThread[] => {
+const getFolderCachedThreads = (folderId: ThreadsStateFilterId | null = folderIdAllKey): InboxThread[] => {
   const cachedData: InboxThreadsCache = getCachedData();
   return cachedData[folderId as ThreadsStateFilterId] || [];
 };
@@ -143,7 +143,7 @@ const updateThreadsStateAndCache = (
 };
 
 const loadThreadsFromCache = (
-  folderId: string = folderIdAllKey,
+  folderId: ThreadsStateFilterId | null = folderIdAllKey,
 ): ((dispatch: (arg0: any) => any) => Promise<void>) => {
   return async (dispatch: (arg0: any) => any) => {
     const cachedThreads: InboxThread[] = getFolderCachedThreads(folderId);

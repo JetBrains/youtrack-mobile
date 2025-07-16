@@ -18,14 +18,13 @@ import {UNIT} from 'components/common-styles';
 import styles from './inbox-threads.styles';
 
 import type {AppState} from 'reducers';
-import type {CustomError} from 'types/Error';
-import type {InboxThread, ThreadData} from 'types/Inbox';
+import type {Entity} from 'types/Entity';
+import type {InboxThread, ThreadsStateFilterId} from 'types/Inbox';
+import type {ReduxThunkDispatch} from 'types/Redux';
 import type {Theme} from 'types/Theme';
-import type {User} from 'types/User';
-import {Entity} from 'types/Entity';
 
 interface Props {
-  folderId: string | undefined;
+  folderId: ThreadsStateFilterId | null;
   onNavigate: (
     entity: Entity,
     navigateToActivity?: string,
@@ -38,19 +37,14 @@ interface Props {
 
 const InboxThreadsList = ({folderId, onNavigate, merger, onScroll}: Props): JSX.Element => {
   const isMergedNotifications: React.MutableRefObject<boolean> = React.useRef(!!getStorageState().mergedNotifications);
+
   const theme: Theme = useContext(ThemeContext);
-  const dispatch = useDispatch();
-  const currentUser: User = useSelector(
-    (state: AppState) => state.app.user,
-  );
-  const error: CustomError = useSelector(
-    (state: AppState) => state.inboxThreads.error,
-  );
-  const inProgress: boolean = useSelector(
-    (state: AppState) => state.inboxThreads.inProgress,
-  );
-  const threadsData: ThreadData =
-    useSelector((state: AppState) => state.inboxThreads.threadsData) || {};
+  const dispatch: ReduxThunkDispatch = useDispatch();
+
+  const currentUser = useSelector((state: AppState) => state.app.user);
+  const error = useSelector((state: AppState) => state.inboxThreads.error);
+  const inProgress: boolean = useSelector((state: AppState) => state.inboxThreads.inProgress);
+  const threadsData = useSelector((state: AppState) => state.inboxThreads.threadsData || {});
 
   const getData = () =>
     threadsData[folderId || folderIdAllKey] || {
@@ -59,13 +53,13 @@ const InboxThreadsList = ({folderId, onNavigate, merger, onScroll}: Props): JSX.
     };
 
   const setThreadsFromCache = useCallback(
-    (id?: string): void => {
+    (id?: ThreadsStateFilterId | null): void => {
       dispatch(actions.loadThreadsFromCache(id));
     },
     [dispatch],
   );
   const loadThreads = useCallback(
-    (id?: string, end?: number, showProgress?: boolean) => {
+    (id?: ThreadsStateFilterId | null, end?: number, showProgress?: boolean) => {
       dispatch(actions.loadInboxThreads(id, end, showProgress));
     },
     [dispatch],
@@ -84,7 +78,7 @@ const InboxThreadsList = ({folderId, onNavigate, merger, onScroll}: Props): JSX.
           index === getData().threads.length - (getData().hasMore ? 2 : 1) && styles.threadLast,
         ]}
         thread={item}
-        currentUser={currentUser}
+        currentUser={currentUser!}
         uiTheme={theme.uiTheme}
         onNavigate={onNavigate}
         showSwipeHint={index === 0 && !getStorageState().dismissNotificationSwipe}
