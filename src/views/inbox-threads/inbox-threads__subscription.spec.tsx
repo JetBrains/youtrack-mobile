@@ -8,19 +8,22 @@ import InboxThreadItemSubscription from './inbox-threads__subscription';
 import mocks from 'test/mocks';
 import {DEFAULT_THEME} from 'components/theme/theme';
 
-import {InboxThread} from 'types/Inbox';
+import Api from 'components/api/api';
+import type {InboxThread} from 'types/Inbox';
+import type {MergedItem} from 'components/activity/activity__split-activities';
+import type {MockStore} from 'redux-mock-store';
 
 jest.mock('components/swipeable/swipeable');
 
-let apiMock;
-let storeMock;
+let apiMock: Api;
+let storeMock: MockStore;
 
 const getApi = () => apiMock;
 
 describe('InboxThreadItemSubscription', () => {
   beforeEach(() => {
     jest.restoreAllMocks();
-    apiMock = {};
+    apiMock = {} as Api;
     storeMock = mocks.createMockStore([thunk.withExtraArgument(getApi)])({
       app: {
         networkState: {
@@ -39,19 +42,19 @@ describe('InboxThreadItemSubscription', () => {
       expect(getByTestId('test:id/inboxThreadsSubscriptionGroup')).toBeTruthy();
     });
     describe('`show more` button', () => {
-      let splittedActivitiesMock;
-      let module;
+      let splittedActivitiesMock: MergedItem[];
+      let module: {splitByHead: jest.Mock};
       beforeEach(() => {
         module = require('components/activity/activity__split-activities');
         splittedActivitiesMock = Array(4)
           .fill(0)
-          .map((it, index) => ({
+          .map((_, index) => ({
             head: {
               id: `id${index}`,
               author: mocks.createUserMock(),
             },
             messages: [{}],
-          }));
+          })) as MergedItem[];
         jest.spyOn(module, 'splitByHead');
       });
       it('should show button', () => {

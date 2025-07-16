@@ -2,7 +2,7 @@ import {getTypes} from 'views/inbox-threads/inbox-threads-helper';
 
 import {Activity} from 'types/Activity';
 
-interface MergedItem {
+export interface MergedItem {
   activities: Activity[];
   messages: Activity[];
   issue?: Activity;
