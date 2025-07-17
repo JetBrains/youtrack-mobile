@@ -11,7 +11,7 @@ import type {AuthParams} from 'types/Auth';
 import type {RefreshResult} from 'react-native-app-auth';
 
 export default class OAuth2 extends AuthBase {
-  authParams: AuthParams | null = null;
+  authParams: AuthParams = {} as AuthParams;
 
   static async obtainTokenWithOAuthCode(
     config: AppConfig,
@@ -20,10 +20,7 @@ export default class OAuth2 extends AuthBase {
   }
 
   async setAuthParamsFromCache(): Promise<void> {
-    const authParams:
-      | AuthParams
-      | null
-      | undefined = await this.getCachedAuthParams();
+    const authParams = await this.getCachedAuthParams();
 
     if (authParams) {
       this.setAuthParams(authParams);
@@ -34,7 +31,7 @@ export default class OAuth2 extends AuthBase {
     this.authParams = authParams;
   }
 
-  getAuthParams(): AuthParams | null {
+  getAuthParams(): AuthParams {
     return this.authParams;
   }
 
