@@ -330,7 +330,6 @@ export const ActivityStream = (props: ActivityStreamProps) => {
             props.commentActions?.onLongPress?.(comment, activity.id as string);
             onShowContextActions(activityGroup, props.commentActions?.contextMenuConfig?.(comment, activity.id));
           }}
-          youtrackWiki={props.youtrackWiki}
         />
       </>
     );

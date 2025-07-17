@@ -11,13 +11,11 @@ import styles from './activity__stream.styles';
 import type {Activity, ActivityStreamCommentActions} from 'types/Activity';
 import type {Attachment, IssueComment} from 'types/CustomFields';
 import type {Theme} from 'types/Theme';
-import type {YouTrackWiki} from 'types/Wiki';
 
 interface Props {
   activity: Activity;
   attachments?: Attachment[];
   commentActions?: ActivityStreamCommentActions;
-  youtrackWiki?: YouTrackWiki;
   onCheckboxUpdate?: (
     checked: boolean,
     position: number,
@@ -32,7 +30,6 @@ const StreamComment = ({
   commentActions,
   onCheckboxUpdate,
   onLongPress = () => {},
-  youtrackWiki,
 }: Props): React.JSX.Element | null => {
   const theme: Theme = useContext(ThemeContext);
 
@@ -58,7 +55,6 @@ const StreamComment = ({
         onRestore={() => commentActions?.onRestoreComment?.(comment)}
         onLongPress={() => onLongPress(comment)}
         uiTheme={theme.uiTheme}
-        youtrackWiki={youtrackWiki}
         onCheckboxUpdate={(checked: boolean, position: number) =>
           onCheckboxUpdate &&
           comment &&

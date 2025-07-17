@@ -39,19 +39,6 @@ describe('<Comment/>', () => {
     const {getByTestId} = renderComment();
     expect(getByTestId('commentMarkdown')).toHaveTextContent(commentMock.text);
   });
-  it('should render a YouTrack Wiki comment', () => {
-    const textPreviewMock = mocks.randomSentence(4);
-    commentMock = mocks.createCommentMock({
-      usesMarkdown: false,
-      textPreview: textPreviewMock,
-    });
-    const {getByTestId} = renderComment({
-      youtrackWiki: {
-        backendUrl: backendUrlMock,
-      },
-    });
-    expect(getByTestId('commentYTWiki')).toHaveTextContent(textPreviewMock);
-  });
   it('should render a legacy comment presentation', () => {
     commentMock = mocks.createCommentMock();
     const {getByTestId} = renderComment({

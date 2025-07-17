@@ -320,7 +320,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
         {...ytWikiProps}
         scrollData={scrollData}
         attachments={issue.attachments}
-        markdown={issue.usesMarkdown ? issue.description : null}
+        markdown={issue.description}
         onCheckboxUpdate={(
           checked: boolean,
           position: number,

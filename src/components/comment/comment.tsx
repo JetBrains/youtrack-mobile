@@ -5,7 +5,6 @@ import Avatar from '../avatar/avatar';
 import HTML from 'components/wiki/markdown/markdown-html';
 import MarkdownView from 'components/wiki/markdown-view';
 import StreamTimestamp from 'components/activity-stream/activity__stream-timestamp';
-import YoutrackWiki from 'components/wiki/youtrack-wiki';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {i18n} from 'components/i18n/i18n';
 import {isPureHTMLBlock, prepareHTML} from 'components/wiki/markdown-helper';
@@ -15,12 +14,10 @@ import styles from './comment.styles';
 
 import type {IssueComment, Attachment} from 'types/CustomFields';
 import type {UITheme} from 'types/Theme';
-import type {YouTrackWiki} from 'types/Wiki';
 
 type Props = {
   comment: IssueComment;
   attachments?: Attachment[];
-  youtrackWiki?: YouTrackWiki;
   canRestore: boolean;
   onRestore: (...args: any[]) => any;
   onLongPress: (...args: any[]) => any;
@@ -70,23 +67,6 @@ function Comment(props: Props) {
     );
   };
 
-  const renderYoutrackWiki = () => {
-    const {backendUrl, onIssueIdTap, imageHeaders} = props.youtrackWiki;
-    return (
-      <View style={styles.commentWikiContainer}>
-        <YoutrackWiki
-          backendUrl={backendUrl}
-          onIssueIdTap={issueId => onIssueIdTap(issueId)}
-          attachments={props.attachments}
-          imageHeaders={imageHeaders}
-          uiTheme={props.uiTheme}
-        >
-          {comment.textPreview}
-        </YoutrackWiki>
-      </View>
-    );
-  };
-
   const renderMarkdown = () => {
     if (props.comment.hasEmail || isPureHTMLBlock(props.comment.text)) {
       return <HTML html={prepareHTML(props.comment.text)} />;
@@ -113,23 +93,11 @@ function Comment(props: Props) {
 
   const renderComment = () => {
     const {comment, onLongPress} = props;
-    const usesMarkdown: boolean = comment.usesMarkdown;
-    const testID: string = comment.deleted
-      ? 'commentDeleted'
-      : usesMarkdown
-      ? 'commentMarkdown'
-      : 'commentYTWiki';
     return (
       <TouchableWithoutFeedback delayLongPress={280} onLongPress={onLongPress}>
-        <View testID={testID}>
+        <View testID={comment.deleted ? 'commentDeleted' : 'commentMarkdown'}>
           {comment.deleted && renderDeletedComment()}
-          {!comment.deleted &&
-            (usesMarkdown || !comment.textPreview) &&
-            renderMarkdown()}
-          {!comment.deleted &&
-            !usesMarkdown &&
-            !!comment.textPreview &&
-            renderYoutrackWiki()}
+          {!comment.deleted && renderMarkdown()}
         </View>
       </TouchableWithoutFeedback>
     );

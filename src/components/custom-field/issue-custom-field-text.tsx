@@ -65,14 +65,7 @@ const IssueCustomFieldText = (props: Props) => {
         />
       )}
 
-      {!props.editMode && (
-        <IssueMarkdown
-          markdown={props.usesMarkdown ? fieldValue : null}
-          youtrackWiki={{
-            description: props.usesMarkdown ? undefined : fieldValue,
-          }}
-        />
-      )}
+      {!props.editMode && <IssueMarkdown markdown={fieldValue} />}
     </View>
   );
 };
