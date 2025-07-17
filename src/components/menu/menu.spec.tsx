@@ -16,10 +16,12 @@ import type API from 'components/api/api';
 import type OAuth2 from 'components/auth/oauth2';
 import type {AppState} from 'reducers';
 import type {MockStore} from 'redux-mock-store';
+import type {NavigationContainer, NavigationContainerComponent} from 'react-navigation';
+import type {PermissionCacheItem} from 'types/Permission';
 import type {RootState} from 'reducers/app-reducer';
 import type {User} from 'types/User';
-import type {PermissionCacheItem} from 'types/Permission';
-import type {NavigationNavigator} from 'react-navigation';
+
+type Navigator = NavigationContainer & NavigationContainerComponent;
 
 jest.mock('components/feature/feature');
 
@@ -372,7 +374,7 @@ describe('<Menu/>', () => {
   });
 
   function mockRouter() {
-    Router.setNavigator(mocks.navigatorMock as unknown as NavigationNavigator);
+    Router.setNavigator(mocks.navigatorMock as unknown as Navigator);
     rootRoutesList.map(routeName => {
       Router.registerRoute({
         name: routeName,

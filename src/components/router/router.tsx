@@ -23,7 +23,7 @@ import {routeMap} from 'app-routes';
 import type {NavigationResetAction} from 'react-navigation';
 
 type RouterMethodName = keyof typeof routeMap;
-type Navigator = NavigationContainer & NavigationContainerComponent;
+export type Navigator = NavigationContainer & NavigationContainerComponent;
 
 interface AppRoute {
   screen: ({navigation}: {navigation: NavigationEventPayload}) => React.ReactNode;
