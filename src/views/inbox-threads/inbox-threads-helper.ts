@@ -52,12 +52,12 @@ function getTypes(
 
 function createMessagesMap(
   messages: InboxThreadMessage[] = [],
-): Record<string, Activity> | null {
+): {[key: string]: InboxThreadMessage} | null {
   if (!messages?.length) {
     return null;
   }
 
-  const map: Record<string, Record<string, any>> = {};
+  const map: {[key: string]: InboxThreadMessage} = {};
   messages.forEach(message => {
     message.activities &&
       message.activities.forEach(activity => {
@@ -67,27 +67,6 @@ function createMessagesMap(
   return map;
 }
 
-function sortEvents(events: Activity[]): Activity[] {
-  let projectEvent: Activity | null | undefined;
-  let i;
-
-  for (i = 0; i < events.length; i++) {
-    if (getTypes(events[i]).project) {
-      projectEvent = events[i];
-      break;
-    }
-  }
-
-  if (!projectEvent) {
-    return events;
-  }
-
-  const sortedEvents = [events[i]];
-  return sortedEvents
-    .concat(events.slice(0, i))
-    .concat(events.slice(i + 1, events.length));
-}
-
 const getThreadTabsTitles: () => string[] = () => [
   i18n('All'),
   i18n('Mentions & Reactions'),
@@ -95,7 +74,7 @@ const getThreadTabsTitles: () => string[] = () => [
 ];
 
 const folderIdAllKey: ThreadsStateFilterId = 'all';
-const folderIdMap: {[key: number]: string} = {
+const folderIdMap: {[key: number]: string | undefined} = {
   [0]: undefined,
   [1]: 'direct',
   [2]: 'subscription',
@@ -127,7 +106,6 @@ function mergeThreads(threads: InboxThread[]): InboxThread[] {
       const curr = akk[iEntity.id];
       if (curr) {
         curr.messages = curr.messages.concat(it.messages);
-        curr.latestTimestamp = Math.max.apply(null, curr.messages.map((it: InboxThreadMessage) => it.timestamp));
       } else {
         akk[iEntity.id] = it;
       }
@@ -151,7 +129,7 @@ function mergeThreads(threads: InboxThread[]): InboxThread[] {
     }, [] as InboxThread[]);
   }
 
-  const orphans = Object.keys(dMap).reduce((akk, id: string) => {
+  const orphans = Object.keys(dMap).reduce((akk: (InboxThread & {lastTimestamp: number})[], id: string) => {
     if (!sMap[id]) {
       akk.push({...dMap[id], lastTimestamp: dMap[id].notified});
     }
@@ -170,5 +148,4 @@ export {
   getThreadTypeData,
   getThreadTabsTitles,
   mergeThreads,
-  sortEvents,
 };
