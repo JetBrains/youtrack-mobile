@@ -1,12 +1,28 @@
 import {isActivityCategory} from './activity__category';
-import type {Activity} from 'types/Activity';
+
+import type {Activity, ActivityAuthorGroup} from 'types/Activity';
+import type {UserBase} from 'types/User';
+
 const IDLE_TIME = 60 * 1000;
+
+interface ActivityGroup {
+  author: UserBase;
+  authorGroup?: ActivityAuthorGroup | null;
+  timestamp: number;
+  events: Activity[];
+  $$hasTerminated?: boolean;
+}
+
 export const groupActivities = (
   activities: Activity[],
-  params: Record<string, any> = {},
-): any[] => {
+  params: {
+    onAddActivityToGroup?: (group: ActivityGroup, activity: Activity) => void;
+    onCompleteGroup?: (group: ActivityGroup) => void;
+    onCreateGroup?: (group: ActivityGroup) => void;
+  },
+) => {
   return (activities || []).reduce(
-    (groups: Array<Record<string, any>>, activity: Activity, activityIndex) => {
+    (groups: ActivityGroup[], activity: Activity, activityIndex) => {
       let group = last(groups);
 
       if (
@@ -33,19 +49,19 @@ export const groupActivities = (
     [],
   );
 
-  function isLastActivity(activities, activityIndex) {
-    return activities.length === activityIndex + 1;
+  function isLastActivity(a: Activity[], activityIndex: number) {
+    return a.length === activityIndex + 1;
   }
 
-  function onComplete(group) {
+  function onComplete(group: ActivityGroup) {
     return group && params.onCompleteGroup && params.onCompleteGroup(group);
   }
 
-  function onCreate(group) {
+  function onCreate(group: ActivityGroup) {
     return params.onCreateGroup && params.onCreateGroup(group);
   }
 
-  function onAddActivity(group, activity) {
+  function onAddActivity(group: ActivityGroup, activity: Activity) {
     return (
       params.onAddActivityToGroup &&
       params.onAddActivityToGroup(group, activity)
@@ -57,24 +73,24 @@ function exceedsIdleTime(prev: number, next: number) {
   return Math.abs(next - prev) > IDLE_TIME;
 }
 
-function authorDiffers(item1, item2) {
+function authorDiffers(item1: ActivityGroup, item2: Activity) {
   return item1?.author && item2?.author && item1.author.id !== item2.author.id;
 }
 
-function createActivityGroup(params: Record<string, any>) {
+function createActivityGroup(activity: Activity): ActivityGroup {
   return {
     events: [],
-    author: params?.author || null,
-    authorGroup: params?.authorGroup,
-    timestamp: params?.timestamp || null,
+    author: activity.author,
+    authorGroup: activity.authorGroup,
+    timestamp: activity.timestamp,
   };
 }
 
-function containsTerminatedActivity(group: Record<string, any>) {
+function containsTerminatedActivity(group: ActivityGroup) {
   return group.$$hasTerminated;
 }
 
-function isTerminated(activity: Record<string, any>) {
+function isTerminated(activity: Activity) {
   return (
     isActivityCategory.comment(activity) ||
     isActivityCategory.issueCreated(activity)
@@ -82,8 +98,8 @@ function isTerminated(activity: Record<string, any>) {
 }
 
 function addActivity(
-  group: Record<string, any>,
-  activity: Record<string, any>,
+  group: ActivityGroup,
+  activity: Activity,
 ) {
   if (!group?.authorGroup && activity?.authorGroup) {
     group.authorGroup = activity.authorGroup;
@@ -98,6 +114,6 @@ function addActivity(
   return group;
 }
 
-function last(items) {
-  return items[items.length - 1];
+function last(groups: ActivityGroup[]) {
+  return groups[groups.length - 1];
 }
