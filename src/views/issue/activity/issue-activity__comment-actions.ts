@@ -25,7 +25,6 @@ import type {AnyError} from 'types/Error';
 import type {IssueComment} from 'types/CustomFields';
 import type {IssueFull} from 'types/Issue';
 import type {Reaction} from 'types/Reaction';
-import type {State as SingleIssueState} from '../issue-reducers';
 import type {UserGroup} from 'types/UserGroup';
 import type {User, UserMentions} from 'types/User';
 import type {ActivityGroup} from 'types/Activity';
@@ -152,8 +151,8 @@ export const createActivityCommentActions = (stateFieldName = DEFAULT_ISSUE_STAT
       };
     },
     getDraftComment: (): ReduxAction<Promise<IssueComment | null>> =>
-      async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
-        const issueState: SingleIssueState = getState()[stateFieldName as keyof AppState] as IssueState;
+      async (_: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
+        const issueState: IssueState = getState().issueState;
         const issueId: string = issueState.issueId || issueState?.issue?.id;
         let draftComment: IssueComment | null = null;
         if (issueId) {
@@ -168,7 +167,7 @@ export const createActivityCommentActions = (stateFieldName = DEFAULT_ISSUE_STAT
     updateDraftComment:
       (draftComment: IssueComment, doNotFlush: boolean = false): ReduxAction<Promise<null | IssueComment>> =>
       async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
-        const issueState: SingleIssueState = getState()[stateFieldName as keyof AppState] as IssueState;
+        const issueState: IssueState = getState()[stateFieldName as keyof AppState] as IssueState;
         const issueId = draftComment?.issue?.id || issueState?.issueId || issueState?.issue?.id;
         if (draftComment && issueId) {
           const [error, draft] = await until<IssueComment>(getApi().issue.updateDraftComment(issueId, draftComment));
@@ -203,7 +202,7 @@ export const createActivityCommentActions = (stateFieldName = DEFAULT_ISSUE_STAT
       };
     },
     setEditingComment: function (comment: (IssueComment | {text: string; reply: boolean}) | null): ReduxAction {
-      return async (dispatch: ReduxThunkDispatch) => {
+      return (dispatch: ReduxThunkDispatch) => {
         dispatch({
           type: types.SET_EDITING_COMMENT,
           comment,
@@ -277,7 +276,7 @@ export const createActivityCommentActions = (stateFieldName = DEFAULT_ISSUE_STAT
       };
     },
     copyCommentUrl: function (id: string): ReduxAction {
-      return (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
+      return (_: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
         const api: Api = getApi();
         const {issue} = getState()[stateFieldName as keyof AppState] as IssueState;
         Clipboard.setString(activityHelper.makeIssueWebUrl(api, issue, id));
@@ -315,7 +314,7 @@ export const createActivityCommentActions = (stateFieldName = DEFAULT_ISSUE_STAT
       visibilityUsers: User[];
     }>> {
       return (
-        dispatch: ReduxThunkDispatch,
+        _: ReduxThunkDispatch,
         getState: ReduxStateGetter,
         getApi: ReduxAPIGetter
       ) => {
@@ -332,7 +331,7 @@ export const createActivityCommentActions = (stateFieldName = DEFAULT_ISSUE_STAT
       activities: ActivityGroup[],
       onReactionUpdate: (activities: Activity[], error?: AnyError) => void
     ): ReduxAction {
-      return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
+      return async (_: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
         const issueApi: IssueAPI = getApi().issue;
         const currentUser: User = getState().app.user!;
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Reaction select');
