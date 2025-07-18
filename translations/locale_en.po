@@ -10,7 +10,7 @@ msgstr ""
 msgid " ({{amount}} unresolved)"
 msgstr " ({{amount}} unresolved)"
 
-#: src/components/comment/comment.tsx:59
+#: src/components/comment/comment.tsx:56
 msgid " or "
 msgstr " or "
 
@@ -125,7 +125,7 @@ msgstr "Add to favorites"
 msgid "added a reaction"
 msgstr "added a reaction"
 
-#: src/views/inbox-threads/inbox-threads-helper.ts:92
+#: src/views/inbox-threads/inbox-threads-helper.ts:71
 msgid "All"
 msgstr "All"
 
@@ -282,12 +282,12 @@ msgstr "Command was successfully applied."
 msgid "Comment changed"
 msgstr "Comment changed"
 
-#: src/components/comment/comment.tsx:46
+#: src/components/comment/comment.tsx:43
 msgid "Comment deleted"
 msgstr "Comment deleted"
 
 #: src/views/article/arcticle-actions.ts:489
-#: src/views/issue/activity/issue-activity__comment-actions.ts:223
+#: src/views/issue/activity/issue-activity__comment-actions.ts:222
 msgid "Comment updated"
 msgstr "Comment updated"
 
@@ -409,7 +409,7 @@ msgstr "declined the pull request"
 #: src/views/issue/activity/issue__activity-stream.tsx:179
 #: src/views/issue/activity/issue__activity.tsx:233
 #: src/views/issue/activity/issue-activity__actions.ts:269
-#: src/views/issue/activity/issue-activity__comment-actions.ts:264
+#: src/views/issue/activity/issue-activity__comment-actions.ts:263
 #: src/views/issue/issue-base-actions-creater.ts:580
 msgid "Delete"
 msgstr "Delete"
@@ -422,7 +422,7 @@ msgstr "Delete all"
 msgid "Delete all drafts?"
 msgstr "Delete all drafts?"
 
-#: src/views/issue/activity/issue-activity__comment-actions.ts:264
+#: src/views/issue/activity/issue-activity__comment-actions.ts:263
 msgid "Delete comment permanently?"
 msgstr "Delete comment permanently?"
 
@@ -434,7 +434,7 @@ msgstr "Delete draft"
 msgid "Delete issue {{issueId}}?"
 msgstr "Delete issue {{issueId}}?"
 
-#: src/components/comment/comment.tsx:63
+#: src/components/comment/comment.tsx:60
 msgid "Delete permanently"
 msgstr "Delete permanently"
 
@@ -683,7 +683,7 @@ msgstr "Light theme"
 msgid "Link issue"
 msgstr "Link issue"
 
-#: src/views/issue/activity/issue-activity__comment-actions.ts:284
+#: src/views/issue/activity/issue-activity__comment-actions.ts:283
 msgid "Link to comment copied"
 msgstr "Link to comment copied"
 
@@ -756,7 +756,7 @@ msgstr "Medium"
 msgid "mentioned you"
 msgstr "mentioned you"
 
-#: src/views/inbox-threads/inbox-threads-helper.ts:93
+#: src/views/inbox-threads/inbox-threads-helper.ts:72
 msgid "Mentions & Reactions"
 msgstr "Mentions & Reactions"
 
@@ -784,7 +784,7 @@ msgstr "New messages"
 msgid "Next"
 msgstr "Next"
 
-#: src/components/activity-stream/activity__stream.tsx:541
+#: src/components/activity-stream/activity__stream.tsx:540
 msgid "No activity yet"
 msgstr "No activity yet"
 
@@ -865,7 +865,7 @@ msgstr "People added as CCs receive the same notifications that are sent to the 
 msgid "Photo and video library"
 msgstr "Photo and video library"
 
-#: src/components/activity-stream/activity__stream.tsx:533
+#: src/components/activity-stream/activity__stream.tsx:532
 msgid "Pinned comments"
 msgstr "Pinned comments"
 
@@ -950,7 +950,7 @@ msgstr "Reset visibility"
 msgid "Restart"
 msgstr "Restart"
 
-#: src/components/comment/comment.tsx:55
+#: src/components/comment/comment.tsx:52
 msgid "Restore"
 msgstr "Restore"
 
@@ -1127,7 +1127,7 @@ msgstr "Sub-articles"
 msgid "submitted a pull request"
 msgstr "submitted a pull request"
 
-#: src/views/inbox-threads/inbox-threads-helper.ts:94
+#: src/views/inbox-threads/inbox-threads-helper.ts:73
 msgid "Subscriptions"
 msgstr "Subscriptions"
 
