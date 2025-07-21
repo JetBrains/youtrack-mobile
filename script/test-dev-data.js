@@ -2,7 +2,7 @@ const pkg = require('../package.json');
 const fg = require('fast-glob');
 const fs = require('fs');
 
-if (hasExceptionReporterToken() || hasAnalyticsId() || hasKonnektorData() || hasBugsnagData()) {
+if (hasExceptionReporterToken() || hasAnalyticsId() || hasKonnektorData()) {
   throw new Error('`Config` or `Bugsnag Config` or `Google Services` is touched. Revert changes and proceed.');
 }
 
@@ -18,10 +18,6 @@ function hasAnalyticsId() {
 
 function hasKonnektorData() {
   return isNotEmpty(pkg.config.KONNECTOR_URL);
-}
-
-function hasBugsnagData() {
-  return isNotEmpty(pkg.bugsnag.token);
 }
 
 function isNotEmpty(param) {

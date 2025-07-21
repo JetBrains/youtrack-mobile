@@ -66,11 +66,6 @@
 	<string>YouTrack Mobile needs access to your photo library so that you can attach photos to issues</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>bugsnag</key>
-	<dict>
-		<key>apiKey</key>
-		<string>7556455bdf436a79d8bd19eb7cacc0ce</string>
-	</dict>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>CFBundleURLTypes</key>

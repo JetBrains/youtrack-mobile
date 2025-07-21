@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, Linking} from 'react-native';
-import Bugsnag from '@bugsnag/react-native';
 import RNRestart from 'react-native-restart';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -67,10 +66,6 @@ class ErrorBoundary extends Component<Props, State> {
       this.setState({
         isReporting: true,
       });
-
-      if (this.state.isExtendedReportEnabled) {
-        Bugsnag.notify(error);
-      }
 
       const reportedIssueId: string | null | undefined = await sendReport(
         `Render crash report: ${errorData.summary}`,

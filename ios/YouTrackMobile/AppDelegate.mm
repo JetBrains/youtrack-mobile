@@ -1,4 +1,3 @@
-#import <Bugsnag/Bugsnag.h>
 #import "RNNotifications.h"
 #import "AppDelegate.h"
 #import <Firebase.h>
@@ -11,7 +10,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  [Bugsnag start];
   [RNNotifications startMonitorNotifications];
   [FIRApp configure];
 
