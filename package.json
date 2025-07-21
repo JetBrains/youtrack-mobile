@@ -36,7 +36,7 @@
     "i18n:compile": "node script/compile-translations.js",
     "i18n:extract": "node script/gettext-extract.js",
     "ios": "react-native run-ios",
-    "ios-archive": "xcodebuild archive -allowProvisioningUpdates -workspace ios/YouTrackMobile.xcworkspace -scheme YouTrackMobile[Release] -destination 'generic/platform=iOS' -archivePath ios/build/YouTrackMobile[Release].xcarchive",
+    "ios-archive": "xcodebuild archive -allowProvisioningUpdates -workspace ios/YouTrackMobile.xcworkspace -scheme YouTrackMobile[Release] -destination 'platform=iOS' -archivePath ios/build/YouTrackMobile[Release].xcarchive",
     "ios-archive-no-sign": "export RCT_NO_LAUNCH_PACKAGER=true && yarn run ios-archive -- CODE_SIGN_IDENTITY='' CODE_SIGNING_REQUIRED=NO",
     "ios-set-version": "node script/set-ios-version",
     "lint": "eslint . --quiet --ext .js,.jsx,.ts,.tsx",
