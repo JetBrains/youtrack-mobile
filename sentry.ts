@@ -17,12 +17,9 @@ export const initSentry = async (dsn: string) => {
     beforeSend(event) {
       const frames = event.exception?.values?.[0]?.stacktrace?.frames;
       if (frames) {
-        // Filter out events where all frames are from node_modules
-        const hasNonNodeModulesFrame = frames.some(
-          (frame) => !frame.filename?.includes('node_modules')
-        );
-        if (!hasNonNodeModulesFrame) {
-          return null; // Discard the event
+        const hasUserCodeFrame = frames.some(frame => !frame.filename?.includes('node_modules'));
+        if (!hasUserCodeFrame) {
+          return null;
         }
       }
       return event;
