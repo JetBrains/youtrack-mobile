@@ -14,7 +14,10 @@ import {openDebugView} from 'actions/app-actions';
 import {sendReport, createReportErrorData} from '../error/error-reporter';
 import {ThemeContext} from '../theme/theme-context';
 import {HIT_SLOP} from '../common-styles/button';
+import {captureException} from '../../../sentry';
+
 import styles from './error-boundary.styles';
+
 import type {ReportErrorData} from '../error/error-reporter';
 import type {Theme, UIThemeColors} from 'types/Theme';
 type Props = {
@@ -63,9 +66,9 @@ class ErrorBoundary extends Component<Props, State> {
     const errorData: ReportErrorData = await createReportErrorData(error, true);
 
     try {
-      this.setState({
-        isReporting: true,
-      });
+      this.setState({isReporting: true});
+
+      captureException(error);
 
       const reportedIssueId: string | null | undefined = await sendReport(
         `Render crash report: ${errorData.summary}`,

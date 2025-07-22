@@ -57,6 +57,17 @@ export const guid = (): string => {
   );
 };
 
+export const hash = (input: string, length = 6): string => {
+  let hashNum = 0;
+  for (let i = 0; i < input.length; i++) {
+    const char = input.charCodeAt(i);
+    hashNum = (hashNum << 5) - hashNum + char; // Force to 32-bit signed integer
+    hashNum |= 0;
+  }
+  const result = (hashNum >>> 0).toString(36); // Convert to unsigned 32-bit and base36 string
+  return result.substring(0, length);
+};
+
 export const removeTrailingSlash = (str: string): string => {
   return str.replace(/\/$/, '');
 };

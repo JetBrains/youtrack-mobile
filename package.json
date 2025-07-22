@@ -9,7 +9,8 @@
   "config": {
     "ANALYTICS_ID": "",
     "EXCEPTION_REPORTER_TOKEN": "",
-    "KONNECTOR_URL": ""
+    "KONNECTOR_URL": "",
+    "SENTRY_DSN": ""
   },
   "license": "Apache-2.0",
   "scripts": {
@@ -50,6 +51,7 @@
     "@react-native-firebase/app": "^21.6.1",
     "@react-native-masked-view/masked-view": "^0.3.1",
     "@reduxjs/toolkit": "1.7.2",
+    "@sentry/react-native": "^6.18.0",
     "base64-js": "1.5.1",
     "cssfilter": "^0.0.10",
     "date-fns": "^2.29.3",
