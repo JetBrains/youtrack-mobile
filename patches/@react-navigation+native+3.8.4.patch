@@ -1,0 +1,45 @@
+diff --git a/node_modules/@react-navigation/native/lib/commonjs/withOrientation.js b/node_modules/@react-navigation/native/lib/commonjs/withOrientation.js
+index 324c382..bb2530d 100644
+--- a/node_modules/@react-navigation/native/lib/commonjs/withOrientation.js
++++ b/node_modules/@react-navigation/native/lib/commonjs/withOrientation.js
+@@ -55,7 +55,9 @@ function _default(WrappedComponent) {
+     }
+
+     componentWillUnmount() {
+-      _reactNative.Dimensions.removeEventListener('change', this.handleOrientationChange);
++      if (typeof _reactNative.Dimensions.removeEventListener === 'function') {
++        _reactNative.Dimensions.removeEventListener('change', this.handleOrientationChange);
++      }
+     }
+
+     render() {
+diff --git a/node_modules/@react-navigation/native/lib/module/withOrientation.js b/node_modules/@react-navigation/native/lib/module/withOrientation.js
+index fbc1c0b..9ef24b7 100644
+--- a/node_modules/@react-navigation/native/lib/module/withOrientation.js
++++ b/node_modules/@react-navigation/native/lib/module/withOrientation.js
+@@ -35,7 +35,9 @@ export default function (WrappedComponent) {
+     }
+
+     componentWillUnmount() {
+-      Dimensions.removeEventListener('change', this.handleOrientationChange);
++      if (typeof Dimensions.removeEventListener === 'function') {
++        Dimensions.removeEventListener('change', this.handleOrientationChange);
++      }
+     }
+
+     render() {
+diff --git a/node_modules/@react-navigation/native/src/withOrientation.js b/node_modules/@react-navigation/native/src/withOrientation.js
+index c449653..5972c79 100644
+--- a/node_modules/@react-navigation/native/src/withOrientation.js
++++ b/node_modules/@react-navigation/native/src/withOrientation.js
+@@ -18,7 +18,9 @@ export default function (WrappedComponent) {
+     }
+
+     componentWillUnmount() {
+-      Dimensions.removeEventListener('change', this.handleOrientationChange);
++      if (typeof Dimensions.removeEventListener === 'function') {
++        Dimensions.removeEventListener('change', this.handleOrientationChange);
++      }
+     }
+
+     handleOrientationChange = ({ window }) => {
