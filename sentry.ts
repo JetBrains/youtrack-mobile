@@ -4,6 +4,8 @@ import DeviceInfo from 'react-native-device-info';
 import appPackage from './package.json';
 import {hash, isIOSPlatform} from 'util/util';
 
+import type {ErrorEvent, EventHint} from '@sentry/core';
+
 export const hasSentryDsn = () => appPackage.config.SENTRY_DSN.length > 0;
 const getDeviceId = async () => DeviceInfo.getUniqueId();
 
@@ -14,13 +16,10 @@ export const initSentry = async (dsn: string) => {
     integrations: [Sentry.breadcrumbsIntegration({console: false})],
     tracesSampleRate: 0.1,
     profilesSampleRate: 0.1,
-    beforeSend(event) {
-      const frames = event.exception?.values?.[0]?.stacktrace?.frames;
-      if (frames) {
-        const hasUserCodeFrame = frames.some(frame => !frame.filename?.includes('node_modules'));
-        if (!hasUserCodeFrame) {
-          return null;
-        }
+    // @ts-ignore
+    beforeSend(event, hint) {
+      if (isNoPermissionError(hint) || !isAppCodeError(event)) {
+        return null;
       }
       return event;
     },
@@ -41,3 +40,23 @@ export const captureException = (error: Error) => {
     Sentry.captureException(error);
   }
 };
+
+function isAppCodeError(event: ErrorEvent) {
+  const frames = event.exception?.values?.[0]?.stacktrace?.frames;
+  if (Array.isArray(frames)) {
+    return frames.some(frame => !frame.filename?.includes('node_modules'));
+  }
+  return true;
+}
+
+function isNoPermissionError(hint: EventHint) {
+  const error = hint?.originalException;
+  if (!error || typeof error !== 'object') {
+    return false;
+  }
+  let errorCode: number | null = 'status' in error && typeof error.status === 'number' ? error.status : null;
+  if (errorCode === null && 'statusCode' in error && typeof error.statusCode === 'number') {
+    errorCode = error.statusCode;
+  }
+  return typeof errorCode === 'number' && errorCode === 401;
+}
