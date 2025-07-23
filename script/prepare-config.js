@@ -1,4 +1,4 @@
-const updateJsonFile = require('update-json-file'); //eslint-disable-line
+const updateJsonFile = require('update-json-file');
 
 const ANALYTICS_ID = process.env.googleAnalyticsID;
 const KONNECTOR_URL = process.env.konnektorURL;
@@ -8,9 +8,9 @@ const EXCEPTION_REPORTER_TOKEN = process.env.exeptionReporterToken;
 const SENTRY_DSN = process.env.sentryDsn;
 
 
-if (!ANALYTICS_ID || !KONNECTOR_URL || !BUILD_NUMBER || !VERSION_NUMBER || !BUGSNAG_TOKEN || !SENTRY_DSN) {
+if (!ANALYTICS_ID || !KONNECTOR_URL || !BUILD_NUMBER || !VERSION_NUMBER || !SENTRY_DSN) {
   console.error('process.env', process.env); //eslint-disable-line
-  throw new Error('Required ENV params `ANALYTICS_ID`, `KONNECTOR_URL`, `BUILD_NUMBER`, `VERSION_NUMBER`, `BUGSNAG_TOKEN`, `SENTRY_DSN` are not set');
+  throw new Error('Required ENV params `ANALYTICS_ID`, `KONNECTOR_URL`, `BUILD_NUMBER`, `VERSION_NUMBER`, `SENTRY_DSN` are not set');
 }
 
 updateJsonFile('package.json', data => {
