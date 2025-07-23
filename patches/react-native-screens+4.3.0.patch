@@ -1,0 +1,38 @@
+diff --git a/node_modules/react-native-screens/lib/commonjs/components/Screen.js b/node_modules/react-native-screens/lib/commonjs/components/Screen.js
+index f9ebb7e..b1b7294 100644
+--- a/node_modules/react-native-screens/lib/commonjs/components/Screen.js
++++ b/node_modules/react-native-screens/lib/commonjs/components/Screen.js
+@@ -161,7 +161,6 @@ const InnerScreen = exports.InnerScreen = /*#__PURE__*/_react.default.forwardRef
+       ...props
+     } = rest;
+     if (active !== undefined && activityState === undefined) {
+-      console.warn('It appears that you are using old version of react-navigation library. Please update @react-navigation/bottom-tabs, @react-navigation/stack and @react-navigation/drawer to version 5.10.0 or above to take full advantage of new functionality added to react-native-screens');
+       activityState = active !== 0 ? 2 : 0; // in the new version, we need one of the screens to have value of 2 after the transition
+     }
+ 
+diff --git a/node_modules/react-native-screens/lib/module/components/Screen.js b/node_modules/react-native-screens/lib/module/components/Screen.js
+index 95f92e4..f715452 100644
+--- a/node_modules/react-native-screens/lib/module/components/Screen.js
++++ b/node_modules/react-native-screens/lib/module/components/Screen.js
+@@ -157,7 +157,6 @@ export const InnerScreen = /*#__PURE__*/React.forwardRef(function InnerScreen(pr
+       ...props
+     } = rest;
+     if (active !== undefined && activityState === undefined) {
+-      console.warn('It appears that you are using old version of react-navigation library. Please update @react-navigation/bottom-tabs, @react-navigation/stack and @react-navigation/drawer to version 5.10.0 or above to take full advantage of new functionality added to react-native-screens');
+       activityState = active !== 0 ? 2 : 0; // in the new version, we need one of the screens to have value of 2 after the transition
+     }
+ 
+diff --git a/node_modules/react-native-screens/src/components/Screen.tsx b/node_modules/react-native-screens/src/components/Screen.tsx
+index e49ed58..9c70b42 100644
+--- a/node_modules/react-native-screens/src/components/Screen.tsx
++++ b/node_modules/react-native-screens/src/components/Screen.tsx
+@@ -237,9 +237,6 @@ export const InnerScreen = React.forwardRef<View, ScreenProps>(
+       } = rest;
+ 
+       if (active !== undefined && activityState === undefined) {
+-        console.warn(
+-          'It appears that you are using old version of react-navigation library. Please update @react-navigation/bottom-tabs, @react-navigation/stack and @react-navigation/drawer to version 5.10.0 or above to take full advantage of new functionality added to react-native-screens',
+-        );
+         activityState = active !== 0 ? 2 : 0; // in the new version, we need one of the screens to have value of 2 after the transition
+       }
+ 
