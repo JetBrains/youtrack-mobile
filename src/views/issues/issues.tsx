@@ -192,7 +192,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
     }
   }
 
-  componentWillReceiveProps(nextProps: IssuesProps) {
+  UNSAFE_componentWillReceiveProps(nextProps: IssuesProps) {
     if(nextProps.issueId !== this.props.issueId) {
       this.initFocusedIssue(nextProps.issueId);
     }
