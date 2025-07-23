@@ -101,7 +101,7 @@ class ErrorBoundary extends Component<Props, State> {
             ]}
           >
             {i18n(
-              'In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so.',
+              'In addition to our built-in error reporting, YouTrack Mobile uses Sentry, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Sentry if you agree to allow us to do so.',
             )}
           </Text>
         </View>
@@ -118,11 +118,11 @@ class ErrorBoundary extends Component<Props, State> {
 
         <TouchableOpacity
           onPress={() =>
-            Linking.openURL('https://docs.bugsnag.com/legal/privacy-policy/')
+            Linking.openURL('https://sentry.io/privacy')
           }
         >
           <Text style={styles.extendedReportModalTextLink}>
-            {i18n('Bugsnag Privacy Policy')}
+            {i18n('Sentry Privacy Policy')}
           </Text>
         </TouchableOpacity>
       </React.Fragment>
@@ -222,7 +222,7 @@ class ErrorBoundary extends Component<Props, State> {
                         }
                       />
                       <Text style={styles.sendReportText}>
-                        {i18n('Send extended report to Bugsnag')}
+                        {i18n('Send extended report to Sentry')}
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
