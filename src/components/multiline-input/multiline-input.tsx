@@ -1,35 +1,29 @@
 import React, {PureComponent} from 'react';
 import {TextInput} from 'react-native';
+
 import {isIOSPlatform} from 'util/util';
 import {UNIT} from 'components/variables';
+
 import type {ViewStyleProp} from 'types/Internal';
+
 const iOSPlatform: boolean = isIOSPlatform();
 const MAX_DEFAULT_HEIGHT = 200;
 const MIN_DEFAULT_HEIGHT = UNIT * 4;
 const DEFAULT_FONT_SIZE = 16;
+
 type Props = {
   adaptive?: boolean;
-  maxInputHeight: number;
-  minInputHeight: number;
+  maxInputHeight?: number;
   autoFocus?: boolean;
-  style?: ViewStyleProp;
+  style?: ViewStyleProp | ViewStyleProp[];
 };
+
 type State = {
   inputHeight: number | null | undefined;
 };
+
 export default class MultilineInput extends PureComponent<Props, State> {
-  static defaultProps: {
-    adaptive: boolean;
-    maxInputHeight: number;
-    minInputHeight: number;
-    returnKeyType: string;
-  } = {
-    adaptive: true,
-    maxInputHeight: MAX_DEFAULT_HEIGHT,
-    minInputHeight: MIN_DEFAULT_HEIGHT,
-    returnKeyType: iOSPlatform ? 'default' : 'none',
-  };
-  input: typeof TextInput;
+  input: TextInput | null = null;
 
   constructor(props: Props) {
     super(props);
@@ -45,11 +39,11 @@ export default class MultilineInput extends PureComponent<Props, State> {
   }
 
   focus() {
-    this.input && this.input.focus();
+    this.input?.focus?.();
   }
 
   onContentSizeChange: (event: any) => void = (event: Record<string, any>) => {
-    const {maxInputHeight, minInputHeight, adaptive} = this.props;
+    const {maxInputHeight = MAX_DEFAULT_HEIGHT, adaptive = true} = this.props;
 
     if (!adaptive) {
       return;
@@ -61,34 +55,26 @@ export default class MultilineInput extends PureComponent<Props, State> {
       newHeight =
         newHeight > maxInputHeight
           ? maxInputHeight
-          : Math.max(newHeight, minInputHeight);
+          : Math.max(newHeight, MIN_DEFAULT_HEIGHT);
     }
 
     this.setState({
       inputHeight: Math.ceil(newHeight),
     });
   };
-  inputRef: (instance: typeof TextInput | null | undefined) => void = (
-    instance: typeof TextInput | null | undefined,
-  ): void => {
+  inputRef = (instance: TextInput | null) => {
     if (instance) {
       this.input = instance;
     }
   };
 
-  render(): React.ReactNode {
-    const {
-      style,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      maxInputHeight,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      minInputHeight,
-      adaptive,
-      ...rest
-    } = this.props;
+  render() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const {style, adaptive = true, maxInputHeight, ...rest} = this.props;
     return (
       <TextInput
         {...rest}
+        returnKeyType={iOSPlatform ? 'default' : 'none'}
         ref={this.inputRef}
         testID="test:id/multiline-input"
         accessibilityLabel="multiline-input"

@@ -13,8 +13,8 @@ import type {ViewStyleProp} from 'types/Internal';
 
 export interface Props {
   item: IItem;
-  isSelected: boolean;
-  onPress: (item: IItem) => void;
+  isSelected?: boolean;
+  onPress?: (item: IItem) => void;
   onLongPress?: (item: IItem) => void;
   disabled?: boolean;
   titleRenderer?: (item: IItem) => React.ReactNode;
@@ -22,13 +22,6 @@ export interface Props {
 }
 
 export default class ListSelectItem extends PureComponent<Props, Readonly<{}>> {
-  static defaultProps: {
-    isSelected: boolean;
-    onPress: (item: IItem) => void;
-  } = {
-    isSelected: false,
-    onPress: (item: IItem) => {},
-  };
 
   getDefaultTitle(item: Record<string, any>): string {
     return getEntityPresentation(item);
@@ -44,11 +37,13 @@ export default class ListSelectItem extends PureComponent<Props, Readonly<{}>> {
 
   onSelect: () => void = () => {
     const {item, onPress} = this.props;
-    onPress(item);
+    if (onPress) {
+      onPress(item);
+    }
   };
 
   render() {
-    const {item, isSelected, style, onLongPress = () => {}, disabled = false} = this.props;
+    const {item, isSelected = false, style, onLongPress = () => {}, disabled = false} = this.props;
 
     return !item ? null : (
       <TouchableOpacity

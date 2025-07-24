@@ -12,7 +12,7 @@ type Props = {
   attachingImage: Record<string, any> | null | undefined;
   attachments: Attachment[];
   canRemoveAttachment?: boolean;
-  onOpenAttachment: (type: string, name: string) => any;
+  onOpenAttachment?: (type: string, name: string) => any;
   onImageLoadingError: (error: any) => any;
   imageHeaders?: Record<string, any> | null;
   userCanRemoveAttachment?: (attachment: Attachment) => any;
@@ -22,19 +22,14 @@ type Props = {
 };
 export default class AttachmentsRow extends PureComponent<Props, Readonly<{}>> {
   scrollView: any;
-  static defaultProps: Partial<Props> = {
-    attachments: [],
-    attachingImage: null,
-    imageHeaders: null,
-    canRemoveAttachment: false,
-    onOpenAttachment: () => {},
-    onRemoveImage: () => {},
-  };
 
   UNSAFE_componentWillReceiveProps(props: Props) {
+    const nextAttachingImage = props.attachingImage || null;
+    const currentAttachingImage = this.props.attachingImage || null;
+
     if (
-      props.attachingImage &&
-      props.attachingImage !== this.props.attachingImage
+      nextAttachingImage &&
+      nextAttachingImage !== currentAttachingImage
     ) {
       setTimeout(() => this.scrollView && this.scrollView.scrollToEnd());
     }
@@ -62,11 +57,11 @@ export default class AttachmentsRow extends PureComponent<Props, Readonly<{}>> {
 
   render(): React.ReactNode {
     const {
-      attachments,
-      attachingImage,
+      attachments = [],
+      attachingImage = null,
       onOpenAttachment,
       onRemoveImage,
-      canRemoveAttachment,
+      canRemoveAttachment = false,
       userCanRemoveAttachment,
       uiTheme,
       style,

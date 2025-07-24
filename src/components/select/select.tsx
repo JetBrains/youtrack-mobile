@@ -57,12 +57,6 @@ export interface ISelectState<T> {
 
 
 export class Select<T extends IItem, S extends ISelectState<T> = ISelectState<T>> extends React.PureComponent<ISelectProps<T>, S> {
-  static defaultProps = {
-    autoFocus: false,
-    noFilter: false,
-    getTitle: (item: IItem) => getEntityPresentation(item),
-    header: () => null,
-  };
 
   static getItemLayout<P>(items: ArrayLike<P> | null | undefined, index: number): {
     index: number;
@@ -91,6 +85,13 @@ export class Select<T extends IItem, S extends ISelectState<T> = ISelectState<T>
       selectedItems: props.selectedItems || ([] as T[]),
       loaded: false,
     } as S;
+  }
+
+  getTitle(item: T) {
+    if (this.props.getTitle) {
+      return this.props.getTitle(item);
+    }
+    return getEntityPresentation(item);
   }
 
   getSortedItems = (items: T[] = []): T[] => {
@@ -148,7 +149,7 @@ export class Select<T extends IItem, S extends ISelectState<T> = ISelectState<T>
   }
 
   filterItemByLabel(item: T, query: string): boolean {
-    const label: string = this.props?.getValue?.(item) || this.props?.getTitle?.(item) || '';
+    const label: string = this.props?.getValue?.(item) || this.getTitle(item) || '';
     return label.toLowerCase().indexOf(query.toLowerCase()) !== -1;
   }
 
@@ -170,12 +171,12 @@ export class Select<T extends IItem, S extends ISelectState<T> = ISelectState<T>
   _onSearch = debounce(this.onSearch, 300);
 
   _renderTitle<P extends T & {color?: ColorCoding}>(item: P) {
-    const label = <Text style={styles.itemTitle}>{this?.props?.getTitle?.(item)}</Text>;
+    const label = <Text style={styles.itemTitle}>{this.getTitle(item)}</Text>;
 
     if ('color' in item && item?.color?.id !== NO_COLOR_CODING_ID) {
       return (
         <View style={styles.colorFieldItemWrapper}>
-          <ColorField text={this?.props?.getTitle?.(item)} color={item.color} style={styles.colorField} />
+          <ColorField text={this.getTitle(item)} color={item.color} style={styles.colorField} />
           {label}
         </View>
       );

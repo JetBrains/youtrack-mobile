@@ -28,20 +28,12 @@ type Props = {
   onIssueIdTap: () => void;
   attachments?: Attachment[];
 };
-type DefaultProps = {
-  onIssueIdTap: () => void;
-  title: string;
-};
 type State = {
   isPinned: boolean;
 };
 export default class WikiPage extends PureComponent<Props, State> {
   state: State = {
     isPinned: false,
-  };
-  static defaultProps: DefaultProps = {
-    onIssueIdTap: () => {},
-    title: '',
   };
 
   async componentDidMount() {

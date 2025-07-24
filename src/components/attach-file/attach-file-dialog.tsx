@@ -44,6 +44,7 @@ const AttachFileDialog = (props: Props) => {
 
   usage.trackScreenView('AttachFileModal');
   const mounted: React.MutableRefObject<boolean> = useRef(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const theme: Theme = useContext(ThemeContext);
 
   const [attaches, updateAttaches] = useState<Array<NormalizedAttachment> | null>(null);
@@ -166,8 +167,8 @@ const AttachFileDialog = (props: Props) => {
                 })),
               );
             }}
-            uiTheme={theme.uiTheme}
             getOptions={props.getVisibilityOptions}
+            visibility={null}
           />
         )}
         <View style={styles.images}>

@@ -14,8 +14,8 @@ type RenderImageOptions = {
   node: Record<string, any>;
   index: number;
   attachments: Attachment[];
-  imageHeaders: Record<string, any> | null | undefined;
-  onImagePress: (arg0: string) => any;
+  imageHeaders?: Record<string, any> | null;
+  onImagePress: (source: Record<string, any>) => any;
 };
 
 function getUrlParams(url: string): Record<string, any> {
@@ -24,7 +24,7 @@ function getUrlParams(url: string): Record<string, any> {
     ? urlParams
         .split('&')
         .map(keyValue => keyValue.split('='))
-        .reduce((params, [key, value]) => {
+        .reduce((params: Record<string, string>, [key, value]) => {
           params[key] = value;
           return params;
         }, {})
@@ -49,13 +49,10 @@ function findTargetAttach(
   if (targetURL) {
     attachId = targetURL;
     targetAttach =
-      !!attachId &&
-      attachments.find(attach => getUrlParams(attach.url).file === attachId);
+      attachId ? attachments.find(attach => getUrlParams(attach.url).file === attachId) : undefined;
   } else {
     attachId = src.split('?')[0].split('/').pop();
-    targetAttach =
-      !!attachId &&
-      attachments.find((attach: Attachment) => attach.id === attachId);
+    targetAttach = attachId ? attachments.find((attach: Attachment) => attach.id === attachId) : undefined;
   }
 
   return targetAttach;
@@ -67,21 +64,15 @@ export function renderImage({
   attachments,
   imageHeaders,
   onImagePress,
-}: RenderImageOptions): void | Node {
-  const targetAttach: Attachment = findTargetAttach(
+}: RenderImageOptions) {
+  const targetAttach = findTargetAttach(
     node?.attribs?.src,
     attachments,
   );
 
   if (targetAttach?.url && !hasMimeType.svg(targetAttach)) {
     //TODO(investigation): for some reason SVG is not rendered here
-    const source = Object.assign(
-      {
-        uri: targetAttach.url,
-        headers: imageHeaders,
-      },
-      targetAttach,
-    );
+    const source = Object.assign({uri: targetAttach.url, headers: imageHeaders});
     const defaultDimensions = {
       width: IMAGE_WIDTH,
       height: IMAGE_HEIGHT,

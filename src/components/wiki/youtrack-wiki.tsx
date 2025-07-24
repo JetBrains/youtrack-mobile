@@ -17,35 +17,30 @@ import {nodeHasType} from './youtrack-wiki__node-type';
 import {showMoreInlineText} from '../text-view/text-view';
 import {TextPropTypes} from 'deprecated-react-native-prop-types';
 import styles, {htmlViewStyles} from './youtrack-wiki.styles';
+import type {Attachment} from 'types/Attachment';
 import type {ViewStyleProp} from 'types/Internal';
 import type {UITheme} from 'types/Theme';
 HTMLView.propTypes.style = TextPropTypes.style;
 type Props = {
   style?: ViewStyleProp;
-  children?: React.ReactElement<React.ComponentProps<any>, any>;
-  attachments: Array<Record<string, any>>;
+  children?: React.ReactNode;
+  attachments: Attachment[];
   imageHeaders: Record<string, any> | null | undefined;
   backendUrl: string;
-  onIssueIdTap: (issueId: string) => any;
+  onIssueIdTap?: (issueId: string) => void;
   renderFullException?: boolean;
   uiTheme: UITheme;
 };
 const HTML_RENDER_NOTHING = null;
 const HTML_RENDER_DEFAULT = undefined;
 
-const RootComponent = props => <Text {...props} />;
+const RootComponent = (props: Record<string, unknown>) => <Text {...props} />;
 
 export default class YoutrackWiki extends PureComponent<Props, void> {
-  static defaultProps: Record<string, any> = {
-    onIssueIdTap: (issueId: string) => {},
-    attachments: [],
-    imageHeaders: null,
-  };
-  renderer: (tree: Record<string, any>) => Record<string, any>;
   handleLinkPress: (url: string) => any | Promise<void> = (url: string) => {
     const issueId = extractIssueId(url);
 
-    if (issueId) {
+    if (issueId && this.props.onIssueIdTap) {
       return this.props.onIssueIdTap(issueId);
     }
 
@@ -55,17 +50,17 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
 
     return Linking.openURL(url);
   };
-  onImagePress: (source: any) => any = (source: Record<string, any>) => {
+  onImagePress = (source: Record<string, any>) => {
     return Router.PreviewFile({
       current: source,
-      imageAttachments: this.props.attachments.filter(attach =>
+      imageAttachments: (this.props.attachments || []).filter(attach =>
         hasMimeType.previewable(attach),
       ),
       imageHeaders: this.props.imageHeaders,
     });
   };
-  renderShowFullExceptionLink: (node: Node, index: number)=> React.ReactNode = (
-    node: Node,
+  renderShowFullExceptionLink = (
+    node: object,
     index: number,
   ) => {
     return (
@@ -90,20 +85,14 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
     return (node?.attribs?.class || '').split('language-').pop();
   }
 
-  renderNode: (
-    node: any,
-    index: number,
-    siblings: any[],
-    parent: any,
-    defaultRenderer: (arg0: any, arg1: any) => any,
-  ) => (any | Node) | null | undefined = (
+  renderNode = (
     node: Record<string, any>,
     index: number,
-    siblings: any[],
+    siblings: Record<string, any>,
     parent: Record<string, any>,
     defaultRenderer: (arg0: any, arg1: any) => any,
   ) => {
-    const {imageHeaders, attachments, renderFullException} = this.props;
+    const {imageHeaders, attachments = [], renderFullException} = this.props;
     const wikiNodeType = nodeHasType(node);
 
     const getCode = () =>

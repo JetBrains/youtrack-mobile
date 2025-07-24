@@ -8,12 +8,12 @@ import {DragContext} from './drag-container';
 import type {DragContextType} from './drag-container';
 const LONG_PRESS_DELAY = 500;
 type Props = {
-  dragOn: 'onLongPress' | 'onPressIn';
+  dragOn?: 'onLongPress' | 'onPressIn';
   disabled: boolean;
   children: React.ReactNode;
   data: String | Record<string, any>;
   style: any;
-  activeOpacity: number;
+  activeOpacity?: number;
   onPress: (...args: any[]) => any;
 };
 type PropsWithContext = Props & {
@@ -32,24 +32,21 @@ class Draggable extends React.Component<PropsWithContext, void> {
       );
     }
   };
-  static defaultProps = {
-    dragOn: 'onLongPress',
-  };
 
   render() {
-    const isDragging =
-      this.props.dragContext?.dragging?.data === this.props.data;
+    const {dragOn = 'onLongPress'} = this.props;
+    const isDragging = this.props.dragContext?.dragging?.data === this.props.data;
     return (
       <TouchableOpacity
         activeOpacity={this.props.activeOpacity}
         style={this.props.style}
         delayLongPress={LONG_PRESS_DELAY}
         onLongPress={
-          this.props.dragOn === 'onLongPress' ? this._initiateDrag : null
+          dragOn === 'onLongPress' ? this._initiateDrag : undefined
         }
         onPress={this.props.onPress}
         onPressIn={
-          this.props.dragOn === 'onPressIn' ? this._initiateDrag : null
+          dragOn === 'onPressIn' ? this._initiateDrag : undefined
         }
         ref={this.wrapper}
       >
@@ -63,7 +60,7 @@ class Draggable extends React.Component<PropsWithContext, void> {
   }
 }
 
-export default (props: Props): React.ReactNode => (
+export default (props: Props) => (
   <DragContext.Consumer>
     {dragContext => {
       if (!dragContext) {

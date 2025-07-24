@@ -34,11 +34,11 @@ type StyleMap = Record<FileCategoryKey, ViewStyleProp>;
 
 type Props = {
   imageHeaders?: RequestHeaders;
-  onOpenAttachment: (type: string, name: string) => any;
-  onImageLoadingError: (error: Record<string, any>) => any;
+  onOpenAttachment?: (type: string, name: string) => any;
+  onImageLoadingError?: (error: Record<string, any>) => any;
   canRemoveImage?: boolean;
   userCanRemoveImage?: (attachment: Attachment) => boolean;
-  onRemoveImage: (attachment: Attachment) => any;
+  onRemoveImage?: (attachment: Attachment) => void;
   attach: Attachment;
   attachments: Attachment[];
   attachingImage: Record<string, any> | null | undefined;
@@ -52,12 +52,6 @@ const ANIMATION_DURATION: number = 700;
 const isAndroid: boolean = isAndroidPlatform();
 
 export default class Attach extends PureComponent<Props, State> {
-  static defaultProps: Partial<Props> = {
-    canRemoveImage: false,
-    onOpenAttachment: () => {},
-    onImageLoadingError: () => {},
-    onRemoveImage: () => {},
-  };
   thumbStyleMap: StyleMap = {
     default: styles.attachmentDefault,
     sheet: styles.attachmentSheet,
@@ -69,7 +63,7 @@ export default class Attach extends PureComponent<Props, State> {
   };
   _isUnmounted: boolean = false;
   handleLoadError: any = debounce(err => {
-    this.props.onImageLoadingError(err);
+    this.props.onImageLoadingError?.(err);
   }, 60 * 1000);
   state: State = {
     isRemoving: false,
@@ -91,7 +85,7 @@ export default class Attach extends PureComponent<Props, State> {
   }
 
   showImageAttachment(attach: Attachment) {
-    this.props.onOpenAttachment('image', attach.id);
+    this.props.onOpenAttachment?.('image', attach.id);
 
     if (isAndroid && hasMimeType.svg(attach)) {
       return this.openAttachmentUrl(attach.name, attach.url);
@@ -114,7 +108,7 @@ export default class Attach extends PureComponent<Props, State> {
   };
 
   openAttachmentUrl(name: string, url: string) {
-    this.props.onOpenAttachment('file', name);
+    this.props.onOpenAttachment?.('file', name);
     Router.AttachmentPreview({
       url,
       name,
@@ -191,7 +185,9 @@ export default class Attach extends PureComponent<Props, State> {
             this.setState({
               isRemoving: true,
             });
-            await this.props.onRemoveImage(this.props.attach);
+            if (this.props.onRemoveImage) {
+              await this.props.onRemoveImage(this.props.attach);
+            }
 
             if (!this._isUnmounted) {
               this.setState({

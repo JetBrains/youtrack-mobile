@@ -3,7 +3,6 @@ import {Text, TouchableOpacity, View} from 'react-native';
 
 import IssueVisibility from './issue-visibility';
 import SelectSectioned, {SelectSectionedModal} from 'components/select/select-sectioned';
-import {DEFAULT_THEME} from 'components/theme/theme';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {getGroupedData, getVisibilityPresentation} from 'components/visibility/visibility-helper';
 import {hasType} from 'components/api/api__resource-types';
@@ -15,7 +14,6 @@ import {visibilityDefaultText} from './visibility-strings';
 
 import styles from './visibility-control.styles';
 
-import type {UITheme} from 'types/Theme';
 import type {User} from 'types/User';
 import type {ViewStyleProp} from 'types/Internal';
 import type {Visibility, VisibilityGroups, VisibilityItem} from 'types/Visibility';
@@ -23,12 +21,11 @@ import {UserGroup} from 'types/UserGroup';
 
 interface Props {
   getOptions: (q: string) => Promise<VisibilityGroups>;
-  onApply: (visibility: Visibility | null) => any;
+  onApply?: (visibility: Visibility | null) => any;
   onHide?: () => any;
   onShow?: () => any;
-  onSubmit?: ((visibility: Visibility | null) => void) | null;
+  onSubmit?: (visibility: Visibility | null) => void;
   style?: ViewStyleProp | null;
-  uiTheme?: UITheme;
   visibility: Visibility | null;
   visibilityDefaultLabel?: string;
   disabled?: boolean;
@@ -41,18 +38,10 @@ type State = {
 };
 
 export default class VisibilityControl extends PureComponent<Props, State> {
-  static defaultProps: Partial<Props> = {
-    visibility: null,
-    onApply: () => null,
-    getOptions: (q: string) => Promise.resolve({} as VisibilityGroups),
-    style: null,
-    uiTheme: DEFAULT_THEME,
-  };
-
   constructor(props: Props) {
     super(props);
     this.state = {
-      visibility: props.visibility,
+      visibility: props.visibility || null,
       isSelectVisible: false,
     };
   }
@@ -73,7 +62,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
       return this.closeSelect();
     }
 
-    this.props.onApply(visibility);
+    this.props.onApply?.(visibility);
   };
 
   getVisibilityOptions = async (q: string): Promise<VisibilityGroups> => {

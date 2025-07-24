@@ -8,27 +8,19 @@ import type {ViewStyleProp} from 'types/Internal';
 import type {Theme} from 'types/Theme';
 export type HeaderProps = {
   onBack?: () => any;
-  onRightButtonClick?: (...args: any[]) => any;
+  onRightButtonClick?: () => void;
   leftButton?: React.ReactNode;
   rightButton?: React.ReactNode;
   extraButton?: React.ReactNode;
   extra?: React.ReactNode;
-  children?: any;
+  children?: React.ReactNode;
   style?: ViewStyleProp;
   title?: string;
   showShadow?: boolean;
 };
-type DefaultProps = {
-  onRightButtonClick: (...args: any[]) => any;
-  showShadow: boolean;
-};
 
 
 export default class Header extends PureComponent<HeaderProps, Readonly<{}>> {
-  static defaultProps: DefaultProps = {
-    onRightButtonClick: () => undefined,
-    showShadow: false,
-  };
 
   onBack(): any {
     if (this.props.onBack) {
@@ -38,10 +30,8 @@ export default class Header extends PureComponent<HeaderProps, Readonly<{}>> {
     return Router.pop();
   }
 
-  onRightButtonClick: () => any | void = () => {
-    if (this.props.onRightButtonClick) {
-      return this.props.onRightButtonClick();
-    }
+  onRightButtonClick = () => {
+    this.props.onRightButtonClick?.();
   };
 
   render(): JSX.Element {
@@ -53,7 +43,7 @@ export default class Header extends PureComponent<HeaderProps, Readonly<{}>> {
       rightButton,
       style,
       title,
-      showShadow,
+      showShadow = false,
     } = this.props;
     return (
       <ThemeContext.Consumer>
