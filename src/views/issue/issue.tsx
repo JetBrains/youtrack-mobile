@@ -115,7 +115,7 @@ export class Issue<T extends IssueProps> extends IssueTabbed<IssueProps & T> {
     this.goOnlineSubscription?.remove?.();
   }
 
-  async componentWillUpdate(nextProps: IssueProps) {
+  async UNSAFE_componentWillUpdate(nextProps: IssueProps) {
     if (nextProps.issueId !== this.props.issueId && this.props.issuePlaceholder?.idReadable !== nextProps.issueId) {
       this.switchToDetailsTab();
       this.props.resetActivityPage();
