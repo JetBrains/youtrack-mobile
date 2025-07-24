@@ -8,6 +8,7 @@ const whiteSpacesInHTMLRegex: RegExp = />\s+</g;
 const whiteSpacesRegex: RegExp = /\s+/g;
 const imageEmbedRegExp: RegExp = /!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g;
 const imageSize: RegExp = /{((height|width)=\d+(%|px)?(\s*?)){1,2}}/i;
+const entityIdRegExp: RegExp = /\/([A-Za-z0-9\-]*\d[A-Za-z0-9\-]*)/g;
 
 const escapeRegExp = (str: string): string => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -28,6 +29,7 @@ const createMentionRegExp = (mention: string): RegExp => {
 export {
   createMentionRegExp,
   createUserMentionRegexp,
+  entityIdRegExp,
   escapeRegExp,
   htmlCodeEndRegex,
   htmlCodeStartRegex,

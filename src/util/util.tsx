@@ -2,11 +2,12 @@ import React from 'react';
 import {Platform} from 'react-native';
 
 import base64 from 'base64-js';
+import {entityIdRegExp} from 'components/wiki/util/patterns';
 import {getStorageState} from 'components/storage/storage';
 
 import type {AnyError} from 'types/Error';
+import type {CustomField} from 'types/CustomFields';
 import type {StorageState} from 'components/storage/storage';
-import {CustomField} from 'types/CustomFields';
 
 interface RequestPromise<P extends any> {
   status: 'fulfilled' | 'rejected',
@@ -168,3 +169,7 @@ export const arrayToMap = (
 export const mapToArray = (map: Record<string, any>): any[] => Object.keys(map).map(function (id) {
   return map[id];
 });
+
+export const anonymizeYTApiEntityId = (url: string) => {
+  return url.replace(entityIdRegExp, (match, group) => (/\d/.test(group) ? '/:id' : match));
+};
