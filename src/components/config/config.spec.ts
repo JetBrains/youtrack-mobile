@@ -56,7 +56,7 @@ describe('Config', () => {
           clientId: 'mobile-id',
           clientSecret: 'service-secret',
           landingUrl: 'ytoauth://landing.url',
-          scopes: 'Hub YouTrack Konnektor',
+          scopes: 'Hub YouTrack Konnector',
           serverUri: 'http://server.url',
           youtrackServiceId: 'service-id',
         },

@@ -88,7 +88,7 @@ async function loadConfig(ytUrl: string): Promise<AppConfig> {
         youtrackServiceId: config.ring.serviceId,
         clientId: config.mobile.serviceId,
         clientSecret: config.mobile.serviceSecret,
-        scopes: 'Hub YouTrack Konnektor',
+        scopes: 'Hub YouTrack Konnector',
         landingUrl: 'ytoauth://landing.url',
       };
       return config;
