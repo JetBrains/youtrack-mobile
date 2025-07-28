@@ -1,38 +1,38 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, Linking} from 'react-native';
+
 import RNRestart from 'react-native-restart';
+// @ts-ignore
 import IconFA from 'react-native-vector-icons/FontAwesome';
+// @ts-ignore
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
-import log from '../log/log';
-import Popup from '../popup/popup';
-import usage from '../usage/usage';
-import {connect} from 'react-redux';
-import {flushStoragePart} from '../storage/storage';
-import {i18n} from 'components/i18n/i18n';
-import {notify, notifyError} from '../notification/notification';
-import {openDebugView} from 'actions/app-actions';
-import {sendReport, createReportErrorData} from '../error/error-reporter';
-import {ThemeContext} from '../theme/theme-context';
-import {HIT_SLOP} from '../common-styles/button';
+
+import log from 'components/log/log';
+import Popup from 'components/popup/popup';
+import usage from 'components/usage/usage';
 import {captureException} from '../../../sentry';
+import {flushStoragePart} from 'components/storage/storage';
+import {HIT_SLOP} from 'components/common-styles/button';
+import {i18n} from 'components/i18n/i18n';
+import {notify, notifyError} from 'components/notification/notification';
+import {sendReport, createReportErrorData} from 'components/error/error-reporter';
+import {ThemeContext} from 'components/theme/theme-context';
 
 import styles from './error-boundary.styles';
 
 import type {ReportErrorData} from '../error/error-reporter';
 import type {Theme, UIThemeColors} from 'types/Theme';
-type Props = {
-  openDebugView: (arg0: any) => any;
-  children: React.ReactElement<React.ComponentProps<any>, any>;
-};
-type State = {
-  error: Error | null | undefined;
+
+const ERROR_TITLE = 'Something went wrong';
+
+interface State {
+  error: Error | null;
   isReporting: boolean;
   isExtendedReportEnabled: boolean;
   isExtendedReportInfoVisible: boolean;
-};
+}
 
-class ErrorBoundary extends Component<Props, State> {
-  ERROR_TITLE = 'Something went wrong';
+export default class ErrorBoundary extends Component<React.PropsWithChildren, State> {
   state = {
     error: null,
     isReporting: false,
@@ -41,15 +41,10 @@ class ErrorBoundary extends Component<Props, State> {
   };
 
   componentDidCatch(error: Error, info: Record<string, any>) {
-    log.warn(`${this.ERROR_TITLE}:\n${error.toString()}`);
-    usage.trackError(info.componentStack);
-    this.setState({
-      error,
-    });
-    // Reset stored route
-    flushStoragePart({
-      lastRoute: null,
-    });
+    log.warn(`${ERROR_TITLE}:\n${error.toString()}`);
+    usage.trackError(info.componentStack, error);
+    this.setState({error});
+    flushStoragePart({lastRoute: null});
   }
 
   contactSupport = () =>
@@ -171,7 +166,7 @@ class ErrorBoundary extends Component<Props, State> {
                     size={64}
                     color={uiThemeColors.$icon}
                   />
-                  <Text style={styles.title}>{this.ERROR_TITLE}</Text>
+                  <Text style={styles.title}>{ERROR_TITLE}</Text>
 
                   <TouchableOpacity
                     hitSlop={HIT_SLOP}
@@ -267,11 +262,3 @@ class ErrorBoundary extends Component<Props, State> {
     );
   }
 }
-
-const mapDispatchToProps = dispatch => {
-  return {
-    openDebugView: () => dispatch(openDebugView()),
-  };
-};
-
-export default connect(() => ({}), mapDispatchToProps)(ErrorBoundary);
