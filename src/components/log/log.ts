@@ -1,5 +1,7 @@
 import {Share} from 'react-native';
+
 import deviceLog, {InMemoryAdapter} from 'react-native-device-log';
+
 deviceLog.init(new InMemoryAdapter(), {
   logToConsole: true,
   logRNErrors: true,
@@ -7,20 +9,21 @@ deviceLog.init(new InMemoryAdapter(), {
   maxNumberToRender: 2000,
   maxNumberToPersist: 2000,
 });
+
 export default {
-  log(...params: any[]): any {
+  log(...params: unknown[]) {
     return deviceLog.log(...params);
   },
 
-  info(...params: any[]): any {
+  info(...params: unknown[]) {
     return deviceLog.info(...params);
   },
 
-  debug(...params: any[]): any {
+  debug(...params: unknown[]) {
     return deviceLog.debug(...params);
   },
 
-  warn(...params: any[]): any {
+  warn(...params: unknown[]) {
     return deviceLog.error(...params);
   },
 
@@ -33,6 +36,7 @@ export default {
     deviceLog.options.logToConsole = false;
   },
 };
+
 export async function getLogs(): Promise<string> {
   const rows = await deviceLog.store.getRows();
   return rows
@@ -40,6 +44,7 @@ export async function getLogs(): Promise<string> {
     .map((row: { timeStamp: Record<any, any>, message: string }) => `${row.timeStamp._i}: ${row.message}`)
     .join('\n');
 }
+
 export async function copyRawLogs() {
   const logs = await getLogs();
   Share.share({
