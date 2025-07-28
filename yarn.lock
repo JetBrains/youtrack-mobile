@@ -2309,10 +2309,10 @@
   resolved "https://registry.yarnpkg.com/@sentry/core/-/core-8.55.0.tgz#4964920229fcf649237ef13b1533dfc4b9f6b22e"
   integrity sha512-6g7jpbefjHYs821Z+EBJ8r4Z7LT5h80YSWRJaylGS4nW5W5Z2KXzpdnyFarv37O7QjauzVC2E+PABmpkw5/JGA==
 
-"@sentry/react-native@^6.18.0":
-  version "6.18.0"
-  resolved "https://registry.yarnpkg.com/@sentry/react-native/-/react-native-6.18.0.tgz#372f7e7a60fb5d4a3b058feda70a6dff90a68728"
-  integrity sha512-xyAnNITIrHMOvfg7pAUFvktke3uOr/tXGNfPsMgg5Kv4rJJhA3kjxBfrIdl0qwPOexkPc8B+oCAHzVkIwGmEhQ==
+"@sentry/react-native@^6.18.1":
+  version "6.18.1"
+  resolved "https://registry.yarnpkg.com/@sentry/react-native/-/react-native-6.18.1.tgz#1addd471d39a160b3c4be81106e3591aa3b679c1"
+  integrity sha512-263Vt51TJ7dEA/zttn2bGv2YAerDEd/KAl/D/YQi5yFRfHFBOp47H3piZbV4v0HE22Ex6yCZQiRgrOjeNmEIhw==
   dependencies:
     "@sentry/babel-plugin-component-annotate" "3.6.1"
     "@sentry/browser" "8.55.0"
