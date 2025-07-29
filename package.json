@@ -184,5 +184,8 @@
     "update-json-file": "1.1.1",
     "wait-on": "^6.0.1"
   },
+  "resolutions": {
+    "metro": "^0.80.3"
+  },
   "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
 }
