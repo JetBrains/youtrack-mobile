@@ -1,0 +1,15 @@
+diff --git a/node_modules/@sentry/react-native/dist/js/tools/ModulesCollector.js b/node_modules/@sentry/react-native/dist/js/tools/ModulesCollector.js
+index 6743d4c..773d41b 100644
+--- a/node_modules/@sentry/react-native/dist/js/tools/ModulesCollector.js
++++ b/node_modules/@sentry/react-native/dist/js/tools/ModulesCollector.js
+@@ -87,6 +87,10 @@ class ModulesCollector {
+                 return;
+             }
+         }
++        if (!(0, fs_1.existsSync)(sourceMapPath) || !(0, fs_1.lstatSync)(sourceMapPath).isFile()) {
++            core_1.logger.error(`❌ Source map path is invalid or not a file: ${sourceMapPath}`);
++            return;
++        }
+         const map = JSON.parse((0, fs_1.readFileSync)(sourceMapPath, 'utf8'));
+         if (!map.sources || !Array.isArray(map.sources)) {
+             core_1.logger.error(`Modules not collected. No sources found in the source map (${sourceMapPath})!`);

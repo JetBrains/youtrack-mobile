@@ -290,7 +290,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT \\\"/bin/sh ../node_modules/@sentry/react-native/scripts/sentry-xcode.sh $REACT_NATIVE_XCODE\\\"\"\n";
+			shellScript = "set -e\n\nexport NODE_BINARY=node\nexport BUNDLE_MAP_OUTPUT=\"${BUILT_PRODUCTS_DIR}/main.jsbundle.map\"\nexport EXTRA_PACKAGER_ARGS=\"--sourcemap-output $BUNDLE_MAP_OUTPUT\"\nexport SOURCEMAP_FILE=\"$BUNDLE_MAP_OUTPUT\"\necho \"Source map will be created and read from: $SOURCEMAP_FILE\"\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT \\\"/bin/sh ../node_modules/@sentry/react-native/scripts/sentry-xcode.sh $REACT_NATIVE_XCODE --log-level=debug --force-foreground\\\"\"\n";
 		};
 		2C78DE56E290E3D602DDF5E1 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -547,7 +547,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = YouTrackMobile/YouTrackMobile.entitlements;
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 4027;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 2ZEFAR8TH3;
 				ENABLE_BITCODE = NO;
@@ -596,8 +596,9 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = YouTrackMobile/YouTrackMobile.entitlements;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 4027;
 				DEVELOPMENT_TEAM = 2ZEFAR8TH3;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 2ZEFAR8TH3;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native/React/**",
@@ -626,6 +627,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.jetbrains.youtrack.YouTrackMobile;
 				PRODUCT_NAME = YouTrackMobile;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = YouTrackMobileDev;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
