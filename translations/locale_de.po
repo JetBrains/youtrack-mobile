@@ -218,10 +218,6 @@ msgstr ""
 msgid "Browser"
 msgstr "Browser"
 
-#: src/components/error-boundary/error-boundary.tsx
-msgid "Bugsnag Privacy Policy"
-msgstr "Datenschutzrichtlinien von Bugsnag"
-
 #: src/views/log-in/log-in.tsx
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr "Durch die Anmeldung stimmen Sie den Datenschutzrichtlinien zu."
@@ -619,8 +615,8 @@ msgid "If this isn't what you expected, you might try one of these solutions:"
 msgstr "Wenn dies nicht Ihren Erwartungen entspricht, probieren Sie eine der folgenden Lösungen aus:"
 
 #: src/components/error-boundary/error-boundary.tsx
-msgid "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so."
-msgstr "Zusätzlich zu unserer integrierten Fehlerberichterstattung verwendet YouTrack Mobile Bugsnag, einen Drittanbieterdienst, der uns hilft, Probleme zu diagnostizieren und die Anwendungsstabilität zu überwachen. Wir geben Berichtsdaten nur mit Ihrer Erlaubnis an Bugsnag weiter."
+msgid "In addition to our built-in error reporting, YouTrack Mobile uses Sentry, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Sentry if you agree to allow us to do so."
+msgstr ""
 
 #: src/views/article/article.tsx
 msgid "in revision"
@@ -1014,8 +1010,8 @@ msgid "Send crash report"
 msgstr "Absturzbericht senden"
 
 #: src/components/error-boundary/error-boundary.tsx
-msgid "Send extended report to Bugsnag"
-msgstr "Erweiterten Bericht an Bugsnag senden"
+msgid "Send extended report to Sentry"
+msgstr ""
 
 #: src/views/settings/settings.tsx
 msgid "Send feedback"
@@ -1032,6 +1028,10 @@ msgstr "Protokolle senden"
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Sending crash report…"
 msgstr "Fehlerbericht wird gesendet…"
+
+#: src/components/error-boundary/error-boundary.tsx
+msgid "Sentry Privacy Policy"
+msgstr ""
 
 #: src/components/date-picker/date-time-picker.tsx
 #: src/views/helpdesk-feedback/index.ts

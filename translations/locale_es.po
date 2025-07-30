@@ -218,10 +218,6 @@ msgstr ""
 msgid "Browser"
 msgstr "Navegador"
 
-#: src/components/error-boundary/error-boundary.tsx
-msgid "Bugsnag Privacy Policy"
-msgstr "Política de privacidad de Bugsnag"
-
 #: src/views/log-in/log-in.tsx
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr "Al iniciar sesión, acepta la Política de privacidad."
@@ -619,8 +615,8 @@ msgid "If this isn't what you expected, you might try one of these solutions:"
 msgstr "Si esto no es lo que esperaba, puede probar alguna de estas soluciones:"
 
 #: src/components/error-boundary/error-boundary.tsx
-msgid "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so."
-msgstr "Además de nuestro informe de errores integrado, YouTrack Mobile utiliza Bugsnag, un servicio externo que nos ayuda a diagnosticar problemas y controlar la estabilidad de la aplicación. Solo compartimos los datos de los informes con Bugsnag si usted acepta que lo hagamos."
+msgid "In addition to our built-in error reporting, YouTrack Mobile uses Sentry, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Sentry if you agree to allow us to do so."
+msgstr ""
 
 #: src/views/article/article.tsx
 msgid "in revision"
@@ -1014,8 +1010,8 @@ msgid "Send crash report"
 msgstr "Enviar informe de errores"
 
 #: src/components/error-boundary/error-boundary.tsx
-msgid "Send extended report to Bugsnag"
-msgstr "Enviar informe ampliado a Bugsnag"
+msgid "Send extended report to Sentry"
+msgstr ""
 
 #: src/views/settings/settings.tsx
 msgid "Send feedback"
@@ -1032,6 +1028,10 @@ msgstr "Enviar registros"
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Sending crash report…"
 msgstr "Enviando informe de errores…"
+
+#: src/components/error-boundary/error-boundary.tsx
+msgid "Sentry Privacy Policy"
+msgstr ""
 
 #: src/components/date-picker/date-time-picker.tsx
 #: src/views/helpdesk-feedback/index.ts

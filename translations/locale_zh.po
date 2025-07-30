@@ -210,10 +210,6 @@ msgstr ""
 msgid "Browser"
 msgstr "浏览器"
 
-#: src/components/error-boundary/error-boundary.tsx
-msgid "Bugsnag Privacy Policy"
-msgstr "Bugsnag 隐私政策"
-
 #: src/views/log-in/log-in.tsx
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr "登录，即表示您同意《隐私政策》。"
@@ -611,8 +607,8 @@ msgid "If this isn't what you expected, you might try one of these solutions:"
 msgstr "如果这不是您所期望的，您可以尝试以下解决方案之一:"
 
 #: src/components/error-boundary/error-boundary.tsx
-msgid "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so."
-msgstr "除了我们内置的错误报告之外，YouTrack Mobile 还会使用第三方服务 Bugsnag，它可以帮助我们诊断问题并监控应用程序的稳定性。只有在您同意允许我们共享的情况下，我们才会与 Bugsnag 共享报告数据。"
+msgid "In addition to our built-in error reporting, YouTrack Mobile uses Sentry, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Sentry if you agree to allow us to do so."
+msgstr ""
 
 #: src/views/article/article.tsx
 msgid "in revision"
@@ -1004,8 +1000,8 @@ msgid "Send crash report"
 msgstr "发送崩溃报告"
 
 #: src/components/error-boundary/error-boundary.tsx
-msgid "Send extended report to Bugsnag"
-msgstr "向 Bugsnag 发送扩展报告"
+msgid "Send extended report to Sentry"
+msgstr ""
 
 #: src/views/settings/settings.tsx
 msgid "Send feedback"
@@ -1022,6 +1018,10 @@ msgstr "发送日志"
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Sending crash report…"
 msgstr "正在发送崩溃报告…"
+
+#: src/components/error-boundary/error-boundary.tsx
+msgid "Sentry Privacy Policy"
+msgstr ""
 
 #: src/components/date-picker/date-time-picker.tsx
 #: src/views/helpdesk-feedback/index.ts

@@ -218,10 +218,6 @@ msgstr "Táblák"
 msgid "Browser"
 msgstr "Böngésző"
 
-#: src/components/error-boundary/error-boundary.tsx
-msgid "Bugsnag Privacy Policy"
-msgstr "Bugsnag adatvédelmi szabályzata"
-
 #: src/views/log-in/log-in.tsx
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr "Bejelentkezésével elfogadja az Adatvédelmi szabályzatot."
@@ -619,8 +615,8 @@ msgid "If this isn't what you expected, you might try one of these solutions:"
 msgstr "Ha nem erre számított, akkor megpróbálhatja a következő megoldások valamelyikét:"
 
 #: src/components/error-boundary/error-boundary.tsx
-msgid "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so."
-msgstr "A beépített hibajelentések mellett a YouTrack Mobile a Bugsnag harmadik fél által nyújtott szolgáltatást használja, amely segít nekünk a problémák diagnosztizálásában és az alkalmazások stabilitásának felügyeletében. Csak akkor osztjuk meg a jelentési adatokat a Bugsnag szolgáltatással, ha beleegyezésével ezt lehetővé teszi számunkra."
+msgid "In addition to our built-in error reporting, YouTrack Mobile uses Sentry, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Sentry if you agree to allow us to do so."
+msgstr ""
 
 #: src/views/article/article.tsx
 msgid "in revision"
@@ -1014,7 +1010,7 @@ msgid "Send crash report"
 msgstr ""
 
 #: src/components/error-boundary/error-boundary.tsx
-msgid "Send extended report to Bugsnag"
+msgid "Send extended report to Sentry"
 msgstr ""
 
 #: src/views/settings/settings.tsx
@@ -1031,6 +1027,10 @@ msgstr ""
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Sending crash report…"
+msgstr ""
+
+#: src/components/error-boundary/error-boundary.tsx
+msgid "Sentry Privacy Policy"
 msgstr ""
 
 #: src/components/date-picker/date-time-picker.tsx

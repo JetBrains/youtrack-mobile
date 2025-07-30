@@ -181,7 +181,7 @@ msgstr "Article removed from favorites"
 msgid "Attach file"
 msgstr "Attach file"
 
-#: src/components/attach-file/attach-file-dialog.tsx:153
+#: src/components/attach-file/attach-file-dialog.tsx:154
 #: src/components/attachments-row/attachments-add-panel.tsx:43
 msgid "Attach files"
 msgstr "Attach files"
@@ -212,15 +212,11 @@ msgstr "Boards"
 msgid "Browser"
 msgstr "Browser"
 
-#: src/components/error-boundary/error-boundary.tsx:127
-msgid "Bugsnag Privacy Policy"
-msgstr "Bugsnag Privacy Policy"
-
 #: src/views/log-in/log-in.tsx:294
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr "By logging in, you agree to the Privacy Policy."
 
-#: src/components/attach-file/attach-file-dialog.tsx:83
+#: src/components/attach-file/attach-file-dialog.tsx:84
 msgid "Camera"
 msgstr "Camera"
 
@@ -315,7 +311,7 @@ msgstr "Confirmation required"
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
-#: src/components/error-boundary/error-boundary.tsx:251
+#: src/components/error-boundary/error-boundary.tsx:244
 #: src/components/error-message/error-message-inline.tsx:56
 #: src/views/enter-server/enter-server.tsx:304
 msgid "Contact support"
@@ -369,7 +365,7 @@ msgstr "Copy text"
 msgid "Could not apply specified command."
 msgstr "Could not apply specified command."
 
-#: src/components/error-boundary/error-boundary.tsx:81
+#: src/components/error-boundary/error-boundary.tsx:74
 msgid "Crash report sent"
 msgstr "Crash report sent"
 
@@ -472,7 +468,7 @@ msgstr "Do you really want to log out?"
 msgid "Do you really want to remove this account?"
 msgstr "Do you really want to remove this account?"
 
-#: src/components/attach-file/attach-file-dialog.tsx:57
+#: src/components/attach-file/attach-file-dialog.tsx:58
 msgid "Document"
 msgstr "Document"
 
@@ -547,7 +543,7 @@ msgstr "Filter boards by name"
 msgid "Filter existing accounts by name or username"
 msgstr "Filter existing accounts by name or username"
 
-#: src/components/select/select.tsx:327
+#: src/components/select/select.tsx:328
 msgid "Filter items"
 msgstr "Filter items"
 
@@ -576,7 +572,7 @@ msgid "Filter tags"
 msgstr "Filter tags"
 
 #: src/components/visibility/comment-visibility-control.tsx:88
-#: src/components/visibility/visibility-control.tsx:143
+#: src/components/visibility/visibility-control.tsx:132
 msgid "Filter users, groups, and teams"
 msgstr "Filter users, groups, and teams"
 
@@ -600,7 +596,7 @@ msgstr "Get help"
 msgid "Groups and teams"
 msgstr "Groups and teams"
 
-#: src/components/error-boundary/error-boundary.tsx:97
+#: src/components/error-boundary/error-boundary.tsx:90
 msgid "Help us fix problems faster"
 msgstr "Help us fix problems faster"
 
@@ -612,9 +608,9 @@ msgstr "Here you'll see a list of articles from your favorite projects"
 msgid "If this isn't what you expected, you might try one of these solutions:"
 msgstr "If this isn't what you expected, you might try one of these solutions:"
 
-#: src/components/error-boundary/error-boundary.tsx:105
-msgid "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so."
-msgstr "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so."
+#: src/components/error-boundary/error-boundary.tsx:98
+msgid "In addition to our built-in error reporting, YouTrack Mobile uses Sentry, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Sentry if you agree to allow us to do so."
+msgstr "In addition to our built-in error reporting, YouTrack Mobile uses Sentry, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Sentry if you agree to allow us to do so."
 
 #: src/views/article/article.tsx:261
 msgid "in revision"
@@ -652,7 +648,7 @@ msgstr "Issues can be sorted by up to 4 attributes"
 msgid "It could mean that the issue doesn't exist or you don't have permission to view it"
 msgstr "It could mean that the issue doesn't exist or you don't have permission to view it"
 
-#: src/components/error-boundary/error-boundary.tsx:117
+#: src/components/error-boundary/error-boundary.tsx:110
 msgid "JetBrains Privacy Policy"
 msgstr "JetBrains Privacy Policy"
 
@@ -692,7 +688,7 @@ msgstr "Link to comment copied"
 msgid "Linked issues"
 msgstr "Linked issues"
 
-#: src/components/select/select.tsx:284
+#: src/components/select/select.tsx:285
 msgid "Loading values…"
 msgstr "Loading values…"
 
@@ -812,7 +808,7 @@ msgstr "No favorites projects found"
 msgid "No issues found"
 msgstr "No issues found"
 
-#: src/components/select/select.tsx:288
+#: src/components/select/select.tsx:289
 msgid "No items"
 msgstr "No items"
 
@@ -861,7 +857,7 @@ msgstr "Paused"
 msgid "People added as CCs receive the same notifications that are sent to the person who reported this ticket"
 msgstr "People added as CCs receive the same notifications that are sent to the person who reported this ticket"
 
-#: src/components/attach-file/attach-file-dialog.tsx:70
+#: src/components/attach-file/attach-file-dialog.tsx:71
 msgid "Photo and video library"
 msgstr "Photo and video library"
 
@@ -946,7 +942,7 @@ msgstr "Reporter"
 msgid "Reset visibility"
 msgstr "Reset visibility"
 
-#: src/components/error-boundary/error-boundary.tsx:184
+#: src/components/error-boundary/error-boundary.tsx:177
 msgid "Restart"
 msgstr "Restart"
 
@@ -1003,13 +999,13 @@ msgstr "select sprint"
 msgid "Select users, groups, and teams"
 msgstr "Select users, groups, and teams"
 
-#: src/components/error-boundary/error-boundary.tsx:199
+#: src/components/error-boundary/error-boundary.tsx:192
 msgid "Send crash report"
 msgstr "Send crash report"
 
-#: src/components/error-boundary/error-boundary.tsx:227
-msgid "Send extended report to Bugsnag"
-msgstr "Send extended report to Bugsnag"
+#: src/components/error-boundary/error-boundary.tsx:220
+msgid "Send extended report to Sentry"
+msgstr "Send extended report to Sentry"
 
 #: src/views/settings/settings.tsx:141
 msgid "Send feedback"
@@ -1023,9 +1019,13 @@ msgstr "Send Feedback"
 msgid "Send logs"
 msgstr "Send logs"
 
-#: src/components/error-boundary/error-boundary.tsx:198
+#: src/components/error-boundary/error-boundary.tsx:191
 msgid "Sending crash report…"
 msgstr "Sending crash report…"
+
+#: src/components/error-boundary/error-boundary.tsx:120
+msgid "Sentry Privacy Policy"
+msgstr "Sentry Privacy Policy"
 
 #: src/components/date-picker/date-time-picker.tsx:69
 #: src/views/helpdesk-feedback/index.ts:178
@@ -1162,7 +1162,7 @@ msgstr "Tags"
 msgid "Thank you for your feedback!"
 msgstr "Thank you for your feedback!"
 
-#: src/components/error-boundary/error-boundary.tsx:145
+#: src/components/error-boundary/error-boundary.tsx:138
 msgid "The application failed to restart automatically. Please try to restart it manually."
 msgstr "The application failed to restart automatically. Please try to restart it manually."
 

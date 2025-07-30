@@ -210,10 +210,6 @@ msgstr ""
 msgid "Browser"
 msgstr "브라우저"
 
-#: src/components/error-boundary/error-boundary.tsx
-msgid "Bugsnag Privacy Policy"
-msgstr "Bugsnag 개인정보 보호정책"
-
 #: src/views/log-in/log-in.tsx
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr "로그인하면 개인정보 보호정책에 동의하는 것입니다."
@@ -611,8 +607,8 @@ msgid "If this isn't what you expected, you might try one of these solutions:"
 msgstr "이 작업을 원한 것이 아니라면 다음 솔루션을 시도해볼 수 있습니다."
 
 #: src/components/error-boundary/error-boundary.tsx
-msgid "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so."
-msgstr "기본 제공 오류 보고 외에도 YouTrack Mobile은 문제를 진단하고 애플리케이션 안정성을 모니터링하는 데 도움을 주는 타사 서비스인 Bugsnag를 사용합니다. 귀하가 허용하는 경우에만 보고서 데이터를 Bugsnag와 공유합니다."
+msgid "In addition to our built-in error reporting, YouTrack Mobile uses Sentry, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Sentry if you agree to allow us to do so."
+msgstr ""
 
 #: src/views/article/article.tsx
 msgid "in revision"
@@ -1004,8 +1000,8 @@ msgid "Send crash report"
 msgstr "충돌 보고서 보내기"
 
 #: src/components/error-boundary/error-boundary.tsx
-msgid "Send extended report to Bugsnag"
-msgstr "Bugsnag에 확장 보고서 보내기"
+msgid "Send extended report to Sentry"
+msgstr ""
 
 #: src/views/settings/settings.tsx
 msgid "Send feedback"
@@ -1022,6 +1018,10 @@ msgstr "로그 보내기"
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Sending crash report…"
 msgstr "충돌 보고서를 보내는 중…"
+
+#: src/components/error-boundary/error-boundary.tsx
+msgid "Sentry Privacy Policy"
+msgstr ""
 
 #: src/components/date-picker/date-time-picker.tsx
 #: src/views/helpdesk-feedback/index.ts

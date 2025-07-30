@@ -218,10 +218,6 @@ msgstr ""
 msgid "Browser"
 msgstr "Navigateur"
 
-#: src/components/error-boundary/error-boundary.tsx
-msgid "Bugsnag Privacy Policy"
-msgstr "Charte de confidentialité de Bugsnag"
-
 #: src/views/log-in/log-in.tsx
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr "En vous connectant, vous acceptez la Charte de confidentialité."
@@ -619,8 +615,8 @@ msgid "If this isn't what you expected, you might try one of these solutions:"
 msgstr "Si ce n'est pas ce que vous attendiez, essayez l'une de ces solutions :"
 
 #: src/components/error-boundary/error-boundary.tsx
-msgid "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so."
-msgstr "En plus de nos rapports d'erreurs intégrés, YouTrack Mobile utilise Bugsnag, un service tiers qui nous aide à diagnostiquer les problèmes et à surveiller la stabilité des applications. Nous ne partageons les données des rapports avec Bugsnag que si vous nous y autorisez."
+msgid "In addition to our built-in error reporting, YouTrack Mobile uses Sentry, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Sentry if you agree to allow us to do so."
+msgstr ""
 
 #: src/views/article/article.tsx
 msgid "in revision"
@@ -1014,8 +1010,8 @@ msgid "Send crash report"
 msgstr "Envoyer un rapport d'incident"
 
 #: src/components/error-boundary/error-boundary.tsx
-msgid "Send extended report to Bugsnag"
-msgstr "Envoyer un rapport étendu à Bugsnag"
+msgid "Send extended report to Sentry"
+msgstr ""
 
 #: src/views/settings/settings.tsx
 msgid "Send feedback"
@@ -1032,6 +1028,10 @@ msgstr "Envoyer les journaux"
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Sending crash report…"
 msgstr "Envoi du rapport d'incident…"
+
+#: src/components/error-boundary/error-boundary.tsx
+msgid "Sentry Privacy Policy"
+msgstr ""
 
 #: src/components/date-picker/date-time-picker.tsx
 #: src/views/helpdesk-feedback/index.ts

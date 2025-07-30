@@ -234,10 +234,6 @@ msgstr "Дошки"
 msgid "Browser"
 msgstr ""
 
-#: src/components/error-boundary/error-boundary.tsx
-msgid "Bugsnag Privacy Policy"
-msgstr ""
-
 #: src/views/log-in/log-in.tsx
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr ""
@@ -635,7 +631,7 @@ msgid "If this isn't what you expected, you might try one of these solutions:"
 msgstr "Якщо це не те, чого ви очікували, спробуйте одне з цих рішень:"
 
 #: src/components/error-boundary/error-boundary.tsx
-msgid "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so."
+msgid "In addition to our built-in error reporting, YouTrack Mobile uses Sentry, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Sentry if you agree to allow us to do so."
 msgstr ""
 
 #: src/views/article/article.tsx
@@ -1034,7 +1030,7 @@ msgid "Send crash report"
 msgstr ""
 
 #: src/components/error-boundary/error-boundary.tsx
-msgid "Send extended report to Bugsnag"
+msgid "Send extended report to Sentry"
 msgstr ""
 
 #: src/views/settings/settings.tsx
@@ -1051,6 +1047,10 @@ msgstr ""
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Sending crash report…"
+msgstr ""
+
+#: src/components/error-boundary/error-boundary.tsx
+msgid "Sentry Privacy Policy"
 msgstr ""
 
 #: src/components/date-picker/date-time-picker.tsx
