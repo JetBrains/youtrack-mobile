@@ -142,7 +142,7 @@ export interface IssueFull extends BaseIssue {
 
 export type IssueCreate = IssueFull & {canUpdateVisibility: boolean};
 
-export type AnyIssue = IssueOnListExtended | IssueFullExtended | IssueLink | IssueCreate;
+export type AnyIssue = IssueOnListExtended | IssueFull | IssueFullExtended | IssueLink | IssueCreate;
 
 export type TransformedSuggestion = {
   prefix: string;
