@@ -38,7 +38,7 @@ function getAssigneeField(issue: AnyIssue) {
   });
 }
 
-function getReadableID(entity: IssueOnListExtended | IssueFull | Article) {
+function getReadableID(entity: IssueOnListExtended | AnyIssue | Article) {
   return (!!entity && entity?.idReadable) || '';
 }
 
