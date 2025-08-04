@@ -1,6 +1,7 @@
 import {notify} from '../notification/notification';
+
 const NEXT_CLICK_MAX_TIMEOUT = 1000;
-let timeoutId = null;
+let timeoutId: number | null = null;
 let counter = 0;
 
 function increaseCounter() {
@@ -12,7 +13,7 @@ function resetCounter() {
 }
 
 export default function clicksCounter(
-  actionToPerform?: () => any,
+  actionToPerform?: () => void,
   message?: string,
   numberOfTaps: number = 6,
 ): void {
@@ -27,9 +28,11 @@ export default function clicksCounter(
   }
 
   if (counter === numberOfTaps) {
-    actionToPerform();
+    if (actionToPerform) {
+      actionToPerform();
+    }
     return resetCounter();
   }
 
-  timeoutId = setTimeout(resetCounter, NEXT_CLICK_MAX_TIMEOUT);
+  timeoutId = global.setTimeout(resetCounter, NEXT_CLICK_MAX_TIMEOUT) as unknown as number;
 }

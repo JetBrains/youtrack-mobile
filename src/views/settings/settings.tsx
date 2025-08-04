@@ -7,7 +7,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import * as appActions from 'actions/app-actions';
 import Accounts from 'components/account/accounts';
-import clicksToShowCounter from 'components/debug-view/clicks-to-show-counter';
+import clicksToShowCounter from 'components/logs-view/clicks-to-show-counter';
 import FeaturesDebugSettings from 'components/feature/features-debug-settings';
 import Header from 'components/header/header';
 import Router from 'components/router/router';

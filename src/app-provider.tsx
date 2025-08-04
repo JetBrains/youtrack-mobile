@@ -7,7 +7,7 @@ import {
   SafeAreaProvider,
   initialWindowMetrics,
 } from 'react-native-safe-area-context';
-import DebugView from 'components/debug-view/debug-view';
+import LogsView from 'components/logs-view/logs-view';
 import ErrorBoundary from 'components/error-boundary/error-boundary';
 import Navigation from './navigation';
 import Network from './components/network/network';
@@ -43,7 +43,7 @@ const AppProvider = () => {
         {(theme: Theme) => {
           const uiTheme: UITheme = theme.uiTheme || DEFAULT_THEME;
           const flexStyle: Partial<ViewStyleProp> = {flex: 1};
-          const backgroundStyle: Partial<ViewStyleProp> = {backgroundColor: uiTheme.colors.$background};
+          const backgroundStyle = {backgroundColor: uiTheme.colors.$background};
           return (
             <SafeAreaProvider initialMetrics={initialWindowMetrics}>
               <StatusBar
@@ -56,7 +56,7 @@ const AppProvider = () => {
                   <Host>
                     <Navigation/>
                     <UserAgreement/>
-                    <DebugView
+                    <LogsView
                       logsStyle={{
                         ...backgroundStyle,
                         textColor: uiTheme.colors.$text,

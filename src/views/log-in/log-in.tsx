@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import React, {Component} from 'react';
-import clicksToShowCounter from 'components/debug-view/clicks-to-show-counter';
+import clicksToShowCounter from 'components/logs-view/clicks-to-show-counter';
 import ErrorMessageInline from 'components/error-message/error-message-inline';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import log from 'components/log/log';
