@@ -29,13 +29,13 @@ interface Props {
     entity: Entity,
     navigateToActivity?: string,
     commentId?: string,
-  ) => any;
+  ) => void;
   merger?: (threads: InboxThread[]) => InboxThread[];
   onScroll?: (isShadowVisible: boolean) => void;
 }
 
 
-const InboxThreadsList = ({folderId, onNavigate, merger, onScroll}: Props): JSX.Element => {
+const InboxThreadsList = ({folderId, onNavigate, merger, onScroll}: Props) => {
   const isMergedNotifications: React.MutableRefObject<boolean> = React.useRef(!!getStorageState().mergedNotifications);
 
   const theme: Theme = useContext(ThemeContext);
@@ -53,7 +53,7 @@ const InboxThreadsList = ({folderId, onNavigate, merger, onScroll}: Props): JSX.
     };
 
   const setThreadsFromCache = useCallback(
-    (id?: ThreadsStateFilterId | null): void => {
+    (id?: ThreadsStateFilterId | null) => {
       dispatch(actions.loadThreadsFromCache(id));
     },
     [dispatch],
@@ -87,6 +87,48 @@ const InboxThreadsList = ({folderId, onNavigate, merger, onScroll}: Props): JSX.
     );
   };
 
+  const renderSeparator = () => <View style={styles.threadSeparator} />;
+
+  const renderFooter = () => {
+    if (error) {
+      return (
+        <ErrorMessage
+          testID="test:id/inboxThreadsListError"
+          error={error}
+          style={styles.error}
+        />
+      );
+    }
+
+    if (inProgress) {
+      return <InboxThreadsProgressPlaceholder />;
+    }
+
+    if (!hasVisibleMessages) {
+      return (
+        <View
+          testID="test:id/inboxThreadsListEmptyMessage"
+          accessibilityLabel="inboxThreadsListEmptyMessage"
+          accessible={true}
+          style={styles.threadsEmpty}
+        >
+          <IconNoNotifications />
+          <Text
+            testID="test:id/inboxThreadsListEmptyMessageText"
+            accessibilityLabel="inboxThreadsListEmptyMessageText"
+            accessible={true}
+            style={styles.threadsEmptyText}
+          >
+            {isUnreadOnly()
+              ? i18n('You don’t have any unread notifications')
+              : i18n('No notifications')}
+          </Text>
+        </View>
+      );
+    }
+    return null;
+  };
+
   const visibleThreads: InboxThread[] = (getData().hasMore
     ? getData().threads.slice(0, getData().threads.length - 1)
     : getData().threads
@@ -97,6 +139,7 @@ const InboxThreadsList = ({folderId, onNavigate, merger, onScroll}: Props): JSX.
       (amount: number, it: InboxThread) => amount + it.messages.length,
       0,
     ) > 0;
+
   return (
     <View
       testID="test:id/inboxThreadsList"
@@ -108,47 +151,8 @@ const InboxThreadsList = ({folderId, onNavigate, merger, onScroll}: Props): JSX.
         contentContainerStyle={styles.threadsList}
         removeClippedSubviews={false}
         data={merger ? merger(visibleThreads) : visibleThreads}
-        ItemSeparatorComponent={() => <View style={styles.threadSeparator} />}
-        ListFooterComponent={() => {
-          if (error) {
-            return (
-              <ErrorMessage
-                testID="test:id/inboxThreadsListError"
-                error={error}
-                style={styles.error}
-              />
-            );
-          }
-
-          if (inProgress) {
-            return <InboxThreadsProgressPlaceholder />;
-          }
-
-          if (!hasVisibleMessages) {
-            return (
-              <View
-                testID="test:id/inboxThreadsListEmptyMessage"
-                accessibilityLabel="inboxThreadsListEmptyMessage"
-                accessible={true}
-                style={styles.threadsEmpty}
-              >
-                <IconNoNotifications />
-                <Text
-                  testID="test:id/inboxThreadsListEmptyMessageText"
-                  accessibilityLabel="inboxThreadsListEmptyMessageText"
-                  accessible={true}
-                  style={styles.threadsEmptyText}
-                >
-                  {isUnreadOnly()
-                    ? i18n('You don’t have any unread notifications')
-                    : i18n('No notifications')}
-                </Text>
-              </View>
-            );
-          }
-
-          return null;
-        }}
+        ItemSeparatorComponent={renderSeparator}
+        ListFooterComponent={renderFooter}
         keyExtractor={(it: InboxThread) => it.id}
         onEndReachedThreshold={1}
         onEndReached={() => {
@@ -171,4 +175,4 @@ const InboxThreadsList = ({folderId, onNavigate, merger, onScroll}: Props): JSX.
   );
 };
 
-export default InboxThreadsList;
+export default React.memo(InboxThreadsList);
