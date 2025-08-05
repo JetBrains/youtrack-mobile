@@ -8,7 +8,9 @@ import {
   clearCachesAndDrafts,
   flushStoragePart,
   getStorageState,
-  InboxThreadsCache, StorageState,
+  InboxThreadsCache,
+  populateStorage,
+  StorageState,
 } from 'components/storage/storage';
 import {confirmation} from 'components/confirmation/confirmation';
 import {IconClose} from 'components/icon/icon';
@@ -21,26 +23,21 @@ type Props = {
 };
 
 interface State {
-  forceHandsetMode: boolean | null,
-  mergedNotifications: boolean | null,
-  notificationsSwipe: boolean | null,
+  forceHandsetMode: boolean | null;
+  mergedNotifications: boolean | null;
 }
 
 const FeaturesDebugSettings = (props: Props) => {
   const {onHide = () => Router.pop(true)} = props;
 
-  const getState = (): State => ({
-    forceHandsetMode,
-    mergedNotifications,
-    notificationsSwipe,
-  } = getStorageState());
+  const getState = (): State => {
+    const storageState = getStorageState();
+    return {forceHandsetMode: storageState.forceHandsetMode, mergedNotifications: storageState.mergedNotifications};
+  };
 
   const [featuresState, updateFeaturesState] = React.useState<State>(getState());
 
-  const toggleStorageValue = async (
-    name: 'forceHandsetMode' | 'mergedNotifications' | 'notificationsSwipe',
-    storageExtraData: Partial<StorageState> = {},
-  ) => {
+  const toggleStorageValue = async (name: keyof State, storageExtraData: Partial<StorageState> = {}) => {
     await flushStoragePart({
       [name]: !featuresState[name],
       ...storageExtraData,
@@ -63,22 +60,11 @@ const FeaturesDebugSettings = (props: Props) => {
         const inboxThreadsCache: InboxThreadsCache | null = getStorageState().inboxThreadsCache;
         await toggleStorageValue('mergedNotifications', {
           inboxThreadsCache: {
+            ...inboxThreadsCache,
             unreadOnly: !!inboxThreadsCache?.unreadOnly,
             lastVisited: inboxThreadsCache?.lastVisited || 0,
           },
         });
-      },
-    },
-    {
-      text: 'Enable swipes in notifications',
-      value: featuresState.notificationsSwipe,
-      onValueChange: async () => {
-        await flushStoragePart({
-          notificationsSwipe: !featuresState.notificationsSwipe,
-        });
-        updateFeaturesState(state => (
-          {...state, notificationsSwipe: !featuresState.notificationsSwipe})
-        );
       },
     },
   ];
@@ -88,17 +74,14 @@ const FeaturesDebugSettings = (props: Props) => {
     text,
     onValueChange,
   }: {
-    value: boolean,
-    text: string,
-    onValueChange: (value: boolean) => void,
+    value: boolean | null;
+    text: string;
+    onValueChange: (value: boolean) => Promise<void>;
   }) => {
     return (
-      <View style={styles.featuresListItem}>
+      <View style={styles.featuresListItem} key={text}>
         <Text style={styles.featuresListItemText}>{text}</Text>
-        <Switch
-          value={value}
-          onValueChange={onValueChange}
-        />
+        <Switch value={!!value} onValueChange={onValueChange} />
       </View>
     );
   };
@@ -108,12 +91,7 @@ const FeaturesDebugSettings = (props: Props) => {
       <View style={styles.container}>
         <Header
           showShadow={true}
-          leftButton={
-            <IconClose
-              color={styles.closeButton.color}
-              style={styles.closeButton}
-            />
-          }
+          leftButton={<IconClose color={styles.closeButton.color} style={styles.closeButton} />}
           onBack={onHide}
           title="Debug settings"
         />
@@ -123,13 +101,12 @@ const FeaturesDebugSettings = (props: Props) => {
           <View style={styles.featuresListItem}>
             <Pressable
               onPress={() => {
-                confirmation('Clear cached data?', 'Clear now').then(
-                  async () => {
-                    await clearCachesAndDrafts();
-                    notify('Storage cleared');
-                    updateFeaturesState(getState());
-                  },
-                );
+                confirmation('Clear cached data?', 'Clear now').then(async () => {
+                  await clearCachesAndDrafts();
+                  await populateStorage();
+                  notify('Storage cleared');
+                  updateFeaturesState(getState());
+                });
               }}
             >
               <Text style={styles.button}>Clear storage</Text>
