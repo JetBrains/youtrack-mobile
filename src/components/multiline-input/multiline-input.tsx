@@ -1,9 +1,10 @@
-import React, {PureComponent} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {TextInput} from 'react-native';
 
 import {isIOSPlatform} from 'util/util';
 import {UNIT} from 'components/variables';
 
+import type {NativeSyntheticEvent, TextInputContentSizeChangeEventData, TextInputProps} from 'react-native';
 import type {ViewStyleProp} from 'types/Internal';
 
 const iOSPlatform: boolean = isIOSPlatform();
@@ -18,81 +19,43 @@ type Props = {
   style?: ViewStyleProp | ViewStyleProp[];
 };
 
-type State = {
-  inputHeight: number | null | undefined;
-};
+const MultilineInput = (props: Props) => {
+  const {style, adaptive = true, maxInputHeight = MAX_DEFAULT_HEIGHT, autoFocus, ...rest} = props;
 
-export default class MultilineInput extends PureComponent<Props, State> {
-  input: TextInput | null = null;
+  const [inputHeight, setInputHeight] = useState<number | null>(null);
+  const inputRef = useRef<TextInput | null>(null);
+  const textInputProps: TextInputProps = {...rest};
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      inputHeight: null,
-    };
-  }
-
-  componentDidUpdate(prevProps: Props) {
-    if (!prevProps.autoFocus && this.props.autoFocus === true) {
-      this.focus();
+  useEffect(() => {
+    if (autoFocus === true) {
+      inputRef.current?.focus?.();
     }
-  }
+  }, [autoFocus]);
 
-  focus() {
-    this.input?.focus?.();
-  }
-
-  onContentSizeChange: (event: any) => void = (event: Record<string, any>) => {
-    const {maxInputHeight = MAX_DEFAULT_HEIGHT, adaptive = true} = this.props;
-
+  const onContentSizeChange = (event: NativeSyntheticEvent<TextInputContentSizeChangeEventData>) => {
     if (!adaptive) {
       return;
     }
-
     let newHeight = event.nativeEvent.contentSize.height + UNIT;
-
     if (maxInputHeight > 0) {
-      newHeight =
-        newHeight > maxInputHeight
-          ? maxInputHeight
-          : Math.max(newHeight, MIN_DEFAULT_HEIGHT);
+      newHeight = newHeight > maxInputHeight ? maxInputHeight : Math.max(newHeight, MIN_DEFAULT_HEIGHT);
     }
-
-    this.setState({
-      inputHeight: Math.ceil(newHeight),
-    });
-  };
-  inputRef = (instance: TextInput | null) => {
-    if (instance) {
-      this.input = instance;
-    }
+    setInputHeight(Math.ceil(newHeight));
   };
 
-  render() {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const {style, adaptive = true, maxInputHeight, ...rest} = this.props;
-    return (
-      <TextInput
-        {...rest}
-        returnKeyType={iOSPlatform ? 'default' : 'none'}
-        ref={this.inputRef}
-        testID="test:id/multiline-input"
-        accessibilityLabel="multiline-input"
-        accessible={true}
-        multiline={true}
-        onContentSizeChange={this.onContentSizeChange}
-        style={[
-          {
-            fontSize: DEFAULT_FONT_SIZE,
-          },
-          style,
-          adaptive
-            ? {
-                height: this.state.inputHeight,
-              }
-            : null,
-        ]}
-      />
-    );
-  }
-}
+  return (
+    <TextInput
+      {...textInputProps}
+      returnKeyType={iOSPlatform ? 'default' : 'none'}
+      ref={inputRef}
+      testID="test:id/multiline-input"
+      accessibilityLabel="multiline-input"
+      accessible={true}
+      multiline={true}
+      onContentSizeChange={onContentSizeChange}
+      style={[{fontSize: DEFAULT_FONT_SIZE}, style, adaptive ? {height: inputHeight} : null]}
+    />
+  );
+};
+
+export default React.memo(MultilineInput);
