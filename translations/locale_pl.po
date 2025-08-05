@@ -1166,10 +1166,6 @@ msgstr "Podsumowanie"
 msgid "Summary changed"
 msgstr "Zmieniono podsumowanie"
 
-#: src/views/settings/settings.tsx
-msgid "Swipe Actions in Notifications"
-msgstr ""
-
 #: src/views/settings/settings__appearance.tsx
 msgid "Sync with OS"
 msgstr "Synchronizuj z systemem operacyjnym"
