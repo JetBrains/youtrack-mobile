@@ -6,7 +6,7 @@ import {Provider} from 'react-redux';
 import mocks from 'test/mocks';
 
 import * as actions from './inbox-threads-actions';
-import Thread, {createThreadData} from './inbox-threads__thread';
+import Thread, {getThreadData} from './inbox-threads__thread';
 import {DEFAULT_THEME} from 'components/theme/theme';
 import InboxThreadItemSubscription from './inbox-threads__subscription';
 import InboxThreadReaction from './inbox-threads__reactions';
@@ -222,7 +222,7 @@ describe('Inbox Thread', () => {
         id: 'S-thread',
       });
 
-      expect(createThreadData(threadMock)).toEqual({
+      expect(getThreadData(threadMock)).toEqual({
         entity: threadMock.subject.target,
         component: InboxThreadItemSubscription,
         entityAtBottom: false,
@@ -234,7 +234,7 @@ describe('Inbox Thread', () => {
         id: 'R-thread',
       });
 
-      expect(createThreadData(threadMock)).toEqual({
+      expect(getThreadData(threadMock)).toEqual({
         entity: threadMock.subject.target,
         component: InboxThreadReaction,
         entityAtBottom: true,
@@ -246,7 +246,7 @@ describe('Inbox Thread', () => {
         id: 'M-thread',
       });
 
-      expect(createThreadData(threadMock)).toEqual({
+      expect(getThreadData(threadMock)).toEqual({
         entity: threadMock.subject.target,
         component: InboxThreadMention,
         entityAtBottom: true,

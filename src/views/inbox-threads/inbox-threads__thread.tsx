@@ -12,7 +12,7 @@ import InboxThreadReaction from './inbox-threads__reactions';
 import InboxThreadReadToggleButton from 'views/inbox-threads/inbox-threads__read-toggle-button';
 import {defaultActionsOptions} from 'components/action-sheet/action-sheet';
 import {getStorageState} from 'components/storage/storage';
-import {getThreadTypeData, ThreadTypeData} from 'views/inbox-threads/inbox-threads-helper';
+import {getThreadTypeData} from 'views/inbox-threads/inbox-threads-helper';
 import {hasType} from 'components/api/api__resource-types';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
@@ -89,21 +89,9 @@ function Thread({
     read: boolean,
     toggleThread: boolean = false,
   ) => {
-    const messagesMap = messages.reduce(
-      (map: Record<string, InboxThreadMessage>, m) => {
-        map[m.id] = {...m, read};
-        return map;
-      },
-      {},
-    );
     const updatedThread: InboxThread = {
       ..._thread,
-      messages: _thread.messages.reduce(
-        (list: InboxThreadMessage[], it: InboxThreadMessage) => list.concat(
-          messagesMap[it.id] ? messagesMap[it.id] : it
-        ),
-        [],
-      ),
+      messages: _thread.messages.map((it: InboxThreadMessage) => ({...it, read})),
     };
     updateThread(updatedThread);
     dispatch(readMessageToggle(messages, read));
@@ -113,7 +101,7 @@ function Thread({
     animation.layoutAnimation();
   };
 
-  const threadData: ThreadData = createThreadData(_thread, isMergedNotifications.current);
+  const threadData: ThreadData = getThreadData(_thread, isMergedNotifications.current);
   const ThreadComponent = threadData.component;
   const renderedEntity = (
     <InboxEntity
@@ -243,10 +231,10 @@ function Thread({
   }
 }
 
-function createThreadData(thread: InboxThread, mergedNotifications?: boolean): ThreadData {
+export function getThreadData(thread: InboxThread, mergedNotifications?: boolean): ThreadData {
   const target = thread.subject.target;
   const entity = target?.issue || target?.article || target;
-  const threadTypeData: ThreadTypeData = getThreadTypeData(thread);
+  const threadTypeData = getThreadTypeData(thread);
   const component = (
     threadTypeData.isReaction
       ? InboxThreadReaction
@@ -257,4 +245,3 @@ function createThreadData(thread: InboxThread, mergedNotifications?: boolean): T
 }
 
 export default Thread;
-export {createThreadData};
