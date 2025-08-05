@@ -1140,10 +1140,6 @@ msgstr "Summary"
 msgid "Summary changed"
 msgstr "Summary changed"
 
-#: src/views/settings/settings.tsx:117
-msgid "Swipe Actions in Notifications"
-msgstr "Swipe Actions in Notifications"
-
 #: src/views/settings/settings__appearance.tsx:34
 msgid "Sync with OS"
 msgstr "Sync with OS"
