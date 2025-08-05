@@ -42,7 +42,6 @@ type TipsState = Record<keyof typeof tipsKeys, boolean | null>
 export const featuresKeys = {
   forceHandsetMode: 'YT_HANDSET_MODE',
   mergedNotifications: 'YT_mergedNotifications',
-  notificationsSwipe: 'YT_notificationsSwipe',
 };
 type FeatureState = Record<keyof typeof featuresKeys, boolean | null>
 
@@ -153,7 +152,6 @@ export const initialTipsState: Readonly<TipsState> = {
 export const initialFeaturesState: Readonly<FeatureState> = {
   mergedNotifications: null,
   forceHandsetMode: null,
-  notificationsSwipe: true,
 };
 
 export const initialState: Readonly<StorageState> = {
@@ -279,7 +277,6 @@ export async function populateStorage(): Promise<StorageState> {
     },
     initialStateCopy,
   );
-  migrateNotificationsSwipe(storageState);
   log.info('Storage populated');
   await secureAccount(storageState);
   return storageState;
@@ -382,14 +379,6 @@ const clearStorage = async () => {
   await flushStorage(initialState);
   await AsyncStorage.multiRemove(Object.keys(storageKeys));
 };
-
-function migrateNotificationsSwipe(ss: StorageState): StorageState {
-  if (typeof ss.notificationsSwipe !== 'boolean') {
-    ss.notificationsSwipe = initialFeaturesState.notificationsSwipe;
-  }
-  return ss;
-}
-
 
 // For tests only!
 export async function __setStorageState(state: StorageState | Partial<StorageState>) {
