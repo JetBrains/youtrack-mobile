@@ -36,7 +36,7 @@ const ArticleItemWithChildren = (props: Props) => {
           {article.summary || i18n('Untitled')}
         </Text>
         <View style={styles.itemArticleIcon}>
-          {hasType.visibilityLimited(article?.visibility) && (
+          {article?.visibility?.$type && hasType.visibilityLimited({$type: article.visibility.$type}) && (
             <IconLock
               style={styles.lockIcon}
               size={16}
