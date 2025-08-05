@@ -76,6 +76,6 @@ hasType.userGroup = hasType(ResourceTypes.USER_GROUP);
 hasType.visibilityLimited = hasType(ResourceTypes.VISIBILITY_LIMITED);
 hasType.work = hasType(ResourceTypes.WORK_ITEM);
 
-export function getShortEntityType(type: string): string {
-  return type.split('.').pop();
+export function getShortEntityType(type: string) {
+  return type.split('.').pop() || '';
 }
