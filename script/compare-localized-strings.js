@@ -20,7 +20,7 @@ function check() {
   );
 
   if (prevLength > newLength) {
-    throw new Error('Localization: UI string was deleted!');
+    throw new Error('Localization: UI string was deleted! If this is intentional, please update the *.json files accordingly and commit them.');
   }
 }
 
