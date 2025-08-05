@@ -45,14 +45,6 @@ export const ResourceTypes = {
     'jetbrains.charisma.persistent.visibility.UnlimitedVisibility',
   WORK_ITEM: 'jetbrains.youtrack.timetracking.gaprest.IssueWorkItem',
 };
-type HasMethodName =
-  | 'comment'
-  | 'user'
-  | 'userGroup'
-  | 'project'
-  | 'savedSearch'
-  | 'tag'
-  | 'agile';
 
 interface Entity {
   $type: string;
@@ -83,17 +75,7 @@ hasType.user = hasType(ResourceTypes.USER);
 hasType.userGroup = hasType(ResourceTypes.USER_GROUP);
 hasType.visibilityLimited = hasType(ResourceTypes.VISIBILITY_LIMITED);
 hasType.work = hasType(ResourceTypes.WORK_ITEM);
-export function filterArrayByType(
-  array: Entity[],
-  methodName: HasMethodName,
-): Entity[] {
-  return (array || []).filter(
-    (it: Entity) => hasType[methodName] && hasType[methodName](it),
-  );
-}
-export const addTypes = function (type: string): string[] {
-  return [].concat(type).concat(getShortEntityType(type));
-};
+
 export function getShortEntityType(type: string): string {
   return type.split('.').pop();
 }
