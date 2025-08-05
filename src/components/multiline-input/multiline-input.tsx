@@ -24,7 +24,19 @@ const MultilineInput = (props: Props) => {
 
   const [inputHeight, setInputHeight] = useState<number | null>(null);
   const inputRef = useRef<TextInput | null>(null);
+  const [selection, setSelection] = React.useState(!iOSPlatform ? {start: 0, end: 0} : undefined);
+  const isFirstFocus = React.useRef(true);
   const textInputProps: TextInputProps = {...rest};
+
+  if (!iOSPlatform) {
+    textInputProps.onFocus = () => {
+      if (isFirstFocus.current) {
+        isFirstFocus.current = false;
+        setSelection({start: 0, end: 0});
+      }
+      setSelection(undefined);
+    };
+  }
 
   useEffect(() => {
     if (autoFocus === true) {
@@ -52,6 +64,7 @@ const MultilineInput = (props: Props) => {
       accessibilityLabel="multiline-input"
       accessible={true}
       multiline={true}
+      selection={selection}
       onContentSizeChange={onContentSizeChange}
       style={[{fontSize: DEFAULT_FONT_SIZE}, style, adaptive ? {height: inputHeight} : null]}
     />
