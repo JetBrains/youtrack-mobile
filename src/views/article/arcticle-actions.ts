@@ -38,6 +38,7 @@ import type {CustomError} from 'types/Error';
 import type {ProjectTeam} from 'types/Project';
 import type {Reaction} from 'types/Reaction';
 import type {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
+import type {ShareContent} from 'react-native/Libraries/Share/Share';
 import type {ShowActionSheetWithOptions} from 'components/action-sheet/action-sheet';
 import type {UserMentions} from 'types/User';
 
@@ -575,10 +576,8 @@ const showArticleCommentActions = (
       {
         title: i18n('Share…'),
         execute: function (): string {
-          const params: Record<string, any> = {};
-          const isIOS: boolean = isIOSPlatform();
-
-          if (isIOS) {
+          const params = {} as ShareContent;
+          if (isIOSPlatform()) {
             params.url = url;
           } else {
             params.title = commentText;
@@ -798,10 +797,9 @@ function onReactionSelect(
     if (error) {
       notifyError(error);
     } else {
-      const targetActivityData:
-        | ActivityPositionData
-        | null
-        | undefined = findActivityInGroupedActivities(activities, comment.id);
+      const targetActivityData: ActivityPositionData | null = activities
+        ? findActivityInGroupedActivities(activities, comment.id)
+        : null;
 
       if (targetActivityData) {
         const _comment = updateActivityCommentReactions({
@@ -811,8 +809,7 @@ function onReactionSelect(
         });
 
         const newActivities: Activity[] = activities.slice(0);
-        const targetActivity: Activity | null | undefined =
-          newActivities[targetActivityData.index];
+        const targetActivity: Activity | null | undefined = newActivities[targetActivityData.index];
 
         if (targetActivity && Array.isArray(targetActivity?.comment?.added)) {
           targetActivity.comment.added = [_comment];

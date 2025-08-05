@@ -7,7 +7,7 @@ import {routeMap} from 'app-routes';
 
 import type {Activity} from 'types/Activity';
 import type {Article, ArticlesList} from 'types/Article';
-import type {CustomError} from 'types/Error';
+import type {AnyError} from 'types/Error';
 import type {IssueComment} from 'types/CustomFields';
 import type {ProjectTeam} from 'types/Project';
 
@@ -16,7 +16,7 @@ export type ArticleState = {
   article: Article | null;
   articleCommentDraft: IssueComment | null;
   articlesList: ArticlesList;
-  error: CustomError | null;
+  error: AnyError | null;
   isLoading: boolean;
   isProcessing: boolean;
   issuePermissions: IssuePermissions;
@@ -46,17 +46,18 @@ const {reducer, actions} = createSlice({
       state.isProcessing = action.payload;
     },
 
-    setError(state: ArticleState, action: PayloadAction<CustomError>) {
+    setError(state: ArticleState, action: PayloadAction<AnyError>) {
       state.error = action.payload;
     },
 
     setArticle(state: ArticleState, action: PayloadAction<Article | null>) {
       state.article = action.payload;
+      return state;
     },
 
     setActivityPage(
       state: ArticleState,
-      action: PayloadAction<Activity[]>,
+      action: PayloadAction<Activity[] | null>,
     ) {
       state.activityPage = action.payload;
     },
@@ -67,7 +68,7 @@ const {reducer, actions} = createSlice({
 
     setArticleCommentDraft(
       state: ArticleState,
-      action: PayloadAction<IssueComment>,
+      action: PayloadAction<IssueComment | null>,
     ) {
       state.articleCommentDraft = action.payload;
     },
