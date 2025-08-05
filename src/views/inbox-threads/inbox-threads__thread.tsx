@@ -28,7 +28,8 @@ import {swipeDirection} from 'components/swipeable';
 import styles from './inbox-threads.styles';
 
 import type {AppState} from 'reducers';
-import type {InboxThread, InboxThreadMessage, ThreadData} from 'types/Inbox';
+import type {Entity} from 'types/Entity';
+import type {InboxThread, InboxThreadMessage, InboxThreadTarget, ThreadData} from 'types/Inbox';
 import type {ReduxThunkDispatch} from 'types/Redux';
 import type {UITheme} from 'types/Theme';
 import type {User} from 'types/User';
@@ -37,10 +38,10 @@ import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   currentUser: User;
   onNavigate: (
-    entity: any,
+    entity: Entity | InboxThreadTarget,
     navigateToActivity?: string,
     commentId?: string,
-  ) => any;
+  ) => void;
   thread: InboxThread;
   uiTheme: UITheme;
   showSwipeHint: boolean;
@@ -218,10 +219,12 @@ function Thread({
               {
                 ...defaultActionsOptions(uiTheme),
                 options: options.map(action => action.title),
-                title: `${threadData.entity?.idReadable} ${threadData.entity?.summary}`,
+                title: `${threadData.entity?.idReadable}${
+                  threadData.entity && 'summary' in threadData.entity ? ` ${threadData.entity.summary}` : ''
+                }`,
                 cancelButtonIndex: options.length - 1,
               },
-              (index?: number) => options[(index as number)]?.execute?.(),
+              (index?: number) => options[index as number]?.execute?.(),
             );
           }}
           style={styles.threadTitleAction}
@@ -235,25 +238,16 @@ function Thread({
 }
 
 function createThreadData(thread: InboxThread, mergedNotifications?: boolean): ThreadData {
-  const threadData: ThreadData = {
-    entity: null,
-    component: null,
-    entityAtBottom: false,
-  };
-
-  if (thread.id) {
-    const target = thread.subject.target;
-    threadData.entity = target?.issue || target?.article || target;
-    const threadTypeData: ThreadTypeData = getThreadTypeData(thread);
-    threadData.component = (
-      threadTypeData.isReaction
-        ? InboxThreadReaction
-        : threadTypeData.isMention ? InboxThreadMention : InboxThreadItemSubscription
-    );
-    threadData.entityAtBottom = mergedNotifications ? false : threadTypeData.isReaction || threadTypeData.isMention;
-  }
-
-  return threadData;
+  const target = thread.subject.target;
+  const entity = target?.issue || target?.article || target;
+  const threadTypeData: ThreadTypeData = getThreadTypeData(thread);
+  const component = (
+    threadTypeData.isReaction
+      ? InboxThreadReaction
+      : threadTypeData.isMention ? InboxThreadMention : InboxThreadItemSubscription
+  );
+  const entityAtBottom = mergedNotifications ? false : threadTypeData.isReaction || threadTypeData.isMention;
+  return {entity, component, entityAtBottom};
 }
 
 export default Thread;
