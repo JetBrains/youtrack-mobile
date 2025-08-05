@@ -1,7 +1,6 @@
 import type {Activity} from './Activity';
 import type {AnyIssue, IssueOnListExtended} from './Issue';
 import type {Article} from './Article';
-import type {Entity} from 'types/Entity';
 import type {User} from './User';
 
 type ChangeCategory =
@@ -129,11 +128,6 @@ export interface InboxThreadGroup {
   };
   work?: Activity;
 }
-export type ThreadData = {
-  entity: Entity | InboxThreadTarget;
-  component: any;
-  entityAtBottom?: boolean;
-};
 export interface InboxFolder {
   id: string;
   lastNotified: number;

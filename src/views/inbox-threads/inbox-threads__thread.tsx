@@ -29,13 +29,19 @@ import styles from './inbox-threads.styles';
 
 import type {AppState} from 'reducers';
 import type {Entity} from 'types/Entity';
-import type {InboxThread, InboxThreadMessage, InboxThreadTarget, ThreadData} from 'types/Inbox';
+import type {InboxThread, InboxThreadMessage, InboxThreadTarget} from 'types/Inbox';
 import type {ReduxThunkDispatch} from 'types/Redux';
 import type {UITheme} from 'types/Theme';
 import type {User} from 'types/User';
 import type {ViewStyleProp} from 'types/Internal';
 
-type Props = {
+type ThreadData = {
+  entity: Entity | InboxThreadTarget;
+  component: React.ElementType;
+  entityAtBottom?: boolean;
+};
+
+interface Props {
   currentUser: User;
   onNavigate: (
     entity: Entity | InboxThreadTarget,
@@ -47,7 +53,7 @@ type Props = {
   showSwipeHint: boolean;
   style?: ViewStyleProp[] | ViewStyleProp,
   onAfterHintShow: () => void,
-};
+}
 
 function Thread({
   thread,
@@ -64,7 +70,7 @@ function Thread({
 
   const dispatch: ReduxThunkDispatch = useDispatch();
 
-  const [_thread, updateThread] = useState(thread);
+  const [_thread, updateThread] = useState<InboxThread>(thread);
 
   const isThreadUnread = _thread.messages.some(it => it.read === false);
   const actionTextBase = [i18n('Mark as unread'), i18n('Mark as read')];
@@ -83,11 +89,11 @@ function Thread({
     read: boolean,
     toggleThread: boolean = false,
   ) => {
-    const messagesMap: Record<string, InboxThreadMessage> = messages.reduce(
-      (map: Record<string, InboxThreadMessage>, it: InboxThreadMessage) => ({
-        ...map,
-        [it.id]: {...it, read},
-      }),
+    const messagesMap = messages.reduce(
+      (map: Record<string, InboxThreadMessage>, m) => {
+        map[m.id] = {...m, read};
+        return map;
+      },
       {},
     );
     const updatedThread: InboxThread = {
@@ -108,7 +114,7 @@ function Thread({
   };
 
   const threadData: ThreadData = createThreadData(_thread, isMergedNotifications.current);
-  const ThreadComponent: any = threadData.component;
+  const ThreadComponent = threadData.component;
   const renderedEntity = (
     <InboxEntity
       testID="test:id/inboxEntity"
