@@ -247,7 +247,7 @@ msgstr "抄送"
 msgid "Clear the current search context"
 msgstr "清除当前搜索上下文"
 
-#: src/components/debug-view/debug-view.tsx
+#: src/components/logs-view/logs-view.tsx
 #: src/components/popup/popup.tsx
 msgid "Close"
 msgstr "关闭"
@@ -716,11 +716,9 @@ msgid "Mark all as read"
 msgstr "全部标记为已读"
 
 #: src/views/inbox-threads/inbox-threads__thread.tsx
-#: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mark as read"
 msgstr "标记为已读"
 
-#: src/views/inbox-threads/inbox-threads__thread.tsx
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mark as unread"
 msgstr "标记为未读"
@@ -1036,7 +1034,7 @@ msgstr "设置日期和时间"
 msgid "Settings"
 msgstr "设置"
 
-#: src/components/debug-view/debug-view.tsx
+#: src/components/logs-view/logs-view.tsx
 msgid "Share"
 msgstr "共享"
 

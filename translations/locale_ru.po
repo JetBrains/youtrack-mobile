@@ -271,7 +271,7 @@ msgstr "Копии"
 msgid "Clear the current search context"
 msgstr "Очистите текущую область поиска"
 
-#: src/components/debug-view/debug-view.tsx
+#: src/components/logs-view/logs-view.tsx
 #: src/components/popup/popup.tsx
 msgid "Close"
 msgstr "Закрыть"
@@ -740,11 +740,9 @@ msgid "Mark all as read"
 msgstr "Отметить все как прочитанные"
 
 #: src/views/inbox-threads/inbox-threads__thread.tsx
-#: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mark as read"
 msgstr "Отметить как прочитанное"
 
-#: src/views/inbox-threads/inbox-threads__thread.tsx
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mark as unread"
 msgstr "Отметить как непрочитанное"
@@ -1066,7 +1064,7 @@ msgstr "Указать дату и время"
 msgid "Settings"
 msgstr "Настройки"
 
-#: src/components/debug-view/debug-view.tsx
+#: src/components/logs-view/logs-view.tsx
 msgid "Share"
 msgstr "Поделиться"
 

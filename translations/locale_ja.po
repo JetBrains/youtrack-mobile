@@ -247,7 +247,7 @@ msgstr "CC"
 msgid "Clear the current search context"
 msgstr "現在の検索範囲をクリア"
 
-#: src/components/debug-view/debug-view.tsx
+#: src/components/logs-view/logs-view.tsx
 #: src/components/popup/popup.tsx
 msgid "Close"
 msgstr "閉じる"
@@ -716,11 +716,9 @@ msgid "Mark all as read"
 msgstr "すべて既読にする"
 
 #: src/views/inbox-threads/inbox-threads__thread.tsx
-#: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mark as read"
 msgstr "既読にする"
 
-#: src/views/inbox-threads/inbox-threads__thread.tsx
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mark as unread"
 msgstr "未読にする"
@@ -1036,7 +1034,7 @@ msgstr "日時の設定"
 msgid "Settings"
 msgstr "設定"
 
-#: src/components/debug-view/debug-view.tsx
+#: src/components/logs-view/logs-view.tsx
 msgid "Share"
 msgstr "共有"
 

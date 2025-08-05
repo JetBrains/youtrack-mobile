@@ -247,7 +247,7 @@ msgstr "참조"
 msgid "Clear the current search context"
 msgstr "현재 검색 컨텍스트 지우기"
 
-#: src/components/debug-view/debug-view.tsx
+#: src/components/logs-view/logs-view.tsx
 #: src/components/popup/popup.tsx
 msgid "Close"
 msgstr "닫기"
@@ -716,11 +716,9 @@ msgid "Mark all as read"
 msgstr "모두 읽음으로 표시"
 
 #: src/views/inbox-threads/inbox-threads__thread.tsx
-#: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mark as read"
 msgstr "읽음으로 표시"
 
-#: src/views/inbox-threads/inbox-threads__thread.tsx
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mark as unread"
 msgstr "읽지 않음으로 표시"
@@ -1036,7 +1034,7 @@ msgstr "날짜 및 시간 설정"
 msgid "Settings"
 msgstr "설정"
 
-#: src/components/debug-view/debug-view.tsx
+#: src/components/logs-view/logs-view.tsx
 msgid "Share"
 msgstr "공유"
 

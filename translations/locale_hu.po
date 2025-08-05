@@ -255,7 +255,7 @@ msgstr ""
 msgid "Clear the current search context"
 msgstr "Az aktuális keresési kontextus törlése"
 
-#: src/components/debug-view/debug-view.tsx
+#: src/components/logs-view/logs-view.tsx
 #: src/components/popup/popup.tsx
 msgid "Close"
 msgstr "Bezár"
@@ -724,11 +724,9 @@ msgid "Mark all as read"
 msgstr "Az összes megjelölése olvasottként"
 
 #: src/views/inbox-threads/inbox-threads__thread.tsx
-#: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mark as read"
 msgstr "Megjelölés olvasottként"
 
-#: src/views/inbox-threads/inbox-threads__thread.tsx
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mark as unread"
 msgstr "Megjelölés olvasatlanként"
@@ -1046,7 +1044,7 @@ msgstr ""
 msgid "Settings"
 msgstr "Beállítások"
 
-#: src/components/debug-view/debug-view.tsx
+#: src/components/logs-view/logs-view.tsx
 msgid "Share"
 msgstr "Megosztás"
 

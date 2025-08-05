@@ -271,7 +271,7 @@ msgstr "Kopie DW"
 msgid "Clear the current search context"
 msgstr "Wyczyść bieżący kontekst wyszukiwania"
 
-#: src/components/debug-view/debug-view.tsx
+#: src/components/logs-view/logs-view.tsx
 #: src/components/popup/popup.tsx
 msgid "Close"
 msgstr "Zamknij"
@@ -740,11 +740,9 @@ msgid "Mark all as read"
 msgstr "Oznacz wszystkie jako przeczytane"
 
 #: src/views/inbox-threads/inbox-threads__thread.tsx
-#: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mark as read"
 msgstr "Oznacz jako przeczytane"
 
-#: src/views/inbox-threads/inbox-threads__thread.tsx
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mark as unread"
 msgstr "Oznacz jako nieprzeczytane"
@@ -1066,7 +1064,7 @@ msgstr "Ustaw datę i godzinę"
 msgid "Settings"
 msgstr "Ustawienia"
 
-#: src/components/debug-view/debug-view.tsx
+#: src/components/logs-view/logs-view.tsx
 msgid "Share"
 msgstr "Udostępnij"
 
