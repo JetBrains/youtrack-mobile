@@ -154,16 +154,14 @@ export const removeDuplicatesFromArray = (A: any[]): any[] => {
   });
 };
 
-export const arrayToMap = (
-  items: any[],
-  keyName: string | null,
-  lowerCaseKey: boolean = false,
-): Record<string, any> => {
-  const key: string = keyName != null ? keyName : 'id';
-  return items.reduce(
-    (map, item) => ({...map, [lowerCaseKey ? item[key].toLowerCase() : item[key]]: item}),
-    {}
-  );
+export const arrayToMap = <T,>(
+  items: T[],
+  keyName?: string,
+) => {
+  return items.reduce((map: Record<string, T>, i) => {
+    map[keyName ?? 'id'] = i;
+    return map;
+  }, {});
 };
 
 export const mapToArray = (map: Record<string, any>): any[] => Object.keys(map).map(function (id) {
