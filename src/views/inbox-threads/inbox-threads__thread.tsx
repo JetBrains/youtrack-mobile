@@ -58,13 +58,16 @@ function Thread({
   onAfterHintShow,
 }: Props) {
   const isMergedNotifications: React.MutableRefObject<boolean> = React.useRef(!!getStorageState().mergedNotifications);
-  const isSwipeEnabled: React.MutableRefObject<boolean> = React.useRef(!!getStorageState().notificationsSwipe);
   const {showActionSheetWithOptions} = useActionSheet();
   const isOnline: boolean = useSelector((state: AppState) => !!state.app.networkState?.isConnected);
 
   const dispatch: ReduxThunkDispatch = useDispatch();
 
   const [_thread, updateThread] = useState(thread);
+
+  const isThreadUnread = _thread.messages.some(it => it.read === false);
+  const actionTextBase = [i18n('Mark as unread'), i18n('Mark as read')];
+  const actionText = isThreadUnread ? actionTextBase.reverse() : actionTextBase;
 
   useEffect(() => {
     updateThread(thread);
@@ -133,12 +136,11 @@ function Thread({
         }}
       />
       {threadData.entityAtBottom && (
-        <View style={styles.threadTitleContainer}>{renderedEntity}</View>
+        <View style={styles.threadTitleContainerBottom}>{renderedEntity}</View>
       )}
     </>
   );
 
-  const hasUnreadMessage = _thread.messages.some(it => it.read === false);
   return (
     <View
       testID="test:id/inboxThreadsListThread"
@@ -165,27 +167,18 @@ function Thread({
         />
       )}
 
-      {(!isMergedNotifications.current && !isSwipeEnabled.current) && renderedComponent}
-
-      {isSwipeEnabled.current && (
-        (() => {
-          const actionText: [string, string] = [i18n('Mark as read'), i18n('Mark as unread')];
-          return (
-            <SwipeableRowWithHint
-              enabled={hasMarkReadField}
-              direction={swipeDirection.left}
-              actionText={actionText}
-              onSwipe={() => doToggleMessagesRead(_thread.messages, hasUnreadMessage)}
-              showHint={showSwipeHint}
-              hintDistance={150}
-              hintDirection={swipeDirection.left}
-              onAfterHintShow={onAfterHintShow}
-            >
-              <View style={styles.threadContainer}>{renderedComponent}</View>
-            </SwipeableRowWithHint>
-          );
-        })()
-      )}
+      <SwipeableRowWithHint
+        enabled={hasMarkReadField}
+        direction={swipeDirection.left}
+        actionText={actionText}
+        onSwipe={() => doToggleMessagesRead(_thread.messages, isThreadUnread)}
+        showHint={showSwipeHint}
+        hintDistance={150}
+        hintDirection={swipeDirection.left}
+        onAfterHintShow={onAfterHintShow}
+      >
+        <View style={styles.threadContainer}>{renderedComponent}</View>
+      </SwipeableRowWithHint>
     </View>
   );
 
@@ -204,9 +197,9 @@ function Thread({
         },
       },
       {
-        title: hasUnreadMessage ? i18n('Mark as read') : i18n('Mark as unread'),
+        title: actionText[0],
         execute: () =>
-          doToggleMessagesRead(_thread.messages, hasUnreadMessage, true),
+          doToggleMessagesRead(_thread.messages, isThreadUnread, true),
       },
       {
         title: i18n('Cancel'),

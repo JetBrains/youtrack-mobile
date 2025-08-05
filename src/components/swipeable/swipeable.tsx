@@ -14,7 +14,7 @@ import type {Interpolation} from './use-swipeable';
 
 interface SwipeableSingleDirectionRowProps extends BaseSwipeableProps, React.PropsWithChildren {
   direction?: SwipeDirection;
-  actionText: [string, string];
+  actionText: string[];
   actionColor?: [ActionColor | null, ActionColor | null];
   onSwipe?: (isFirstSwipe: boolean) => void;
   onRightSwipe?: () => void;

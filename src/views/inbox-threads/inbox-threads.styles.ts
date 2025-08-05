@@ -77,6 +77,10 @@ export default EStyleSheet.create({
     paddingLeft: UNIT * 2,
     alignItems: 'baseline',
   },
+  threadTitleContainerBottom: {
+    paddingLeft: UNIT / 4,
+    alignItems: 'baseline',
+  },
   threadTitleContent: {
     width: '100%',
     flexDirection: 'row',
