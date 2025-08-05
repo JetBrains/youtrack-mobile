@@ -58,7 +58,6 @@ describe('Storage', () => {
         'YT_dismissNotificationSwipe',
         'YT_mergedNotifications',
         'YT_HANDSET_MODE',
-        'YT_notificationsSwipe',
         'YT_ARTICLES',
         'YT_ARTICLES_LIST',
         'YT_ARTICLES_QUERY',

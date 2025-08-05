@@ -30,7 +30,7 @@ import {
 import {getCachedPermissions, storeYTCurrentUser, targetAccountToSwitchTo} from './app-actions-helper';
 import {getErrorMessage} from 'components/error/error-resolver';
 import {getStoredSecurelyAuthParams} from 'components/storage/storage__oauth';
-import {flushStoragePart, getStorageState} from 'components/storage/storage';
+import {getStorageState} from 'components/storage/storage';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
 import {isAndroidPlatform, isIOSPlatform, until} from 'util/util';
@@ -975,7 +975,6 @@ export function initializeApp(
     }
 
     await dispatch(migrateToIssuesFilterSearch());
-    await migrateToSwipeActionsInSettings();
     await createAPIInstance();
 
     let isRedirected: boolean = false;
@@ -1321,12 +1320,6 @@ const setHelpdeskMenuVisibility = (hidden: boolean): ReduxAction => {
     });
   };
 };
-
-async function migrateToSwipeActionsInSettings() {
-  if (getStorageState().notificationsSwipe === null) {
-    await flushStoragePart({notificationsSwipe: true});
-  }
-}
 
 export {
   addMentionToDraftComment,

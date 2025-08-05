@@ -258,7 +258,7 @@ export async function populateStorage(): Promise<StorageState> {
   const PAIR_KEY = 0;
   const PAIR_VALUE = 1;
   const pairs = await AsyncStorage.multiGet(
-    (Object.values(storageKeys) as any) as Array<string>,
+    Object.values(storageKeys) as Array<string>,
   );
   const values = pairs.reduce((acc, pair) => {
     acc[pair[PAIR_KEY]] = pair[PAIR_VALUE];
@@ -279,6 +279,7 @@ export async function populateStorage(): Promise<StorageState> {
     },
     initialStateCopy,
   );
+  migrateNotificationsSwipe(storageState);
   log.info('Storage populated');
   await secureAccount(storageState);
   return storageState;
@@ -381,6 +382,13 @@ const clearStorage = async () => {
   await flushStorage(initialState);
   await AsyncStorage.multiRemove(Object.keys(storageKeys));
 };
+
+function migrateNotificationsSwipe(ss: StorageState): StorageState {
+  if (typeof ss.notificationsSwipe !== 'boolean') {
+    ss.notificationsSwipe = initialFeaturesState.notificationsSwipe;
+  }
+  return ss;
+}
 
 
 // For tests only!
