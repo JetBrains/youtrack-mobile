@@ -237,7 +237,7 @@ const loadInboxThreads = (
 ): ReduxAction => {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     const reset: boolean = typeof end !== 'number';
-    const folderKey: string = folderId || folderIdAllKey;
+    const folderKey: ThreadsStateFilterId = folderId || folderIdAllKey;
 
     if (reset) {
       usage.trackEvent(ANALYTICS_NOTIFICATIONS_THREADS_PAGE, 'Load inbox threads');
@@ -277,7 +277,7 @@ const loadInboxThreads = (
   };
 };
 
-const muteToggle = (id: string, muted: boolean): ReduxAction => {
+const muteToggle = (id: string, muted: boolean): ReduxAction<Promise<boolean>> => {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     trackEvent('mute thread', {
       muted,

@@ -8,11 +8,12 @@ import styles from './inbox.styles';
 
 import type {AnyIssue} from 'types/Issue';
 import type {Article} from 'types/Article';
+import type {InboxThreadTarget} from 'types/Inbox';
 import type {TextStyleProp} from 'types/Internal';
 import type {TouchableWithoutFeedbackProps} from 'react-native';
 
 interface Props extends TouchableWithoutFeedbackProps {
-  entity: AnyIssue | Article;
+  entity: AnyIssue | Article | InboxThreadTarget;
   onNavigate: () => void;
   styleText?: TextStyleProp;
 }
