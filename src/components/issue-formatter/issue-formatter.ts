@@ -1,7 +1,6 @@
 import {isSLAField} from 'components/custom-field/custom-field-helper';
 
-import type {AnyIssue, IssueFull, IssueOnListExtended, IssueOnListField} from 'types/Issue';
-import type {Article} from 'types/Article';
+import type {AnyIssue, IssueOnListExtended, IssueOnListField} from 'types/Issue';
 import type {CustomField, CustomFieldBase} from 'types/CustomFields';
 
 function findIssueField(
@@ -38,8 +37,8 @@ function getAssigneeField(issue: AnyIssue) {
   });
 }
 
-function getReadableID(entity: IssueOnListExtended | AnyIssue | Article) {
-  return (!!entity && entity?.idReadable) || '';
+function getReadableID(entity?: {idReadable?: string}): string {
+  return entity?.idReadable || '';
 }
 
 function getEntityPresentation<T extends {[key: string]: any}>(entity?: T) {
