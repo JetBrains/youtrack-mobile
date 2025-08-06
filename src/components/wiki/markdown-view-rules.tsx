@@ -11,6 +11,7 @@ import renderRules from 'react-native-markdown-display/src/lib/renderRules';
 import UrlParse from 'url-parse';
 
 import HTML from './markdown/markdown-html';
+import FileMedia from 'components/attach-file/file-media';
 import MarkdownHyperLink from 'components/wiki/markdown/markdown-hyper-link';
 import {hasMimeType} from 'components/mime-type/mime-type';
 import {IconCheckboxBlank, IconCheckboxChecked} from 'components/icon/icon';
@@ -37,6 +38,7 @@ export type Mentions = {
 };
 const imageRegExp: RegExp = /<img [^>]*src=(["“'])[^"]*(["”'])[^>]*>/i;
 const htmlTagRegex = /(<([^>]+)>)/gi;
+const mp4Regex = /\.mp4$/i;
 
 const googleCalendarURL: RegExp = /^http(s?):\/\/calendar.google.([a-z]{2,})\/calendar/i;
 const googleDocsURL: RegExp = /^http(s?):\/\/docs.google.([a-z]{2,})\/document/i;
@@ -91,6 +93,10 @@ function getMarkdownRules(
             style={[inheritedStyles, textStyle, style.text]}
           />
         );
+      }
+
+      if (mp4Regex.test(src)) {
+        return <FileMedia file={{url}} />;
       }
 
       return <MarkdownEmbedLink

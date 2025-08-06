@@ -3,10 +3,21 @@ import {Dimensions, ScaledSize} from 'react-native';
 
 import Video from 'react-native-video';
 
-import {NormalizedAttachment} from 'types/Attachment';
 import {ImageDimensions} from 'types/CustomFields';
 
-const FileMedia = ({file, size}: {file: NormalizedAttachment, size?: ImageDimensions;}) => {
+const FileMedia = ({
+  file,
+  size,
+}: {
+  file: {
+    url: string;
+    dimensions?: {
+      width: number;
+      height: number;
+    };
+  };
+  size?: ImageDimensions;
+}) => {
   let dimensions;
   if (size) {
     dimensions = size;
