@@ -80,3 +80,7 @@ jest.mock('@react-native-firebase/analytics', () => ({
   }),
 }));
 
+jest.mock('react-native-haptic-feedback', () => ({
+  HapticFeedbackTypes: {},
+  trigger: jest.fn(),
+}));

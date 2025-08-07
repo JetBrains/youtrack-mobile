@@ -83,6 +83,7 @@
     "react-native-extended-stylesheet": "0.12.0",
     "react-native-fast-image": "8.6.3",
     "react-native-gesture-handler": "2.24.0",
+    "react-native-haptic-feedback": "2.3.3",
     "react-native-htmlview": "0.16.0",
     "react-native-image-crop-picker": "0.50.1",
     "react-native-image-gallery": "2.1.5",

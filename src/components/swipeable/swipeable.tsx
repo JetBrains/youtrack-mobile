@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import {View} from 'react-native';
+import {HapticFeedbackTypes, trigger} from 'react-native-haptic-feedback';
 
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {SwipeableWithHint} from './swipeable-with-hint';
@@ -46,6 +47,9 @@ function SwipeableRow({
       leftThreshold={props.leftThreshold}
       rightThreshold={props.rightThreshold}
       animationOptions={props.animationOptions}
+      onSwipeableWillOpen={() => {
+        trigger(HapticFeedbackTypes.impactMedium);
+      }}
       onSwipeableOpen={(d: SwipeDirection) => {
         if (!direction && onRightSwipe && onLeftSwipe) {
           if (d === swipeDirection.left) {

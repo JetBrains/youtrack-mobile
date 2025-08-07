@@ -1,6 +1,8 @@
 import React from 'react';
 import {TouchableOpacity} from 'react-native';
 
+import {HapticFeedbackTypes, trigger} from 'react-native-haptic-feedback';
+
 import {IconCircle, IconCircleOutline} from 'components/icon/icon';
 import {useSelector} from 'react-redux';
 
@@ -32,6 +34,7 @@ export default function InboxThreadReadToggleButton({
       accessible={true}
       style={[styles.threadItemAction, style]}
       onPress={() => {
+        trigger(HapticFeedbackTypes.impactMedium);
         onReadChange(messages, !messages[0].read);
       }}
     >
