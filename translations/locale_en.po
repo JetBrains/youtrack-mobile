@@ -228,7 +228,7 @@ msgstr "Camera"
 #: src/views/article/arcticle-actions.ts:625
 #: src/views/create-issue/create-issue-actions.ts:368
 #: src/views/inbox-threads/inbox-threads__thread.tsx:200
-#: src/views/inbox-threads/inbox-threads.tsx:278
+#: src/views/inbox-threads/inbox-threads.tsx:279
 #: src/views/issue/issue-base-actions-creater.ts:597
 #: src/views/issue/issue-base-actions-creater.ts:629
 #: src/views/knowledge-base/knowledge-base-actions.ts:446
@@ -584,7 +584,7 @@ msgstr "Filters"
 msgid "Find favorite projects"
 msgstr "Find favorite projects"
 
-#: src/views/issues/issues.tsx:559
+#: src/views/issues/issues.tsx:562
 msgid "Find issues that contain key words"
 msgstr "Find issues that contain key words"
 
@@ -713,7 +713,7 @@ msgstr "Logs"
 msgid "Manage Favorite Projects"
 msgstr "Manage Favorite Projects"
 
-#: src/views/inbox-threads/inbox-threads.tsx:262
+#: src/views/inbox-threads/inbox-threads.tsx:263
 msgid "Mark all as read"
 msgstr "Mark all as read"
 
@@ -802,7 +802,7 @@ msgstr "No drafts yet"
 msgid "No favorites projects found"
 msgstr "No favorites projects found"
 
-#: src/views/issues/issues.tsx:609
+#: src/views/issues/issues.tsx:612
 msgid "No issues found"
 msgstr "No issues found"
 
@@ -826,11 +826,11 @@ msgstr "No user information provided by Upsource."
 msgid "Nope, can't find it!"
 msgstr "Nope, can't find it!"
 
-#: src/views/inbox-threads/inbox-threads.tsx:269
+#: src/views/inbox-threads/inbox-threads.tsx:270
 msgid "Notification settings…"
 msgstr "Notification settings…"
 
-#: src/views/inbox-threads/inbox-threads.tsx:239
+#: src/views/inbox-threads/inbox-threads.tsx:240
 #: src/views/inbox/inbox.tsx:711
 msgid "Notifications"
 msgstr "Notifications"
@@ -981,7 +981,7 @@ msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
 #: src/views/inbox/inbox.tsx:750
-#: src/views/issues/issues.tsx:675
+#: src/views/issues/issues.tsx:678
 msgid "Select an issue from the list"
 msgstr "Select an issue from the list"
 
@@ -1065,7 +1065,7 @@ msgstr "Share logs"
 msgid "Share…"
 msgstr "Share…"
 
-#: src/views/inbox-threads/inbox-threads.tsx:250
+#: src/views/inbox-threads/inbox-threads.tsx:251
 msgid "Show all"
 msgstr "Show all"
 
@@ -1251,7 +1251,7 @@ msgstr "Title"
 msgid "Title changed"
 msgstr "Title changed"
 
-#: src/views/inbox-threads/inbox-threads.tsx:146
+#: src/views/inbox-threads/inbox-threads.tsx:147
 msgid "To view an item in context, select an issue, article, or update from the list"
 msgstr "To view an item in context, select an issue, article, or update from the list"
 
@@ -1283,7 +1283,7 @@ msgstr "Uncategorized Cards"
 msgid "Unmute thread"
 msgstr "Unmute thread"
 
-#: src/views/inbox-threads/inbox-threads.tsx:251
+#: src/views/inbox-threads/inbox-threads.tsx:252
 msgid "Unread only"
 msgstr "Unread only"
 
