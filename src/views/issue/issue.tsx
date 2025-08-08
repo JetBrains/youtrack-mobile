@@ -27,10 +27,12 @@ import {DEFAULT_ISSUE_STATE_FIELD_NAME} from './issue-base-actions-creater';
 import {DEFAULT_THEME} from 'components/theme/theme';
 import {getApi} from 'components/api/api__instance';
 import {getReadableID} from 'components/issue-formatter/issue-formatter';
+import {HIT_SLOP} from 'components/common-styles';
 import {
   IconBack,
   IconCheck,
-  IconClose, IconMoreOptions,
+  IconClose,
+  IconMoreOptions,
 } from 'components/icon/icon';
 import {isHelpdeskProject} from 'components/helpdesk';
 import {isSplitView} from 'components/responsive/responsive-helper';
@@ -379,6 +381,7 @@ export class Issue<T extends IssueProps> extends IssueTabbed<IssueProps & T> {
         testID="test:id/header-menu-button"
         accessibilityLabel="header-menu-button"
         accessible={true}
+        hitSlop={HIT_SLOP}
         onPress={() => {
           if (this.isIssueLoaded()) {
             showIssueActions(

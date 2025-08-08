@@ -3,6 +3,7 @@ import {TouchableOpacity} from 'react-native';
 
 import {HapticFeedbackTypes, trigger} from 'react-native-haptic-feedback';
 
+import {HIT_SLOP} from 'components/common-styles';
 import {IconCircle, IconCircleOutline} from 'components/icon/icon';
 import {useSelector} from 'react-redux';
 
@@ -10,7 +11,7 @@ import styles from './inbox-threads.styles';
 
 import type {AppState} from 'reducers';
 import type {InboxThreadMessage} from 'types/Inbox';
-import {ViewStyleProp} from 'types/Internal';
+import type {ViewStyleProp} from 'types/Internal';
 
 type Props = {
   messages: InboxThreadMessage[];
@@ -37,6 +38,7 @@ export default function InboxThreadReadToggleButton({
         trigger(HapticFeedbackTypes.impactMedium);
         onReadChange(messages, !messages[0].read);
       }}
+      hitSlop={HIT_SLOP}
     >
       {messages[0].read ? (
         <IconCircleOutline size={10} color={styles.iconAddReaction.color} />

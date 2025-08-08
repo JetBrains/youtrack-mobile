@@ -19,6 +19,7 @@ import usage from 'components/usage/usage';
 import {ANALYTICS_NOTIFICATIONS_THREADS_PAGE} from 'components/analytics/analytics-ids';
 import {defaultActionsOptions} from 'components/action-sheet/action-sheet';
 import {folderIdMap, getThreadTabsTitles, mergeThreads} from './inbox-threads-helper';
+import {HIT_SLOP} from 'components/common-styles';
 import {getStorageState} from 'components/storage/storage';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
@@ -33,10 +34,10 @@ import tabStyles from 'components/issue-tabbed/issue-tabbed.style';
 import type {AppState} from 'reducers';
 import type {TabRoute} from 'types/Issue';
 import type {Theme, UIThemeColors} from 'types/Theme';
-import {AppConfig} from 'types/AppConfig';
-import {Entity} from 'types/Entity';
-import {InboxThread} from 'types/Inbox';
-import {NavigationState} from 'react-navigation';
+import type {AppConfig} from 'types/AppConfig';
+import type {Entity} from 'types/Entity';
+import type {InboxThread} from 'types/Inbox';
+import type {NavigationState} from 'react-navigation';
 
 const InboxThreads: ()=> React.ReactNode = (): JSX.Element => {
   const routes: TabRoute[] = getThreadTabsTitles().map(
@@ -288,6 +289,7 @@ const InboxThreads: ()=> React.ReactNode = (): JSX.Element => {
             );
           }}
           style={styles.threadTitleAction}
+          hitSlop={HIT_SLOP}
         >
           <IconMoreOptions color={isOnline ? styles.link.color : styles.disabled.color}/>
         </TouchableOpacity>

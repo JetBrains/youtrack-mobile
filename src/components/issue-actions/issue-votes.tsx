@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
 import {IconVote} from 'components/icon/icon';
-import {HIT_SLOP} from 'components/common-styles';
+import {HIT_SLOP2} from 'components/common-styles';
 
 import styles from './issue-votes.styles';
 
@@ -25,7 +25,7 @@ export default function (props: Props) {
 
   return (
     <TouchableOpacity
-      hitSlop={HIT_SLOP}
+      hitSlop={HIT_SLOP2}
       disabled={!canVote}
       style={[styles.button, style]}
       onPress={toggle}

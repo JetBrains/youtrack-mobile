@@ -37,8 +37,9 @@ export default EStyleSheet.create({
   zoomButton: {
     position: 'absolute',
     zIndex: 1,
-    top: UNIT * 2,
-    right: UNIT * 2,
+    top: UNIT,
+    right: UNIT,
+    padding: UNIT,
   },
   zoomButtonIcon: {
     resizeMode: 'contain',

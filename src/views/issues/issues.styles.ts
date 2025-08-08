@@ -47,12 +47,18 @@ export default EStyleSheet.create({
     maxWidth: UNIT * 12,
   },
   listActionsItem: {
-    height: UNIT * 4,
-    width: UNIT * 4,
-    marginLeft: UNIT,
-    paddingRight: 2.5,
-    alignItems: 'flex-end',
+    height: UNIT * 3.5,
+    width: UNIT * 3.5,
+    marginLeft: UNIT * 2,
+    marginRight: -UNIT / 2,
+    alignItems: 'center',
     justifyContent: 'center',
+  },
+
+  listActionsItemMore: {
+    width: UNIT * 4.5,
+    marginRight: -UNIT * 2,
+    paddingRight: UNIT * 2,
   },
 
   tryAgainButton: {

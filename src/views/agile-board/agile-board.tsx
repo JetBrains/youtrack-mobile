@@ -36,7 +36,7 @@ import {DragContainer} from 'components/draggable';
 import {flushStoragePart, getStorageState} from 'components/storage/storage';
 import {getScrollableWidth} from 'components/board-scroller/board-scroller__math';
 import {hasType, ResourceTypes} from 'components/api/api__resource-types';
-import {HIT_SLOP} from 'components/common-styles';
+import {HIT_SLOP2} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
 import {IconException} from 'components/icon/icon';
 import {isSplitView} from 'components/responsive/responsive-helper';
@@ -347,7 +347,7 @@ class AgileBoard extends Component<Props, State> {
             testID="magnifier-button"
             accessibilityLabel="magnifier-button"
             accessible={true}
-            hitSlop={HIT_SLOP}
+            hitSlop={HIT_SLOP2}
             onPress={this.toggleZoom}
           >
             <Icon width={20} height={20} color={styles.link.color} />

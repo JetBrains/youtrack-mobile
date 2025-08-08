@@ -32,6 +32,7 @@ import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
 import {createAnimatedRotateStyle} from 'views/issues/issues-helper';
 import {DEFAULT_THEME} from 'components/theme/theme';
 import {ERROR_MESSAGE_DATA} from 'components/error/error-message-data';
+import {HIT_SLOP, HIT_SLOP2} from 'components/common-styles';
 import {getIssueFromCache} from './index';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
@@ -241,13 +242,14 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
     );
     return (
       <TouchableOpacity
-        style={styles.listActionsItem}
+        style={[styles.listActionsItem, styles.listActionsItemMore]}
         disabled={this.props.isInProgress}
         testID="test:id/issuesSettingsButton"
         accessibilityLabel="issuesSettingsButton"
         onPress={() => {
           this.toggleSettingsVisibility(true);
         }}
+        hitSlop={HIT_SLOP}
       >
         <Animated.View style={animatedStyle}>
           <IconMoreOptions
@@ -283,6 +285,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
           }
         }}
         disabled={this.props.isInProgress}
+        hitSlop={HIT_SLOP2}
       >
         <IconAdd
           color={
