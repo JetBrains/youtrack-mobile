@@ -74,7 +74,7 @@ const getThreadTabsTitles: () => string[] = () => [
 ];
 
 const folderIdAllKey: ThreadsStateFilterId = 'all';
-const folderIdMap: {[key: number]: string | undefined} = {
+const folderIdMap: {[key: number]: ThreadsStateFilterId | undefined} = {
   [0]: undefined,
   [1]: 'direct',
   [2]: 'subscription',

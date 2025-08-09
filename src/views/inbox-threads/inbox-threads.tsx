@@ -38,6 +38,7 @@ import type {AppConfig} from 'types/AppConfig';
 import type {Entity} from 'types/Entity';
 import type {InboxThread} from 'types/Inbox';
 import type {NavigationState} from 'react-navigation';
+import type {ReduxThunkDispatch} from 'types/Redux';
 
 const InboxThreads: ()=> React.ReactNode = (): JSX.Element => {
   const routes: TabRoute[] = getThreadTabsTitles().map(
@@ -48,7 +49,7 @@ const InboxThreads: ()=> React.ReactNode = (): JSX.Element => {
     }),
   );
 
-  const dispatch = useDispatch();
+  const dispatch: ReduxThunkDispatch = useDispatch();
   const {showActionSheetWithOptions} = useActionSheet();
   const theme: Theme = React.useContext(ThemeContext);
   const dimensionsChangeListener = React.useRef();
