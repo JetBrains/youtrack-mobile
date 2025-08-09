@@ -17,7 +17,7 @@ const MarkdownHyperLink = ({
 }: {
   children?: React.ReactNode;
   uri: string;
-  style: TextStyle | TextStyle[];
+  style: TextStyle;
 }) => {
   const dispatch: ReduxThunkDispatch = useDispatch();
   return (

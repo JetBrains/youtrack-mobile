@@ -27,7 +27,7 @@ export default function MarkdownMention({
 }: {
   mention: string;
   onPress: () => void;
-  style: TextStyle | TextStyle[];
+  style: TextStyle;
 }) {
   return (
     <Text key={guid()} onPress={onPress} selectable={true} style={style}>
@@ -36,7 +36,7 @@ export default function MarkdownMention({
   );
 }
 
-export function MarkdownMentionWithUserCard({mention, style}: {mention: Mention; style: TextStyle | TextStyle[]}) {
+export function MarkdownMentionWithUserCard({mention, style}: {mention: Mention; style: TextStyle}) {
   const {openBottomSheet} = useBottomSheetContext();
 
   const isArticle = () => hasType.article(mention);
