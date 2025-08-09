@@ -22,7 +22,7 @@ import {
   readMessageToggle,
   updateThreadsStateAndCache,
 } from './inbox-threads-actions';
-import {SwipeableRowWithHint} from 'components/swipeable/swipeable';
+import SwipeableRow from 'components/swipeable/swipeable';
 import {swipeDirection} from 'components/swipeable';
 
 import styles from './inbox-threads.styles';
@@ -50,9 +50,7 @@ interface Props {
   ) => void;
   thread: InboxThread;
   uiTheme: UITheme;
-  showSwipeHint: boolean;
-  style?: ViewStyleProp[] | ViewStyleProp,
-  onAfterHintShow: () => void,
+  style?: ViewStyleProp,
 }
 
 function Thread({
@@ -60,9 +58,7 @@ function Thread({
   currentUser,
   uiTheme,
   onNavigate,
-  showSwipeHint,
   style,
-  onAfterHintShow,
 }: Props) {
   const isMergedNotifications: React.MutableRefObject<boolean> = React.useRef(!!getStorageState().mergedNotifications);
   const {showActionSheetWithOptions} = useActionSheet();
@@ -162,18 +158,14 @@ function Thread({
         />
       )}
 
-      <SwipeableRowWithHint
+      <SwipeableRow
         enabled={hasMarkReadField}
         direction={swipeDirection.left}
         actionText={actionText}
         onSwipe={() => doToggleMessagesRead(_thread.messages, isThreadUnread)}
-        showHint={showSwipeHint}
-        hintDistance={150}
-        hintDirection={swipeDirection.left}
-        onAfterHintShow={onAfterHintShow}
       >
         <View style={styles.threadContainer}>{renderedComponent}</View>
-      </SwipeableRowWithHint>
+      </SwipeableRow>
     </View>
   );
 
