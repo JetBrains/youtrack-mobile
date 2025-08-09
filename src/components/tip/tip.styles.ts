@@ -5,7 +5,6 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {mainText} from 'components/common-styles';
 import {UNIT} from 'components/variables';
 
-
 export default EStyleSheet.create({
   tip: {
     position: 'relative',
@@ -44,15 +43,33 @@ export default EStyleSheet.create({
     borderRadius: UNIT * 2,
   },
   tipIcon: {
-    color: '$icon',
+    position: 'relative',
+    top: -UNIT / 4,
+    marginRight: UNIT * 1.5,
+    color: '$background',
   },
-
-  tipStreamActions: {
+  tipBox: {
     zIndex: 1,
     position: 'absolute',
-    maxHeight: 120,
     left: UNIT,
     right: UNIT,
+  },
+  tipStreamActions: {
+    maxHeight: 120,
     bottom: UNIT,
+  },
+  tipNotificationSettings: {
+    top: 50,
+  },
+  tipColout: {
+    zIndex: 1,
+    position: 'absolute',
+    width: UNIT * 2,
+    height: UNIT * 2,
+    borderRadius: UNIT / 4,
+    right: UNIT,
+    top: -UNIT / 2,
+    backgroundColor: '$text',
+    transform: [{rotate: '45deg'}],
   },
 });

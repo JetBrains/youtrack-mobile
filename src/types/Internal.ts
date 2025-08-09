@@ -3,5 +3,5 @@ import {
   TextStyle,
 } from 'react-native';
 
-export type ViewStyleProp = ViewStyle;
-export type TextStyleProp = TextStyle;
+export type ViewStyleProp = ViewStyle | ViewStyle[] | null;
+export type TextStyleProp = TextStyle | TextStyle[] | null;

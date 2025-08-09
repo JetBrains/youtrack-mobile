@@ -15,6 +15,7 @@ import InboxThreadsUpdateButton from './inbox-threads__update-button';
 import Issue from 'views/issue/issue';
 import NothingSelectedIconWithText from 'components/icon/nothing-selected-icon-with-text';
 import Router from 'components/router/router';
+import TipNotificationsSettingsAndSwipes from 'components/tip/tips/notifications-settings';
 import usage from 'components/usage/usage';
 import {ANALYTICS_NOTIFICATIONS_THREADS_PAGE} from 'components/analytics/analytics-ids';
 import {defaultActionsOptions} from 'components/action-sheet/action-sheet';
@@ -40,7 +41,7 @@ import type {InboxThread} from 'types/Inbox';
 import type {NavigationState} from 'react-navigation';
 import type {ReduxThunkDispatch} from 'types/Redux';
 
-const InboxThreads: ()=> React.ReactNode = (): JSX.Element => {
+const InboxThreads = () => {
   const routes: TabRoute[] = getThreadTabsTitles().map(
     (name: string, index: number) => ({
       key: index,
@@ -312,6 +313,8 @@ const InboxThreads: ()=> React.ReactNode = (): JSX.Element => {
 
         {isMergedNotifications.current && AllTab(null, null, mergeThreads)}
         {!isMergedNotifications.current && renderTabs()}
+
+        <TipNotificationsSettingsAndSwipes/>
       </Container>
 
       {isSplitView && (
