@@ -61,7 +61,7 @@ export default EStyleSheet.create({
   tipNotificationSettings: {
     top: 50,
   },
-  tipColout: {
+  tipCollout: {
     zIndex: 1,
     position: 'absolute',
     width: UNIT * 2,
