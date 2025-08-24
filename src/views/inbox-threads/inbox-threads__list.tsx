@@ -7,13 +7,13 @@ import * as actions from './inbox-threads-actions';
 import ErrorMessage from 'components/error-message/error-message';
 import InboxThreadsProgressPlaceholder from './inbox-threads__progress-placeholder';
 import Thread from './inbox-threads__thread';
-import {folderIdAllKey} from './inbox-threads-helper';
 import {getStorageState} from 'components/storage/storage';
 import {i18n} from 'components/i18n/i18n';
 import {IconNoNotifications} from 'components/icon/icon-pictogram';
 import {isUnreadOnly} from './inbox-threads-actions';
 import {ThemeContext} from 'components/theme/theme-context';
 import {UNIT} from 'components/common-styles';
+import {useThreadsList} from './inbox-use-threads';
 
 import styles from './inbox-threads.styles';
 
@@ -46,11 +46,7 @@ const InboxThreadsList = ({folderId, onNavigate, merger, onScroll}: Props) => {
   const inProgress: boolean = useSelector((state: AppState) => state.inboxThreads.inProgress);
   const threadsData = useSelector((state: AppState) => state.inboxThreads.threadsData || {});
 
-  const getData = () =>
-    threadsData[folderId || folderIdAllKey] || {
-      threads: [],
-      hasMore: false,
-    };
+  const {data, visibleThreads, hasVisibleMessages} = useThreadsList({threadsData, folderId});
 
   const setThreadsFromCache = useCallback(
     (id?: ThreadsStateFilterId | null) => {
@@ -75,7 +71,7 @@ const InboxThreadsList = ({folderId, onNavigate, merger, onScroll}: Props) => {
         style={[
           styles.thread,
           index === 0 && isMergedNotifications.current && styles.threadFirstMerged,
-          index === getData().threads.length - (getData().hasMore ? 2 : 1) && styles.threadLast,
+          index === data.threads.length - (data.hasMore ? 2 : 1) && styles.threadLast,
         ]}
         thread={item}
         currentUser={currentUser!}
@@ -127,17 +123,6 @@ const InboxThreadsList = ({folderId, onNavigate, merger, onScroll}: Props) => {
     return null;
   };
 
-  const visibleThreads: InboxThread[] = (getData().hasMore
-    ? getData().threads.slice(0, getData().threads.length - 1)
-    : getData().threads
-  ).filter((it: InboxThread) => it.subject.target && it.messages.length > 0);
-  const hasVisibleMessages: boolean =
-    visibleThreads.length > 0 &&
-    visibleThreads.reduce(
-      (amount: number, it: InboxThread) => amount + it.messages.length,
-      0,
-    ) > 0;
-
   return (
     <View
       testID="test:id/inboxThreadsList"
@@ -154,8 +139,8 @@ const InboxThreadsList = ({folderId, onNavigate, merger, onScroll}: Props) => {
         keyExtractor={(it: InboxThread) => it.id}
         onEndReachedThreshold={1}
         onEndReached={() => {
-          if (getData().hasMore && !inProgress) {
-            loadThreads(folderId, getData().threads.slice(-1)[0].notified);
+          if (data.hasMore && !inProgress) {
+            loadThreads(folderId, data.threads.slice(-1)[0].notified);
           }
         }}
         refreshControl={
