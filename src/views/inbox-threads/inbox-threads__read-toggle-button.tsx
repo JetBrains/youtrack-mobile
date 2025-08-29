@@ -10,21 +10,17 @@ import {useSelector} from 'react-redux';
 import styles from './inbox-threads.styles';
 
 import type {AppState} from 'reducers';
-import type {InboxThreadMessage} from 'types/Inbox';
 import type {ViewStyleProp} from 'types/Internal';
 
-type Props = {
-  messages: InboxThreadMessage[];
-  onReadChange: (messages: InboxThreadMessage[], read: boolean) => any;
-  style?: ViewStyleProp;
-};
-
-
 export default function InboxThreadReadToggleButton({
-  messages = [],
+  read,
   onReadChange,
   style,
-}: Props) {
+}: {
+  read: boolean;
+  onReadChange: (read: boolean) => any;
+  style?: ViewStyleProp;
+}) {
   const isOnline: boolean = useSelector((state: AppState) => !!state.app.networkState?.isConnected);
 
   return (
@@ -36,11 +32,11 @@ export default function InboxThreadReadToggleButton({
       style={[styles.threadItemAction, style]}
       onPress={() => {
         trigger(HapticFeedbackTypes.impactMedium);
-        onReadChange(messages, !messages[0].read);
+        onReadChange(!read);
       }}
       hitSlop={HIT_SLOP}
     >
-      {messages[0].read ? (
+      {read ? (
         <IconCircleOutline size={10} color={styles.iconAddReaction.color} />
       ) : (
         <IconCircle size={10} color={styles.link.color} />

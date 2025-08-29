@@ -6,13 +6,16 @@ import {Provider} from 'react-redux';
 import mocks from 'test/mocks';
 
 import * as actions from './inbox-threads-actions';
-import Thread, {getThreadData} from './inbox-threads__thread';
+import Thread from './inbox-threads__thread';
 import {DEFAULT_THEME} from 'components/theme/theme';
 import InboxThreadItemSubscription from './inbox-threads__subscription';
 import InboxThreadReaction from './inbox-threads__reactions';
 import InboxThreadMention from './inbox-threads__mention';
 import {InboxThread, InboxThreadMessage} from 'types/Inbox';
 import {Store} from 'redux';
+import {useThread} from './inbox-threads__use-thread';
+
+import type {ThreadData} from './inbox-threads__use-thread';
 
 jest.mock('components/swipeable/swipeable');
 jest.mock('@expo/react-native-action-sheet', () => ({
@@ -216,40 +219,51 @@ describe('Inbox Thread', () => {
   });
 
 
-  describe('getThreadData', () => {
+  describe('useThread', () => {
+    beforeEach(async () => {
+      await mocks.setStorage({mergedNotifications: false});
+    });
+
+    function ThreadHookProbe({thread, callback}: {thread: InboxThread; callback: (r: ThreadData) => void}) {
+      const {entity, ThreadView, isBottomPositioned} = useThread(thread);
+      React.useEffect(() => {
+        callback({entity, ThreadView, isBottomPositioned});
+      }, [entity, ThreadView, isBottomPositioned, callback]);
+      return null;
+    }
+
     it('should create subscription item', async () => {
       threadMock = mocks.createThreadMock({
         id: 'S-thread',
       });
-
-      expect(getThreadData(threadMock)).toEqual({
+      const fn = jest.fn();
+      render(<ThreadHookProbe thread={threadMock} callback={fn} />);
+      expect(fn).toHaveBeenCalledWith({
         entity: threadMock.subject.target,
-        component: InboxThreadItemSubscription,
-        entityAtBottom: false,
+        ThreadView: InboxThreadItemSubscription,
+        isBottomPositioned: false,
       });
     });
 
     it('should create reaction item', async () => {
-      threadMock = mocks.createThreadMock({
-        id: 'R-thread',
-      });
-
-      expect(getThreadData(threadMock)).toEqual({
+      threadMock = mocks.createThreadMock({id: 'R-thread'});
+      const fn = jest.fn();
+      render(<ThreadHookProbe thread={threadMock} callback={fn} />);
+      expect(fn).toHaveBeenCalledWith({
         entity: threadMock.subject.target,
-        component: InboxThreadReaction,
-        entityAtBottom: true,
+        ThreadView: InboxThreadReaction,
+        isBottomPositioned: true,
       });
     });
 
     it('should create mention item', async () => {
-      threadMock = mocks.createThreadMock({
-        id: 'M-thread',
-      });
-
-      expect(getThreadData(threadMock)).toEqual({
+      threadMock = mocks.createThreadMock({id: 'M-thread'});
+      const fn = jest.fn();
+      render(<ThreadHookProbe thread={threadMock} callback={fn} />);
+      expect(fn).toHaveBeenCalledWith({
         entity: threadMock.subject.target,
-        component: InboxThreadMention,
-        entityAtBottom: true,
+        ThreadView: InboxThreadMention,
+        isBottomPositioned: true,
       });
     });
   });
@@ -290,8 +304,6 @@ describe('Inbox Thread', () => {
     return render(
       <Provider store={storeMock}>
         <Thread
-          showSwipeHint={false}
-          onAfterHintShow={jest.fn()}
           onNavigate={jest.fn()}
           thread={thread}
           currentUser={mocks.createUserMock()}

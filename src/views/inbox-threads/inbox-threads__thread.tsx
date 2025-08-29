@@ -6,18 +6,14 @@ import {useDispatch} from 'react-redux';
 
 import animation from 'components/animation/animation';
 import InboxEntity from '../inbox/inbox__entity';
-import InboxThreadItemSubscription from './inbox-threads__subscription';
-import InboxThreadMention from './inbox-threads__mention';
-import InboxThreadReaction from './inbox-threads__reactions';
 import InboxThreadReadToggleButton from 'views/inbox-threads/inbox-threads__read-toggle-button';
 import SwipeableRow from 'components/swipeable/swipeable';
-import {getStorageState} from 'components/storage/storage';
-import {getThreadTypeData} from 'views/inbox-threads/inbox-threads-helper';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
 import {muteToggle, readMessageToggle, updateThreadsStateAndCache} from './inbox-threads-actions';
 import {swipeDirection} from 'components/swipeable';
 import {ThreadSettings} from 'views/inbox-threads/inbox-threads__thread-settings';
+import {useThread} from 'views/inbox-threads/inbox-threads__use-thread';
 
 import styles from './inbox-threads.styles';
 
@@ -27,12 +23,6 @@ import type {ReduxThunkDispatch} from 'types/Redux';
 import type {UITheme} from 'types/Theme';
 import type {User} from 'types/User';
 import type {ViewStyleProp} from 'types/Internal';
-
-type ThreadData = {
-  entity: Entity | InboxThreadTarget;
-  component: React.ElementType;
-  entityAtBottom?: boolean;
-};
 
 interface Props {
   currentUser: User;
@@ -53,26 +43,22 @@ function Thread({
   onNavigate,
   style,
 }: Props) {
-  const isMergedNotifications: React.MutableRefObject<boolean> = React.useRef(!!getStorageState().mergedNotifications);
   const {showActionSheetWithOptions} = useActionSheet();
 
   const dispatch: ReduxThunkDispatch = useDispatch();
 
   const [_thread, updateThread] = useState<InboxThread>(thread);
 
-  const isThreadUnread = _thread.messages.some(it => it.read === false);
+  const [isRead, setIsRead] = useState<boolean>(!thread.messages.some(it => !it.read));
   const actionTextBase = [i18n('Mark as unread'), i18n('Mark as read')];
-  const actionText = isThreadUnread ? actionTextBase.reverse() : actionTextBase;
+  const actionText = isRead ? actionTextBase : actionTextBase.reverse();
+  const {entity, ThreadView, isBottomPositioned} = useThread(_thread);
 
   useEffect(() => {
     updateThread(thread);
   }, [thread]);
 
-  if (!_thread.id || !_thread?.messages?.length) {
-    return null;
-  }
-
-  const doToggleMessagesRead = (
+  const toggleMessagesRead = (
     messages: InboxThreadMessage[],
     read: boolean,
     toggleThread: boolean = false,
@@ -82,6 +68,7 @@ function Thread({
       messages: _thread.messages.map((it: InboxThreadMessage) => ({...it, read})),
     };
     updateThread(updatedThread);
+    setIsRead(read);
     dispatch(readMessageToggle(messages, read));
     dispatch(updateThreadsStateAndCache(updatedThread, toggleThread && read));
     animation.layoutAnimation();
@@ -102,45 +89,28 @@ function Thread({
     },
     {
       title: actionText[0],
-      execute: () => doToggleMessagesRead(thread.messages, isThreadUnread, true),
+      execute: () => toggleMessagesRead(_thread.messages, !isRead, true),
     },
     {
       title: i18n('Cancel'),
     },
   ];
-  const threadData: ThreadData = getThreadData(_thread, isMergedNotifications.current);
-  const ThreadComponent = threadData.component;
-  const renderedEntity = (
+
+  const hasSettings = hasType.issue(entity) || hasType.article(entity);
+  const hasReadField = typeof _thread.messages?.[0]?.read === 'boolean';
+  const Entity = (
     <InboxEntity
       testID="test:id/inboxEntity"
       accessibilityLabel="inboxEntity"
       accessible={true}
-      entity={threadData.entity}
-      onNavigate={() => onNavigate(threadData.entity)}
+      entity={entity}
+      onNavigate={() => onNavigate(entity)}
       style={[
         styles.threadTitle,
-        threadData.entityAtBottom && styles.threadSubTitle,
+        isBottomPositioned && styles.threadSubTitle,
       ]}
-      styleText={threadData.entityAtBottom && styles.threadSubTitleText}
+      styleText={isBottomPositioned && styles.threadSubTitleText}
     />
-  );
-  const hasSettings: boolean = hasType.issue(threadData.entity) || hasType.article(threadData.entity);
-  const hasMarkReadField: boolean = typeof _thread.messages?.[0]?.read === 'boolean';
-  const renderedComponent = (
-    <>
-      <ThreadComponent
-        thread={_thread}
-        currentUser={currentUser}
-        uiTheme={uiTheme}
-        onNavigate={onNavigate}
-        onReadChange={(messages: InboxThreadMessage[], read: boolean) => {
-          doToggleMessagesRead(messages, read);
-        }}
-      />
-      {threadData.entityAtBottom && (
-        <View style={styles.threadTitleContainerBottom}>{renderedEntity}</View>
-      )}
-    </>
   );
 
   return (
@@ -150,16 +120,16 @@ function Thread({
       accessible={true}
       style={style}
     >
-      {!threadData.entityAtBottom && (
+      {!isBottomPositioned && (
         <View style={hasSettings && styles.threadTitleContainer}>
           <View style={styles.threadTitleContent}>
-            {renderedEntity}
+            {Entity}
             {hasSettings && (
               <ThreadSettings
                 options={options}
                 uiTheme={uiTheme}
-                title={`${threadData.entity?.idReadable}${
-                  threadData.entity && 'summary' in threadData.entity ? ` ${threadData.entity.summary}` : ''
+                title={`${entity?.idReadable}${
+                  entity && 'summary' in entity ? ` ${entity.summary}` : ''
                 }`}
                 showActionSheetWithOptions={showActionSheetWithOptions}
               />
@@ -168,39 +138,37 @@ function Thread({
         </View>
       )}
 
-      {hasMarkReadField && (
+      {hasReadField && (
         <InboxThreadReadToggleButton
-          style={!threadData.entityAtBottom && styles.threadItemActionWithSettings}
-          messages={_thread.messages}
-          onReadChange={(messages: InboxThreadMessage[], read: boolean) => {
-            doToggleMessagesRead(messages, read);
+          style={!isBottomPositioned && styles.threadItemActionWithSettings}
+          read={isRead}
+          onReadChange={(read: boolean) => {
+            toggleMessagesRead(_thread.messages, read);
           }}
         />
       )}
 
       <SwipeableRow
-        enabled={hasMarkReadField}
+        enabled={hasReadField}
         direction={swipeDirection.left}
         actionText={actionText}
-        onSwipe={() => doToggleMessagesRead(_thread.messages, isThreadUnread)}
+        onSwipe={() => toggleMessagesRead(_thread.messages, !isRead)}
       >
-        <View style={styles.threadContainer}>{renderedComponent}</View>
+        <View style={styles.threadContainer}>
+          <ThreadView
+            thread={_thread}
+            currentUser={currentUser}
+            uiTheme={uiTheme}
+            onNavigate={onNavigate}
+            onReadChange={(messages: InboxThreadMessage[], read: boolean) => {
+              toggleMessagesRead(messages, read);
+            }}
+          />
+          {isBottomPositioned && <View style={styles.threadTitleContainerBottom}>{Entity}</View>}
+        </View>
       </SwipeableRow>
     </View>
   );
-}
-
-export function getThreadData(thread: InboxThread, mergedNotifications?: boolean): ThreadData {
-  const target = thread.subject.target;
-  const entity = target?.issue || target?.article || target;
-  const threadTypeData = getThreadTypeData(thread);
-  const component = (
-    threadTypeData.isReaction
-      ? InboxThreadReaction
-      : threadTypeData.isMention ? InboxThreadMention : InboxThreadItemSubscription
-  );
-  const entityAtBottom = mergedNotifications ? false : threadTypeData.isReaction || threadTypeData.isMention;
-  return {entity, component, entityAtBottom};
 }
 
 export default Thread;
