@@ -10,7 +10,7 @@ import InboxThreadReadToggleButton from 'views/inbox-threads/inbox-threads__read
 import SwipeableRow from 'components/swipeable/swipeable';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
-import {muteToggle, readMessageToggle, updateThreadsStateAndCache} from './inbox-threads-actions';
+import {isUnreadOnly, muteToggle, readMessageToggle, updateThreadsStateAndCache} from './inbox-threads-actions';
 import {swipeDirection} from 'components/swipeable';
 import {ThreadSettings} from 'views/inbox-threads/inbox-threads__thread-settings';
 import {useThread} from 'views/inbox-threads/inbox-threads__use-thread';
@@ -71,7 +71,9 @@ function Thread({
     setIsRead(read);
     dispatch(readMessageToggle(messages, read));
     dispatch(updateThreadsStateAndCache(updatedThread, toggleThread && read));
-    animation.layoutAnimation();
+    if (isUnreadOnly()) {
+      animation.layoutAnimation();
+    }
   };
 
   const options = [
