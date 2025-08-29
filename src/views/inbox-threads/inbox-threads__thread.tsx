@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {View} from 'react-native';
 
 import {useActionSheet} from '@expo/react-native-action-sheet';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 import animation from 'components/animation/animation';
 import InboxEntity from '../inbox/inbox__entity';
@@ -10,24 +10,17 @@ import InboxThreadItemSubscription from './inbox-threads__subscription';
 import InboxThreadMention from './inbox-threads__mention';
 import InboxThreadReaction from './inbox-threads__reactions';
 import InboxThreadReadToggleButton from 'views/inbox-threads/inbox-threads__read-toggle-button';
-import {defaultActionsOptions} from 'components/action-sheet/action-sheet';
+import SwipeableRow from 'components/swipeable/swipeable';
 import {getStorageState} from 'components/storage/storage';
 import {getThreadTypeData} from 'views/inbox-threads/inbox-threads-helper';
 import {hasType} from 'components/api/api__resource-types';
-import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
-import {IconMoreOptions} from 'components/icon/icon';
-import {
-  muteToggle,
-  readMessageToggle,
-  updateThreadsStateAndCache,
-} from './inbox-threads-actions';
-import SwipeableRow from 'components/swipeable/swipeable';
+import {muteToggle, readMessageToggle, updateThreadsStateAndCache} from './inbox-threads-actions';
 import {swipeDirection} from 'components/swipeable';
+import {ThreadSettings} from 'views/inbox-threads/inbox-threads__thread-settings';
 
 import styles from './inbox-threads.styles';
 
-import type {AppState} from 'reducers';
 import type {Entity} from 'types/Entity';
 import type {InboxThread, InboxThreadMessage, InboxThreadTarget} from 'types/Inbox';
 import type {ReduxThunkDispatch} from 'types/Redux';
@@ -62,7 +55,6 @@ function Thread({
 }: Props) {
   const isMergedNotifications: React.MutableRefObject<boolean> = React.useRef(!!getStorageState().mergedNotifications);
   const {showActionSheetWithOptions} = useActionSheet();
-  const isOnline: boolean = useSelector((state: AppState) => !!state.app.networkState?.isConnected);
 
   const dispatch: ReduxThunkDispatch = useDispatch();
 
@@ -91,12 +83,31 @@ function Thread({
     };
     updateThread(updatedThread);
     dispatch(readMessageToggle(messages, read));
-    dispatch(
-      updateThreadsStateAndCache(updatedThread, toggleThread && read === true),
-    );
+    dispatch(updateThreadsStateAndCache(updatedThread, toggleThread && read));
     animation.layoutAnimation();
   };
 
+  const options = [
+    {
+      title: _thread.muted ? i18n('Unmute thread') : i18n('Mute thread'),
+      execute: () => {
+        const isMuted: boolean = _thread.muted;
+        updateThread({..._thread, muted: !isMuted});
+        dispatch(muteToggle(_thread.id, !isMuted)).then((muted: boolean) => {
+          if (muted !== !isMuted) {
+            updateThread({..._thread, muted});
+          }
+        });
+      },
+    },
+    {
+      title: actionText[0],
+      execute: () => doToggleMessagesRead(thread.messages, isThreadUnread, true),
+    },
+    {
+      title: i18n('Cancel'),
+    },
+  ];
   const threadData: ThreadData = getThreadData(_thread, isMergedNotifications.current);
   const ThreadComponent = threadData.component;
   const renderedEntity = (
@@ -143,7 +154,16 @@ function Thread({
         <View style={hasSettings && styles.threadTitleContainer}>
           <View style={styles.threadTitleContent}>
             {renderedEntity}
-            {hasSettings && renderSettings()}
+            {hasSettings && (
+              <ThreadSettings
+                options={options}
+                uiTheme={uiTheme}
+                title={`${threadData.entity?.idReadable}${
+                  threadData.entity && 'summary' in threadData.entity ? ` ${threadData.entity.summary}` : ''
+                }`}
+                showActionSheetWithOptions={showActionSheetWithOptions}
+              />
+            )}
           </View>
         </View>
       )}
@@ -168,59 +188,6 @@ function Thread({
       </SwipeableRow>
     </View>
   );
-
-  function renderSettings() {
-    const options = [
-      {
-        title: _thread.muted ? i18n('Unmute thread') : i18n('Mute thread'),
-        execute: () => {
-          const isMuted: boolean = _thread.muted;
-          updateThread({..._thread, muted: !isMuted});
-          dispatch(muteToggle(_thread.id, !isMuted)).then((muted: boolean) => {
-            if (muted !== !isMuted) {
-              updateThread({..._thread, muted});
-            }
-          });
-        },
-      },
-      {
-        title: actionText[0],
-        execute: () =>
-          doToggleMessagesRead(_thread.messages, isThreadUnread, true),
-      },
-      {
-        title: i18n('Cancel'),
-      },
-    ];
-    return (
-      <View style={styles.threadTitleActions}>
-        <TouchableOpacity
-          hitSlop={HIT_SLOP}
-          disabled={!isOnline}
-          testID="test:id/inboxThreadsThreadSettings"
-          accessibilityLabel="inboxThreadsThreadSettings"
-          accessible={true}
-          onPress={() => {
-            showActionSheetWithOptions(
-              {
-                ...defaultActionsOptions(uiTheme),
-                options: options.map(action => action.title),
-                title: `${threadData.entity?.idReadable}${
-                  threadData.entity && 'summary' in threadData.entity ? ` ${threadData.entity.summary}` : ''
-                }`,
-                cancelButtonIndex: options.length - 1,
-              },
-              (index?: number) => options[index as number]?.execute?.(),
-            );
-          }}
-          style={styles.threadTitleAction}
-        >
-          <IconMoreOptions color={isOnline ? styles.icon.color : styles.disabled.color}
-          />
-        </TouchableOpacity>
-      </View>
-    );
-  }
 }
 
 export function getThreadData(thread: InboxThread, mergedNotifications?: boolean): ThreadData {
