@@ -35,7 +35,12 @@ function SwipeableRow({
   const {swipeableRow, close, renderActions, props} = useSwipeable();
   const [text0 = '', text1 = ''] = actionText;
   const [isFirstSwipe, setIsFirstSwipe] = React.useState(true);
-  const [label, setLabel] = React.useState(actionText[0] || '');
+  const [label, setLabel] = React.useState('');
+
+  React.useEffect(() => {
+    setLabel(actionText[0] ?? '');
+    setIsFirstSwipe(true);
+  }, [actionText]);
 
   return (
     <Swipeable
@@ -67,13 +72,13 @@ function SwipeableRow({
       renderLeftActions={
         direction === swipeDirection.left || onLeftSwipe
           ? (_: Interpolation, dragX: Interpolation) =>
-              renderActions(dragX, true, direction ? label : actionText[0], actionColor?.[0] || null)
+              renderActions(dragX, true, direction ? label : text0, actionColor?.[0] ?? null)
           : undefined
       }
       renderRightActions={
         direction === swipeDirection.right || onRightSwipe
           ? (_: Interpolation, dragX: Interpolation) =>
-              renderActions(dragX, false, direction ? label : actionText[1], actionColor?.[1] || null)
+              renderActions(dragX, false, direction ? label : text1, actionColor?.[1] ?? null)
           : undefined
       }
     >
