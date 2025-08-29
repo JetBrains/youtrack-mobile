@@ -38,7 +38,7 @@ interface Props {
 const InboxThreadsList = ({folderId, onNavigate, merger, onScroll}: Props) => {
   const isMergedNotifications: React.MutableRefObject<boolean> = React.useRef(!!getStorageState().mergedNotifications);
 
-  const theme: Theme = useContext(ThemeContext);
+  const theme = useContext<Theme>(ThemeContext);
   const dispatch: ReduxThunkDispatch = useDispatch();
 
   const currentUser = useSelector((state: AppState) => state.app.user);
@@ -81,7 +81,7 @@ const InboxThreadsList = ({folderId, onNavigate, merger, onScroll}: Props) => {
     );
   };
 
-  const renderSeparator = () => <View style={styles.threadSeparator} />;
+  const renderSeparator = React.useCallback(() => <View style={styles.threadSeparator} />, []);
 
   const renderFooter = () => {
     if (error) {
