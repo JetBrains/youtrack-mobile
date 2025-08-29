@@ -81,6 +81,10 @@ msgstr "1 週間 1 日 1 時間 1分"
 msgid "Accept"
 msgstr "同意します"
 
+#: src/components/tip/tips/notifications-settings.tsx
+msgid "Activate the \"Unread only\" option to filter your notifications, then swipe right to mark them as read and keep your list clean."
+msgstr ""
+
 #: src/components/issue-tabbed/issue-tabbed.tsx
 msgid "Activity"
 msgstr "アクティビティ"
