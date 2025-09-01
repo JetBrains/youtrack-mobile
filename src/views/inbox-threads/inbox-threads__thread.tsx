@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 
 import {useActionSheet} from '@expo/react-native-action-sheet';
-import {useDispatch} from 'react-redux';
+import {useDispatch} from 'hooks/use-dispatch';
 
 import animation from 'components/animation/animation';
 import InboxEntity from '../inbox/inbox__entity';
@@ -19,7 +19,6 @@ import styles from './inbox-threads.styles';
 
 import type {Entity} from 'types/Entity';
 import type {InboxThread, InboxThreadMessage, InboxThreadTarget} from 'types/Inbox';
-import type {ReduxThunkDispatch} from 'types/Redux';
 import type {UITheme} from 'types/Theme';
 import type {User} from 'types/User';
 import type {ViewStyleProp} from 'types/Internal';
@@ -45,7 +44,7 @@ function Thread({
 }: Props) {
   const {showActionSheetWithOptions} = useActionSheet();
 
-  const dispatch: ReduxThunkDispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const [_thread, updateThread] = useState<InboxThread>(thread);
 

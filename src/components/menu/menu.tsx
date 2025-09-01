@@ -3,7 +3,8 @@ import {Dimensions, View, EventSubscription} from 'react-native';
 
 import * as Progress from 'react-native-progress';
 import {View as AnimatedView} from 'react-native-animatable';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
+import {useDispatch} from 'hooks/use-dispatch';
 
 import IconHelpdesk from 'components/icon/assets/menu_helpdesk.svg';
 import IconIssues from 'components/icon/assets/menu_issue.svg';
@@ -27,7 +28,6 @@ import styles from './menu.styles';
 
 import type {AppState} from 'reducers';
 import type {Article} from 'types/Article';
-import type {ReduxThunkDispatch} from 'types/Redux';
 import type {RootState} from 'reducers/app-reducer';
 
 export const menuPollInboxStatusDelay: number = 60 * 1000;
@@ -38,7 +38,7 @@ type Routes = {
 };
 
 export default function Menu() {
-  const dispatch: ReduxThunkDispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const isHelpdeskFeatureEnabled: boolean = checkVersion(FEATURE_VERSION.helpDesk);
 

@@ -1,14 +1,12 @@
 import React from 'react';
 import {Text, TextStyle} from 'react-native';
 
-import {useDispatch} from 'react-redux';
+import {useDispatch} from 'hooks/use-dispatch';
 
 import {guid} from 'util/util';
 import {handleURL} from 'actions/app-actions';
 
 import styles from 'components/wiki/youtrack-wiki.styles';
-
-import type {ReduxThunkDispatch} from 'types/Redux.ts';
 
 const MarkdownHyperLink = ({
   children,
@@ -19,7 +17,7 @@ const MarkdownHyperLink = ({
   uri: string;
   style: TextStyle;
 }) => {
-  const dispatch: ReduxThunkDispatch = useDispatch();
+  const dispatch = useDispatch();
   return (
     <Text
       selectable={true}

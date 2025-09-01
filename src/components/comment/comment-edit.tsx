@@ -10,7 +10,7 @@ import {
 
 import IconAttachment from '@jetbrains/icons/attachment.svg';
 import InputScrollView from 'react-native-input-scroll-view';
-import {useDispatch} from 'react-redux';
+import {useDispatch} from 'hooks/use-dispatch';
 
 import AttachFileDialog from 'components/attach-file/attach-file-dialog';
 import AttachmentAddPanel from 'components/attachments-row/attachments-add-panel';
@@ -43,7 +43,6 @@ import styles, { MIN_INPUT_SIZE} from './comment-edit.styles';
 import type {Attachment, IssueComment} from 'types/CustomFields';
 import type {AttachmentActions} from 'components/attachments-row/attachment-actions';
 import type {NormalizedAttachment} from 'types/Attachment';
-import type {ReduxThunkDispatch} from 'types/Redux';
 import type {Theme} from 'types/Theme';
 import type {User, UserMentions} from 'types/User';
 import type {Visibility, VisibilityGroups} from 'types/Visibility';
@@ -95,7 +94,7 @@ const EMPTY_COMMENT: EditingComment = {
 } as EditingComment;
 
 const CommentEdit = (props: Props) => {
-  const dispatch: ReduxThunkDispatch = useDispatch();
+  const dispatch = useDispatch();
   const theme: Theme = React.useContext(ThemeContext);
   const attachmentActions: AttachmentActions = getAttachmentActions('issueCommentInput');
   const isReporter = useIsReporter();

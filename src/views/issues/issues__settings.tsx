@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
+import {useDispatch} from 'hooks/use-dispatch';
 
 import BottomSheetModal from 'components/modal-panel-bottom/bottom-sheet-modal';
 import IssuesFiltersSetting from 'views/issues/issues__filters-settings';
@@ -30,7 +31,6 @@ import {receiveUserAppearanceProfile, receiveUserHelpdeskProfile} from 'actions/
 import styles from './issues.styles';
 
 import type {AppState} from 'reducers';
-import type {ReduxThunkDispatch} from 'types/Redux';
 import type {User} from 'types/User';
 
 
@@ -43,7 +43,7 @@ const IssuesListSettings = ({
   toggleVisibility: (isVisible: boolean) => void;
   onChange: () => void,
 }): React.JSX.Element => {
-  const dispatch: ReduxThunkDispatch = useDispatch();
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
     usage.trackEvent(ANALYTICS_ISSUES_PAGE, 'Issues settings: open');

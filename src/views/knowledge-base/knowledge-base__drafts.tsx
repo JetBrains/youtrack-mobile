@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 import {View as AnimatedView} from 'react-native-animatable';
-import {useDispatch} from 'react-redux';
+import {useDispatch} from 'hooks/use-dispatch';
 
 import ArticleWithChildren from 'components/articles/article-item-with-children';
 import ErrorMessage from 'components/error-message/error-message';
@@ -29,7 +29,6 @@ import {until} from 'util/util';
 import styles from './knowledge-base.styles';
 
 import type {Article, ArticleDraft} from 'types/Article';
-import {ReduxThunkDispatch} from 'types/Redux';
 
 interface Props {
   backIcon?: any;
@@ -41,7 +40,7 @@ interface Props {
 }
 
 const KnowledgeBaseDrafts = (props: Props) => {
-  const dispatch:ReduxThunkDispatch = useDispatch();
+  const dispatch = useDispatch();
   const [drafts, updateDrafts] = useState<ArticleDraft[] | null>(null);
   const [isLoading, updateLoading] = useState(false);
   const [isDeleting, updateDeleting] = useState(false);

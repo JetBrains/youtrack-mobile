@@ -2,7 +2,8 @@ import React from 'react';
 import {Text, View} from 'react-native';
 
 import Animated, {Layout, useSharedValue, withSpring} from 'react-native-reanimated';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
+import {useDispatch} from 'hooks/use-dispatch';
 
 import Header from 'components/header/header';
 import Router from 'components/router/router';
@@ -21,7 +22,6 @@ import styles from 'views/create-issue/create-issue.styles';
 
 import type {AppState} from 'reducers';
 import type {IssueCreate} from 'types/Issue';
-import type {ReduxThunkDispatch} from 'types/Redux';
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 
@@ -29,7 +29,7 @@ const IssueDrafts = ({onHide}: { onHide: () => void }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const theme = useTheme();
 
-  const dispatch: ReduxThunkDispatch = useDispatch();
+  const dispatch = useDispatch();
   const drafts: IssueCreate[] = useSelector((state: AppState) => state.creation.drafts);
   const [current, setCurrent] = React.useState<string | null>(null);
   const height = useSharedValue(SELECT_ITEM_HEIGHT);

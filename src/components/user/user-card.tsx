@@ -1,7 +1,7 @@
 import React from 'react';
 import {Clipboard, Linking, Text, TouchableOpacity, View} from 'react-native';
 
-import {useDispatch} from 'react-redux';
+import {useDispatch} from 'hooks/use-dispatch';
 
 import Avatar from 'components/avatar/avatar';
 import ImageWithProgress from 'components/image/image-with-progress';
@@ -24,12 +24,11 @@ import styles from './user-card.styles';
 
 import type {Article} from 'types/Article';
 import type {DraftCommentData} from 'types/CustomFields';
-import type {ReduxThunkDispatch} from 'types/Redux.ts';
 import type {User} from 'types/User';
 
 
 const UserCard = ({user}: { user: User}) => {
-  const dispatch: ReduxThunkDispatch = useDispatch();
+  const dispatch = useDispatch();
   const {closeBottomSheet} = useBottomSheetContext();
 
   const loadedUser: User | null = useUserCardAsync(user.id);

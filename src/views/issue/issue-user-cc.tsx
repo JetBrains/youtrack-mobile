@@ -1,7 +1,8 @@
 import React from 'react';
 import {Text, View} from 'react-native';
 
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
+import {useDispatch} from 'hooks/use-dispatch';
 
 import ColorField from 'components/color-field/color-field';
 import FormSelect from 'components/form/form-select-button';
@@ -19,7 +20,6 @@ import styles from './issue.styles';
 import type {AppState} from 'reducers';
 import type {CustomError} from 'types/Error';
 import type {ISelectProps} from 'components/select/select';
-import type {ReduxThunkDispatch} from 'types/Redux';
 import type {UserCC, UserHubCC} from 'types/User';
 import type {TextStyleProp, ViewStyleProp} from 'types/Internal';
 
@@ -32,7 +32,7 @@ const IssueUsersCC = ({
   style?: ViewStyleProp;
   textStyle?: TextStyleProp;
 }) => {
-  const dispatch: ReduxThunkDispatch = useDispatch();
+  const dispatch = useDispatch();
   const issue = useSelector((state: AppState) => state.issueState.issue);
   const usersCC = useSelector((state: AppState) => state.issueState.usersCC || []);
   const currentUser = useSelector((state: AppState) => state.app.user!);

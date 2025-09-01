@@ -1,7 +1,8 @@
 import React from 'react';
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
+import {useDispatch} from 'hooks/use-dispatch';
 
 import MarkdownView from 'components/wiki/markdown-view';
 import ModalView from 'components/modal-view/modal-view';
@@ -12,10 +13,9 @@ import {i18n} from 'components/i18n/i18n';
 import styles from './user-agreement.styles';
 
 import type {AppState} from 'reducers';
-import type {ReduxThunkDispatch} from 'types/Redux';
 
 const UserAgreementView = () => {
-  const dispatch: ReduxThunkDispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const show = useSelector((state: AppState) => state.app.showUserAgreement);
   const agreement = useSelector((state: AppState) => state.app.endUserAgreement);

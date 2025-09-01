@@ -1,7 +1,8 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {Clipboard, Share} from 'react-native';
 
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
+import {useDispatch} from 'hooks/use-dispatch';
 
 import * as articleActions from './arcticle-actions';
 import ActivityStream from 'components/activity-stream/activity__stream';
@@ -34,7 +35,6 @@ import type {Article} from 'types/Article';
 import type {Attachment, IssueComment} from 'types/CustomFields';
 import type {ContextMenuConfig, ContextMenuConfigItem} from 'types/MenuConfig';
 import type {Reaction} from 'types/Reaction';
-import type {ReduxThunkDispatch} from 'types/Redux';
 import type {UITheme} from 'types/Theme';
 import type {User} from 'types/User';
 
@@ -58,7 +58,7 @@ interface IReactionState {
 const ArticleActivities = (props: Props) => {
   const {article, uiTheme, renderRefreshControl, issuePermissions} = props;
 
-  const dispatch: ReduxThunkDispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const activityPage = useSelector((state: AppState) => state.article.activityPage);
   const articleCommentDraft = useSelector((state: AppState) => state.article.articleCommentDraft);

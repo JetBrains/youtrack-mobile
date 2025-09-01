@@ -1,7 +1,8 @@
 import React from 'react';
 import {View} from 'react-native';
 
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
+import {useDispatch} from 'hooks/use-dispatch';
 
 import Header from 'components/header/header';
 import IssueActivitiesSettings from 'views/issue/activity/issue__activity-settings';
@@ -14,12 +15,11 @@ import {receiveUserAppearanceProfile} from 'actions/app-actions';
 import styles from './settings.styles';
 
 import type {AppState} from 'reducers';
-import type {ReduxThunkDispatch} from 'types/Redux';
 import type {UITheme} from 'types/Theme';
 import type {UserAppearanceProfile} from 'types/User';
 
 const SettingsActivity = ({uiTheme}: {uiTheme: UITheme}) => {
-  const dispatch: ReduxThunkDispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const userAppearanceProfile = useSelector(
     (state: AppState) => state.app.user?.profiles.appearance || DEFAULT_USER_APPEARANCE_PROFILE

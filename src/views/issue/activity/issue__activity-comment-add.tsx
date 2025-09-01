@@ -1,6 +1,7 @@
 import React from 'react';
 
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
+import {useDispatch} from 'hooks/use-dispatch';
 
 import IssueCommentEdit from 'components/comment/comment-edit';
 import IssuePermissions from 'components/issue-permissions/issue-permissions';
@@ -14,7 +15,6 @@ import type {IssueComment} from 'types/CustomFields';
 import type {IssueContextData} from 'types/Issue';
 import {AppState} from 'reducers';
 import {NormalizedAttachment} from 'types/Attachment';
-import {ReduxThunkDispatch} from 'types/Redux';
 import {Visibility} from 'types/Visibility';
 
 interface Props {
@@ -26,7 +26,7 @@ interface Props {
 }
 
 const IssueActivityStreamCommentAdd = (props: Props) => {
-  const dispatch: ReduxThunkDispatch = useDispatch();
+  const dispatch = useDispatch();
   const team = useSelector((state: AppState) => state.issueActivity.defaultProjectTeam);
 
   const issueContext: IssueContextData = React.useContext(IssueContext);

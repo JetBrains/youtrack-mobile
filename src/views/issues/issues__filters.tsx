@@ -1,7 +1,8 @@
 import React from 'react';
 import {ScrollView, TouchableOpacity, View} from 'react-native';
 
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
+import {useDispatch} from 'hooks/use-dispatch';
 
 import IssuesFilterField from 'views/issues/issues__filters-filter';
 import {IconClose} from 'components/icon/icon';
@@ -11,11 +12,9 @@ import styles from './issues.styles';
 
 import type {AppState} from 'reducers';
 import type {FilterFieldSetting, FilterFiledSettingMap, IssuesSettings} from 'views/issues/index';
-import type {ReduxThunkDispatch} from 'types/Redux';
-
 
 const IssuesFilters = (): React.JSX.Element | null => {
-  const dispatch: ReduxThunkDispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const disabled: boolean = useSelector((state: AppState) => state.issueList.isRefreshing);
   const settings: IssuesSettings = useSelector((state: AppState) => state.issueList.settings);

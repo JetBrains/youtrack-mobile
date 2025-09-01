@@ -1,7 +1,8 @@
 import React, {useCallback, useContext, useEffect} from 'react';
 import {FlatList, RefreshControl, Text, View} from 'react-native';
 
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
+import {useDispatch} from 'hooks/use-dispatch';
 
 import * as actions from './inbox-threads-actions';
 import ErrorMessage from 'components/error-message/error-message';
@@ -20,7 +21,6 @@ import styles from './inbox-threads.styles';
 import type {AppState} from 'reducers';
 import type {Entity} from 'types/Entity';
 import type {InboxThread, ThreadsStateFilterId} from 'types/Inbox';
-import type {ReduxThunkDispatch} from 'types/Redux';
 import type {Theme} from 'types/Theme';
 
 interface Props {
@@ -39,7 +39,7 @@ const InboxThreadsList = ({folderId, onNavigate, merger, onScroll}: Props) => {
   const isMergedNotifications: React.MutableRefObject<boolean> = React.useRef(!!getStorageState().mergedNotifications);
 
   const theme = useContext<Theme>(ThemeContext);
-  const dispatch: ReduxThunkDispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const currentUser = useSelector((state: AppState) => state.app.user);
   const error = useSelector((state: AppState) => state.inboxThreads.error);

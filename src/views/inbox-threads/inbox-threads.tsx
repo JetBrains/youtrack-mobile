@@ -3,7 +3,8 @@ import {Dimensions, Linking, TouchableOpacity, View} from 'react-native';
 
 import {SceneMap, SceneRendererProps, TabBar, TabView} from 'react-native-tab-view';
 import {useActionSheet} from '@expo/react-native-action-sheet';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
+import {useDispatch} from 'hooks/use-dispatch';
 
 import * as actions from './inbox-threads-actions';
 import Article from 'views/article/article';
@@ -39,7 +40,6 @@ import type {AppConfig} from 'types/AppConfig';
 import type {Entity} from 'types/Entity';
 import type {InboxThread} from 'types/Inbox';
 import type {NavigationState} from 'react-navigation';
-import type {ReduxThunkDispatch} from 'types/Redux';
 
 const InboxThreads = () => {
   const routes: TabRoute[] = getThreadTabsTitles().map(
@@ -50,7 +50,7 @@ const InboxThreads = () => {
     }),
   );
 
-  const dispatch: ReduxThunkDispatch = useDispatch();
+  const dispatch = useDispatch();
   const {showActionSheetWithOptions} = useActionSheet();
   const theme: Theme = React.useContext(ThemeContext);
   const dimensionsChangeListener = React.useRef();

@@ -9,7 +9,8 @@ import {
   View,
 } from 'react-native';
 
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
+import {useDispatch} from 'hooks/use-dispatch';
 
 import * as actions from './helpdesk-feedback-actions';
 import AttachFileDialog from 'components/attach-file/attach-file-dialog';
@@ -51,14 +52,13 @@ import styles from './helpdesk-feedback.styles';
 import type {AppState} from 'reducers';
 import type {NormalizedAttachment} from 'types/Attachment';
 import type {ProjectHelpdesk} from 'types/Project';
-import type {ReduxThunkDispatch} from 'types/Redux';
 import type {Theme, UIThemeColors} from 'types/Theme';
 
 const HelpDeskFeedback = ({project, uuid}: {project: ProjectHelpdesk, uuid?: string}) => {
   const theme: Theme = React.useContext(ThemeContext);
   const uiThemeColors: UIThemeColors = theme.uiTheme.colors;
 
-  const dispatch: ReduxThunkDispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const form = useSelector((state: AppState) => state.helpDeskFeedbackForm.form);
   const error = useSelector((state: AppState) => state.helpDeskFeedbackForm.error);

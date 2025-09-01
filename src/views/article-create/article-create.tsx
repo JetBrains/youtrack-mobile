@@ -8,7 +8,8 @@ import {
 } from 'react-native';
 
 import {useDebouncedCallback} from 'use-debounce';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
+import {useDispatch} from 'hooks/use-dispatch';
 import {View as AnimatedView} from 'react-native-animatable';
 
 import * as articleCreateActions from './arcticle-create-actions';
@@ -40,7 +41,6 @@ import type {ArticleCreateState} from './article-create-reducers';
 import type {Attachment} from 'types/CustomFields';
 import type {CustomError} from 'types/Error';
 import type {NormalizedAttachment} from 'types/Attachment';
-import type {ReduxThunkDispatch} from 'types/Redux';
 import type {Theme, UIThemeColors} from 'types/Theme';
 import type {Visibility} from 'types/Visibility';
 
@@ -68,7 +68,7 @@ const ArticleCreate = (props: Props) => {
     visibility: null,
     attachments: [],
   });
-  const dispatch: ReduxThunkDispatch = useDispatch();
+  const dispatch = useDispatch();
   const theme: Theme = useContext(ThemeContext);
   const isConnected: boolean = useSelector(
     (state: AppState) => !!state.app.networkState?.isConnected,

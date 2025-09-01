@@ -1,6 +1,7 @@
 import React, {useCallback, useEffect} from 'react';
 
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
+import {useDispatch} from 'hooks/use-dispatch';
 
 import * as articleActions from './arcticle-actions';
 import IssueCommentEdit from 'components/comment/comment-edit';
@@ -13,7 +14,6 @@ import {visibilityArticleDefaultText} from 'components/visibility/visibility-str
 import type {AppState} from 'reducers';
 import type {Article} from 'types/Article';
 import type {IssueComment} from 'types/CustomFields';
-import type {ReduxThunkDispatch} from 'types/Redux';
 
 interface Props {
   article: Article;
@@ -23,7 +23,7 @@ interface Props {
 }
 
 const ArticleAddComment = (props: Props) => {
-  const dispatch: ReduxThunkDispatch = useDispatch();
+  const dispatch = useDispatch();
   const issuePermissions: IssuePermissions = useSelector((state: AppState) => state.app.issuePermissions);
   const isAgent = issuePermissions.helpdesk.isAgent(props.article);
   const isReporter = issuePermissions.helpdesk.isReporter(props.article);

@@ -3,7 +3,7 @@ import {Text, TouchableOpacity, View} from 'react-native';
 
 // @ts-ignore
 import DraggableFlatList from 'react-native-draggable-dynamic-flatlist';
-import {useDispatch} from 'react-redux';
+import {useDispatch} from 'hooks/use-dispatch';
 import {View as AnimatedView} from 'react-native-animatable';
 
 import Header from 'components/header/header';
@@ -23,7 +23,6 @@ import styles from './issues.styles';
 import type {FilterField} from 'types/Sorting';
 import type {FilterFieldSetting} from 'views/issues/index';
 import type {ICustomField} from 'types/CustomFields';
-import type {ReduxThunkDispatch} from 'types/Redux';
 import usage from 'components/usage/usage';
 
 const IssuesFiltersSettingList = ({
@@ -36,7 +35,7 @@ const IssuesFiltersSettingList = ({
   onBack: () => void;
 }) => {
   const isSplitViewMode = isSplitView();
-  const dispatch: ReduxThunkDispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const contextId = dispatch(getSearchContext()).id;
   const cachedFilterFields = React.useRef<Array<FilterField> | null>(null);

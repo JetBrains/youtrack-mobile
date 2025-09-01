@@ -2,7 +2,8 @@ import React, {memo, useContext, useEffect, useState} from 'react';
 import {ActivityIndicator, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
 import InputScrollView from 'react-native-input-scroll-view';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
+import {useDispatch} from 'hooks/use-dispatch';
 
 import DatePicker from 'components/date-picker/date-picker';
 import Header from 'components/header/header';
@@ -29,7 +30,6 @@ import styles from './activity__add-spent-time.styles';
 import type {AppState} from 'reducers';
 import type {ISelectProps} from 'components/select/select';
 import type {IssueFull} from 'types/Issue';
-import type {ReduxThunkDispatch} from 'types/Redux';
 import type {Theme} from 'types/Theme';
 import type {User} from 'types/User';
 import type {ViewStyleProp} from 'types/Internal';
@@ -55,7 +55,7 @@ type SelectPropsType = {ringId: string; name: string} | WorkItemType | WorkItemA
 const AddSpentTimeForm = (props: Props) => {
   const currentUser = useSelector((state: AppState) => state.app.user!);
   const theme: Theme = useContext(ThemeContext);
-  const dispatch: ReduxThunkDispatch = useDispatch();
+  const dispatch = useDispatch();
   const issueActivityActions = createIssueActivityActions();
 
   const [isProgress, updateProgress] = useState(false);

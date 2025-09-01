@@ -3,7 +3,8 @@ import {View, Text, TouchableOpacity, Linking} from 'react-native';
 
 // @ts-ignore
 import Switch from 'react-native-switch-pro';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
+import {useDispatch} from 'hooks/use-dispatch';
 
 import * as appActions from 'actions/app-actions';
 import Accounts from 'components/account/accounts';
@@ -26,12 +27,11 @@ import styles from './settings.styles';
 
 import type {AppState} from 'reducers';
 import type {StorageState} from 'components/storage/storage';
-import type {ReduxThunkDispatch} from 'types/Redux';
 import type {UserHelpdeskProfile} from 'types/User';
 
 
 export default function Settings() {
-  const dispatch: ReduxThunkDispatch = useDispatch();
+  const dispatch = useDispatch();
   const uiTheme = useUITheme();
 
   const isHelpdeskFeatureEnabled: boolean = checkVersion(FEATURE_VERSION.helpDesk);

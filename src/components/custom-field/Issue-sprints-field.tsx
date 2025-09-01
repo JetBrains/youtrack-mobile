@@ -2,7 +2,8 @@ import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
 import {useActionSheet} from '@expo/react-native-action-sheet';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
+import {useDispatch} from 'hooks/use-dispatch';
 
 import Router from 'components/router/router';
 import Select from 'components/select/select';
@@ -17,10 +18,9 @@ import styles from './custom-field.styles';
 import type {ActionSheetAction} from 'types/Action';
 import type {AppState} from 'reducers';
 import type {IssueSprint} from 'types/Issue';
-import type {ReduxThunkDispatch} from 'types/Redux';
 
 export default function IssueSprintsField({projectId, onUpdate}: {projectId: string; onUpdate: () => void}) {
-  const dispatch: ReduxThunkDispatch = useDispatch();
+  const dispatch = useDispatch();
   const {showActionSheetWithOptions} = useActionSheet();
 
   const issueSprints = useSelector((state: AppState) => getIssueState(state).issueSprints);
