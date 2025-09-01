@@ -12,8 +12,9 @@ export default EStyleSheet.create({
   leftAction: {
     flexGrow: 1,
     paddingLeft: UNIT,
+    paddingTop: UNIT * 2,
     alignItems: 'flex-start',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     backgroundColor: '$blueBackground',
   },
   leftActionText: {
