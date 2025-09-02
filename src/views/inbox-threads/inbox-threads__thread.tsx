@@ -10,7 +10,7 @@ import InboxThreadReadToggleButton from 'views/inbox-threads/inbox-threads__read
 import SwipeableRow from 'components/swipeable/swipeable';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
-import {isUnreadOnly, muteToggle, readMessageToggle, updateThreadsStateAndCache} from './inbox-threads-actions';
+import {isUnreadOnly, muteToggle, updateThreadRead, updateThreadsStateAndCache} from './inbox-threads-actions';
 import {swipeDirection} from 'components/swipeable';
 import {ThreadSettings} from 'views/inbox-threads/inbox-threads__thread-settings';
 import {useThread} from 'views/inbox-threads/inbox-threads__use-thread';
@@ -57,19 +57,15 @@ function Thread({
     updateThread(thread);
   }, [thread]);
 
-  const toggleMessagesRead = (
-    messages: InboxThreadMessage[],
-    read: boolean,
-    toggleThread: boolean = false,
-  ) => {
+  const toggleRead = (read: boolean) => {
     const updatedThread: InboxThread = {
       ..._thread,
-      messages: _thread.messages.map((it: InboxThreadMessage) => ({...it, read})),
+      messages: _thread.messages.map(m => ({...m, read})),
     };
     updateThread(updatedThread);
     setIsRead(read);
-    dispatch(readMessageToggle(messages, read));
-    dispatch(updateThreadsStateAndCache(updatedThread, toggleThread && read));
+    dispatch(updateThreadRead(_thread.id, _thread.updated, read));
+    dispatch(updateThreadsStateAndCache(updatedThread));
     if (isUnreadOnly()) {
       animation.layoutAnimation();
     }
@@ -90,7 +86,7 @@ function Thread({
     },
     {
       title: actionText[0],
-      execute: () => toggleMessagesRead(_thread.messages, !isRead, true),
+      execute: () => toggleRead(!isRead),
     },
     {
       title: i18n('Cancel'),
@@ -144,7 +140,7 @@ function Thread({
           style={!isBottomPositioned && styles.threadItemActionWithSettings}
           read={isRead}
           onReadChange={(read: boolean) => {
-            toggleMessagesRead(_thread.messages, read);
+            toggleRead(read);
           }}
         />
       )}
@@ -153,7 +149,7 @@ function Thread({
         enabled={hasReadField}
         direction={swipeDirection.left}
         actionText={actionText}
-        onSwipe={() => toggleMessagesRead(_thread.messages, !isRead)}
+        onSwipe={() => toggleRead(!isRead)}
       >
         <View style={styles.threadContainer}>
           <ThreadView
@@ -162,7 +158,7 @@ function Thread({
             uiTheme={uiTheme}
             onNavigate={onNavigate}
             onReadChange={(messages: InboxThreadMessage[], read: boolean) => {
-              toggleMessagesRead(messages, read);
+              toggleRead(read);
             }}
           />
           {isBottomPositioned && <View style={styles.threadTitleContainerBottom}>{Entity}</View>}

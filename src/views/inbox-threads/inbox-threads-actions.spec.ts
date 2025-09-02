@@ -469,13 +469,27 @@ describe('Inbox Threads', () => {
         ),
       };
     });
-    it('should not update the threads state and a cache', async () => {
-      prepareStoreAndCacheData(folderIdAllKey, 1);
+    it('should update the threads state and a cache for Mentions & Reactions notifications', async () => {
+      prepareStoreAndCacheData(folderIdMap[1], 1);
       await store.dispatch(
         actions.updateThreadsStateAndCache(updatedThread, false),
       );
-      expect(store.getActions()).toHaveLength(0);
-      expect(storage.flushStoragePart).not.toHaveBeenCalled();
+      expect(store.getActions()).toHaveLength(1);
+      expect(store.getActions()[0]).toEqual({
+        payload: {
+          folderId: folderIdMap[1],
+          reset: true,
+          threads: [threadMocks[0], updatedThread],
+        },
+        type: 'inboxThreads/setNotifications',
+      });
+      expect(storage.flushStoragePart).toHaveBeenCalledWith({
+        inboxThreadsCache: {
+          [folderIdMap[1]]: [threadMocks[0], updatedThread],
+          lastVisited: 1,
+          unreadOnly,
+        },
+      });
     });
     it('should update the threads state and a cache for All notifications', async () => {
       prepareStoreAndCacheData(folderIdAllKey, 0);

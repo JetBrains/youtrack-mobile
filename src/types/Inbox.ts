@@ -111,6 +111,7 @@ export interface InboxThread {
   id: string;
   muted: boolean;
   notified: number;
+  updated: number;
   subject: {
     $type: string;
     id: string;

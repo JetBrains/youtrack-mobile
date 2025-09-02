@@ -243,6 +243,7 @@ function createThreadMock(data = {}) {
     {
       id: `S-${uuid()}`,
       notified: 1,
+      updated: 2,
       muted: false,
       messages: [
         {

@@ -24,6 +24,7 @@ export const inboxThreadFields: ToField = toField([
   'id',
   'notified',
   'muted',
+  'updated',
   {
     subject: [
       'id',

@@ -13,9 +13,8 @@ import {until} from 'util/util';
 
 import type Api from 'components/api/api';
 import type {AppState} from 'reducers';
-import type {CustomError} from 'types/Error';
 import type {Entity} from 'types/Entity';
-import type {InboxFolder, InboxThread, InboxThreadMessage} from 'types/Inbox';
+import type {InboxFolder, InboxThread} from 'types/Inbox';
 import type {IssueComment} from 'types/CustomFields';
 import type {Reaction} from 'types/Reaction';
 import type {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
@@ -48,61 +47,51 @@ const updateCache = async (data: Record<string, any>): Promise<void> => {
   });
 };
 
-const updateThreadsStateAndCache = (thread: InboxThread, setThreadRead: boolean): ReduxAction => {
+const updateThreadsStateAndCache = (thread: InboxThread): ReduxAction => {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
-    const storedFolderIds: ThreadsStateFilterId[] = [folderIdAllKey, folderIdMap[2]] as ThreadsStateFilterId[];
+    const storedFolderIds: ThreadsStateFilterId[] = [folderIdAllKey, folderIdMap[1], folderIdMap[2]] as ThreadsStateFilterId[];
 
-    if (lastVisitedTabIndex() !== 1) {
-      const updatedState: ThreadsStateData = updateState();
-      const updatedCacheData: Partial<InboxThreadsCache> = storedFolderIds.reduce(
-        (map: Partial<InboxThreadsCache>, folderId: ThreadsStateFilterId) => {
-          return Object.assign(
-            map,
-            updatedState[folderId]
-              ? {
-                  [folderId]: updatedState[folderId].threads || getCachedData()[folderId],
-                }
-              : {},
-          );
-        },
-        {},
-      );
-      updateCache(updatedCacheData);
-    }
+    const updatedState: ThreadsStateData = updateState();
+    const updatedCacheData: Partial<InboxThreadsCache> = storedFolderIds.reduce(
+      (map: Partial<InboxThreadsCache>, folderId: ThreadsStateFilterId) => {
+        return Object.assign(
+          map,
+          updatedState[folderId]
+            ? {
+                [folderId]: updatedState[folderId].threads || getCachedData()[folderId],
+              }
+            : {},
+        );
+      },
+      {},
+    );
+    updateCache(updatedCacheData);
 
     function updateState(): ThreadsStateData {
-      const unreadOnly: boolean = getCachedData().unreadOnly;
-      const threadsData: ThreadsStateData = getState()?.inboxThreads?.threadsData;
+      const state = getState();
+      const inboxThreads = state?.inboxThreads;
+      const threadsData = inboxThreads?.threadsData;
       return storedFolderIds.reduce((map: ThreadsStateData, folderId: ThreadsStateFilterId) => {
         let data = {};
 
         if (threadsData?.[folderId]) {
-          const threads: InboxThread[] = threadsData[folderId].threads.reduce(
-            (list: InboxThread[], it: InboxThread) =>
-              list.concat(
-                thread.id === it.id
-                  ? unreadOnly && setThreadRead
-                    ? []
-                    : unreadOnly
-                    ? {
-                        ...thread,
-                        messages: thread.messages.filter((it: InboxThreadMessage) => !it.read),
-                      }
-                    : thread
-                  : it,
-              ),
-            [],
-          );
-          dispatch(
-            setNotifications({
-              threads,
-              reset: true,
-              folderId,
-            }),
-          );
-          data = {
-            [folderId]: {...threadsData[folderId], threads},
-          };
+          const updatedThreads = threadsData[folderId].threads.reduce((acc: InboxThread[], it: InboxThread) => {
+            acc.push(thread.id === it.id ? thread : it);
+            return acc;
+          }, []);
+
+          let threads: InboxThread[];
+          if (getCachedData().unreadOnly) {
+            threads = updatedThreads.reduce((acc: InboxThread[], t: InboxThread) => {
+              acc.push({...t, messages: t.messages.filter(m => !m.read)});
+              return acc;
+            }, []);
+          } else {
+            threads = updatedThreads;
+          }
+
+          dispatch(setNotifications({threads, reset: true, folderId}));
+          data = {[folderId]: {...threadsData[folderId], threads: updatedThreads}};
         }
 
         return {...map, ...data};
@@ -299,30 +288,13 @@ const muteToggle = (id: string, muted: boolean): ReduxAction<Promise<boolean>> =
   };
 };
 
-const readMessageToggle = (messages: InboxThreadMessage[], read: boolean): ReduxAction => {
-  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter): Promise<void> => {
-    trackEvent('mark message read', {
-      read,
-    });
-
+const updateThreadRead = (id: string, updated: number, read: boolean): ReduxAction => {
+  return async (_: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
+    trackEvent('mark thread read', {read});
     if (!isOnline(getState())) {
       return;
     }
-
-    const [error]: [
-      CustomError | null | undefined,
-      {
-        read: boolean;
-      },
-    ] = await until(
-      getApi().inbox.markMessages(
-        messages.map((it: InboxThreadMessage) => ({
-          id: it.id,
-        })),
-        read,
-      ),
-    );
-
+    const [error] = await until<boolean>(getApi().inbox.markThreadRead(id, updated, read));
     if (error) {
       notifyError(error);
     }
@@ -398,8 +370,8 @@ export {
   markFolderSeen,
   muteToggle,
   onReactionSelect,
-  readMessageToggle,
   setInProgress,
   toggleUnreadOnly,
   updateThreadsStateAndCache,
+  updateThreadRead,
 };

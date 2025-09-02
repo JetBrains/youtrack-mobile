@@ -3,8 +3,10 @@ import {inboxThreadFields} from './api__inbox-fields';
 import {InboxFolder} from 'types/Inbox';
 import type Auth from '../auth/oauth2';
 import type {InboxThread} from 'types/Inbox';
+
 export const threadsPageSize: number = 16;
-export default class IssueAPI extends ApiBase {
+
+export default class InboxAPI extends ApiBase {
   constructor(auth: Auth) {
     super(auth);
   }
@@ -87,6 +89,17 @@ export default class IssueAPI extends ApiBase {
       'POST',
       {
         messages: ids,
+        read,
+      },
+    );
+  }
+
+  async markThreadRead(id: string, updated: number, read: boolean): Promise<{read: boolean;}> {
+    return this.makeAuthorizedRequest(
+      `${this.youTrackApiUrl}/inbox/markThread?fields=read`,
+      'POST',
+      {
+        thread: {id, updated},
         read,
       },
     );
