@@ -41,7 +41,7 @@ const getFolderCachedThreads = (folderId: ThreadsStateFilterId | null = folderId
 
 const isOnline = (state: AppState): boolean => state?.app?.networkState?.isConnected === true;
 
-const updateCache = async (data: Record<string, any>): Promise<void> => {
+const updateCache = async (data: Record<string, any>) => {
   await flushStoragePart({
     inboxThreadsCache: {...DEFAULT_CACHE_DATA, ...getCachedData(), ...data},
   });
@@ -68,24 +68,20 @@ const updateThreadsStateAndCache = (thread: InboxThread): ReduxAction => {
     updateCache(updatedCacheData);
 
     function updateState(): ThreadsStateData {
-      const state = getState();
-      const inboxThreads = state?.inboxThreads;
-      const threadsData = inboxThreads?.threadsData;
+      const threadsData = getState()?.inboxThreads?.threadsData;
       return storedFolderIds.reduce((map: ThreadsStateData, folderId: ThreadsStateFilterId) => {
         let data = {};
 
         if (threadsData?.[folderId]) {
-          const updatedThreads = threadsData[folderId].threads.reduce((acc: InboxThread[], it: InboxThread) => {
-            acc.push(thread.id === it.id ? thread : it);
-            return acc;
+          const updatedThreads = threadsData[folderId].threads.map((it: InboxThread) => {
+            return thread.id === it.id ? thread : it;
           }, []);
 
           let threads: InboxThread[];
           if (getCachedData().unreadOnly) {
-            threads = updatedThreads.reduce((acc: InboxThread[], t: InboxThread) => {
-              acc.push({...t, messages: t.messages.filter(m => !m.read)});
-              return acc;
-            }, []);
+            threads = updatedThreads.map((t: InboxThread) => {
+              return {...t, messages: t.messages.filter(m => !m.read)};
+            });
           } else {
             threads = updatedThreads;
           }
