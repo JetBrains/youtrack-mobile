@@ -52,6 +52,11 @@ function SwipeableRow({
       leftThreshold={props.leftThreshold}
       rightThreshold={props.rightThreshold}
       animationOptions={props.animationOptions}
+      overshootLeft={props.overshootLeft}
+      overshootRight={props.overshootRight}
+      useNativeAnimations={props.useNativeAnimations}
+      dragOffsetFromLeftEdge={props.dragOffsetFromLeftEdge}
+      dragOffsetFromRightEdge={props.dragOffsetFromRightEdge}
       onSwipeableWillOpen={() => {
         trigger(HapticFeedbackTypes.impactMedium);
       }}

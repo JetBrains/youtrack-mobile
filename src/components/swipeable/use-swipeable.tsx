@@ -120,13 +120,18 @@ export function useSwipeable(): SwipeableData {
     getAnimationStyles,
     renderActions,
     props: {
-      friction: 1.5,
+      friction: 2.0,
       leftThreshold: fullWidth * 0.2,
       rightThreshold: fullWidth * 0.2,
+      overshootLeft: false,
+      overshootRight: false,
+      dragOffsetFromLeftEdge: 0,
+      dragOffsetFromRightEdge: 0,
+      useNativeAnimations: true,
       animationOptions: {
         delay: 0,
-        speed: 200,
-        bounciness: 2,
+        speed: 300,
+        bounciness: 0,
       },
     },
   };
