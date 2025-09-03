@@ -240,7 +240,7 @@ const loadInboxThreads = (
     }
 
     dispatch(setInProgress(true, setGlobalProgress));
-    const [error, threads] = await until<InboxThread[]>(getApi().inbox.getThreads(folderId, end, isUnreadOnly()));
+    const [error, threads] = await until<InboxThread[]>(getApi().inbox.getThreads(isUnreadOnly(), folderId, end));
     dispatch(setInProgress(false, setGlobalProgress));
 
     if (error) {

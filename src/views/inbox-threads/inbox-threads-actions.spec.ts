@@ -62,9 +62,9 @@ describe('Inbox Threads', () => {
         actions.loadInboxThreads(undefined, undefined, false),
       );
       expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(
-        undefined,
-        undefined,
         false,
+        undefined,
+        undefined,
       );
       expect(store.getActions()).toEqual([
         {
@@ -121,9 +121,9 @@ describe('Inbox Threads', () => {
     it('should load more threads', async () => {
       await store.dispatch(actions.loadInboxThreads(undefined, 1));
       expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(
+        false,
         undefined,
         1,
-        false,
       );
       expect(store.getActions()[5]).toEqual({
         type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
@@ -144,7 +144,7 @@ describe('Inbox Threads', () => {
       });
 
       await store.dispatch(actions.loadInboxThreads(undefined, 1));
-      expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(undefined, 1, true);
+      expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(true, undefined, 1);
       expect(store.getActions()[5]).toEqual({
         type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
         payload: {

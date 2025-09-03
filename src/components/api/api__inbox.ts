@@ -22,9 +22,9 @@ export default class InboxAPI extends ApiBase {
   }
 
   async getThreads(
-    folder?: string | null | undefined,
-    end?: number | null | undefined,
-    unreadOnly: boolean | null | undefined,
+    unreadOnly: boolean,
+    folder?: string | null,
+    end?: number | null,
   ): Promise<InboxThread[]> {
     return this.makeAuthorizedRequest(
       [
@@ -66,30 +66,12 @@ export default class InboxAPI extends ApiBase {
     );
   }
 
-  async saveAllAsSeen(lastSeen: number): Promise<void> {
+  async saveAllAsSeen(lastSeen: number): Promise<InboxFolder> {
     return this.makeAuthorizedRequest(
       `${this.youTrackApiUrl}/inbox/lastSeen?fields=id,lastNotified,lastSeen`,
       'POST',
       {
         lastSeen,
-      },
-    );
-  }
-
-  async markMessages(
-    ids: {
-      id: string;
-    }[],
-    read: boolean,
-  ): Promise<{
-    read: boolean;
-  }> {
-    return this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/inbox/markMessages?fields=read`,
-      'POST',
-      {
-        messages: ids,
-        read,
       },
     );
   }
