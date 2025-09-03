@@ -18,9 +18,12 @@ import SettingsFeedbackForm from './settings__feedback-form';
 import usage, {VERSION_STRING} from 'components/usage/usage';
 import {ANALYTICS_SETTINGS_PAGE} from 'components/analytics/analytics-ids';
 import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
+import {clearCachesAndDrafts, populateStorage} from 'components/storage/storage';
+import {confirmation} from 'components/confirmation/confirmation';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
 import {isIssueActivitiesAPIEnabled} from 'views/issue/activity/issue-activity__helper';
+import {notify} from 'components/notification/notification';
 import {useUITheme} from 'components/theme/use-theme';
 
 import styles from './settings.styles';
@@ -113,6 +116,21 @@ export default function Settings() {
           <View style={styles.separator} />
 
           <View style={styles.settingsListItem}>
+            <TouchableOpacity
+              hitSlop={HIT_SLOP}
+              onPress={() => {
+                confirmation('Clear cached data?', 'Clear').then(async () => {
+                  await clearCachesAndDrafts();
+                  await populateStorage();
+                  notify(i18n('Cache cleared'));
+                });
+              }}
+            >
+              <Text style={styles.link}>{i18n('Clear cache')}</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.settingsListItem}>
             <TouchableOpacity hitSlop={HIT_SLOP} onPress={() => dispatch(appActions.openDebugView())}>
               <Text style={styles.settingsListItemTitleText}>{i18n('Share logs')}</Text>
             </TouchableOpacity>
@@ -129,7 +147,7 @@ export default function Settings() {
           <Text style={styles.settingsFooterTitle}>YouTrack Mobile</Text>
 
           <TouchableOpacity onPress={() => Linking.openURL('https://jetbrains.com/youtrack')}>
-            <Text style={styles.settingsFooterLink}>jetbrains.com/youtrack</Text>
+            <Text style={[styles.link, styles.settingsFooterLink]}>jetbrains.com/youtrack</Text>
           </TouchableOpacity>
 
           <Text style={styles.settingsFooterBuild}>{VERSION_STRING}</Text>

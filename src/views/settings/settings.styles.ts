@@ -51,9 +51,11 @@ export default EStyleSheet.create({
     fontSize: MAIN_FONT_SIZE + 2,
     fontWeight: '500',
   },
-  settingsFooterLink: {
+  link: {
     ...mainText,
     color: '$link',
+  },
+  settingsFooterLink: {
     marginTop: UNIT,
     marginBottom: UNIT,
   },
