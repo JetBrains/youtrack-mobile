@@ -65,7 +65,7 @@ export default class ErrorBoundary extends Component<React.PropsWithChildren, St
 
       captureException(error);
 
-      const reportedIssueId: string | null | undefined = await sendReport(
+      const reportedIssueId = await sendReport(
         `Render crash report: ${errorData.summary}`,
         errorData.description,
       );
@@ -161,11 +161,7 @@ export default class ErrorBoundary extends Component<React.PropsWithChildren, St
             return (
               <View style={styles.container}>
                 <View style={styles.message}>
-                  <IconFA
-                    name="exclamation-circle"
-                    size={64}
-                    color={uiThemeColors.$icon}
-                  />
+                  <IconFA name="exclamation-circle" size={64} color={uiThemeColors.$icon} />
                   <Text style={styles.title}>{ERROR_TITLE}</Text>
 
                   <TouchableOpacity
@@ -178,60 +174,41 @@ export default class ErrorBoundary extends Component<React.PropsWithChildren, St
                   </TouchableOpacity>
                 </View>
 
-                <View style={styles.sendReport}>
-                  <TouchableOpacity
-                    style={[styles.buttonSendReport, buttonStyle]}
-                    disabled={isReporting}
-                    onPress={this.reportCrash}
-                  >
-                    <Text
-                      style={[styles.buttonText, styles.buttonSendReportText]}
-                    >
-                      {isReporting
-                        ? i18n('Sending crash report…')
-                        : i18n('Send crash report')}
-                    </Text>
-                  </TouchableOpacity>
-
-                  <View style={styles.row}>
+                {false &&
+                  <View style={styles.sendReport}>
                     <TouchableOpacity
-                      style={styles.row}
+                      style={[styles.buttonSendReport, buttonStyle]}
                       disabled={isReporting}
-                      onPress={() =>
-                        this.setState({
-                          isExtendedReportEnabled: !isExtendedReportEnabled,
-                        })
-                      }
+                      onPress={this.reportCrash}
                     >
-                      <IconMaterial
-                        name={
-                          isExtendedReportEnabled
-                            ? 'checkbox-marked'
-                            : 'checkbox-blank-outline'
-                        }
-                        size={24}
-                        color={
-                          isReporting
-                            ? uiThemeColors.$disabled
-                            : uiThemeColors.$link
-                        }
-                      />
-                      <Text style={styles.sendReportText}>
-                        {i18n('Send extended report to Sentry')}
+                      <Text style={[styles.buttonText, styles.buttonSendReportText]}>
+                        {isReporting ? i18n('Sending crash report…') : i18n('Send crash report')}
                       </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
-                      disabled={isReporting}
-                      onPress={this.toggleInfoModalVisibility}
-                    >
-                      <IconMaterial
-                        name="information"
-                        size={24}
-                        color={uiThemeColors.$icon}
-                      />
-                    </TouchableOpacity>
+
+                    <View style={styles.row}>
+                      <TouchableOpacity
+                        style={styles.row}
+                        disabled={isReporting}
+                        onPress={() =>
+                          this.setState({
+                            isExtendedReportEnabled: !isExtendedReportEnabled,
+                          })
+                        }
+                      >
+                        <IconMaterial
+                          name={isExtendedReportEnabled ? 'checkbox-marked' : 'checkbox-blank-outline'}
+                          size={24}
+                          color={isReporting ? uiThemeColors.$disabled : uiThemeColors.$link}
+                        />
+                        <Text style={styles.sendReportText}>{i18n('Send extended report to Sentry')}</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity disabled={isReporting} onPress={this.toggleInfoModalVisibility}>
+                        <IconMaterial name="information" size={24} color={uiThemeColors.$icon} />
+                      </TouchableOpacity>
+                    </View>
                   </View>
-                </View>
+                }
 
                 <View>
                   <TouchableOpacity
@@ -240,9 +217,7 @@ export default class ErrorBoundary extends Component<React.PropsWithChildren, St
                     style={buttonStyle}
                     onPress={this.contactSupport}
                   >
-                    <Text style={styles.buttonText}>
-                      {i18n('Contact support')}
-                    </Text>
+                    <Text style={styles.buttonText}>{i18n('Contact support')}</Text>
                   </TouchableOpacity>
                 </View>
 
