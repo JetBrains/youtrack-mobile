@@ -34,6 +34,18 @@ const trackEvent = (event: string, params?: Object) => {
 
 const getCachedData = (): InboxThreadsCache => getStorageState().inboxThreadsCache || DEFAULT_CACHE_DATA;
 
+const isUnreadOnly = (): boolean => getCachedData().unreadOnly;
+
+function getThreadWithFilteredMessages(thread: InboxThread): InboxThread {
+  if (isUnreadOnly()) {
+    return {
+      ...thread,
+      messages: thread.messages.filter(m => !m.read),
+    };
+  }
+  return thread;
+}
+
 const getFolderCachedThreads = (folderId: ThreadsStateFilterId | null = folderIdAllKey): InboxThread[] => {
   const cachedData: InboxThreadsCache = getCachedData();
   return cachedData[folderId as ThreadsStateFilterId] || [];
@@ -70,27 +82,22 @@ const updateThreadsStateAndCache = (thread: InboxThread): ReduxAction => {
     function updateState(): ThreadsStateData {
       const threadsData = getState()?.inboxThreads?.threadsData;
       return storedFolderIds.reduce((map: ThreadsStateData, folderId: ThreadsStateFilterId) => {
-        let data = {};
-
         if (threadsData?.[folderId]) {
           const updatedThreads = threadsData[folderId].threads.map((it: InboxThread) => {
             return thread.id === it.id ? thread : it;
           }, []);
 
-          let threads: InboxThread[];
-          if (getCachedData().unreadOnly) {
-            threads = updatedThreads.map((t: InboxThread) => {
-              return {...t, messages: t.messages.filter(m => !m.read)};
-            });
-          } else {
-            threads = updatedThreads;
-          }
-
-          dispatch(setNotifications({threads, reset: true, folderId}));
-          data = {[folderId]: {...threadsData[folderId], threads: updatedThreads}};
+          dispatch(
+            setNotifications({
+              threads: updatedThreads.map(getThreadWithFilteredMessages),
+              reset: true,
+              folderId,
+            }),
+          );
+          map[folderId] = {...threadsData[folderId], threads: updatedThreads};
         }
 
-        return {...map, ...data};
+        return map;
       }, {} as ThreadsStateData);
     }
   };
@@ -103,7 +110,7 @@ const loadThreadsFromCache = (folderId: ThreadsStateFilterId | null = folderIdAl
     if (cachedThreads?.length) {
       dispatch(
         setNotifications({
-          threads: cachedThreads,
+          threads: cachedThreads.map(getThreadWithFilteredMessages),
           reset: true,
           folderId,
         }),
@@ -135,8 +142,6 @@ const toggleUnreadOnly = async (): Promise<void> => {
     unreadOnly: !inboxThreadsCache.unreadOnly,
   });
 };
-
-const isUnreadOnly = (): boolean => getCachedData().unreadOnly === true;
 
 const saveFolderSeen = (folderId: string, lastSeen: number): ReduxAction => {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
