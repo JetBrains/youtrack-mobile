@@ -242,6 +242,10 @@ msgstr "Браузер"
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr "Входя в систему, вы соглашаетесь с Политикой конфиденциальности."
 
+#: src/views/settings/settings.tsx
+msgid "Cache cleared"
+msgstr ""
+
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Camera"
 msgstr "Камера"
@@ -270,6 +274,10 @@ msgstr "Добавить меня в копию"
 #: src/views/issue/issue-user-cc.tsx
 msgid "CCs"
 msgstr "Копии"
+
+#: src/views/settings/settings.tsx
+msgid "Clear cache"
+msgstr ""
 
 #: src/components/error/error-message-data.ts
 msgid "Clear the current search context"

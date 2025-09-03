@@ -218,6 +218,10 @@ msgstr "ブラウザー"
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr "ログインすることで、プライバシーポリシーに同意したことになります。"
 
+#: src/views/settings/settings.tsx
+msgid "Cache cleared"
+msgstr ""
+
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Camera"
 msgstr "カメラ"
@@ -246,6 +250,10 @@ msgstr "自分を CC に追加"
 #: src/views/issue/issue-user-cc.tsx
 msgid "CCs"
 msgstr "CC"
+
+#: src/views/settings/settings.tsx
+msgid "Clear cache"
+msgstr ""
 
 #: src/components/error/error-message-data.ts
 msgid "Clear the current search context"

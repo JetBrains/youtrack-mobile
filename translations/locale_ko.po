@@ -218,6 +218,10 @@ msgstr "브라우저"
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr "로그인하면 개인정보 보호정책에 동의하는 것입니다."
 
+#: src/views/settings/settings.tsx
+msgid "Cache cleared"
+msgstr ""
+
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Camera"
 msgstr "카메라"
@@ -246,6 +250,10 @@ msgstr "나를 참조에 추가"
 #: src/views/issue/issue-user-cc.tsx
 msgid "CCs"
 msgstr "참조"
+
+#: src/views/settings/settings.tsx
+msgid "Clear cache"
+msgstr ""
 
 #: src/components/error/error-message-data.ts
 msgid "Clear the current search context"

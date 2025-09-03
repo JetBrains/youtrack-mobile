@@ -218,6 +218,10 @@ msgstr "浏览器"
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr "登录，即表示您同意《隐私政策》。"
 
+#: src/views/settings/settings.tsx
+msgid "Cache cleared"
+msgstr ""
+
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Camera"
 msgstr "相机"
@@ -246,6 +250,10 @@ msgstr "抄送我"
 #: src/views/issue/issue-user-cc.tsx
 msgid "CCs"
 msgstr "抄送"
+
+#: src/views/settings/settings.tsx
+msgid "Clear cache"
+msgstr ""
 
 #: src/components/error/error-message-data.ts
 msgid "Clear the current search context"

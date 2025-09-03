@@ -242,6 +242,10 @@ msgstr "Przeglądarka"
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr "Logując się, wyrażasz zgodę na Politykę prywatności."
 
+#: src/views/settings/settings.tsx
+msgid "Cache cleared"
+msgstr ""
+
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Camera"
 msgstr "Kamera"
@@ -270,6 +274,10 @@ msgstr "Dodaj mnie do DW"
 #: src/views/issue/issue-user-cc.tsx
 msgid "CCs"
 msgstr "Kopie DW"
+
+#: src/views/settings/settings.tsx
+msgid "Clear cache"
+msgstr ""
 
 #: src/components/error/error-message-data.ts
 msgid "Clear the current search context"
