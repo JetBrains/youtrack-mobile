@@ -81,7 +81,7 @@ export function useSwipeable(): SwipeableData {
   );
 
   const getAnimationStyles = (dragX: Interpolation, toLeft: boolean) => {
-    const inputRange = toLeft ? [0, fullWidth - 300] : [-fullWidth - 300, 0];
+    const inputRange = toLeft ? [0, fullWidth] : [-fullWidth, 0];
 
     const trans = dragX.interpolate({
       inputRange,
