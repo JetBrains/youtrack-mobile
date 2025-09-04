@@ -219,7 +219,7 @@ const InboxThreads = () => {
       <TabView
         lazy={true}
         renderLazyPlaceholder={() => <InboxThreadsProgressPlaceholder />}
-        swipeEnabled={true}
+        swipeEnabled={false}
         navigationState={navigationState}
         renderScene={SceneMap({
           [0]: AllTab,
