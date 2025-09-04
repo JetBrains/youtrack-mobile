@@ -85,7 +85,7 @@ export function useSwipeable(): SwipeableData {
 
     const trans = dragX.interpolate({
       inputRange,
-      outputRange: toLeft ? [40, 60] : [-60, 40],
+      outputRange: toLeft ? [-5, 20] : [-30, 0],
       extrapolate: 'clamp',
     });
 
