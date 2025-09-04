@@ -81,15 +81,18 @@ export function useSwipeable(): SwipeableData {
   );
 
   const getAnimationStyles = (dragX: Interpolation, toLeft: boolean) => {
-    const inputRange = toLeft ? leftRange : rightRange;
+    const inputRange = toLeft ? [0, fullWidth - 300] : [-fullWidth - 300, 0];
+
     const trans = dragX.interpolate({
       inputRange,
-      outputRange: toLeft ? [0, 5, 10, 15, 22, 30, 45, 60] : [-60, -45, -30, -22, -15, -10, -5, 0],
+      outputRange: toLeft ? [40, 60] : [-60, 40],
       extrapolate: 'clamp',
     });
+
+    // Gentle scale for less jittery feel vs. aggressive 0.8–1.25
     const scale = dragX.interpolate({
       inputRange,
-      outputRange: toLeft ? [0.8, 0.85, 0.9, 0.95, 1.0, 1.1, 1.2, 1.25] : [1.25, 1.2, 1.1, 1.0, 0.95, 0.9, 0.85, 0.8],
+      outputRange: toLeft ? [0.92, 1.08] : [1.08, 0.92],
       extrapolate: 'clamp',
     });
     return {transform: [{translateX: trans}, {scale}]};
@@ -120,9 +123,9 @@ export function useSwipeable(): SwipeableData {
     getAnimationStyles,
     renderActions,
     props: {
-      friction: 2.0,
-      leftThreshold: fullWidth * 0.2,
-      rightThreshold: fullWidth * 0.2,
+      friction: 0.8,
+      leftThreshold: fullWidth * 0.15,
+      rightThreshold: fullWidth * 0.15,
       overshootLeft: false,
       overshootRight: false,
       dragOffsetFromLeftEdge: 0,
@@ -130,8 +133,8 @@ export function useSwipeable(): SwipeableData {
       useNativeAnimations: true,
       animationOptions: {
         delay: 0,
-        speed: 300,
-        bounciness: 0,
+        speed: 200,
+        bounciness: 4,
       },
     },
   };
