@@ -1,3 +1,6 @@
+import org.jetbrains.crowdin.CrowdinEnterpriseDownloadTask
+import org.jetbrains.crowdin.CrowdinEnterpriseUploadTask
+
 buildscript {
   repositories {
     maven {
@@ -14,7 +17,7 @@ buildscript {
   }
 }
 
-task crowdinUpload(type: org.jetbrains.crowdin.CrowdinUploadTask) {
+task crowdinUpload(type: org.jetbrains.crowdin.CrowdinEnterpriseUploadTask) {
   loadAllFiles = false
   projects = [YOUTRACK, YOUTRACK_COMMUNITY]
   files = [
@@ -30,7 +33,7 @@ task generateEnglishLocale(type: org.jetbrains.crowdin.GenerateEnglishFileTask){
   into new File("$projectDir/../translations/locale_en.po")
 }
 
-task crowdinDownload(type: org.jetbrains.crowdin.CrowdinDownloadTask) {
+task crowdinDownload(type: org.jetbrains.crowdin.CrowdinEnterpriseDownloadTask) {
   projects = [YOUTRACK, YOUTRACK_COMMUNITY]
   fileMapping = ['youtrack-mobile' : "$projectDir/../translations"]
   if (project.hasProperty("crowdinToken")){
