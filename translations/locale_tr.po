@@ -2,12 +2,12 @@ msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Crowdin-Project: youtrack-custom-localization\n"
-"X-Crowdin-Project-ID: 309400\n"
+"X-Crowdin-Project: bc8a6406124a24eb08285d4b04ba5310\n"
+"X-Crowdin-Project-ID: 139\n"
 "X-Crowdin-Language: tr\n"
 "X-Crowdin-File: /YouTrack/youtrack-mobile.po\n"
-"X-Crowdin-File-ID: 622252\n"
-"Project-Id-Version: youtrack-custom-localization\n"
+"X-Crowdin-File-ID: 717733\n"
+"Project-Id-Version: bc8a6406124a24eb08285d4b04ba5310\n"
 "Language-Team: Turkish\n"
 "Language: tr\n"
 
@@ -115,7 +115,7 @@ msgstr "Tepki ekle"
 
 #: src/components/comment/comment-edit.tsx
 msgid "Add spent time"
-msgstr "Harcanan süreyi ekle"
+msgstr ""
 
 #: src/components/tags/tag-add-panel.tsx
 #: src/views/issue/issue-base-actions-creater.ts
@@ -137,7 +137,7 @@ msgstr ""
 
 #: src/views/inbox-threads/inbox-threads-helper.ts
 msgid "All"
-msgstr "Tümü"
+msgstr ""
 
 #: src/views/issues/issues__filters-filter.tsx
 msgid "All projects"
@@ -212,11 +212,11 @@ msgstr "Ek adı"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Author"
-msgstr "Yazar"
+msgstr ""
 
 #: src/components/custom-field/Issue-sprints-field.tsx
 msgid "Boards"
-msgstr "Panolar"
+msgstr ""
 
 #: src/views/attachment-preview/attachment-preview.tsx
 msgid "Browser"
@@ -270,7 +270,7 @@ msgstr "Geçerli arama bağlamını temizle"
 #: src/components/logs-view/logs-view.tsx
 #: src/components/popup/popup.tsx
 msgid "Close"
-msgstr "Kapat"
+msgstr ""
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Collapse all"
@@ -290,7 +290,7 @@ msgstr ""
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "Command was successfully applied."
-msgstr "Komut başarıyla uygulandı."
+msgstr ""
 
 #: src/components/activity/activity__history-title.ts
 msgid "Comment changed"
@@ -311,7 +311,7 @@ msgstr "yorum yapıldı"
 
 #: src/components/activity/activity-helper.ts
 msgid "Comments"
-msgstr "Yorumlar"
+msgstr ""
 
 #: src/components/activity-stream/activity__stream-vcs.tsx
 msgid "committed changes"
@@ -366,7 +366,7 @@ msgstr "Alan metnini kopyala"
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copy link"
-msgstr "Bağlantıyı kopyala"
+msgstr ""
 
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
@@ -381,7 +381,7 @@ msgstr "Metni kopyala"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "Could not apply specified command."
-msgstr "Belirtilen komut uygulanamadı."
+msgstr ""
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Crash report sent"
@@ -405,7 +405,7 @@ msgstr ""
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Date"
-msgstr "Tarih"
+msgstr ""
 
 #: src/components/user-agreement/user-agreement.tsx
 msgid "Decline"
@@ -426,7 +426,7 @@ msgstr "çekme talebi reddedildi"
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Delete"
-msgstr "Sil"
+msgstr ""
 
 #: src/views/create-issue/create-issue-drafts.tsx
 msgid "Delete all"
@@ -438,7 +438,7 @@ msgstr "Tüm taslaklar silinsin mi?"
 
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 msgid "Delete comment permanently?"
-msgstr "Yorum kalıcı olarak silinsin mi?"
+msgstr ""
 
 #: src/views/article-create/article-create.tsx
 msgid "Delete draft"
@@ -450,21 +450,21 @@ msgstr "Sorun {{issueId}} silinsin mi?"
 
 #: src/components/comment/comment.tsx
 msgid "Delete permanently"
-msgstr "Kalıcı olarak sil"
+msgstr ""
 
 #: src/views/helpdesk-feedback/index.ts
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Description"
-msgstr "Açıklama"
+msgstr ""
 
 #: src/components/activity/activity__history-title.ts
 msgid "Description changed"
-msgstr "Açıklama değiştirildi"
+msgstr ""
 
 #: src/components/issue-tabbed/issue-tabbed.tsx
 #: src/views/inbox/inbox.tsx
 msgid "Details"
-msgstr "Detaylar"
+msgstr ""
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Discard and close"
@@ -505,11 +505,11 @@ msgstr "Taslaklar"
 #: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Edit"
-msgstr "Düzenle"
+msgstr ""
 
 #: src/components/comment/comment-edit.tsx
 msgid "Edit comment"
-msgstr "Yorumu düzenle"
+msgstr ""
 
 #: src/components/user/user-card.tsx
 msgid "Email"
@@ -531,7 +531,7 @@ msgstr "Komut girin"
 #: src/components/query-assist/query-assist.tsx
 #: src/components/query-assist/query-preview.tsx
 msgid "Enter search request"
-msgstr "Arama isteği girin"
+msgstr ""
 
 #: src/views/enter-server/enter-server.tsx
 msgid "Enter the web address for a YouTrack installation where you have a registered account"
@@ -543,7 +543,7 @@ msgstr ""
 
 #: src/components/search/search-context.ts
 msgid "Everything"
-msgstr "Her şey"
+msgstr ""
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Favorites"
@@ -592,7 +592,7 @@ msgstr ""
 #: src/components/visibility/comment-visibility-control.tsx
 #: src/components/visibility/visibility-control.tsx
 msgid "Filter users, groups, and teams"
-msgstr "Kullanıcıları, grupları ve ekipleri filtrele"
+msgstr ""
 
 #: src/views/issues/index.ts
 msgid "Filters"
@@ -656,7 +656,7 @@ msgstr ""
 
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue updated"
-msgstr "Konu güncellendi"
+msgstr ""
 
 #: src/views/issues/issues__sortby_list.tsx
 msgid "Issues can be sorted by up to 4 attributes"
@@ -676,7 +676,7 @@ msgstr "az önce"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Knowledge Base"
-msgstr "Bilgi Bankası"
+msgstr ""
 
 #: src/views/issues/index.ts
 msgid "Large"
@@ -786,7 +786,7 @@ msgstr "Yeni Makale"
 
 #: src/views/create-issue/create-issue.tsx
 msgid "New Issue"
-msgstr "Yeni Sorun"
+msgstr ""
 
 #: src/views/inbox-threads/inbox-threads__update-button.tsx
 msgid "New messages"
@@ -822,7 +822,7 @@ msgstr ""
 
 #: src/views/issues/issues.tsx
 msgid "No issues found"
-msgstr "Sorun bulunmadı"
+msgstr ""
 
 #: src/components/select/select.tsx
 msgid "No items"
@@ -838,11 +838,11 @@ msgstr ""
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "No user information provided by Upsource."
-msgstr "Upsource tarafından sağlanan kullanıcı bilgisi yok."
+msgstr ""
 
 #: src/components/error/error-message-data.ts
 msgid "Nope, can't find it!"
-msgstr "Hayır, bulamıyorum!"
+msgstr ""
 
 #: src/views/inbox-threads/inbox-threads.tsx
 msgid "Notification settings…"
@@ -851,7 +851,7 @@ msgstr "Bildirim ayarları…"
 #: src/views/inbox-threads/inbox-threads.tsx
 #: src/views/inbox/inbox.tsx
 msgid "Notifications"
-msgstr "Bildirimler"
+msgstr ""
 
 #: src/views/settings/settings-helper.ts
 msgid "Other"
@@ -863,7 +863,7 @@ msgstr "Diğer gruplar ve takımlar"
 
 #: src/views/log-in/log-in.tsx
 msgid "Password"
-msgstr "Parola"
+msgstr ""
 
 #: src/components/custom-field/custom-field-sla.tsx
 msgid "Paused"
@@ -1005,7 +1005,7 @@ msgstr ""
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Select an option"
-msgstr "Bir seçenek belirleyin"
+msgstr ""
 
 #: src/components/custom-field/Issue-sprints-field.tsx
 msgid "select sprint"
@@ -1058,7 +1058,7 @@ msgstr "Ayarlar"
 
 #: src/components/logs-view/logs-view.tsx
 msgid "Share"
-msgstr "Paylaş"
+msgstr ""
 
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/article__activity.tsx
@@ -1317,11 +1317,11 @@ msgstr "Görünürlüğü güncelle"
 #: src/views/inbox-threads/inbox-threads__item-history.tsx
 #: src/views/inbox-threads/inbox-threads__item-work.tsx
 msgid "updated"
-msgstr "güncellendi"
+msgstr ""
 
 #: src/components/issue-tabbed/issue-tabbed__created-updated.tsx
 msgid "Updated by"
-msgstr "Güncelleyen:"
+msgstr ""
 
 #: src/components/error/error-message-data.ts
 msgid "Use fewer search parameters"
@@ -1341,7 +1341,7 @@ msgstr "Kullanıcılar"
 
 #: src/components/activity/activity-helper.ts
 msgid "VCS changes"
-msgstr "VCS değişiklikleri"
+msgstr ""
 
 #: src/views/inbox-threads/inbox-threads__item-comment.tsx
 msgid "View comment"
@@ -1386,7 +1386,7 @@ msgstr ""
 
 #: src/components/error/error-message-data.ts
 msgid "Woah, you can't touch this!"
-msgstr "Hop, buna dokunamazsın!"
+msgstr ""
 
 #: src/components/error/error-message-data.ts
 msgid "Wrap attribute values that contain spaces in braces {like this}."

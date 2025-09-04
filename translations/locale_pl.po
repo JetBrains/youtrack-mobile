@@ -2,12 +2,12 @@ msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
-"X-Crowdin-Project: youtrack-custom-localization\n"
-"X-Crowdin-Project-ID: 309400\n"
+"X-Crowdin-Project: bc8a6406124a24eb08285d4b04ba5310\n"
+"X-Crowdin-Project-ID: 139\n"
 "X-Crowdin-Language: pl\n"
 "X-Crowdin-File: /YouTrack/youtrack-mobile.po\n"
-"X-Crowdin-File-ID: 622252\n"
-"Project-Id-Version: youtrack-custom-localization\n"
+"X-Crowdin-File-ID: 717733\n"
+"Project-Id-Version: bc8a6406124a24eb08285d4b04ba5310\n"
 "Language-Team: Polish\n"
 "Language: pl\n"
 
@@ -116,7 +116,7 @@ msgstr "Ustawienia aktywności"
 
 #: src/views/issues/issues__filters-settings.tsx
 msgid "Add filter"
-msgstr "Dodaj filtr"
+msgstr ""
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Add project to favorites"
@@ -125,7 +125,7 @@ msgstr "Dodaj projekt do ulubionych"
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Add reaction"
-msgstr "Dodaj reakcję"
+msgstr ""
 
 #: src/components/comment/comment-edit.tsx
 msgid "Add spent time"
@@ -134,7 +134,7 @@ msgstr "Dodaj spędzony czas"
 #: src/components/tags/tag-add-panel.tsx
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Add tag"
-msgstr "Dodaj tag"
+msgstr ""
 
 #: src/components/date-picker/date-time-picker.tsx
 msgid "Add time"
@@ -151,17 +151,17 @@ msgstr "dodano reakcję"
 
 #: src/views/inbox-threads/inbox-threads-helper.ts
 msgid "All"
-msgstr "Wszystkie"
+msgstr "Wszystko"
 
 #: src/views/issues/issues__filters-filter.tsx
 msgid "All projects"
-msgstr "Wszystkie projekty"
+msgstr ""
 
 #: src/views/settings/settings__activity.tsx
 #: src/views/settings/settings__appearance.tsx
 #: src/views/settings/settings.tsx
 msgid "Appearance"
-msgstr "Wygląd"
+msgstr ""
 
 #: src/views/create-issue/create-issue-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -178,7 +178,7 @@ msgstr "Czy na pewno chcesz usunąć ten artykuł?"
 
 #: src/components/confirmation/article-confirmations.ts
 msgid "Are you sure you want to delete this draft?"
-msgstr "Czy na pewno chcesz usunąć tę wersję roboczą?"
+msgstr ""
 
 #: src/views/issue/activity/issue-activity__actions.ts
 msgid "Are you sure you want to delete this work item?"
@@ -208,7 +208,7 @@ msgstr "Załącz plik"
 #: src/components/attach-file/attach-file-dialog.tsx
 #: src/components/attachments-row/attachments-add-panel.tsx
 msgid "Attach files"
-msgstr "Załącz pliki"
+msgstr ""
 
 #: src/components/activity/activity__history-title.ts
 msgid "Attachment"
@@ -264,16 +264,16 @@ msgstr "Kamera"
 #: src/views/knowledge-base/knowledge-base-actions.ts
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Cancel"
-msgstr "Anuluj"
+msgstr ""
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "CC me"
-msgstr "Dodaj mnie do DW"
+msgstr ""
 
 #: src/components/activity/activity__history-title.ts
 #: src/views/issue/issue-user-cc.tsx
 msgid "CCs"
-msgstr "Kopie DW"
+msgstr ""
 
 #: src/views/settings/settings.tsx
 msgid "Clear cache"
@@ -323,11 +323,11 @@ msgstr "Zaktualizowano komentarz"
 
 #: src/views/inbox-threads/inbox-threads__item-comment.tsx
 msgid "commented"
-msgstr "skomentowano"
+msgstr ""
 
 #: src/components/activity/activity-helper.ts
 msgid "Comments"
-msgstr "Komentarze"
+msgstr ""
 
 #: src/components/activity-stream/activity__stream-vcs.tsx
 msgid "committed changes"
@@ -353,7 +353,7 @@ msgstr "Skontaktuj się z pomocą techniczną"
 
 #: src/views/article/article.tsx
 msgid "Content"
-msgstr "Zawartość"
+msgstr ""
 
 #: src/components/activity/activity__history-title.ts
 msgid "Content revised"
@@ -367,7 +367,7 @@ msgstr "Poprawiono treść"
 #: src/views/issue/issue-base-actions-creater.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copied"
-msgstr "Skopiowano"
+msgstr ""
 
 #: src/views/issue/issue__details.tsx
 msgid "Copy description"
@@ -405,11 +405,11 @@ msgstr "Wysłano raport o awarii"
 
 #: src/views/inbox-threads/inbox-threads__item-issue-created.tsx
 msgid "created"
-msgstr "utworzono"
+msgstr ""
 
 #: src/components/issue-tabbed/issue-tabbed__created-updated.tsx
 msgid "Created by"
-msgstr "Utworzone przez"
+msgstr ""
 
 #: src/views/create-issue/create-issue.tsx
 msgid "Current issue"
@@ -421,7 +421,7 @@ msgstr "Motyw ciemny"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Date"
-msgstr "Data"
+msgstr ""
 
 #: src/components/user-agreement/user-agreement.tsx
 msgid "Decline"
@@ -446,11 +446,11 @@ msgstr "Usuń"
 
 #: src/views/create-issue/create-issue-drafts.tsx
 msgid "Delete all"
-msgstr "Usuń wszystkie"
+msgstr ""
 
 #: src/views/create-issue/create-issue-drafts.tsx
 msgid "Delete all drafts?"
-msgstr "Czy usunąć wszystkie wersje robocze?"
+msgstr ""
 
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 msgid "Delete comment permanently?"
@@ -458,11 +458,11 @@ msgstr "Trwale usunąć komentarz?"
 
 #: src/views/article-create/article-create.tsx
 msgid "Delete draft"
-msgstr "Usuń wersję roboczą"
+msgstr ""
 
 #: src/components/confirmation/issue-confirmations.ts
 msgid "Delete issue {{issueId}}?"
-msgstr "Usunąć zgłoszenie {{issueId}}?"
+msgstr ""
 
 #: src/components/comment/comment.tsx
 msgid "Delete permanently"
@@ -480,7 +480,7 @@ msgstr "Zmieniono opis"
 #: src/components/issue-tabbed/issue-tabbed.tsx
 #: src/views/inbox/inbox.tsx
 msgid "Details"
-msgstr "Szczegóły"
+msgstr ""
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Discard and close"
@@ -492,7 +492,7 @@ msgstr "Odrzucić wersję roboczą i zamknąć?"
 
 #: src/views/article-create/article-create.tsx
 msgid "Discard unpublished changes"
-msgstr "Odrzuć nieopublikowane zmiany"
+msgstr ""
 
 #: src/components/account/accounts.tsx
 msgid "Do you really want to log out?"
@@ -513,7 +513,7 @@ msgstr "Nie wysyłaj dzienników"
 #: src/views/create-issue/create-issue-drafts.tsx
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Drafts"
-msgstr "Wersje robocze"
+msgstr ""
 
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/article__activity.tsx
@@ -525,7 +525,7 @@ msgstr "Edytuj"
 
 #: src/components/comment/comment-edit.tsx
 msgid "Edit comment"
-msgstr "Edytuj komentarz"
+msgstr ""
 
 #: src/components/user/user-card.tsx
 msgid "Email"
@@ -547,7 +547,7 @@ msgstr "Wprowadź polecenie"
 #: src/components/query-assist/query-assist.tsx
 #: src/components/query-assist/query-preview.tsx
 msgid "Enter search request"
-msgstr "Wprowadź żądanie wyszukiwania"
+msgstr ""
 
 #: src/views/enter-server/enter-server.tsx
 msgid "Enter the web address for a YouTrack installation where you have a registered account"
@@ -559,7 +559,7 @@ msgstr "Wprowadź wartość czasu"
 
 #: src/components/search/search-context.ts
 msgid "Everything"
-msgstr "Wszystko"
+msgstr ""
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Favorites"
@@ -575,7 +575,7 @@ msgstr "Filtruj tablice według nazwy"
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "Filter existing accounts by name or username"
-msgstr "Filtruj istniejące konta według nazwy lub nazwy użytkownika"
+msgstr ""
 
 #: src/components/select/select.tsx
 msgid "Filter items"
@@ -594,7 +594,7 @@ msgstr "Filtruj projekty, zapisane wyszukiwania i tagi"
 #: src/views/issues/issues__filters-settings__list.tsx
 #: src/views/issues/issues__settings.tsx
 msgid "Filter Settings"
-msgstr "Ustawienia filtrów"
+msgstr ""
 
 #: src/views/agile-board/board-actions.ts
 msgid "Filter sprints by name"
@@ -608,11 +608,11 @@ msgstr "Filtruj tagi"
 #: src/components/visibility/comment-visibility-control.tsx
 #: src/components/visibility/visibility-control.tsx
 msgid "Filter users, groups, and teams"
-msgstr "Filtrowanie użytkowników, grup i zespołów"
+msgstr ""
 
 #: src/views/issues/index.ts
 msgid "Filters"
-msgstr "Filtry"
+msgstr ""
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Find favorite projects"
@@ -620,7 +620,7 @@ msgstr "Znajdź ulubione projekty"
 
 #: src/views/issues/issues.tsx
 msgid "Find issues that contain key words"
-msgstr "Znajdź zgłoszenia zawierające słowa kluczowe"
+msgstr ""
 
 #: src/views/enter-server/enter-server.tsx
 msgid "Get help"
@@ -628,7 +628,7 @@ msgstr "Uzyskaj pomoc"
 
 #: src/components/visibility/visibility-helper.ts
 msgid "Groups and teams"
-msgstr "Grupy i zespoły"
+msgstr ""
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Help us fix problems faster"
@@ -648,11 +648,11 @@ msgstr ""
 
 #: src/views/article/article.tsx
 msgid "in revision"
-msgstr "w trakcie rewizji"
+msgstr ""
 
 #: src/components/visibility/visibility-helper.ts
 msgid "Inherited restrictions"
-msgstr "Odziedziczone ograniczenia"
+msgstr ""
 
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue deleted"
@@ -660,7 +660,7 @@ msgstr "Usunięto zgłoszenie"
 
 #: src/components/activity/activity-helper.ts
 msgid "Issue history"
-msgstr "Historia zgłoszeń"
+msgstr ""
 
 #: src/components/issue-actions/issue-links-actions.ts
 msgid "Issue link added"
@@ -692,7 +692,7 @@ msgstr "przed chwilą"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Knowledge Base"
-msgstr "Baza wiedzy"
+msgstr ""
 
 #: src/views/issues/index.ts
 msgid "Large"
@@ -711,7 +711,7 @@ msgstr "Motyw jasny"
 #: src/views/create-issue/create-issue.tsx
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Link issue"
-msgstr "Powiąż zgłoszenie"
+msgstr ""
 
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 msgid "Link to comment copied"
@@ -728,7 +728,7 @@ msgstr "Ładowanie wartości…"
 
 #: src/views/log-in/log-in.tsx
 msgid "Log in"
-msgstr "Zaloguj się"
+msgstr ""
 
 #: src/views/log-in/log-in.tsx
 msgid "Log in to YouTrack"
@@ -749,7 +749,7 @@ msgstr "Zarządzaj ulubionymi projektami"
 
 #: src/views/inbox-threads/inbox-threads.tsx
 msgid "Mark all as read"
-msgstr "Oznacz wszystkie jako przeczytane"
+msgstr ""
 
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mark as read"
@@ -790,7 +790,7 @@ msgstr "wspomniał(-a) o tobie"
 
 #: src/views/inbox-threads/inbox-threads-helper.ts
 msgid "Mentions & Reactions"
-msgstr "Wzmianki i reakcje"
+msgstr ""
 
 #: src/components/activity-stream/activity__stream-vcs.tsx
 msgid "merged the pull request"
@@ -806,7 +806,7 @@ msgstr "Nowy artykuł"
 
 #: src/views/create-issue/create-issue.tsx
 msgid "New Issue"
-msgstr "Nowe zgłoszenie"
+msgstr ""
 
 #: src/views/inbox-threads/inbox-threads__update-button.tsx
 msgid "New messages"
@@ -814,7 +814,7 @@ msgstr "Nowe wiadomości"
 
 #: src/views/enter-server/enter-server.tsx
 msgid "Next"
-msgstr "Dalej"
+msgstr ""
 
 #: src/components/activity-stream/activity__stream.tsx
 msgid "No activity yet"
@@ -830,7 +830,7 @@ msgstr "Nie znaleziono artykułów"
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "No CCs"
-msgstr "Brak kopii DW"
+msgstr ""
 
 #: src/views/knowledge-base/knowledge-base__drafts.tsx
 msgid "No drafts yet"
@@ -842,7 +842,7 @@ msgstr "Nie znaleziono ulubionych projektów"
 
 #: src/views/issues/issues.tsx
 msgid "No issues found"
-msgstr "Nie znaleziono zgłoszeń"
+msgstr ""
 
 #: src/components/select/select.tsx
 msgid "No items"
@@ -850,7 +850,7 @@ msgstr "Brak elementów"
 
 #: src/views/inbox-threads/inbox-threads__list.tsx
 msgid "No notifications"
-msgstr "Brak powiadomień"
+msgstr ""
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "No type"
@@ -862,7 +862,7 @@ msgstr "Brak informacji o użytkowniku dostarczonych przez Upsource."
 
 #: src/components/error/error-message-data.ts
 msgid "Nope, can't find it!"
-msgstr "Nope, nie mogę tego znaleźć!"
+msgstr ""
 
 #: src/views/inbox-threads/inbox-threads.tsx
 msgid "Notification settings…"
@@ -871,7 +871,7 @@ msgstr "Ustawienia powiadomień…"
 #: src/views/inbox-threads/inbox-threads.tsx
 #: src/views/inbox/inbox.tsx
 msgid "Notifications"
-msgstr "Powiadomienia"
+msgstr ""
 
 #: src/views/settings/settings-helper.ts
 msgid "Other"
@@ -879,19 +879,19 @@ msgstr "Inne"
 
 #: src/components/visibility/visibility-helper.ts
 msgid "Other groups and teams"
-msgstr "Inne grupy i zespoły"
+msgstr ""
 
 #: src/views/log-in/log-in.tsx
 msgid "Password"
-msgstr "Hasło"
+msgstr ""
 
 #: src/components/custom-field/custom-field-sla.tsx
 msgid "Paused"
-msgstr "Wstrzymano"
+msgstr ""
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "People added as CCs receive the same notifications that are sent to the person who reported this ticket"
-msgstr "Osoby dodane jako odbiorcy kopii DW otrzymują te same powiadomienia, co osoba, która zgłosiła to zgłoszenie pomocy technicznej"
+msgstr ""
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
@@ -911,12 +911,12 @@ msgstr "Problem"
 
 #: src/components/custom-fields-panel/index.ts
 msgid "Project"
-msgstr "Projekt"
+msgstr ""
 
 #: src/views/issues/issues-actions.ts
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Projects"
-msgstr "Projekty"
+msgstr ""
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Projects collapsed"
@@ -928,7 +928,7 @@ msgstr "Rozwinięto projekty"
 
 #: src/views/issues/index.ts
 msgid "Query"
-msgstr "Zapytanie"
+msgstr ""
 
 #: src/components/query-assist/query-assist-helper.ts
 msgid "Recent searches"
@@ -936,7 +936,7 @@ msgstr "Ostatnie wyszukiwania"
 
 #: src/components/visibility/visibility-helper.ts
 msgid "Recommended groups and teams"
-msgstr "Polecane grupy i zespoły"
+msgstr ""
 
 #: src/components/custom-field/Issue-sprints-field.tsx
 #: src/views/knowledge-base/knowledge-base-actions.ts
@@ -953,7 +953,7 @@ msgstr "Usunąć projekt z ulubionych?"
 
 #: src/components/tags/tags.tsx
 msgid "Remove tag"
-msgstr "Usuń etykietę"
+msgstr ""
 
 #: src/views/inbox-threads/inbox-threads__reactions.tsx
 #: src/views/inbox/inbox.tsx
@@ -967,16 +967,16 @@ msgstr "ponownie otwarto żądanie ściągnięcia"
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Reply"
-msgstr "Odpowiedz"
+msgstr ""
 
 #: src/views/issue/issue-user-cc.tsx
 #: src/views/issue/issue-user-cc.tsx
 msgid "Reporter"
-msgstr "Zgłaszający"
+msgstr ""
 
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Reset visibility"
-msgstr "Resetuj widoczność"
+msgstr ""
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Restart"
@@ -984,7 +984,7 @@ msgstr "Uruchom ponownie"
 
 #: src/components/comment/comment.tsx
 msgid "Restore"
-msgstr "Przywróć"
+msgstr ""
 
 #: src/views/home/home.tsx
 msgid "Retry"
@@ -992,11 +992,11 @@ msgstr "Ponów próbę"
 
 #: src/views/issues/issues-actions.ts
 msgid "Saved Searches"
-msgstr "Zapisane wyszukiwania"
+msgstr ""
 
 #: src/views/knowledge-base/knowledge-base__search.tsx
 msgid "Search articles"
-msgstr "Wyszukaj artykuły"
+msgstr ""
 
 #: src/components/error/error-message-data.ts
 msgid "Search for a different value"
@@ -1016,7 +1016,7 @@ msgstr "Wybierz zgłaszającego lub wprowadź nowy adres e-mail"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Select an article from the list"
-msgstr "Wybierz artykuł z listy"
+msgstr ""
 
 #: src/views/inbox/inbox.tsx
 #: src/views/issues/issues.tsx
@@ -1029,7 +1029,7 @@ msgstr "Wybierz opcję"
 
 #: src/components/custom-field/Issue-sprints-field.tsx
 msgid "select sprint"
-msgstr "wybierz sprint"
+msgstr ""
 
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Select users, groups, and teams"
@@ -1078,7 +1078,7 @@ msgstr "Ustawienia"
 
 #: src/components/logs-view/logs-view.tsx
 msgid "Share"
-msgstr "Udostępnij"
+msgstr ""
 
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/article__activity.tsx
@@ -1114,7 +1114,7 @@ msgstr "Pokaż wszystkie zgłoszenia oznaczone tagiem „{{tagName}}”..."
 #: src/components/activity-stream/activity__stream-vcs.tsx
 #: src/views/inbox-threads/inbox-threads__subscription.tsx
 msgid "Show more"
-msgstr "Pokaż więcej"
+msgstr ""
 
 #: src/views/issues/index.ts
 msgid "Small"
@@ -1135,17 +1135,17 @@ msgstr "Kolejność sortowania"
 
 #: src/views/issue/activity/issue__activity-settings.tsx
 msgid "Sort: oldest first"
-msgstr "Sortowanie: najpierw najstarsze"
+msgstr ""
 
 #: src/views/issues/issues__sortby.tsx
 msgid "Sorted by"
-msgstr "Sortuj wg"
+msgstr ""
 
 #: src/components/activity/activity-helper.ts
 #: src/views/issue/activity/activity__add-spent-time.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Spent time"
-msgstr "Poświęcony czas"
+msgstr "Spędzony czas"
 
 #: src/components/activity-stream/activity__stream-work.tsx
 msgid "Spent time:"
@@ -1157,7 +1157,7 @@ msgstr "Rozpocznij nowy artykuł"
 
 #: src/views/article/article__details.tsx
 msgid "Sub-articles"
-msgstr "Artykuły podrzędne"
+msgstr ""
 
 #: src/components/activity-stream/activity__stream-vcs.tsx
 msgid "submitted a pull request"
@@ -1165,7 +1165,7 @@ msgstr "przesłano żądanie ściągnięcia"
 
 #: src/views/inbox-threads/inbox-threads-helper.ts
 msgid "Subscriptions"
-msgstr "Subskrypcje"
+msgstr ""
 
 #: src/views/helpdesk-feedback/index.ts
 #: src/views/settings/settings__feedback-form.tsx
@@ -1178,7 +1178,7 @@ msgstr "Zmieniono podsumowanie"
 
 #: src/views/settings/settings__appearance.tsx
 msgid "Sync with OS"
-msgstr "Synchronizuj z systemem operacyjnym"
+msgstr ""
 
 #: src/components/activity/activity__history-title.ts
 msgid "Tag"
@@ -1210,11 +1210,11 @@ msgstr "Tablica {{boardName}} ma błędy konfiguracyjne"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The change has been detached from this issue. It is still displayed here because its comment mentions the issue."
-msgstr "Zmiana została odłączona z tego zgłoszenia. Jest ciągle tutaj widoczna, ponieważ jej komentarz nawiązuje do zgłoszenia."
+msgstr ""
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The change has been manually attached to this issue."
-msgstr "Zmiana została ręcznie dołączona do tego zgłoszenia."
+msgstr ""
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The change was processed during the initial data fetching, thus no command has been applied."
@@ -1266,7 +1266,7 @@ msgstr "Podczas pobierania informacji o autorze zmiany z TeamCity wystąpił bł
 
 #: src/components/confirmation/article-confirmations.ts
 msgid "This action deletes all drafts, including unpublished sub-articles"
-msgstr "Ta akcja usuwa wszystkie wersje robocze, w tym nieopublikowane artykuły podrzędne"
+msgstr ""
 
 #: src/views/inbox-threads/inbox-threads-actions.ts
 msgid "Thread muted"
@@ -1285,7 +1285,7 @@ msgstr "Zgłoszenia"
 
 #: src/views/article-create/article-create.tsx
 msgid "Title"
-msgstr "Tytuł"
+msgstr ""
 
 #: src/components/activity/activity__history-title.ts
 msgid "Title changed"
@@ -1317,7 +1317,7 @@ msgstr "Typ"
 
 #: src/components/agile-row/agile-row.tsx
 msgid "Uncategorized Cards"
-msgstr "Karty nieskategoryzowane"
+msgstr ""
 
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Unmute thread"
@@ -1325,11 +1325,11 @@ msgstr "Wyłącz wyciszenie wątku"
 
 #: src/views/inbox-threads/inbox-threads.tsx
 msgid "Unread only"
-msgstr "Tylko nieprzeczytane"
+msgstr ""
 
 #: src/components/articles/article-item-with-children.tsx
 msgid "Untitled"
-msgstr "Bez tytułu"
+msgstr ""
 
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
@@ -1339,11 +1339,11 @@ msgstr "Zaktualizuj widoczność"
 #: src/views/inbox-threads/inbox-threads__item-history.tsx
 #: src/views/inbox-threads/inbox-threads__item-work.tsx
 msgid "updated"
-msgstr "zaktualizowano"
+msgstr ""
 
 #: src/components/issue-tabbed/issue-tabbed__created-updated.tsx
 msgid "Updated by"
-msgstr "Zaktualizowany przez"
+msgstr ""
 
 #: src/components/error/error-message-data.ts
 msgid "Use fewer search parameters"
@@ -1355,11 +1355,11 @@ msgstr "Konto użytkownika zostało zablokowane"
 
 #: src/views/log-in/log-in.tsx
 msgid "Username or email"
-msgstr "Nazwa użytkownika lub adres e-mail"
+msgstr ""
 
 #: src/components/visibility/visibility-helper.ts
 msgid "Users"
-msgstr "Użytkownicy"
+msgstr ""
 
 #: src/components/activity/activity-helper.ts
 msgid "VCS changes"
@@ -1379,7 +1379,7 @@ msgstr "Wyświetl przesłane zgłoszenia"
 
 #: src/components/activity/activity__history-title.ts
 msgid "Visibility"
-msgstr "Widoczność"
+msgstr ""
 
 #: src/components/activity-stream/activity__stream.tsx
 #: src/components/visibility/comment-visibility-control.tsx
@@ -1388,11 +1388,11 @@ msgstr "Widoczne dla {{presentation}}"
 
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to article readers"
-msgstr "Widoczne dla czytelników artykułów"
+msgstr ""
 
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to issue readers"
-msgstr "Widoczny dla czytelników zgłoszeń"
+msgstr ""
 
 #: src/components/error/error-message-data.ts
 msgid "We didn't find any issues in the current search context that match your query"
@@ -1400,7 +1400,7 @@ msgstr "W bieżącym kontekście wyszukiwania nie znaleźliśmy żadnych zgłosz
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "When integrating TeamCity and YouTrack, the users are matched by their email addresses. TeamCity has not provided any email address of the committer."
-msgstr "Podczas integracji TeamCity z YouTrackużytkownicy są dopasowywani poprzez ich adresy email. TeamCity nie dostarczyło żadnego adresu email zatwierdzajacego zmiany."
+msgstr ""
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "When integrating TeamCity and YouTrack, the users are matched by their email addresses. There are two or more different YouTrack users that have the same email address as the commit's author has in TeamCity."
@@ -1408,7 +1408,7 @@ msgstr "Podczas integracji TeamCity i YouTrack użytkownicy są dopasowywani na 
 
 #: src/components/error/error-message-data.ts
 msgid "Woah, you can't touch this!"
-msgstr "Hej, nie możesz tego dotykać!"
+msgstr ""
 
 #: src/components/error/error-message-data.ts
 msgid "Wrap attribute values that contain spaces in braces {like this}."
@@ -1417,11 +1417,11 @@ msgstr "Zawijaj wartości atrybutów zawierające spacje w nawiasach klamrowych 
 #: src/components/comment/comment-edit.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Write a comment, @mention people"
-msgstr "Napisz komentarz, @wspomnij o kimś"
+msgstr ""
 
 #: src/components/account/accounts.tsx
 msgid "Yes"
-msgstr "Tak"
+msgstr ""
 
 #: src/actions/app-actions.ts
 msgid "You are trying to open a link from another server. Please add this server to the app first."

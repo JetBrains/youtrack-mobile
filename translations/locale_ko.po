@@ -2,12 +2,12 @@ msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: youtrackjetbrains\n"
-"X-Crowdin-Project-ID: 295498\n"
+"X-Crowdin-Project: a7446adbb853c41eeb8eaf77c95f351b\n"
+"X-Crowdin-Project-ID: 137\n"
 "X-Crowdin-Language: ko\n"
 "X-Crowdin-File: youtrack-mobile.po\n"
-"X-Crowdin-File-ID: 622250\n"
-"Project-Id-Version: youtrackjetbrains\n"
+"X-Crowdin-File-ID: 717683\n"
+"Project-Id-Version: a7446adbb853c41eeb8eaf77c95f351b\n"
 "Language-Team: Korean\n"
 "Language: ko\n"
 
@@ -1355,11 +1355,11 @@ msgstr "{{presentation}}에게 표시"
 
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to article readers"
-msgstr "자료 리더에게 표시됨"
+msgstr "자료를 보는 이에게 표시됨"
 
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to issue readers"
-msgstr "이슈 리더에게 표시됨"
+msgstr "이슈를 보는 이에게 표시됨"
 
 #: src/components/error/error-message-data.ts
 msgid "We didn't find any issues in the current search context that match your query"

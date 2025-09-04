@@ -2,12 +2,12 @@ msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Crowdin-Project: youtrackjetbrains\n"
-"X-Crowdin-Project-ID: 295498\n"
-"X-Crowdin-Language: es-ES\n"
+"X-Crowdin-Project: a7446adbb853c41eeb8eaf77c95f351b\n"
+"X-Crowdin-Project-ID: 137\n"
+"X-Crowdin-Language: es\n"
 "X-Crowdin-File: youtrack-mobile.po\n"
-"X-Crowdin-File-ID: 622250\n"
-"Project-Id-Version: youtrackjetbrains\n"
+"X-Crowdin-File-ID: 717683\n"
+"Project-Id-Version: a7446adbb853c41eeb8eaf77c95f351b\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
 
@@ -1107,7 +1107,7 @@ msgstr "Algo ha salido mal."
 
 #: src/views/issues/issues__sortby_list.tsx
 msgid "Sort Attributes"
-msgstr "Ordenar atributos"
+msgstr "Atributos de ordenación"
 
 #: src/views/issues/issues__settings.tsx
 msgid "Sort Order"

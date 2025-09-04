@@ -2,12 +2,12 @@ msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3;\n"
-"X-Crowdin-Project: youtrack-custom-localization\n"
-"X-Crowdin-Project-ID: 309400\n"
+"X-Crowdin-Project: bc8a6406124a24eb08285d4b04ba5310\n"
+"X-Crowdin-Project-ID: 139\n"
 "X-Crowdin-Language: he\n"
 "X-Crowdin-File: /YouTrack/youtrack-mobile.po\n"
-"X-Crowdin-File-ID: 622252\n"
-"Project-Id-Version: youtrack-custom-localization\n"
+"X-Crowdin-File-ID: 717733\n"
+"Project-Id-Version: bc8a6406124a24eb08285d4b04ba5310\n"
 "Language-Team: Hebrew\n"
 "Language: he\n"
 
@@ -125,7 +125,7 @@ msgstr ""
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Add reaction"
-msgstr "הוספת תגובה"
+msgstr ""
 
 #: src/components/comment/comment-edit.tsx
 msgid "Add spent time"
@@ -208,7 +208,7 @@ msgstr ""
 #: src/components/attach-file/attach-file-dialog.tsx
 #: src/components/attachments-row/attachments-add-panel.tsx
 msgid "Attach files"
-msgstr "צירוף קבצים"
+msgstr ""
 
 #: src/components/activity/activity__history-title.ts
 msgid "Attachment"
@@ -228,7 +228,7 @@ msgstr ""
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Author"
-msgstr "יוצר"
+msgstr ""
 
 #: src/components/custom-field/Issue-sprints-field.tsx
 msgid "Boards"
@@ -327,7 +327,7 @@ msgstr "הגיב/ה"
 
 #: src/components/activity/activity-helper.ts
 msgid "Comments"
-msgstr "הערות/ תגובות"
+msgstr ""
 
 #: src/components/activity-stream/activity__stream-vcs.tsx
 msgid "committed changes"
@@ -405,7 +405,7 @@ msgstr ""
 
 #: src/views/inbox-threads/inbox-threads__item-issue-created.tsx
 msgid "created"
-msgstr "נוצר"
+msgstr ""
 
 #: src/components/issue-tabbed/issue-tabbed__created-updated.tsx
 msgid "Created by"
@@ -421,7 +421,7 @@ msgstr ""
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Date"
-msgstr "תאריך"
+msgstr ""
 
 #: src/components/user-agreement/user-agreement.tsx
 msgid "Decline"
@@ -442,7 +442,7 @@ msgstr ""
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Delete"
-msgstr "מחק"
+msgstr ""
 
 #: src/views/create-issue/create-issue-drafts.tsx
 msgid "Delete all"
@@ -521,7 +521,7 @@ msgstr "טיוטות"
 #: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Edit"
-msgstr "ערוך"
+msgstr ""
 
 #: src/components/comment/comment-edit.tsx
 msgid "Edit comment"
@@ -559,7 +559,7 @@ msgstr ""
 
 #: src/components/search/search-context.ts
 msgid "Everything"
-msgstr "הכל"
+msgstr ""
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Favorites"
@@ -728,7 +728,7 @@ msgstr ""
 
 #: src/views/log-in/log-in.tsx
 msgid "Log in"
-msgstr "כניסה"
+msgstr ""
 
 #: src/views/log-in/log-in.tsx
 msgid "Log in to YouTrack"
@@ -842,7 +842,7 @@ msgstr ""
 
 #: src/views/issues/issues.tsx
 msgid "No issues found"
-msgstr "לא נמצאו בעיות"
+msgstr ""
 
 #: src/components/select/select.tsx
 msgid "No items"
@@ -875,7 +875,7 @@ msgstr ""
 
 #: src/views/settings/settings-helper.ts
 msgid "Other"
-msgstr ""
+msgstr "אחר"
 
 #: src/components/visibility/visibility-helper.ts
 msgid "Other groups and teams"
@@ -887,7 +887,7 @@ msgstr "סיסמה"
 
 #: src/components/custom-field/custom-field-sla.tsx
 msgid "Paused"
-msgstr "הושהה"
+msgstr ""
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "People added as CCs receive the same notifications that are sent to the person who reported this ticket"
@@ -916,7 +916,7 @@ msgstr "פרויקט"
 #: src/views/issues/issues-actions.ts
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Projects"
-msgstr "פרויקטים"
+msgstr ""
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Projects collapsed"
@@ -928,7 +928,7 @@ msgstr ""
 
 #: src/views/issues/index.ts
 msgid "Query"
-msgstr "שאילתה"
+msgstr ""
 
 #: src/components/query-assist/query-assist-helper.ts
 msgid "Recent searches"
@@ -967,7 +967,7 @@ msgstr ""
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Reply"
-msgstr "הגב"
+msgstr ""
 
 #: src/views/issue/issue-user-cc.tsx
 #: src/views/issue/issue-user-cc.tsx
@@ -984,7 +984,7 @@ msgstr ""
 
 #: src/components/comment/comment.tsx
 msgid "Restore"
-msgstr "שחזר"
+msgstr ""
 
 #: src/views/home/home.tsx
 msgid "Retry"
@@ -1078,7 +1078,7 @@ msgstr ""
 
 #: src/components/logs-view/logs-view.tsx
 msgid "Share"
-msgstr "שתף"
+msgstr ""
 
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/article__activity.tsx
@@ -1145,7 +1145,7 @@ msgstr ""
 #: src/views/issue/activity/activity__add-spent-time.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Spent time"
-msgstr "זמן שהושקע"
+msgstr ""
 
 #: src/components/activity-stream/activity__stream-work.tsx
 msgid "Spent time:"
@@ -1170,7 +1170,7 @@ msgstr ""
 #: src/views/helpdesk-feedback/index.ts
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Summary"
-msgstr "תקציר"
+msgstr ""
 
 #: src/components/activity/activity__history-title.ts
 msgid "Summary changed"
@@ -1190,7 +1190,7 @@ msgstr[3] ""
 
 #: src/views/issues/issues-actions.ts
 msgid "Tags"
-msgstr "תגיות"
+msgstr ""
 
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Thank you for your feedback!"
@@ -1339,7 +1339,7 @@ msgstr ""
 #: src/views/inbox-threads/inbox-threads__item-history.tsx
 #: src/views/inbox-threads/inbox-threads__item-work.tsx
 msgid "updated"
-msgstr "עודכן"
+msgstr ""
 
 #: src/components/issue-tabbed/issue-tabbed__created-updated.tsx
 msgid "Updated by"
@@ -1359,7 +1359,7 @@ msgstr ""
 
 #: src/components/visibility/visibility-helper.ts
 msgid "Users"
-msgstr "משתמשים"
+msgstr ""
 
 #: src/components/activity/activity-helper.ts
 msgid "VCS changes"

@@ -2,12 +2,12 @@ msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: youtrackjetbrains\n"
-"X-Crowdin-Project-ID: 295498\n"
+"X-Crowdin-Project: a7446adbb853c41eeb8eaf77c95f351b\n"
+"X-Crowdin-Project-ID: 137\n"
 "X-Crowdin-Language: zh-CN\n"
 "X-Crowdin-File: youtrack-mobile.po\n"
-"X-Crowdin-File-ID: 622250\n"
-"Project-Id-Version: youtrackjetbrains\n"
+"X-Crowdin-File-ID: 717683\n"
+"Project-Id-Version: a7446adbb853c41eeb8eaf77c95f351b\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh\n"
 
@@ -828,7 +828,7 @@ msgstr "无类型"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "No user information provided by Upsource."
-msgstr "Upsource 没有提供用户信息."
+msgstr "Upsource 没有提供用户信息。"
 
 #: src/components/error/error-message-data.ts
 msgid "Nope, can't find it!"
@@ -1193,11 +1193,11 @@ msgstr "提交作者不属于提交者群组。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The commit author has not specified an email address."
-msgstr "提交作者未指定电子邮件地址."
+msgstr "提交作者未指定电子邮件地址。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The commit author has specified an email address that is associated with a different user account."
-msgstr "提交作者指定了与其他帐户关联的电子邮件地址."
+msgstr "提交作者指定了与其他帐户关联的电子邮件地址。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The commit author is not an assignee in the project."
@@ -1442,7 +1442,7 @@ msgstr "YouTrack 找不到与之相匹配的 GitLab 帐户。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not receive an email address for the commit author from Bitbucket."
-msgstr "YouTrack 没有从 Bitbucket 收到提交作者的电子邮件地址."
+msgstr "YouTrack 没有从 Bitbucket 收到提交作者的电子邮件地址。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not receive an email address for the commit author from GitHub."
@@ -1454,15 +1454,15 @@ msgstr "YouTrack 没有从 GitLab 收到提交作者的电子邮件地址."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not receive user data for this commit author from Bitbucket."
-msgstr "YouTrack 没有从 Bitbucket 收到此提交作者的用户数据."
+msgstr "YouTrack 没有从 Bitbucket 收到此提交作者的用户数据。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not receive user data for this commit author from GitHub."
-msgstr "YouTrack 没有从 GitHub 收到此提交作者的用户数据."
+msgstr "YouTrack 没有从 GitHub 收到此提交作者的用户数据。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not receive user data for this commit author from GitLab."
-msgstr "YouTrack 没有从 GitLab 收到此提交作者的用户数据."
+msgstr "YouTrack 没有从 GitLab 收到此提交作者的用户数据。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack found multiple users with email addresses that match the registered email in Bitbucket."
