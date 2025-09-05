@@ -881,7 +881,10 @@ export function handleURL(uri: string = ''): ReduxAction {
       } else if (query) {
         navigateToScreen(backendUrl, dispatch, url, true, undefined, undefined, query);
       } else {
-        Linking.openURL(url);
+        const canOpen = await Linking.canOpenURL(url);
+        if (canOpen) {
+          Linking.openURL(url);
+        }
       }
     }
   };
