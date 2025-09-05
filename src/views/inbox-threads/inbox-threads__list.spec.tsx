@@ -69,6 +69,28 @@ describe('Inbox Threads List', () => {
         expect(getByTestId('test:id/inboxThreadsListError')).toBeDefined();
       });
     });
+    it('should render progress placeholder', async () => {
+      createStore({
+        inboxThreads: {
+          inProgress: true,
+        },
+      });
+      const {getByTestId} = doRender();
+      await waitFor(() => {
+        expect(getByTestId('test:id/inboxThreadsProgress')).toBeDefined();
+      });
+    });
+    it('should not render progress placeholder if an error occured', async () => {
+      createStore({
+        inboxThreads: {
+          inProgress: true,
+        },
+      });
+      const {getByTestId} = doRender();
+      await waitFor(() => {
+        expect(getByTestId('test:id/inboxThreadsProgress')).toBeDefined();
+      });
+    });
     describe('`No notifications message` render', () => {
       const emptyMessageTestId = 'test:id/inboxThreadsListEmptyMessage';
       it('should render the message if there is no any threads', async () => {

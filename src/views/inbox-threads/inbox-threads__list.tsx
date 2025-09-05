@@ -6,6 +6,7 @@ import {useDispatch} from 'hooks/use-dispatch';
 
 import * as actions from './inbox-threads-actions';
 import ErrorMessage from 'components/error-message/error-message';
+import InboxThreadsProgressPlaceholder from './inbox-threads__progress-placeholder';
 import Thread from './inbox-threads__thread';
 import {getStorageState} from 'components/storage/storage';
 import {i18n} from 'components/i18n/i18n';
@@ -91,6 +92,10 @@ const InboxThreadsList = ({folderId, onNavigate, merger, onScroll}: Props) => {
           style={styles.error}
         />
       );
+    }
+
+    if (inProgress) {
+      return <InboxThreadsProgressPlaceholder />;
     }
 
     if (!hasVisibleMessages) {

@@ -2,7 +2,6 @@ import React from 'react';
 import {View} from 'react-native';
 import {SkeletonIssues} from 'components/skeleton/skeleton';
 import {UNIT} from 'components/variables';
-
 export default () => (
   <View
     testID="test:id/inboxThreadsProgress"
