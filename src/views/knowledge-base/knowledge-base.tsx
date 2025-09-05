@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {
-  RefreshControl,
   SectionList,
   Text,
   TouchableOpacity,
@@ -8,6 +7,7 @@ import {
   ActivityIndicator,
   Dimensions,
 } from 'react-native';
+import {RefreshControl} from 'components/haptick/refresh-control';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';

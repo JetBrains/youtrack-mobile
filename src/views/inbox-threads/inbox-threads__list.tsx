@@ -1,5 +1,6 @@
 import React, {useCallback, useContext, useEffect} from 'react';
-import {FlatList, RefreshControl, Text, View} from 'react-native';
+import {FlatList, Text, View} from 'react-native';
+import {RefreshControl} from 'components/haptick/refresh-control';
 
 import {useSelector} from 'react-redux';
 import {useDispatch} from 'hooks/use-dispatch';

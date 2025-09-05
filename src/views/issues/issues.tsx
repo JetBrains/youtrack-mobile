@@ -3,10 +3,10 @@ import {
   View,
   Text,
   FlatList,
-  RefreshControl,
   TouchableOpacity,
   Animated,
 } from 'react-native';
+import {RefreshControl} from 'components/haptick/refresh-control';
 
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';

@@ -1,11 +1,11 @@
 import React from 'react';
 import {
-  RefreshControl,
   View,
   FlatList,
   Text,
   TouchableOpacity,
 } from 'react-native';
+import {RefreshControl} from 'components/haptick/refresh-control';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';

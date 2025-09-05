@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import {
   View,
-  RefreshControl,
   TouchableOpacity,
   ActivityIndicator,
   Dimensions,
   NativeScrollEvent,
 } from 'react-native';
+import {RefreshControl} from 'components/haptick/refresh-control';
 
 import DeviceInfo from 'react-native-device-info';
 import isEqual from 'react-fast-compare';

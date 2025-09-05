@@ -3,9 +3,9 @@ import {
   View,
   FlatList,
   Text,
-  RefreshControl,
   ActivityIndicator,
 } from 'react-native';
+import {RefreshControl} from 'components/haptick/refresh-control';
 
 import ErrorMessage from 'components/error-message/error-message';
 import Header from 'components/header/header';
