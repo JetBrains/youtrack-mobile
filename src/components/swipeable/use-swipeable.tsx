@@ -4,6 +4,7 @@ import {Animated, Dimensions} from 'react-native';
 
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {RectButton} from 'react-native-gesture-handler';
+import {isIOSPlatform} from 'util/util';
 
 import styles from './swipeable.styles';
 
@@ -39,6 +40,8 @@ export interface SwipeableData {
   ) => React.ReactNode;
   props: SwipeableProps;
 }
+
+const isIOS = isIOSPlatform();
 
 export function useSwipeable(): SwipeableData {
   const swipeableRow = React.useRef<Swipeable | null>(null);
@@ -123,7 +126,7 @@ export function useSwipeable(): SwipeableData {
     getAnimationStyles,
     renderActions,
     props: {
-      friction: 0.8,
+      friction: isIOS ? 0.8 : 0.6,
       leftThreshold: fullWidth * 0.15,
       rightThreshold: fullWidth * 0.15,
       overshootLeft: false,
@@ -134,7 +137,7 @@ export function useSwipeable(): SwipeableData {
       animationOptions: {
         delay: 0,
         speed: 200,
-        bounciness: 4,
+        bounciness: isIOS ? 4 : 0,
       },
     },
   };
