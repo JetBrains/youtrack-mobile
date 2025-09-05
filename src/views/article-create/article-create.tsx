@@ -5,6 +5,7 @@ import {
   View,
   Text,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from 'react-native';
 
 import {useDebouncedCallback} from 'use-debounce';
@@ -27,8 +28,10 @@ import VisibilityControl from 'components/visibility/visibility-control';
 import {ANALYTICS_ARTICLE_CREATE_PAGE} from 'components/analytics/analytics-ids';
 import {getApi} from 'components/api/api__instance';
 import {getStorageState} from 'components/storage/storage';
+import {headerMinHeight} from 'components/header/header.styles';
 import {i18n} from 'components/i18n/i18n';
 import {IconAngleDown, IconCheck, IconClose} from 'components/icon/icon';
+import {isIOSPlatform} from 'util/util';
 import {PanelWithSeparator} from 'components/panel/panel-with-separator';
 import {SkeletonCreateArticle} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
@@ -335,7 +338,11 @@ const ArticleCreate = (props: Props) => {
   const linkColor: string = uiThemeColors.$link;
   const hasArticleDraft: boolean = articleDraft !== null;
   return (
-    <View testID="createArticle" style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={isIOSPlatform() ? 'padding' : 'height'}
+      keyboardVerticalOffset={headerMinHeight}
+      testID="createArticle" style={styles.container}
+    >
       {renderHeader()}
 
       {!hasArticleDraft && (
@@ -421,7 +428,7 @@ const ArticleCreate = (props: Props) => {
       </ScrollView>
 
       {isAttachFileDialogVisible && renderAttachFileDialog()}
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
