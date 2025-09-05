@@ -168,7 +168,7 @@ msgstr "Are you sure you want to delete this work item?"
 msgid "Article added to favorites"
 msgstr "Article added to favorites"
 
-#: src/views/article-create/article-create.tsx:390
+#: src/views/article-create/article-create.tsx:397
 msgid "Article content"
 msgstr "Article content"
 
@@ -319,7 +319,7 @@ msgstr "Confirm logout"
 msgid "Confirmation required"
 msgstr "Confirmation required"
 
-#: src/actions/app-actions.ts:894
+#: src/actions/app-actions.ts:897
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
@@ -434,7 +434,7 @@ msgstr "Delete all drafts?"
 msgid "Delete comment permanently?"
 msgstr "Delete comment permanently?"
 
-#: src/views/article-create/article-create.tsx:308
+#: src/views/article-create/article-create.tsx:311
 msgid "Delete draft"
 msgstr "Delete draft"
 
@@ -468,7 +468,7 @@ msgstr "Discard and close"
 msgid "Discard draft and close?"
 msgstr "Discard draft and close?"
 
-#: src/views/article-create/article-create.tsx:309
+#: src/views/article-create/article-create.tsx:312
 msgid "Discard unpublished changes"
 msgstr "Discard unpublished changes"
 
@@ -559,7 +559,7 @@ msgstr "Filter existing accounts by name or username"
 msgid "Filter items"
 msgstr "Filter items"
 
-#: src/views/article-create/article-create.tsx:148
+#: src/views/article-create/article-create.tsx:151
 #: src/views/issues/issues-actions.ts:355
 #: src/views/knowledge-base/knowledge-base.tsx:514
 msgid "Filter projects"
@@ -822,7 +822,7 @@ msgstr "No issues found"
 msgid "No items"
 msgstr "No items"
 
-#: src/views/inbox-threads/inbox-threads__list.tsx:113
+#: src/views/inbox-threads/inbox-threads__list.tsx:119
 msgid "No notifications"
 msgstr "No notifications"
 
@@ -1255,7 +1255,7 @@ msgstr "Thread unmuted"
 msgid "Tickets"
 msgstr "Tickets"
 
-#: src/views/article-create/article-create.tsx:389
+#: src/views/article-create/article-create.tsx:396
 msgid "Title"
 msgstr "Title"
 
@@ -1403,7 +1403,7 @@ msgstr "You are trying to open a link from another server. Please add this serve
 msgid "You can only CC a maximum of 5 reporters per ticket"
 msgstr "You can only CC a maximum of 5 reporters per ticket"
 
-#: src/views/inbox-threads/inbox-threads__list.tsx:112
+#: src/views/inbox-threads/inbox-threads__list.tsx:118
 msgid "You don’t have any unread notifications"
 msgstr "You don’t have any unread notifications"
 
