@@ -58,7 +58,7 @@ function SwipeableRow({
       dragOffsetFromLeftEdge={props.dragOffsetFromLeftEdge}
       dragOffsetFromRightEdge={props.dragOffsetFromRightEdge}
       onSwipeableWillOpen={() => {
-        trigger(HapticFeedbackTypes.impactMedium);
+        trigger(HapticFeedbackTypes.impactMedium, {enableVibrateFallback: true, ignoreAndroidSystemSettings: true});
       }}
       onSwipeableOpen={(d: SwipeDirection) => {
         if (!direction && onRightSwipe && onLeftSwipe) {
