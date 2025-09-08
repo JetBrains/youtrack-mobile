@@ -82,10 +82,11 @@ export const baseMarkdownStyles = {
     textDecorationLine: 'line-through',
   },
   blockquote: {
-    margin: 0,
     padding: 0,
     marginLeft: 0,
     marginTop: UNIT,
+    marginBottom: 0,
+    paddingBottom: UNIT,
     paddingLeft: UNIT * 1.5,
     backgroundColor: 'transparent',
     borderLeftColor: DEFAULT_THEME.colors.$iconAccent,
@@ -93,6 +94,7 @@ export const baseMarkdownStyles = {
   },
   blockquoteText: {
     fontSize: MAIN_FONT_SIZE,
+    flexWrap: 'wrap',
   },
   bullet_list: {},
   ordered_list: {},

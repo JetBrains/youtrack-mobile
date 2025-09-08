@@ -59,13 +59,19 @@ function getMarkdownRules(
   return {
     blockquote: (
       node: MarkdownNode,
-      children: React.ReactElement,
+      children: React.ReactElement | string,
       parent: React.ReactElement,
       style: typeof baseMarkdownStyles,
       inheritedStyles: TextStyleProp = {},
     ) => (
       <View key={node.key} style={style.blockquote}>
-        <Text style={[inheritedStyles, style.blockquoteText]}>{children}</Text>
+        {typeof children === 'string' ? (
+          <Text style={[inheritedStyles, style.blockquoteText]}>
+            {children}
+          </Text>
+        ) : (
+          children
+        )}
       </View>
     ),
     image: (
