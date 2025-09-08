@@ -10,6 +10,7 @@ import {IconFileText} from 'components/icon/icon';
 import {useBottomSheetContext} from 'components/bottom-sheet';
 
 import type {Mention} from 'components/wiki/markdown-view-rules';
+import type {TextStyleProp} from 'types/Internal';
 
 import styles from 'components/wiki/markdown/markdown.styles';
 
@@ -36,7 +37,7 @@ export default function MarkdownMention({
   );
 }
 
-export function MarkdownMentionWithUserCard({mention, style}: {mention: Mention; style: TextStyle}) {
+export function MarkdownMentionWithUserCard({mention, style}: {mention: Mention; style: TextStyleProp}) {
   const {openBottomSheet} = useBottomSheetContext();
 
   const isArticle = () => hasType.article(mention);

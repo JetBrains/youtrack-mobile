@@ -94,7 +94,6 @@ export const baseMarkdownStyles = {
   },
   blockquoteText: {
     fontSize: MAIN_FONT_SIZE,
-    flexWrap: 'wrap',
   },
   bullet_list: {},
   ordered_list: {},

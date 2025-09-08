@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, TextStyle} from 'react-native';
+import {Text} from 'react-native';
 
 import * as regExps from 'components/wiki/util/patterns';
 import {doSortBy} from 'components/search/sorting';
@@ -13,6 +13,7 @@ import {Mention, Mentions} from 'components/wiki/markdown-view-rules';
 import type {Article} from 'types/Article';
 import type {Attachment} from 'types/CustomFields';
 import type {MarkdownNode} from 'types/Markdown';
+import type {TextStyleProp} from 'types/Internal';
 import type {UITheme} from 'types/Theme';
 import type {User} from 'types/User';
 
@@ -44,7 +45,7 @@ const MarkdownText = ({
   mentions,
 }: {
   node: MarkdownNode,
-  style: TextStyle[] | TextStyle,
+  style: TextStyleProp,
   attachments: Attachment[],
   mentions: Mentions | undefined,
   uiTheme: UITheme,

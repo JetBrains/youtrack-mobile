@@ -10,25 +10,24 @@ import {
 import renderRules from 'react-native-markdown-display/src/lib/renderRules';
 import UrlParse from 'url-parse';
 
-import HTML from './markdown/markdown-html';
 import FileMedia from 'components/attach-file/file-media';
+import HTML from './markdown/markdown-html';
+import MarkdownCheckbox from 'components/wiki/markdown/markdown-checkbox';
 import MarkdownHyperLink from 'components/wiki/markdown/markdown-hyper-link';
+import {baseMarkdownStyles} from 'components/wiki/markdown-view-styles';
 import {hasMimeType} from 'components/mime-type/mime-type';
-import {IconCheckboxBlank, IconCheckboxChecked} from 'components/icon/icon';
 import {isMarkdownNodeContainsCheckbox} from 'components/wiki/markdown-helper';
 import {MarkdownCodeHighlighter, MarkdownEmbedLink, MarkdownText} from 'components/wiki/markdown';
 
 import styles from './youtrack-wiki.styles';
 
+import type {AnyIssue} from 'types/Issue';
 import type {Article} from 'types/Article';
 import type {Attachment} from 'types/CustomFields';
-import type {AnyIssue} from 'types/Issue';
 import type {MarkdownNode} from 'types/Markdown';
 import type {TextStyleProp} from 'types/Internal';
 import type {UITheme} from 'types/Theme';
-import {User} from 'types/User';
-import {baseMarkdownStyles} from 'components/wiki/markdown-view-styles';
-
+import type {User} from 'types/User';
 
 export type Mention = Article | AnyIssue | User;
 export type Mentions = {
@@ -59,8 +58,8 @@ function getMarkdownRules(
   return {
     blockquote: (
       node: MarkdownNode,
-      children: React.ReactElement | string,
-      parent: React.ReactElement,
+      children: React.ReactElement[] | string,
+      parent: MarkdownNode[],
       style: typeof baseMarkdownStyles,
       inheritedStyles: TextStyleProp = {},
     ) => (
@@ -76,8 +75,8 @@ function getMarkdownRules(
     ),
     image: (
       node: MarkdownNode,
-      children: React.ReactElement,
-      parent: React.ReactElement,
+      children: React.ReactElement[],
+      parent: MarkdownNode[],
       style: typeof baseMarkdownStyles,
       inheritedStyles: TextStyleProp = {},
     ) => {
@@ -114,8 +113,8 @@ function getMarkdownRules(
     },
     code_inline: (
       node: MarkdownNode,
-      children: React.ReactElement,
-      parent: React.ReactElement,
+      children: React.ReactElement[],
+      parent: MarkdownNode[],
       style: typeof baseMarkdownStyles,
       inheritedStyles: TextStyleProp = {},
     ) => {
@@ -134,8 +133,8 @@ function getMarkdownRules(
     ),
     link: (
       node: MarkdownNode,
-      children: React.ReactElement,
-      parent: React.ReactElement,
+      children: React.ReactElement[],
+      parent: MarkdownNode[],
       style: typeof baseMarkdownStyles,
       inheritedStyles: TextStyleProp = {},
     ) => {
@@ -163,8 +162,8 @@ function getMarkdownRules(
     },
     list_item: (
       node: MarkdownNode,
-      children: React.ReactElement,
-      parent: React.ReactElement,
+      children: React.ReactElement[],
+      parent: MarkdownNode[],
       style: typeof baseMarkdownStyles,
       inheritedStyles: TextStyleProp = {},
     ) => {
@@ -187,8 +186,8 @@ function getMarkdownRules(
     },
     inline: (
       node: MarkdownNode,
-      children: React.ReactElement,
-      parent: React.ReactElement,
+      children: React.ReactElement[],
+      parent: MarkdownNode[],
       style: typeof baseMarkdownStyles,
       inheritedStyles: TextStyleProp = {},
     ) => {
@@ -205,8 +204,8 @@ function getMarkdownRules(
     },
     textgroup: (
       node: MarkdownNode,
-      children: React.ReactElement,
-      parent: React.ReactElement,
+      children: React.ReactElement[],
+      parent: MarkdownNode[],
       style: typeof baseMarkdownStyles,
       inheritedStyles: TextStyleProp = {},
     ) => {
@@ -230,44 +229,35 @@ function getMarkdownRules(
     },
     checkbox: (
       node: MarkdownNode,
-      children: React.ReactElement,
-      parent: React.ReactElement,
+      children: React.ReactElement[],
+      parent: MarkdownNode[],
       style: typeof baseMarkdownStyles,
       inheritedStyles: TextStyleProp = {},
+      enabled: boolean = true,
     ) => {
-      const isChecked: boolean = node.attributes.checked === true;
-      const position: number = node.attributes.position;
-      const CheckboxIcon = isChecked ? IconCheckboxChecked : IconCheckboxBlank;
-      const onPress = () => onCheckboxUpdate?.(!isChecked, position);
+      const isInTable = parent.some(i => i.type === 'table');
       return (
-        <React.Fragment key={node.key}>
-          <Text
-            onPress={onPress}
-            style={styles.checkboxIconContainer}
-          >
-            <CheckboxIcon
-              size={24}
-              style={[
-                styles.checkboxIcon,
-                !isChecked && styles.checkboxIconBlank,
-              ]}
-            />
-          </Text>
+        <MarkdownCheckbox
+          enabled={enabled && !isInTable}
+          key={node.key}
+          onCheckboxUpdate={onCheckboxUpdate}
+          position={node.attributes.position}
+          checked={node.attributes.checked === true}
+        >
           <MarkdownText
             attachments={attachments}
-            key={node.key}
             mentions={mentions}
             node={node}
             style={[textStyle, inheritedStyles, styles.checkboxRow]}
             uiTheme={uiTheme}
           />
-        </React.Fragment>
+        </MarkdownCheckbox>
       );
     },
     text: (
       node: MarkdownNode,
-      children: React.ReactElement,
-      parent: React.ReactElement,
+      children: React.ReactElement[],
+      parent: MarkdownNode[],
       style: typeof baseMarkdownStyles,
       inheritedStyles: TextStyleProp = {},
     ) => {
@@ -282,8 +272,8 @@ function getMarkdownRules(
     },
     s: (
       node: MarkdownNode,
-      children: React.ReactElement,
-      parent: React.ReactElement,
+      children: React.ReactElement[],
+      parent: MarkdownNode[],
       style: typeof baseMarkdownStyles,
       inheritedStyles: TextStyleProp = {},
     ) => {
@@ -297,8 +287,8 @@ function getMarkdownRules(
     },
     html_block: (
       node: MarkdownNode,
-      children: React.ReactElement,
-      parent: React.ReactElement,
+      children: React.ReactElement[],
+      parent: MarkdownNode[],
       style: typeof baseMarkdownStyles,
     ) => {
       if (isHTMLLinebreak(node.content)) {
@@ -309,8 +299,8 @@ function getMarkdownRules(
     },
     html_inline: (
       node: MarkdownNode,
-      children: React.ReactElement,
-      parent: React.ReactElement,
+      children: React.ReactElement[],
+      parent: MarkdownNode[],
       style: typeof baseMarkdownStyles,
       inheritedStyles: TextStyleProp = {},
     ) => {
@@ -334,8 +324,8 @@ function getMarkdownRules(
     },
     table: (
       node: MarkdownNode,
-      children: React.ReactElement,
-      parent: React.ReactElement,
+      children: React.ReactElement[],
+      parent: MarkdownNode[],
       style: typeof baseMarkdownStyles,
       inheritedStyles = {},
     ) => {
@@ -385,8 +375,8 @@ function isHTMLLinebreak(text: string): boolean {
 
 function renderHTMLLinebreak(
   node: MarkdownNode,
-  children: React.ReactElement,
-  parent: React.ReactElement,
+  children: React.ReactElement[],
+  parent: MarkdownNode[],
   style: typeof baseMarkdownStyles,
 ) {
   return renderRules.softbreak(node, children, parent, style);
