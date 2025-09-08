@@ -737,7 +737,6 @@ export default class IssueAPI extends ApiBase {
     issueId: string,
     checked: boolean,
     position: number,
-    description: string,
   ): Promise<{
     text: string;
     updated: number;
@@ -753,7 +752,6 @@ export default class IssueAPI extends ApiBase {
             position,
           },
         ],
-        description,
       },
     );
   }

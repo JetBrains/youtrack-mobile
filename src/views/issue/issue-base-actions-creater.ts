@@ -273,14 +273,7 @@ export const createActions = (
             description,
           ),
         );
-        const [error] = await until(
-          api.issue.updateDescriptionCheckbox(
-            issue.id,
-            checked,
-            position,
-            issue.description,
-          ),
-        );
+        const [error] = await until(api.issue.updateDescriptionCheckbox(issue.id, checked, position));
 
         if (error) {
           dispatch(
