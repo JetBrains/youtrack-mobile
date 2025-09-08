@@ -18,11 +18,11 @@ import {splitByHead} from 'components/activity/activity__split-activities';
 import styles from './inbox-threads.styles';
 
 import type {Activity} from 'types/Activity';
-import type {InboxThread, InboxThreadGroup} from 'types/Inbox';
+import type {Entity} from 'types/Entity';
+import type {InboxThread, InboxThreadGroup, InboxThreadMessage} from 'types/Inbox';
 import type {UITheme} from 'types/Theme';
 import type {User} from 'types/User';
 import type {ViewStyleProp} from 'types/Internal';
-import {Entity} from 'types/Entity';
 
 
 type Props = {
@@ -43,9 +43,9 @@ export default function InboxThreadItemSubscription({
 }: Props): JSX.Element | null {
   const isMergedNotifications: React.MutableRefObject<boolean> = React.useRef(!!getStorageState().mergedNotifications);
   const [shownMessagesAmount, updateShownMessagesAmount] = useState(3);
-  const activityToMessageMap: Record<string, Activity> | null = createMessagesMap(thread.messages);
+  const activityToMessageMap: Record<string, InboxThreadMessage> | null = createMessagesMap(thread.messages);
   const activities: Activity[] = thread.messages.reduce(
-    (list, it) => list.concat(it.activities),
+    (list: Activity[], it) => list.concat(it.activities),
     [],
   );
   const messageGroups = groupActivities(activities.reverse(), {

@@ -2,6 +2,7 @@ import {isActivityCategory} from './activity__category';
 
 import type {Activity, ActivityAuthorGroup} from 'types/Activity';
 import type {UserBase} from 'types/User';
+import type {InboxThreadMessage} from 'types/Inbox';
 
 const IDLE_TIME = 60 * 1000;
 
@@ -11,6 +12,8 @@ interface ActivityGroup {
   timestamp: number;
   events: Activity[];
   $$hasTerminated?: boolean;
+  activityToMessageMap?: Record<string, InboxThreadMessage> | null;
+  messages?: InboxThreadMessage[] | null;
 }
 
 export const groupActivities = (

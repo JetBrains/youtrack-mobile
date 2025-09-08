@@ -10,6 +10,7 @@ export interface MergedItem {
   article?: Activity;
   comment?: Activity;
   work?: Activity;
+  mergedActivities?: Activity[]
 }
 
 export function splitByHead(activities: Activity[], activityToMessageMap: Record<string, Activity>) {
