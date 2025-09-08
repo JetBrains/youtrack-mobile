@@ -112,7 +112,7 @@ msgid "Add spent time"
 msgstr "Add spent time"
 
 #: src/components/tags/tag-add-panel.tsx:40
-#: src/views/issue/issue-base-actions-creater.ts:540
+#: src/views/issue/issue-base-actions-creater.ts:533
 msgid "Add tag"
 msgstr "Add tag"
 
@@ -144,7 +144,7 @@ msgid "Appearance"
 msgstr "Appearance"
 
 #: src/views/create-issue/create-issue-actions.ts:361
-#: src/views/issue/issue-base-actions-creater.ts:571
+#: src/views/issue/issue-base-actions-creater.ts:564
 msgid "Apply command…"
 msgstr "Apply command…"
 
@@ -181,7 +181,7 @@ msgid "Article removed from favorites"
 msgstr "Article removed from favorites"
 
 #: src/components/comment/comment-edit.tsx:566
-#: src/views/issue/issue-base-actions-creater.ts:550
+#: src/views/issue/issue-base-actions-creater.ts:543
 msgid "Attach file"
 msgstr "Attach file"
 
@@ -237,8 +237,8 @@ msgstr "Camera"
 #: src/views/create-issue/create-issue-actions.ts:368
 #: src/views/inbox-threads/inbox-threads__thread.tsx:92
 #: src/views/inbox-threads/inbox-threads.tsx:281
-#: src/views/issue/issue-base-actions-creater.ts:597
-#: src/views/issue/issue-base-actions-creater.ts:629
+#: src/views/issue/issue-base-actions-creater.ts:590
+#: src/views/issue/issue-base-actions-creater.ts:622
 #: src/views/knowledge-base/knowledge-base-actions.ts:446
 #: src/views/settings/settings__feedback-form.tsx:79
 msgid "Cancel"
@@ -342,8 +342,8 @@ msgstr "Content revised"
 #: src/views/article/article__activity.tsx:216
 #: src/views/article/article__activity.tsx:225
 #: src/views/issue/activity/issue__activity-stream.tsx:146
-#: src/views/issue/issue-base-actions-creater.ts:523
-#: src/views/issue/issue-base-actions-creater.ts:625
+#: src/views/issue/issue-base-actions-creater.ts:516
+#: src/views/issue/issue-base-actions-creater.ts:618
 msgid "Copied"
 msgstr "Copied"
 
@@ -358,7 +358,7 @@ msgstr "Copy field text"
 #: src/views/article/arcticle-actions.ts:598
 #: src/views/article/article__activity.tsx:221
 #: src/views/issue/activity/issue__activity-stream.tsx:152
-#: src/views/issue/issue-base-actions-creater.ts:519
+#: src/views/issue/issue-base-actions-creater.ts:512
 msgid "Copy link"
 msgstr "Copy link"
 
@@ -369,7 +369,7 @@ msgstr "Copy link to article"
 
 #: src/views/article/article__activity.tsx:212
 #: src/views/issue/activity/issue__activity-stream.tsx:142
-#: src/views/issue/issue-base-actions-creater.ts:621
+#: src/views/issue/issue-base-actions-creater.ts:614
 msgid "Copy text"
 msgstr "Copy text"
 
@@ -418,7 +418,7 @@ msgstr "declined the pull request"
 #: src/views/issue/activity/issue__activity.tsx:233
 #: src/views/issue/activity/issue-activity__actions.ts:269
 #: src/views/issue/activity/issue-activity__comment-actions.ts:263
-#: src/views/issue/issue-base-actions-creater.ts:580
+#: src/views/issue/issue-base-actions-creater.ts:573
 msgid "Delete"
 msgstr "Delete"
 
@@ -497,7 +497,7 @@ msgstr "Drafts"
 #: src/views/article/article__activity.tsx:179
 #: src/views/issue/activity/issue__activity-stream.tsx:101
 #: src/views/issue/activity/issue__activity.tsx:222
-#: src/views/issue/issue-base-actions-creater.ts:530
+#: src/views/issue/issue-base-actions-creater.ts:523
 msgid "Edit"
 msgstr "Edit"
 
@@ -579,7 +579,7 @@ msgid "Filter sprints by name"
 msgstr "Filter sprints by name"
 
 #: src/components/tags/tag-add-select.tsx:26
-#: src/views/issue/issue-base-actions-creater.ts:426
+#: src/views/issue/issue-base-actions-creater.ts:419
 msgid "Filter tags"
 msgstr "Filter tags"
 
@@ -632,7 +632,7 @@ msgstr "in revision"
 msgid "Inherited restrictions"
 msgstr "Inherited restrictions"
 
-#: src/views/issue/issue-base-actions-creater.ts:733
+#: src/views/issue/issue-base-actions-creater.ts:726
 msgid "Issue deleted"
 msgstr "Issue deleted"
 
@@ -687,7 +687,7 @@ msgstr "Light theme"
 
 #: src/components/linked-issues/linked-issues-add-link.tsx:247
 #: src/views/create-issue/create-issue.tsx:376
-#: src/views/issue/issue-base-actions-creater.ts:561
+#: src/views/issue/issue-base-actions-creater.ts:554
 msgid "Link issue"
 msgstr "Link issue"
 
@@ -1059,7 +1059,7 @@ msgstr "Share"
 #: src/views/article/article__activity.tsx:239
 #: src/views/issue/activity/issue__activity-stream.tsx:162
 #: src/views/issue/activity/issue__activity-stream.tsx:169
-#: src/views/issue/issue-base-actions-creater.ts:510
+#: src/views/issue/issue-base-actions-creater.ts:503
 msgid "Share link"
 msgstr "Share link"
 
@@ -1073,7 +1073,7 @@ msgstr "Share logs"
 
 #: src/views/article/arcticle-actions.ts:203
 #: src/views/article/arcticle-actions.ts:577
-#: src/views/issue/issue-base-actions-creater.ts:495
+#: src/views/issue/issue-base-actions-creater.ts:488
 msgid "Share…"
 msgstr "Share…"
 
