@@ -1,17 +1,22 @@
 import * as React from 'react';
 
-import {View} from 'react-native';
-import {HapticFeedbackTypes, trigger} from 'react-native-haptic-feedback';
+import {Animated, View} from 'react-native';
 
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+import {HapticFeedbackTypes, trigger} from 'react-native-haptic-feedback';
+import {RectButton} from 'react-native-gesture-handler';
+
+import {isIOSPlatform} from 'util/util';
 import {SwipeableWithHint} from './swipeable-with-hint';
 import {swipeDirection} from 'components/swipeable';
 import {useSwipeable} from './use-swipeable';
 
-import styles from './swipeable.styles';
-
 import type {ActionColor, BaseSwipeableProps, SwipeDirection} from 'components/swipeable';
 import type {Interpolation} from './use-swipeable';
+
+import styles from './swipeable.styles';
+
+const isIOS = isIOSPlatform();
 
 interface SwipeableSingleDirectionRowProps extends BaseSwipeableProps, React.PropsWithChildren {
   direction?: SwipeDirection;
@@ -32,7 +37,9 @@ function SwipeableRow({
   onLeftSwipe,
   children,
 }: SwipeableSingleDirectionRowProps) {
-  const {swipeableRow, close, renderActions, props} = useSwipeable();
+  const {swipeableRow, getAnimationStyles, fullWidth} = useSwipeable();
+  const threshold = fullWidth * 0.2;
+
   const [text0 = '', text1 = ''] = actionText;
   const [isFirstSwipe, setIsFirstSwipe] = React.useState(true);
   const [label, setLabel] = React.useState('');
@@ -42,21 +49,43 @@ function SwipeableRow({
     setIsFirstSwipe(true);
   }, [actionText]);
 
+  const close = () => swipeableRow?.current?.close?.();
+
+  const renderActions = (dragX: Interpolation, toLeft: boolean, text: string, actionColor?: ActionColor | null) => {
+    const animationStyles = getAnimationStyles(dragX, toLeft);
+    const actionStyle = toLeft ? styles.leftAction : styles.rightAction;
+    const textStyle = toLeft ? styles.leftActionText : styles.rightActionText;
+    return (
+      <RectButton
+        style={[actionStyle, actionColor?.backgroundColor ? {backgroundColor: actionColor.backgroundColor} : null]}
+        onPress={close}
+      >
+        <Animated.Text style={[textStyle, animationStyles, actionColor?.color ? {color: actionColor.color} : null]}>
+          {text.split(' ').join('\n')}
+        </Animated.Text>
+      </RectButton>
+    );
+  };
+
   return (
     <Swipeable
       enabled={typeof enabled === 'boolean' ? enabled : true}
+      useNativeAnimations={true}
       containerStyle={styles.container}
       ref={swipeableRow}
       enableTrackpadTwoFingerGesture
-      friction={props.friction}
-      leftThreshold={props.leftThreshold}
-      rightThreshold={props.rightThreshold}
-      animationOptions={props.animationOptions}
-      overshootLeft={props.overshootLeft}
-      overshootRight={props.overshootRight}
-      useNativeAnimations={props.useNativeAnimations}
-      dragOffsetFromLeftEdge={props.dragOffsetFromLeftEdge}
-      dragOffsetFromRightEdge={props.dragOffsetFromRightEdge}
+      friction={isIOS ? 0.5 : 0.6}
+      leftThreshold={threshold}
+      rightThreshold={threshold}
+      animationOptions={{
+        delay: 0,
+        speed: 1000,
+        bounciness: 0,
+      }}
+      overshootLeft={false}
+      overshootRight={false}
+      shouldCancelWhenOutside={true}
+      hitSlop={{left: -10, right: -10}}
       onSwipeableWillOpen={() => {
         trigger(HapticFeedbackTypes.impactMedium, {enableVibrateFallback: true, ignoreAndroidSystemSettings: true});
       }}
