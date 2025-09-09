@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import {Animated, Dimensions} from 'react-native';
+import {Animated} from 'react-native';
 
-import Swipeable from 'react-native-gesture-handler/Swipeable';
+import {DimensionsManager} from 'components/dimentions/dimensions-manager';
 
 export type Interpolation = Animated.AnimatedInterpolation<number | string>;
 
@@ -12,7 +12,6 @@ export interface SwipeAction {
 }
 
 export interface SwipeableData {
-  swipeableRow: React.RefObject<Swipeable>;
   fullWidth: number;
   getAnimationStyles: (
     dragX: Interpolation,
@@ -26,14 +25,13 @@ export interface SwipeableData {
 }
 
 export function useSwipeable(): SwipeableData {
-  const swipeableRow = React.useRef<Swipeable | null>(null);
-  const getFullWidth = () => Dimensions.get('window').width;
-  const [fullWidth, setFullWidth] = React.useState(getFullWidth());
+  const manager = DimensionsManager.getInstance();
+  const [fullWidth, setFullWidth] = React.useState(() => manager.getCurrentWidth());
 
   React.useEffect(() => {
-    const subscription = Dimensions.addEventListener('change', () => setFullWidth(getFullWidth()));
-    return () => subscription?.remove();
-  }, []);
+    const unsubscribe = manager.subscribe(setFullWidth);
+    return unsubscribe;
+  }, [manager]);
 
   const getAnimationStyles = (dragX: Interpolation, toLeft: boolean) => {
     const inputRange = toLeft ? [0, fullWidth] : [-fullWidth, 0];
@@ -54,7 +52,6 @@ export function useSwipeable(): SwipeableData {
   };
 
   return {
-    swipeableRow,
     fullWidth,
     getAnimationStyles,
   };

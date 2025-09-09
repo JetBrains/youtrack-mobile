@@ -37,7 +37,8 @@ function SwipeableRow({
   onLeftSwipe,
   children,
 }: SwipeableSingleDirectionRowProps) {
-  const {swipeableRow, getAnimationStyles, fullWidth} = useSwipeable();
+  const swipeableRow = React.useRef<Swipeable | null>(null);
+  const {getAnimationStyles, fullWidth} = useSwipeable();
   const threshold = fullWidth * 0.2;
 
   const [text0 = '', text1 = ''] = actionText;
