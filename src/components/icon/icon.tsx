@@ -16,8 +16,8 @@ import ChevronSmallDown from 'components/icon/assets/shevron_small_down.svg';
 import ChevronSmallUp from 'components/icon/assets/shevron_small_up.svg';
 import Comment from 'components/icon/assets/comment.svg';
 import Drag from '@jetbrains/icons/drag-20px.svg';
-import Envelope from 'components/icon/assets/envelope.svg';
-import EnvelopeOpen from 'components/icon/assets/envelope-open.svg';
+import MarkRead from 'components/icon/assets/mark-read.svg';
+import MarkUnread from 'components/icon/assets/mark-unread.svg';
 import History from 'components/icon/assets/history.svg';
 import Link from '@jetbrains/icons/link-20px.svg';
 import Lock from 'components/icon/assets/lock.svg';
@@ -237,9 +237,9 @@ export const IconClose = (props: Props) => IconAdd(props, rotate45);
 
 export const IconComment = (props: Props) => <Comment {...createSVGProps(props, 24)} />;
 
-export const IconEnvelope = (props: Props) => <Envelope {...createSVGProps(props, 24)} />;
+export const IconMarkRead = (props: Props) => <MarkRead {...createSVGProps(props, 24)} />;
 
-export const IconEnvelopeOpen = (props: Props) => <EnvelopeOpen {...createSVGProps(props, 24)} />;
+export const IconMarkUnread = (props: Props) => <MarkUnread {...createSVGProps(props, 24)} />;
 
 export const IconHistory = (props: Props) => <History {...createSVGProps(props, 24)} />;
 

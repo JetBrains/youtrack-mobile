@@ -108,13 +108,16 @@ const Swipeable = ({
     [screenWidth, swipeToEdge, translateX],
   );
 
-  const animateFallbackReturn = useCallback((smooth: boolean) => {
-    const animate = smooth ? Animated.spring : Animated.timing;
-    animate(translateX, {
-      toValue: 0,
-      ...(smooth ? SWIPE_ANIMATION_CONFIG.fallbackSmooth : SWIPE_ANIMATION_CONFIG.fallback),
-    }).start();
-  }, [translateX]);
+  const animateFallbackReturn = useCallback(
+    (smooth: boolean) => {
+      const animate = smooth ? Animated.spring : Animated.timing;
+      animate(translateX, {
+        toValue: 0,
+        ...(smooth ? SWIPE_ANIMATION_CONFIG.fallbackSmooth : SWIPE_ANIMATION_CONFIG.fallback),
+      }).start();
+    },
+    [translateX],
+  );
 
   const resetTriggerActionIfBelowThreshold = useCallback(
     (translationX: number) => {
@@ -144,7 +147,7 @@ const Swipeable = ({
       isActionTriggered.current = true;
       activeAction.current = direction;
       triggerHapticFeedback();
-      animateAction(1.7);
+      animateAction(2);
     },
     [animateAction, triggerHapticFeedback],
   );
@@ -219,11 +222,13 @@ const Swipeable = ({
           animateFallbackReturn(!actionDefined);
         }
         resetGestureState();
+        animateAction(1);
       }
     },
     [
       threshold,
       resetGestureState,
+      animateAction,
       leftAction,
       rightAction,
       syncUpdate,

@@ -14,7 +14,7 @@ import {i18n} from 'components/i18n/i18n';
 import {isUnreadOnly, muteToggle, updateThreadRead, updateThreadsStateAndCache} from './inbox-threads-actions';
 import {ThreadSettings} from 'views/inbox-threads/inbox-threads__thread-settings';
 import {useThread} from 'views/inbox-threads/inbox-threads__use-thread';
-import {IconEnvelope, IconEnvelopeOpen} from 'components/icon/icon';
+import {IconMarkRead, IconMarkUnread} from 'components/icon/icon';
 
 import styles from './inbox-threads.styles';
 
@@ -139,7 +139,7 @@ function Thread({thread, currentUser, uiTheme, onNavigate, style}: Props) {
 
       <Swipeable
         leftAction={{
-          icon: isRead ? <IconEnvelope size={12} /> : <IconEnvelopeOpen size={12} />,
+          icon: !isRead ? <IconMarkRead size={12} /> : <IconMarkUnread size={12} />,
           onSwipe: () => {
             setIsUpdating(true);
             toggleRead(!isRead);
