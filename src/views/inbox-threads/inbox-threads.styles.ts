@@ -18,7 +18,7 @@ export default EStyleSheet.create({
     color: '$iconAction',
   },
   iconAddReaction: {
-    color: '$iconAccent',
+    color: '$link',
   },
   avatarComment: {
     backgroundColor: '$background',

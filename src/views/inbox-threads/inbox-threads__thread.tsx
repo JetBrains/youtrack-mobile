@@ -3,20 +3,22 @@ import {View} from 'react-native';
 
 import {useActionSheet} from '@expo/react-native-action-sheet';
 import {useDispatch} from 'hooks/use-dispatch';
+import {useSelector} from 'react-redux';
 
 import animation from 'components/animation/animation';
 import InboxEntity from '../inbox/inbox__entity';
 import InboxThreadReadToggleButton from 'views/inbox-threads/inbox-threads__read-toggle-button';
-import SwipeableRow from 'components/swipeable/swipeable';
+import Swipeable from 'components/swipeable/swipeable';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
 import {isUnreadOnly, muteToggle, updateThreadRead, updateThreadsStateAndCache} from './inbox-threads-actions';
-import {swipeDirection} from 'components/swipeable';
 import {ThreadSettings} from 'views/inbox-threads/inbox-threads__thread-settings';
 import {useThread} from 'views/inbox-threads/inbox-threads__use-thread';
+import {IconEnvelope, IconEnvelopeOpen} from 'components/icon/icon';
 
 import styles from './inbox-threads.styles';
 
+import type {AppState} from 'reducers';
 import type {Entity} from 'types/Entity';
 import type {InboxThread, InboxThreadMessage, InboxThreadTarget} from 'types/Inbox';
 import type {UITheme} from 'types/Theme';
@@ -25,46 +27,36 @@ import type {ViewStyleProp} from 'types/Internal';
 
 interface Props {
   currentUser: User;
-  onNavigate: (
-    entity: Entity | InboxThreadTarget,
-    navigateToActivity?: string,
-    commentId?: string,
-  ) => void;
+  onNavigate: (entity: Entity | InboxThreadTarget, navigateToActivity?: string, commentId?: string) => void;
   thread: InboxThread;
   uiTheme: UITheme;
-  style?: ViewStyleProp,
+  style?: ViewStyleProp;
 }
 
-function Thread({
-  thread,
-  currentUser,
-  uiTheme,
-  onNavigate,
-  style,
-}: Props) {
+function Thread({thread, currentUser, uiTheme, onNavigate, style}: Props) {
   const {showActionSheetWithOptions} = useActionSheet();
 
   const dispatch = useDispatch();
+  const inProgress: boolean = useSelector((state: AppState) => state.inboxThreads.inProgress);
 
   const [_thread, updateThread] = useState<InboxThread>(thread);
-
-  const [isRead, setIsRead] = useState<boolean>(!thread.messages.some(it => !it.read));
-  const actionTextBase = [i18n('Mark as unread'), i18n('Mark as read')];
-  const actionText = isRead ? actionTextBase : actionTextBase.reverse();
   const {entity, ThreadView, isBottomPositioned} = useThread(_thread);
+  const [isRead, setIsRead] = useState<boolean>(!thread.messages.some(it => !it.read));
+  const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
   useEffect(() => {
     updateThread(thread);
   }, [thread]);
 
-  const toggleRead = (read: boolean) => {
+  const toggleRead = async (read: boolean) => {
     const updatedThread: InboxThread = {
       ..._thread,
       messages: _thread.messages.map(m => ({...m, read})),
     };
     updateThread(updatedThread);
     setIsRead(read);
-    dispatch(updateThreadRead(_thread.id, _thread.updated, read));
+    await dispatch(updateThreadRead(_thread.id, _thread.updated, read));
+    setIsUpdating(false);
     dispatch(updateThreadsStateAndCache(updatedThread));
     if (isUnreadOnly()) {
       animation.layoutAnimation();
@@ -85,7 +77,7 @@ function Thread({
       },
     },
     {
-      title: actionText[0],
+      title: isRead ? i18n('Mark as unread') : i18n('Mark as read'),
       execute: () => toggleRead(!isRead),
     },
     {
@@ -145,11 +137,17 @@ function Thread({
         />
       )}
 
-      <SwipeableRow
-        enabled={hasReadField}
-        direction={swipeDirection.left}
-        actionText={actionText}
-        onSwipe={() => toggleRead(!isRead)}
+      <Swipeable
+        leftAction={{
+          icon: isRead ? <IconEnvelope size={12} /> : <IconEnvelopeOpen size={12} />,
+          onSwipe: () => {
+            setIsUpdating(true);
+            toggleRead(!isRead);
+          },
+        }}
+        enabled={hasReadField && !inProgress && !isUpdating}
+        swipeToEdge={true}
+        syncUpdate={isUnreadOnly()}
       >
         <View style={styles.threadContainer}>
           <ThreadView
@@ -163,7 +161,7 @@ function Thread({
           />
           {isBottomPositioned && <View style={styles.threadTitleContainerBottom}>{Entity}</View>}
         </View>
-      </SwipeableRow>
+      </Swipeable>
     </View>
   );
 }

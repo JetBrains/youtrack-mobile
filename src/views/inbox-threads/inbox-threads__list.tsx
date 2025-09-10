@@ -133,7 +133,11 @@ const InboxThreadsList = ({folderId, onNavigate, merger, onScroll}: Props) => {
     >
       <FlatList
         contentContainerStyle={styles.threadsList}
-        removeClippedSubviews={false}
+        removeClippedSubviews={true}
+        windowSize={10}
+        maxToRenderPerBatch={5}
+        updateCellsBatchingPeriod={100}
+        initialNumToRender={10}
         data={merger ? merger(visibleThreads) : visibleThreads}
         ItemSeparatorComponent={renderSeparator}
         ListFooterComponent={renderFooter}

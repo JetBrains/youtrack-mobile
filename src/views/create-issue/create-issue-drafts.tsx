@@ -8,14 +8,13 @@ import {useDispatch} from 'hooks/use-dispatch';
 import Header from 'components/header/header';
 import Router from 'components/router/router';
 import Select from 'components/select/select';
-import SwipeableRow from 'components/swipeable/swipeable';
+import Swipeable from 'components/swipeable/swipeable';
 import {confirmation, deleteButtonText} from 'components/confirmation/confirmation';
 import {deleteAllDrafts, deleteDraft} from 'views/create-issue/create-issue-actions';
 import {i18n} from 'components/i18n/i18n';
 import {IconBack} from 'components/icon/icon';
 import {IssueRowDraft} from 'views/issues/issues__row';
 import {SELECT_ITEM_HEIGHT} from 'components/select/select.styles';
-import {swipeDirection} from 'components/swipeable';
 import {useTheme} from 'components/theme/use-theme';
 
 import styles from 'views/create-issue/create-issue.styles';
@@ -36,22 +35,20 @@ const IssueDrafts = ({onHide}: { onHide: () => void }) => {
 
   const listItem = ({item} : {item: IssueCreate}) => {
     return (
-      <SwipeableRow
-        enabled={true}
-        direction={swipeDirection.right}
-        actionText={[i18n('Delete'), '']}
-        actionColor={[
-          null,
-          {color: styles.dangerous.color, backgroundColor: styles.dangerous.backgroundColor},
-        ]}
-        onSwipe={async () => {
-          setCurrent(item.id);
-          height.value = withSpring(0);
-          await dispatch(deleteDraft(item.id));
-          if (drafts.length === 1) {
-            onHide();
-          }
-        }}
+      <Swipeable
+        syncUpdate={true}
+        rightAction={{
+          text: i18n('Delete'),
+          actionColor: {color: styles.dangerous.color, backgroundColor: styles.dangerous.backgroundColor},
+          onSwipe: async () => {
+            setCurrent(item.id);
+            height.value = withSpring(0);
+            await dispatch(deleteDraft(item.id));
+            if (drafts.length === 1) {
+              onHide();
+            }
+          },
+      }}
       >
         <AnimatedView
           style={current === item.id ? {height} : null}
@@ -64,7 +61,7 @@ const IssueDrafts = ({onHide}: { onHide: () => void }) => {
             }}
           />
         </AnimatedView>
-      </SwipeableRow>
+      </Swipeable>
     );
   };
 

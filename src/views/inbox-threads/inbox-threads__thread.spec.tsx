@@ -247,6 +247,9 @@ describe('Inbox Thread', () => {
       app: {
         networkState: networkStateMock,
       },
+      inboxThreads: {
+        inProgress: false,
+      },
     });
   }
 });

@@ -1,126 +1,252 @@
-import * as React from 'react';
+import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 
-import {Animated, View} from 'react-native';
+import {Animated, Dimensions, View} from 'react-native';
 
-import Swipeable from 'react-native-gesture-handler/Swipeable';
+import {
+  PanGestureHandler,
+  PanGestureHandlerGestureEvent as GestureEvent,
+  PanGestureHandlerStateChangeEvent as StateChangeEvent,
+  State,
+} from 'react-native-gesture-handler';
 import {HapticFeedbackTypes, trigger} from 'react-native-haptic-feedback';
-import {RectButton} from 'react-native-gesture-handler';
 
-import {isIOSPlatform} from 'util/util';
-import {SwipeableWithHint} from './swipeable-with-hint';
-import {swipeDirection} from 'components/swipeable';
-import {useSwipeable} from './use-swipeable';
-
-import type {ActionColor, BaseSwipeableProps, SwipeDirection} from 'components/swipeable';
-import type {Interpolation} from './use-swipeable';
+import SwipeableAction from './swipeable-action';
 
 import styles from './swipeable.styles';
 
-const isIOS = isIOSPlatform();
+import {
+  hapticConfig,
+  PanGestureActiveOffsetX,
+  PanGestureFailOffsetY,
+  SWIPE_ANIMATION_CONFIG,
+  SwipeDirection,
+} from 'components/swipeable/index';
 
-interface SwipeableSingleDirectionRowProps extends BaseSwipeableProps, React.PropsWithChildren {
-  direction?: SwipeDirection;
-  actionText: string[];
-  actionColor?: [ActionColor | null, ActionColor | null];
-  onSwipe?: (isFirstSwipe: boolean) => void;
-  onRightSwipe?: () => void;
-  onLeftSwipe?: () => void;
+import type {SwipeAction} from 'components/swipeable/index';
+
+interface Props extends React.PropsWithChildren {
+  leftAction?: SwipeAction;
+  rightAction?: SwipeAction;
+  enabled?: boolean;
+  threshold?: number;
+  swipeToEdge?: boolean;
+  syncUpdate?: boolean;
 }
 
-function SwipeableRow({
-  enabled,
-  direction,
-  actionText,
-  actionColor,
-  onSwipe,
-  onRightSwipe,
-  onLeftSwipe,
+const Swipeable = ({
   children,
-}: SwipeableSingleDirectionRowProps) {
-  const swipeableRow = React.useRef<Swipeable | null>(null);
-  const {getAnimationStyles, fullWidth} = useSwipeable();
-  const threshold = fullWidth * 0.2;
+  leftAction,
+  rightAction,
+  enabled = true,
+  threshold = 80,
+  swipeToEdge = false,
+  syncUpdate = false,
+}: Props) => {
+  const panRef = useRef<PanGestureHandler>(null);
+  const translateX = useRef(new Animated.Value(0)).current;
+  const actionScale = useRef(new Animated.Value(1)).current;
+  const isActionTriggered = useRef(false);
+  const activeAction = useRef<SwipeDirection | null>(null);
 
-  const [text0 = '', text1 = ''] = actionText;
-  const [isFirstSwipe, setIsFirstSwipe] = React.useState(true);
-  const [label, setLabel] = React.useState('');
+  const animateAction = useCallback(
+    (toValue: number) => {
+      Animated.spring(actionScale, {
+        toValue,
+        friction: 3,
+        tension: 100,
+        useNativeDriver: true,
+      }).start();
+    },
+    [actionScale],
+  );
 
-  React.useEffect(() => {
-    setLabel(actionText[0] ?? '');
-    setIsFirstSwipe(true);
-  }, [actionText]);
+  useEffect(() => {
+    return () => {
+      translateX.resetAnimation();
+    };
+  }, [translateX]);
 
-  const close = () => swipeableRow?.current?.close?.();
+  const screenWidth = useMemo(() => Dimensions.get('window').width, []);
 
-  const renderActions = (dragX: Interpolation, toLeft: boolean, text: string, actionColor?: ActionColor | null) => {
-    const animationStyles = getAnimationStyles(dragX, toLeft);
-    const actionStyle = toLeft ? styles.leftAction : styles.rightAction;
-    const textStyle = toLeft ? styles.leftActionText : styles.rightActionText;
-    return (
-      <RectButton
-        style={[actionStyle, actionColor?.backgroundColor ? {backgroundColor: actionColor.backgroundColor} : null]}
-        onPress={close}
-      >
-        <Animated.Text style={[textStyle, animationStyles, actionColor?.color ? {color: actionColor.color} : null]}>
-          {text.split(' ').join('\n')}
-        </Animated.Text>
-      </RectButton>
-    );
+  const actionContainerWidth = useMemo(() => {
+    return !!leftAction && !!rightAction ? '50%' : '100%';
+  }, [leftAction, rightAction]);
+
+  const triggerHapticFeedback = useCallback(() => {
+    trigger(HapticFeedbackTypes.impactMedium, hapticConfig);
+  }, []);
+
+  const animateSwipe = useCallback(
+    async (direction: SwipeDirection) => {
+      return new Promise<void>(resolve => {
+        if (swipeToEdge) {
+          const edgeValue = direction === SwipeDirection.LEFT ? screenWidth : -screenWidth;
+          Animated.sequence([
+            Animated.timing(translateX, {
+              toValue: edgeValue,
+              ...SWIPE_ANIMATION_CONFIG.toEdge,
+            }),
+            Animated.timing(translateX, {
+              toValue: 0,
+              ...SWIPE_ANIMATION_CONFIG.fromEdge,
+            }),
+          ]).start(() => resolve());
+        } else {
+          Animated.timing(translateX, {
+            toValue: 0,
+            ...SWIPE_ANIMATION_CONFIG.immediate,
+          }).start(() => resolve());
+        }
+      });
+    },
+    [screenWidth, swipeToEdge, translateX],
+  );
+
+  const animateFallbackReturn = useCallback(() => {
+    Animated.timing(translateX, {
+      toValue: 0,
+      ...SWIPE_ANIMATION_CONFIG.fallback,
+    }).start();
+  }, [translateX]);
+
+  const resetTriggerActionIfBelowThreshold = useCallback(
+    (translationX: number) => {
+      if (Math.abs(translationX) < threshold) {
+        if (isActionTriggered.current) {
+          triggerHapticFeedback();
+          animateAction(1);
+        }
+        isActionTriggered.current = false;
+        activeAction.current = null;
+      }
+    },
+    [animateAction, threshold, triggerHapticFeedback],
+  );
+
+  const setCurrentActionIfTriggered = useCallback(
+    (direction: SwipeDirection | null) => {
+      const actionExists =
+        (direction === SwipeDirection.LEFT && leftAction) || (direction === SwipeDirection.RIGHT && rightAction);
+
+      if (actionExists) {
+        isActionTriggered.current = true;
+        activeAction.current = direction;
+        triggerHapticFeedback();
+        animateAction(1.7);
+      }
+    },
+    [animateAction, leftAction, rightAction, triggerHapticFeedback],
+  );
+
+  const resetGestureState = useCallback(() => {
+    isActionTriggered.current = false;
+    activeAction.current = null;
+  }, []);
+
+  const getActiveDirection = (translationX: number): SwipeDirection | null => {
+    let direction: SwipeDirection | null = null;
+    if (translationX > 0) {
+      direction = SwipeDirection.LEFT;
+    } else if (translationX < 0) {
+      direction = SwipeDirection.RIGHT;
+    }
+    return direction;
   };
 
-  return (
-    <Swipeable
-      enabled={typeof enabled === 'boolean' ? enabled : true}
-      useNativeAnimations={true}
-      containerStyle={styles.container}
-      ref={swipeableRow}
-      enableTrackpadTwoFingerGesture
-      friction={isIOS ? 0.5 : 0.6}
-      leftThreshold={threshold}
-      rightThreshold={threshold}
-      animationOptions={{
-        delay: 0,
-        speed: 1000,
-        bounciness: 0,
-      }}
-      overshootLeft={false}
-      overshootRight={false}
-      shouldCancelWhenOutside={true}
-      hitSlop={{left: -10, right: -10}}
-      onSwipeableWillOpen={() => {
-        trigger(HapticFeedbackTypes.impactMedium, {enableVibrateFallback: true, ignoreAndroidSystemSettings: true});
-      }}
-      onSwipeableOpen={(d: SwipeDirection) => {
-        if (!direction && onRightSwipe && onLeftSwipe) {
-          if (d === swipeDirection.left) {
-            onLeftSwipe();
-          } else {
-            onRightSwipe();
-          }
-        } else if (direction && onSwipe && direction === d) {
-          onSwipe(isFirstSwipe);
-          setIsFirstSwipe(!isFirstSwipe);
-          setLabel(isFirstSwipe ? text1 : text0);
-        }
-        close();
-      }}
-      renderLeftActions={
-        direction === swipeDirection.left || onLeftSwipe
-          ? (_: Interpolation, dragX: Interpolation) =>
-              renderActions(dragX, true, direction ? label : text0, actionColor?.[0] ?? null)
-          : undefined
+  const gestureEventListener = useCallback(
+    (event: GestureEvent) => {
+      const translationX = event.nativeEvent.translationX;
+      const direction = getActiveDirection(translationX);
+      if (Math.abs(translationX) > threshold && !isActionTriggered.current) {
+        setCurrentActionIfTriggered(direction);
       }
-      renderRightActions={
-        direction === swipeDirection.right || onRightSwipe
-          ? (_: Interpolation, dragX: Interpolation) =>
-              renderActions(dragX, false, direction ? label : text1, actionColor?.[1] ?? null)
-          : undefined
-      }
-    >
-      <View style={styles.content}>{children}</View>
-    </Swipeable>
+      resetTriggerActionIfBelowThreshold(translationX);
+    },
+    [threshold, resetTriggerActionIfBelowThreshold, setCurrentActionIfTriggered],
   );
-}
 
-export default SwipeableRow;
-export const SwipeableRowWithHint = SwipeableWithHint(SwipeableRow);
+  const onGestureEvent = useMemo(
+    () =>
+      Animated.event([{nativeEvent: {translationX: translateX}}], {
+        useNativeDriver: true,
+        listener: gestureEventListener,
+      }),
+    [translateX, gestureEventListener],
+  );
+
+  const onStateChange = useCallback(
+    async (event: StateChangeEvent) => {
+      const {state, translationX} = event.nativeEvent;
+
+      if (state === State.END) {
+        let activeDirection: SwipeDirection.LEFT | SwipeDirection.RIGHT | null = null;
+        if (translationX > 0) {
+          activeDirection = SwipeDirection.LEFT;
+        } else if (translationX < 0) {
+          activeDirection = SwipeDirection.RIGHT;
+        }
+        const actionTriggered = Math.abs(translationX) > threshold && isActionTriggered.current;
+
+        if (actionTriggered && activeDirection) {
+          const action = (activeDirection === SwipeDirection.LEFT ? leftAction : rightAction) ?? null;
+          if (syncUpdate && action) {
+            action.onSwipe();
+          }
+          await animateSwipe(activeDirection);
+          if (!syncUpdate && action) {
+            action.onSwipe();
+          }
+        } else {
+          triggerHapticFeedback();
+          animateFallbackReturn();
+        }
+        resetGestureState();
+      }
+    },
+    [
+      threshold,
+      resetGestureState,
+      leftAction,
+      rightAction,
+      animateSwipe,
+      syncUpdate,
+      triggerHapticFeedback,
+      animateFallbackReturn,
+    ],
+  );
+
+  if (!enabled) {
+    return <View>{children}</View>;
+  }
+
+  return (
+    <PanGestureHandler
+      ref={panRef}
+      onGestureEvent={onGestureEvent}
+      onHandlerStateChange={onStateChange}
+      activeOffsetX={PanGestureActiveOffsetX}
+      failOffsetY={PanGestureFailOffsetY}
+    >
+      <Animated.View style={styles.container}>
+        {leftAction && (
+          <SwipeableAction action={leftAction} isLeft={true} width={actionContainerWidth} scale={actionScale} />
+        )}
+        {rightAction && (
+          <SwipeableAction action={rightAction} isLeft={false} width={actionContainerWidth} scale={actionScale} />
+        )}
+        <Animated.View
+          style={[
+            styles.content,
+            {
+              transform: [{translateX}],
+            },
+          ]}
+        >
+          {children}
+        </Animated.View>
+      </Animated.View>
+    </PanGestureHandler>
+  );
+};
+
+export default React.memo(Swipeable);
