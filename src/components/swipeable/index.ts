@@ -38,7 +38,12 @@ export const SWIPE_ANIMATION_CONFIG = {
     useNativeDriver: true,
   },
   fallback: {
-    duration: 50,
+    duration: 350,
+    useNativeDriver: true,
+  },
+  fallbackSmooth: {
+    tension: 120,
+    friction: 25,
     useNativeDriver: true,
   },
 } as const;

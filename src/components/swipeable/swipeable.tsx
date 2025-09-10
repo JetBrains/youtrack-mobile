@@ -25,6 +25,10 @@ import {
 import type {SwipeAction} from 'components/swipeable/index';
 
 const DEFAULT_THRESHOLD = 80;
+const MAX_NO_ACTION_SWIPE = 160;
+const getTranslationFriction = (translation: number): number => {
+  return Math.sign(translation) * Math.min(Math.abs(translation) * 0.25, MAX_NO_ACTION_SWIPE * 0.4);
+};
 
 interface Props extends React.PropsWithChildren {
   leftAction?: SwipeAction;
@@ -104,10 +108,11 @@ const Swipeable = ({
     [screenWidth, swipeToEdge, translateX],
   );
 
-  const animateFallbackReturn = useCallback(() => {
-    Animated.timing(translateX, {
+  const animateFallbackReturn = useCallback((smooth: boolean) => {
+    const animate = smooth ? Animated.spring : Animated.timing;
+    animate(translateX, {
       toValue: 0,
-      ...SWIPE_ANIMATION_CONFIG.fallback,
+      ...(smooth ? SWIPE_ANIMATION_CONFIG.fallbackSmooth : SWIPE_ANIMATION_CONFIG.fallback),
     }).start();
   }, [translateX]);
 
@@ -171,14 +176,18 @@ const Swipeable = ({
     [threshold, hasAction, resetTriggerActionIfBelowThreshold, activateAction],
   );
 
-  const onGestureEvent = useMemo(
-    () =>
-      Animated.event([{nativeEvent: {translationX: translateX}}], {
-        useNativeDriver: true,
-        listener: gestureEventListener,
-      }),
-    [translateX, gestureEventListener],
-  );
+  const onGestureEvent = useMemo(() => {
+    return (event: GestureEvent) => {
+      const translationX = event.nativeEvent.translationX;
+      const direction = getActiveDirection(translationX);
+      if (!hasAction(direction)) {
+        translateX.setValue(getTranslationFriction(translationX));
+      } else {
+        translateX.setValue(translationX);
+        gestureEventListener(event);
+      }
+    };
+  }, [translateX, gestureEventListener, hasAction]);
 
   const onStateChange = useCallback(
     async (event: StateChangeEvent) => {
@@ -203,10 +212,11 @@ const Swipeable = ({
             action.onSwipe();
           }
         } else {
-          if (hasAction(activeDirection) && isActionTriggered.current) {
+          const actionDefined = hasAction(activeDirection);
+          if (actionDefined && isActionTriggered.current) {
             triggerHapticFeedback();
           }
-          animateFallbackReturn();
+          animateFallbackReturn(!actionDefined);
         }
         resetGestureState();
       }
