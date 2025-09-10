@@ -24,6 +24,8 @@ import {
 
 import type {SwipeAction} from 'components/swipeable/index';
 
+const DEFAULT_THRESHOLD = 80;
+
 interface Props extends React.PropsWithChildren {
   leftAction?: SwipeAction;
   rightAction?: SwipeAction;
@@ -38,7 +40,7 @@ const Swipeable = ({
   leftAction,
   rightAction,
   enabled = true,
-  threshold = 80,
+  threshold = DEFAULT_THRESHOLD,
   swipeToEdge = false,
   syncUpdate = false,
 }: Props) => {
@@ -68,7 +70,7 @@ const Swipeable = ({
 
   const screenWidth = useMemo(() => Dimensions.get('window').width, []);
 
-  const actionContainerWidth = useMemo(() => {
+  const actionContainerWidth = useMemo((): string => {
     return !!leftAction && !!rightAction ? '50%' : '100%';
   }, [leftAction, rightAction]);
 
@@ -123,19 +125,23 @@ const Swipeable = ({
     [animateAction, threshold, triggerHapticFeedback],
   );
 
-  const setCurrentActionIfTriggered = useCallback(
+  const hasAction = useCallback(
     (direction: SwipeDirection | null) => {
-      const actionExists =
-        (direction === SwipeDirection.LEFT && leftAction) || (direction === SwipeDirection.RIGHT && rightAction);
-
-      if (actionExists) {
-        isActionTriggered.current = true;
-        activeAction.current = direction;
-        triggerHapticFeedback();
-        animateAction(1.7);
-      }
+      return (
+        (direction === SwipeDirection.LEFT && !!leftAction) || (direction === SwipeDirection.RIGHT && !!rightAction)
+      );
     },
-    [animateAction, leftAction, rightAction, triggerHapticFeedback],
+    [leftAction, rightAction],
+  );
+
+  const activateAction = useCallback(
+    (direction: SwipeDirection | null) => {
+      isActionTriggered.current = true;
+      activeAction.current = direction;
+      triggerHapticFeedback();
+      animateAction(1.7);
+    },
+    [animateAction, triggerHapticFeedback],
   );
 
   const resetGestureState = useCallback(() => {
@@ -157,12 +163,12 @@ const Swipeable = ({
     (event: GestureEvent) => {
       const translationX = event.nativeEvent.translationX;
       const direction = getActiveDirection(translationX);
-      if (Math.abs(translationX) > threshold && !isActionTriggered.current) {
-        setCurrentActionIfTriggered(direction);
+      if (Math.abs(translationX) > threshold && !isActionTriggered.current && hasAction(direction)) {
+        activateAction(direction);
       }
       resetTriggerActionIfBelowThreshold(translationX);
     },
-    [threshold, resetTriggerActionIfBelowThreshold, setCurrentActionIfTriggered],
+    [threshold, hasAction, resetTriggerActionIfBelowThreshold, activateAction],
   );
 
   const onGestureEvent = useMemo(
@@ -197,7 +203,9 @@ const Swipeable = ({
             action.onSwipe();
           }
         } else {
-          triggerHapticFeedback();
+          if (hasAction(activeDirection) && isActionTriggered.current) {
+            triggerHapticFeedback();
+          }
           animateFallbackReturn();
         }
         resetGestureState();
@@ -208,10 +216,11 @@ const Swipeable = ({
       resetGestureState,
       leftAction,
       rightAction,
-      animateSwipe,
       syncUpdate,
-      triggerHapticFeedback,
+      animateSwipe,
+      hasAction,
       animateFallbackReturn,
+      triggerHapticFeedback,
     ],
   );
 

@@ -19,7 +19,6 @@ export default EStyleSheet.create({
     padding: UNIT * 3.6,
     zIndex: -1,
     backgroundColor: '$linkLight',
-    borderRadius: UNIT * 3,
   },
   actionContainerRight: {
     top: 0,
