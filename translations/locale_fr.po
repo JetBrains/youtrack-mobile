@@ -644,7 +644,7 @@ msgstr "Ticket supprimé"
 
 #: src/components/activity/activity-helper.ts
 msgid "Issue history"
-msgstr "Historique des tickets"
+msgstr "Journal du ticket"
 
 #: src/components/issue-actions/issue-links-actions.ts
 msgid "Issue link added"
