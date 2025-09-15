@@ -99,6 +99,9 @@ android {
         manifestPlaceholders = [
           appAuthRedirectScheme: "ytoauth"
         ]
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a'
+        }
     }
 
     signingConfigs {
