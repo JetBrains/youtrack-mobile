@@ -216,7 +216,7 @@ msgstr "Autor"
 
 #: src/components/custom-field/Issue-sprints-field.tsx
 msgid "Boards"
-msgstr ""
+msgstr "Boards"
 
 #: src/views/attachment-preview/attachment-preview.tsx
 msgid "Browser"
@@ -628,7 +628,7 @@ msgstr "Wenn dies nicht Ihren Erwartungen entspricht, probieren Sie eine der fol
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "In addition to our built-in error reporting, YouTrack Mobile uses Sentry, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Sentry if you agree to allow us to do so."
-msgstr ""
+msgstr "Zusätzlich zu unserer integrierten Fehlerberichterstattung verwendet YouTrack Mobile Sentry, einen Drittanbieterdienst, der uns hilft, Probleme zu diagnostizieren und die Anwendungsstabilität zu überwachen. Wir geben Berichtsdaten nur mit Ihrer Erlaubnis an Sentry weiter."
 
 #: src/views/article/article.tsx
 msgid "in revision"
@@ -879,7 +879,7 @@ msgstr "Foto- und Videobibliothek"
 
 #: src/components/activity-stream/activity__stream.tsx
 msgid "Pinned comments"
-msgstr ""
+msgstr "Angeheftete Kommentare"
 
 #: src/views/issues/issues__settings.tsx
 msgid "Preview Size"
@@ -1005,11 +1005,11 @@ msgstr "Wählen Sie ein Ticket von der Liste aus"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Select an option"
-msgstr ""
+msgstr "Eine Option auswählen"
 
 #: src/components/custom-field/Issue-sprints-field.tsx
 msgid "select sprint"
-msgstr ""
+msgstr "Sprint auswählen"
 
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Select users, groups, and teams"
@@ -1021,7 +1021,7 @@ msgstr "Absturzbericht senden"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Send extended report to Sentry"
-msgstr ""
+msgstr "Erweiterten Bericht an Sentry senden"
 
 #: src/views/settings/settings.tsx
 msgid "Send feedback"
@@ -1041,7 +1041,7 @@ msgstr "Fehlerbericht wird gesendet…"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Sentry Privacy Policy"
-msgstr ""
+msgstr "Datenschutzrichtlinien von Sentry"
 
 #: src/components/date-picker/date-time-picker.tsx
 #: src/views/helpdesk-feedback/index.ts
@@ -1427,7 +1427,7 @@ msgstr "Ihr Account ist nicht berechtigt, diesen Vorgang auszuführen."
 
 #: src/actions/app-actions.ts
 msgid "Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator."
-msgstr ""
+msgstr "Ihr Autorisierungstoken ist abgelaufen oder ungültig. Bitte geben Sie Ihre Anmeldedaten erneut ein, um den Token zu aktualisieren. Falls Sie sich dann immer noch nicht anmelden können, wenden Sie sich bitte an Ihren Administrator."
 
 #: src/components/storage/storage.ts
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."

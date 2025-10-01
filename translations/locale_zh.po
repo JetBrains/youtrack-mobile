@@ -208,7 +208,7 @@ msgstr "作者"
 
 #: src/components/custom-field/Issue-sprints-field.tsx
 msgid "Boards"
-msgstr ""
+msgstr "面板"
 
 #: src/views/attachment-preview/attachment-preview.tsx
 msgid "Browser"
@@ -620,7 +620,7 @@ msgstr "如果这不是您所期望的，您可以尝试以下解决方案之一
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "In addition to our built-in error reporting, YouTrack Mobile uses Sentry, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Sentry if you agree to allow us to do so."
-msgstr ""
+msgstr "除了我们内置的错误报告之外，YouTrack Mobile 还会使用第三方服务 Sentry，它可以帮助我们诊断问题并监控应用程序的稳定性。只有在您同意允许我们共享的情况下，我们才会与 Sentry 共享报告数据。"
 
 #: src/views/article/article.tsx
 msgid "in revision"
@@ -869,7 +869,7 @@ msgstr "照片和视频库"
 
 #: src/components/activity-stream/activity__stream.tsx
 msgid "Pinned comments"
-msgstr ""
+msgstr "置顶的评论"
 
 #: src/views/issues/issues__settings.tsx
 msgid "Preview Size"
@@ -995,11 +995,11 @@ msgstr "从列表中选择问题"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Select an option"
-msgstr ""
+msgstr "选择选项"
 
 #: src/components/custom-field/Issue-sprints-field.tsx
 msgid "select sprint"
-msgstr ""
+msgstr "选择冲刺"
 
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Select users, groups, and teams"
@@ -1011,7 +1011,7 @@ msgstr "发送崩溃报告"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Send extended report to Sentry"
-msgstr ""
+msgstr "向 Sentry 发送扩展报告"
 
 #: src/views/settings/settings.tsx
 msgid "Send feedback"
@@ -1031,7 +1031,7 @@ msgstr "正在发送崩溃报告…"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Sentry Privacy Policy"
-msgstr ""
+msgstr "Sentry 隐私政策"
 
 #: src/components/date-picker/date-time-picker.tsx
 #: src/views/helpdesk-feedback/index.ts
@@ -1416,7 +1416,7 @@ msgstr "您的帐户权限不足，无法执行此操作。"
 
 #: src/actions/app-actions.ts
 msgid "Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator."
-msgstr ""
+msgstr "您的授权令牌已过期或无效。重新输入您的登录凭据可刷新令牌。如果您仍无法登录，请联系您的管理员。"
 
 #: src/components/storage/storage.ts
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."

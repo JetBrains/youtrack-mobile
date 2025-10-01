@@ -208,7 +208,7 @@ msgstr "작성자"
 
 #: src/components/custom-field/Issue-sprints-field.tsx
 msgid "Boards"
-msgstr ""
+msgstr "보드"
 
 #: src/views/attachment-preview/attachment-preview.tsx
 msgid "Browser"
@@ -869,7 +869,7 @@ msgstr "사진 및 비디오 라이브러리"
 
 #: src/components/activity-stream/activity__stream.tsx
 msgid "Pinned comments"
-msgstr ""
+msgstr "고정된 코멘트"
 
 #: src/views/issues/issues__settings.tsx
 msgid "Preview Size"
@@ -995,11 +995,11 @@ msgstr "목록에서 이슈 선택"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Select an option"
-msgstr ""
+msgstr "옵션 선택"
 
 #: src/components/custom-field/Issue-sprints-field.tsx
 msgid "select sprint"
-msgstr ""
+msgstr "스프린트 선택"
 
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Select users, groups, and teams"
@@ -1416,7 +1416,7 @@ msgstr "귀하의 계정에는 이 작업을 수행할 수 있는 권한이 없�
 
 #: src/actions/app-actions.ts
 msgid "Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator."
-msgstr ""
+msgstr "사용자의 토큰이 만료되었거나 유효하지 않습니다. 로그인 자격 증명을 다시 입력해 토큰을 새로 고침하세요. 그래도 로그인할 수 없으면 관리자에게 문의하세요."
 
 #: src/components/storage/storage.ts
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."

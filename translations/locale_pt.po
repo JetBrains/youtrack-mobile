@@ -90,7 +90,7 @@ msgstr "Aceitar"
 
 #: src/components/tip/tips/notifications-settings.tsx
 msgid "Activate the \"Unread only\" option to filter your notifications, then swipe right to mark them as read and keep your list clean."
-msgstr ""
+msgstr "Ative a opção \"Apenas não lidas\" para filtrar suas notificações, depois deslize para a direita para marcá-las como lidas e manter sua lista limpa."
 
 #: src/components/issue-tabbed/issue-tabbed.tsx
 msgid "Activity"
@@ -216,7 +216,7 @@ msgstr "Autor"
 
 #: src/components/custom-field/Issue-sprints-field.tsx
 msgid "Boards"
-msgstr ""
+msgstr "Boards"
 
 #: src/views/attachment-preview/attachment-preview.tsx
 msgid "Browser"
@@ -228,7 +228,7 @@ msgstr "Ao fazer o login, você concorda com a Política de Privacidade."
 
 #: src/views/settings/settings.tsx
 msgid "Cache cleared"
-msgstr ""
+msgstr "Cache limpo"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Camera"
@@ -261,7 +261,7 @@ msgstr "CCs"
 
 #: src/views/settings/settings.tsx
 msgid "Clear cache"
-msgstr ""
+msgstr "Limpar cache"
 
 #: src/components/error/error-message-data.ts
 msgid "Clear the current search context"
@@ -628,7 +628,7 @@ msgstr "Se isto não é o que você esperava, você pode tentar uma das soluçõ
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "In addition to our built-in error reporting, YouTrack Mobile uses Sentry, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Sentry if you agree to allow us to do so."
-msgstr ""
+msgstr "Além de nosso relatório de erros integrado, o YouTrack Mobile usa o Sentry, um serviço de terceiros que nos ajuda a diagnosticar problemas e monitorar a estabilidade do aplicativo. Nós só compartilhamos dados de relatórios com o Sentry com a sua concordância."
 
 #: src/views/article/article.tsx
 msgid "in revision"
@@ -879,7 +879,7 @@ msgstr "Biblioteca de fotos e vídeos"
 
 #: src/components/activity-stream/activity__stream.tsx
 msgid "Pinned comments"
-msgstr ""
+msgstr "Comentários fixados"
 
 #: src/views/issues/issues__settings.tsx
 msgid "Preview Size"
@@ -1005,11 +1005,11 @@ msgstr "Selecione um issue da lista"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Select an option"
-msgstr ""
+msgstr "Selecione uma opção"
 
 #: src/components/custom-field/Issue-sprints-field.tsx
 msgid "select sprint"
-msgstr ""
+msgstr "selecione o sprint"
 
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Select users, groups, and teams"
@@ -1021,7 +1021,7 @@ msgstr "Enviar relatório de erros"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Send extended report to Sentry"
-msgstr ""
+msgstr "Enviar relatório estendido para o Sentry"
 
 #: src/views/settings/settings.tsx
 msgid "Send feedback"
@@ -1041,7 +1041,7 @@ msgstr "Enviando relatório de erros…"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Sentry Privacy Policy"
-msgstr ""
+msgstr "Política de Privacidade da Sentry"
 
 #: src/components/date-picker/date-time-picker.tsx
 #: src/views/helpdesk-feedback/index.ts
@@ -1403,7 +1403,7 @@ msgstr "Sim"
 
 #: src/actions/app-actions.ts
 msgid "You are trying to open a link from another server. Please add this server to the app first."
-msgstr ""
+msgstr "Você está tentando abrir um link de outro servidor. Por favor, adicione este servidor ao aplicativo primeiro."
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "You can only CC a maximum of 5 reporters per ticket"
@@ -1427,7 +1427,7 @@ msgstr "Sua conta não tem permissão suficiente para realizar esta operação."
 
 #: src/actions/app-actions.ts
 msgid "Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator."
-msgstr ""
+msgstr "Seu token de autorização expirou ou é inválido. Insira novamente suas credenciais de login para atualizar o token. Se você ainda não consegue fazer login, por favor contate o administrador."
 
 #: src/components/storage/storage.ts
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."

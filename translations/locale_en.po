@@ -73,8 +73,8 @@ msgid "@Mention in a comment"
 msgstr "@Mention in a comment"
 
 #: src/views/helpdesk-feedback/index.ts:171
-#: src/views/issue/activity/activity__add-spent-time.tsx:313
-#: src/views/issue/activity/activity__add-spent-time.tsx:327
+#: src/views/issue/activity/activity__add-spent-time.tsx:307
+#: src/views/issue/activity/activity__add-spent-time.tsx:321
 msgid "1w 1d 1h 1m"
 msgstr "1w 1d 1h 1m"
 
@@ -107,7 +107,7 @@ msgstr "Add project to favorites"
 msgid "Add reaction"
 msgstr "Add reaction"
 
-#: src/components/comment/comment-edit.tsx:597
+#: src/components/comment/comment-edit.tsx:596
 msgid "Add spent time"
 msgstr "Add spent time"
 
@@ -180,7 +180,7 @@ msgstr "Article published"
 msgid "Article removed from favorites"
 msgstr "Article removed from favorites"
 
-#: src/components/comment/comment-edit.tsx:566
+#: src/components/comment/comment-edit.tsx:565
 #: src/views/issue/issue-base-actions-creater.ts:543
 msgid "Attach file"
 msgstr "Attach file"
@@ -204,7 +204,7 @@ msgstr "Attachment deleted"
 msgid "Attachment name"
 msgstr "Attachment name"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:295
+#: src/views/issue/activity/activity__add-spent-time.tsx:289
 msgid "Author"
 msgstr "Author"
 
@@ -397,7 +397,7 @@ msgstr "Current issue"
 msgid "Dark theme"
 msgstr "Dark theme"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:301
+#: src/views/issue/activity/activity__add-spent-time.tsx:295
 msgid "Date"
 msgstr "Date"
 
@@ -415,7 +415,7 @@ msgstr "declined the pull request"
 #: src/views/article/article__activity.tsx:250
 #: src/views/create-issue/create-issue-drafts.tsx:41
 #: src/views/issue/activity/issue__activity-stream.tsx:179
-#: src/views/issue/activity/issue__activity.tsx:233
+#: src/views/issue/activity/issue__activity.tsx:232
 #: src/views/issue/activity/issue-activity__actions.ts:269
 #: src/views/issue/activity/issue-activity__comment-actions.ts:263
 #: src/views/issue/issue-base-actions-creater.ts:573
@@ -447,7 +447,7 @@ msgid "Delete permanently"
 msgstr "Delete permanently"
 
 #: src/views/helpdesk-feedback/index.ts:207
-#: src/views/settings/settings__feedback-form.tsx:189
+#: src/views/settings/settings__feedback-form.tsx:185
 msgid "Description"
 msgstr "Description"
 
@@ -460,11 +460,11 @@ msgstr "Description changed"
 msgid "Details"
 msgstr "Details"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:188
+#: src/views/issue/activity/activity__add-spent-time.tsx:187
 msgid "Discard and close"
 msgstr "Discard and close"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:188
+#: src/views/issue/activity/activity__add-spent-time.tsx:187
 msgid "Discard draft and close?"
 msgstr "Discard draft and close?"
 
@@ -496,12 +496,12 @@ msgstr "Drafts"
 #: src/views/article/arcticle-actions.ts:264
 #: src/views/article/article__activity.tsx:179
 #: src/views/issue/activity/issue__activity-stream.tsx:101
-#: src/views/issue/activity/issue__activity.tsx:222
+#: src/views/issue/activity/issue__activity.tsx:221
 #: src/views/issue/issue-base-actions-creater.ts:523
 msgid "Edit"
 msgstr "Edit"
 
-#: src/components/comment/comment-edit.tsx:614
+#: src/components/comment/comment-edit.tsx:613
 msgid "Edit comment"
 msgstr "Edit comment"
 
@@ -514,7 +514,7 @@ msgstr "Email"
 msgid "Email address"
 msgstr "Email address"
 
-#: src/views/settings/settings__feedback-form.tsx:167
+#: src/views/settings/settings__feedback-form.tsx:163
 msgid "Email address for follow-up"
 msgstr "Email address for follow-up"
 
@@ -716,7 +716,7 @@ msgstr "Log in to YouTrack"
 msgid "Log in with Browser"
 msgstr "Log in with Browser"
 
-#: src/views/settings/settings__feedback-form.tsx:156
+#: src/views/settings/settings__feedback-form.tsx:152
 msgid "Logs"
 msgstr "Logs"
 
@@ -826,7 +826,7 @@ msgstr "No items"
 msgid "No notifications"
 msgstr "No notifications"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:425
+#: src/views/issue/activity/activity__add-spent-time.tsx:418
 msgid "No type"
 msgstr "No type"
 
@@ -997,7 +997,7 @@ msgstr "Select an article from the list"
 msgid "Select an issue from the list"
 msgstr "Select an issue from the list"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:361
+#: src/views/issue/activity/activity__add-spent-time.tsx:355
 msgid "Select an option"
 msgstr "Select an option"
 
@@ -1116,8 +1116,8 @@ msgid "Sorted by"
 msgstr "Sorted by"
 
 #: src/components/activity/activity-helper.ts:48
-#: src/views/issue/activity/activity__add-spent-time.tsx:236
-#: src/views/issue/activity/activity__add-spent-time.tsx:308
+#: src/views/issue/activity/activity__add-spent-time.tsx:235
+#: src/views/issue/activity/activity__add-spent-time.tsx:302
 msgid "Spent time"
 msgstr "Spent time"
 
@@ -1142,7 +1142,7 @@ msgid "Subscriptions"
 msgstr "Subscriptions"
 
 #: src/views/helpdesk-feedback/index.ts:213
-#: src/views/settings/settings__feedback-form.tsx:177
+#: src/views/settings/settings__feedback-form.tsx:173
 msgid "Summary"
 msgstr "Summary"
 
@@ -1283,7 +1283,7 @@ msgstr "Touch and hold an item to view a list of available actions"
 msgid "Try Again"
 msgstr "Try Again"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:336
+#: src/views/issue/activity/activity__add-spent-time.tsx:330
 msgid "Type"
 msgstr "Type"
 
@@ -1386,8 +1386,8 @@ msgstr "Woah, you can't touch this!"
 msgid "Wrap attribute values that contain spaces in braces {like this}."
 msgstr "Wrap attribute values that contain spaces in braces {like this}."
 
-#: src/components/comment/comment-edit.tsx:431
-#: src/views/issue/activity/activity__add-spent-time.tsx:385
+#: src/components/comment/comment-edit.tsx:430
+#: src/views/issue/activity/activity__add-spent-time.tsx:379
 msgid "Write a comment, @mention people"
 msgstr "Write a comment, @mention people"
 

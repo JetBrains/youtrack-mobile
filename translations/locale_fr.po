@@ -90,7 +90,7 @@ msgstr "Accepter"
 
 #: src/components/tip/tips/notifications-settings.tsx
 msgid "Activate the \"Unread only\" option to filter your notifications, then swipe right to mark them as read and keep your list clean."
-msgstr ""
+msgstr "Activez l'option \"Non lues uniquement\" pour filtrer vos notifications, puis faites glisser vers la droite pour les marquer comme lues et garder votre liste propre."
 
 #: src/components/issue-tabbed/issue-tabbed.tsx
 msgid "Activity"
@@ -216,7 +216,7 @@ msgstr "Auteur"
 
 #: src/components/custom-field/Issue-sprints-field.tsx
 msgid "Boards"
-msgstr ""
+msgstr "Tableaux"
 
 #: src/views/attachment-preview/attachment-preview.tsx
 msgid "Browser"
@@ -228,7 +228,7 @@ msgstr "En vous connectant, vous acceptez la Charte de confidentialité."
 
 #: src/views/settings/settings.tsx
 msgid "Cache cleared"
-msgstr ""
+msgstr "Cache vidé"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Camera"
@@ -261,7 +261,7 @@ msgstr "CC"
 
 #: src/views/settings/settings.tsx
 msgid "Clear cache"
-msgstr ""
+msgstr "Vider le cache"
 
 #: src/components/error/error-message-data.ts
 msgid "Clear the current search context"
@@ -628,7 +628,7 @@ msgstr "Si ce n'est pas ce que vous attendiez, essayez l'une de ces solutions :"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "In addition to our built-in error reporting, YouTrack Mobile uses Sentry, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Sentry if you agree to allow us to do so."
-msgstr ""
+msgstr "En plus de nos rapports d'erreurs intégrés, YouTrack Mobile utilise Sentry, un service tiers qui nous aide à diagnostiquer les problèmes et à surveiller la stabilité des applications. Nous ne partageons les données des rapports avec Sentry que si vous nous y autorisez."
 
 #: src/views/article/article.tsx
 msgid "in revision"
@@ -879,7 +879,7 @@ msgstr "Photothèque et vidéothèque"
 
 #: src/components/activity-stream/activity__stream.tsx
 msgid "Pinned comments"
-msgstr ""
+msgstr "Commentaires épinglés"
 
 #: src/views/issues/issues__settings.tsx
 msgid "Preview Size"
@@ -1005,11 +1005,11 @@ msgstr "Sélectionnez un ticket dans la liste"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Select an option"
-msgstr ""
+msgstr "Sélectionner une option"
 
 #: src/components/custom-field/Issue-sprints-field.tsx
 msgid "select sprint"
-msgstr ""
+msgstr "sélectionner un sprint"
 
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Select users, groups, and teams"
@@ -1021,7 +1021,7 @@ msgstr "Envoyer un rapport d'incident"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Send extended report to Sentry"
-msgstr ""
+msgstr "Envoyer un rapport étendu à Sentry"
 
 #: src/views/settings/settings.tsx
 msgid "Send feedback"
@@ -1041,7 +1041,7 @@ msgstr "Envoi du rapport d'incident…"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Sentry Privacy Policy"
-msgstr ""
+msgstr "Charte de confidentialité de Sentry"
 
 #: src/components/date-picker/date-time-picker.tsx
 #: src/views/helpdesk-feedback/index.ts
@@ -1403,7 +1403,7 @@ msgstr "Oui"
 
 #: src/actions/app-actions.ts
 msgid "You are trying to open a link from another server. Please add this server to the app first."
-msgstr ""
+msgstr "Vous essayez d'ouvrir un lien depuis un autre serveur. Veuillez d'abord ajouter ce serveur à l'application."
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "You can only CC a maximum of 5 reporters per ticket"
@@ -1427,7 +1427,7 @@ msgstr "Votre compte ne dispose pas d'une autorisation suffisante pour effectuer
 
 #: src/actions/app-actions.ts
 msgid "Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator."
-msgstr ""
+msgstr "Votre jeton d'autorisation a expiré ou n'est pas valide. Saisissez à nouveau vos identifiants de connexion pour actualiser ce jeton. Si vous ne pouvez toujours pas vous connecter, contactez votre administrateur."
 
 #: src/components/storage/storage.ts
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
