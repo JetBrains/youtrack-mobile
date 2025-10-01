@@ -11,7 +11,6 @@ import IssueActivityCommentAdd from './issue__activity-comment-add';
 import IssueActivityStream from './issue__activity-stream';
 import IssueActivityStreamCommentEdit from './issue-activity__comment-edit';
 import IssuePermissions from 'components/issue-permissions/issue-permissions';
-import KeyboardWrapper from 'components/keyboard-wrapper/keyboard-wrapper';
 import ModalPortal from 'components/modal-view/modal-portal';
 import Router from 'components/router/router';
 import Select, {ISelectProps} from 'components/select/select';
@@ -428,31 +427,29 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
               {(theme: Theme) => {
                 this.theme = theme;
                 return (
-                  <KeyboardWrapper>
-                    <View style={styles.activities}>
-                      {isVisibilitySelectShown && this.renderCommentVisibilitySelect()}
+                  <View style={styles.activities}>
+                    {isVisibilitySelectShown && this.renderCommentVisibilitySelect()}
 
-                        <View style={styles.container}>
-                          <View>{!this.hasLoadingError() && this._renderActivities()}</View>
-                        </View>
-
-                        {Boolean(this.canAddComment()) && !editingComment?.isEdit && this.renderAddCommentInput()}
-                        {editingComment?.isEdit && this.renderEditCommentInput()}
-                        <TipActivityActionAccessTouch canAddComment={this.canAddComment()} />
-
-                        {this.state.modalChildren && (
-                          <ModalPortal
-                            onHide={() =>
-                              this.setState({
-                                modalChildren: null,
-                              })
-                            }
-                          >
-                            {this.state.modalChildren}
-                          </ModalPortal>
-                        )}
+                    <View style={styles.container}>
+                      {!this.hasLoadingError() && this._renderActivities()}
                     </View>
-                    </KeyboardWrapper>
+
+                    {Boolean(this.canAddComment()) && !editingComment?.isEdit && this.renderAddCommentInput()}
+                    {editingComment?.isEdit && this.renderEditCommentInput()}
+                    <TipActivityActionAccessTouch canAddComment={this.canAddComment()} />
+
+                    {this.state.modalChildren && (
+                      <ModalPortal
+                        onHide={() =>
+                          this.setState({
+                            modalChildren: null,
+                          })
+                        }
+                      >
+                        {this.state.modalChildren}
+                      </ModalPortal>
+                    )}
+                  </View>
                 );
               }}
             </ThemeContext.Consumer>

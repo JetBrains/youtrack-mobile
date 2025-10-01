@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 
 import IconAttachment from '@jetbrains/icons/attachment.svg';
-import InputScrollView from 'react-native-input-scroll-view';
 import {useDispatch} from 'hooks/use-dispatch';
 
 import AttachFileDialog from 'components/attach-file/attach-file-dialog';
@@ -640,48 +639,43 @@ const CommentEdit = (props: Props) => {
           />
         )}
 
-        <InputScrollView
-          topOffset={styles.commentEditContentTopOffset.marginTop}
-          multilineInputStyle={styles.mainText}
-        >
-          <View style={styles.commentEditContent}>
-            {!isReporter && !state.mentionsVisible && (
-              <View style={styles.commentEditVisibility}>
-                {renderVisibility()}
-              </View>
-            )}
-
-            <View style={styles.commentEditInput}>
-              {renderCommentInput(
-                true,
-                () => {},
-                () => {
-                  changeState({
-                    mentionsVisible: false,
-                  });
-                },
-              )}
+        <View style={styles.commentEditContent}>
+          {!isReporter && !state.mentionsVisible && (
+            <View style={styles.commentEditVisibility}>
+              {renderVisibility()}
             </View>
+          )}
 
-            {!state.mentionsVisible && (
-              <View style={styles.commentEditAttachments}>
-                {renderAttachments()}
-
-                {props.canAttach && (
-                  <AttachmentAddPanel
-                    style={styles.commentEditAttachmentsAttachButton}
-                    isDisabled={
-                      state.isSaving ||
-                      state.isAttachFileDialogVisible ||
-                      state.mentionsLoading
-                    }
-                    showAddAttachDialog={() => toggleAttachFileDialog(true)}
-                  />
-                )}
-              </View>
+          <View style={styles.commentEditInput}>
+            {renderCommentInput(
+              true,
+              () => {},
+              () => {
+                changeState({
+                  mentionsVisible: false,
+                });
+              },
             )}
           </View>
-        </InputScrollView>
+
+          {!state.mentionsVisible && (
+            <View style={styles.commentEditAttachments}>
+              {renderAttachments()}
+
+              {props.canAttach && (
+                <AttachmentAddPanel
+                  style={styles.commentEditAttachmentsAttachButton}
+                  isDisabled={
+                    state.isSaving ||
+                    state.isAttachFileDialogVisible ||
+                    state.mentionsLoading
+                  }
+                  showAddAttachDialog={() => toggleAttachFileDialog(true)}
+                />
+              )}
+            </View>
+          )}
+        </View>
       </View>
     );
   };
