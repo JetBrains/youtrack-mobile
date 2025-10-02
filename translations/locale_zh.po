@@ -83,7 +83,7 @@ msgstr "接受"
 
 #: src/components/tip/tips/notifications-settings.tsx
 msgid "Activate the \"Unread only\" option to filter your notifications, then swipe right to mark them as read and keep your list clean."
-msgstr ""
+msgstr "激活“仅未读”选项以筛选您的通知，然后向右滑动将其标记为已读，保持列表整洁。"
 
 #: src/components/issue-tabbed/issue-tabbed.tsx
 msgid "Activity"
@@ -220,7 +220,7 @@ msgstr "登录，即表示您同意《隐私政策》。"
 
 #: src/views/settings/settings.tsx
 msgid "Cache cleared"
-msgstr ""
+msgstr "缓存已清除"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Camera"
@@ -253,7 +253,7 @@ msgstr "抄送"
 
 #: src/views/settings/settings.tsx
 msgid "Clear cache"
-msgstr ""
+msgstr "清除缓存"
 
 #: src/components/error/error-message-data.ts
 msgid "Clear the current search context"
@@ -1392,7 +1392,7 @@ msgstr "是"
 
 #: src/actions/app-actions.ts
 msgid "You are trying to open a link from another server. Please add this server to the app first."
-msgstr ""
+msgstr "您正在尝试打开来自其他服务器的链接。请先将此服务器添加到应用中。"
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "You can only CC a maximum of 5 reporters per ticket"

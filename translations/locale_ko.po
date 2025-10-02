@@ -824,7 +824,7 @@ msgstr "알림 없음"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "No type"
-msgstr "유형 없음"
+msgstr "타입 없음"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "No user information provided by Upsource."
@@ -1280,7 +1280,7 @@ msgstr "다시 시도"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Type"
-msgstr "유형"
+msgstr "타입"
 
 #: src/components/agile-row/agile-row.tsx
 msgid "Uncategorized Cards"
