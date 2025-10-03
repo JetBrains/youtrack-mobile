@@ -104,7 +104,7 @@ msgstr "Принять"
 
 #: src/components/tip/tips/notifications-settings.tsx
 msgid "Activate the \"Unread only\" option to filter your notifications, then swipe right to mark them as read and keep your list clean."
-msgstr ""
+msgstr "Включите параметр «Только непрочитанные», чтобы отфильтровать уведомления, затем смахните вправо, чтобы отметить их как прочитанные и очистить список."
 
 #: src/components/issue-tabbed/issue-tabbed.tsx
 msgid "Activity"
@@ -644,7 +644,7 @@ msgstr "Если вы ожидали другого результата, поп
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "In addition to our built-in error reporting, YouTrack Mobile uses Sentry, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Sentry if you agree to allow us to do so."
-msgstr ""
+msgstr "Помимо собственной системы сбора информации об ошибках, в YouTrack Mobile используется сервис Sentry. Он помогает нам диагностировать проблемы и следить за стабильной работой приложения. Мы отправляем данные в Sentry только с вашего разрешения."
 
 #: src/views/article/article.tsx
 msgid "in revision"
@@ -1041,7 +1041,7 @@ msgstr "Отправить отчет об ошибке"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Send extended report to Sentry"
-msgstr ""
+msgstr "Отправить подробный отчет в Sentry"
 
 #: src/views/settings/settings.tsx
 msgid "Send feedback"
@@ -1425,7 +1425,7 @@ msgstr "Да"
 
 #: src/actions/app-actions.ts
 msgid "You are trying to open a link from another server. Please add this server to the app first."
-msgstr ""
+msgstr "Вы пытаетесь открыть ссылку с другого сервера. Сначала добавьте этот сервер в приложение."
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "You can only CC a maximum of 5 reporters per ticket"

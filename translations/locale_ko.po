@@ -83,7 +83,7 @@ msgstr "수락"
 
 #: src/components/tip/tips/notifications-settings.tsx
 msgid "Activate the \"Unread only\" option to filter your notifications, then swipe right to mark them as read and keep your list clean."
-msgstr ""
+msgstr "알림을 필터링하려면 '안 읽은 항목만' 옵션을 활성화하고, 오른쪽으로 밀어 읽음으로 표시해 목록을 깔끔하게 유지하세요."
 
 #: src/components/issue-tabbed/issue-tabbed.tsx
 msgid "Activity"
@@ -220,7 +220,7 @@ msgstr "로그인하면 개인정보 보호정책에 동의하는 것입니다."
 
 #: src/views/settings/settings.tsx
 msgid "Cache cleared"
-msgstr ""
+msgstr "캐시 삭제됨"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Camera"
@@ -253,7 +253,7 @@ msgstr "참조"
 
 #: src/views/settings/settings.tsx
 msgid "Clear cache"
-msgstr ""
+msgstr "캐시 삭제"
 
 #: src/components/error/error-message-data.ts
 msgid "Clear the current search context"
@@ -620,7 +620,7 @@ msgstr "이 작업을 원한 것이 아니라면 다음 솔루션을 시도해�
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "In addition to our built-in error reporting, YouTrack Mobile uses Sentry, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Sentry if you agree to allow us to do so."
-msgstr ""
+msgstr "YouTrack Mobile은 기본 제공되는 오류 보고 기능 외에도 문제 진단과 앱 안정성 모니터링을 위해 타사 서비스인 Sentry를 사용합니다. 동의하신 경우에만 보고 데이터를 Sentry와 공유합니다."
 
 #: src/views/article/article.tsx
 msgid "in revision"
@@ -1011,7 +1011,7 @@ msgstr "충돌 보고서 보내기"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Send extended report to Sentry"
-msgstr ""
+msgstr "Sentry로 확장 보고서 보내기"
 
 #: src/views/settings/settings.tsx
 msgid "Send feedback"
@@ -1031,7 +1031,7 @@ msgstr "충돌 보고서를 보내는 중…"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Sentry Privacy Policy"
-msgstr ""
+msgstr "Sentry 개인정보 처리방침"
 
 #: src/components/date-picker/date-time-picker.tsx
 #: src/views/helpdesk-feedback/index.ts
@@ -1392,7 +1392,7 @@ msgstr "예"
 
 #: src/actions/app-actions.ts
 msgid "You are trying to open a link from another server. Please add this server to the app first."
-msgstr ""
+msgstr "다른 서버의 링크를 열려고 합니다. 먼저 이 서버를 앱에 추가하세요."
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "You can only CC a maximum of 5 reporters per ticket"
