@@ -90,7 +90,7 @@ msgstr "Annehmen"
 
 #: src/components/tip/tips/notifications-settings.tsx
 msgid "Activate the \"Unread only\" option to filter your notifications, then swipe right to mark them as read and keep your list clean."
-msgstr ""
+msgstr "Aktivieren Sie die Option „Nur ungelesene“, um Ihre Benachrichtigungen zu filtern. Wischen Sie anschließend nach rechts, um eine Benachrichtigung als gelesen zu markieren und so Ihre Liste überschaubar zu halten."
 
 #: src/components/issue-tabbed/issue-tabbed.tsx
 msgid "Activity"
@@ -228,7 +228,7 @@ msgstr "Durch die Anmeldung stimmen Sie den Datenschutzrichtlinien zu."
 
 #: src/views/settings/settings.tsx
 msgid "Cache cleared"
-msgstr ""
+msgstr "Cache geleert"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Camera"
@@ -261,7 +261,7 @@ msgstr "Kopien"
 
 #: src/views/settings/settings.tsx
 msgid "Clear cache"
-msgstr ""
+msgstr "Cache leeren"
 
 #: src/components/error/error-message-data.ts
 msgid "Clear the current search context"
@@ -1403,7 +1403,7 @@ msgstr "Ja"
 
 #: src/actions/app-actions.ts
 msgid "You are trying to open a link from another server. Please add this server to the app first."
-msgstr ""
+msgstr "Sie versuchen, einen Link zu einem anderen Server zu öffnen. Bitte fügen Sie diesen Server zunächst zur App hinzu."
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "You can only CC a maximum of 5 reporters per ticket"
