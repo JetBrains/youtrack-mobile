@@ -36,7 +36,7 @@
     "start": "react-native start",
     "test": "yarn jest",
     "test-dev-data": "node script/test-dev-data.js",
-    "test-set-env": "DETOX_DISABLE_POSTINSTALL=true TEAMCITY_VERSION=enablereport",
+    "test-set-env": "TEAMCITY_VERSION=enablereport",
     "test:watch": "yarn test -- --watchAll"
   },
   "tmp": ".tmp",
