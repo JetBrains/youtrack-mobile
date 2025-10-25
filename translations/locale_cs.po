@@ -862,7 +862,7 @@ msgstr "Upsource neposkytl žádné informace o uživateli."
 
 #: src/components/error/error-message-data.ts
 msgid "Nope, can't find it!"
-msgstr ""
+msgstr "Ne, nemůžu to najít!"
 
 #: src/views/inbox-threads/inbox-threads.tsx
 msgid "Notification settings…"
@@ -916,7 +916,7 @@ msgstr "Projekt"
 #: src/views/issues/issues-actions.ts
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Projects"
-msgstr ""
+msgstr "Projekty"
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Projects collapsed"
@@ -1025,7 +1025,7 @@ msgstr "Vyberte problém ze seznamu"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Select an option"
-msgstr ""
+msgstr "Vyberte možnost"
 
 #: src/components/custom-field/Issue-sprints-field.tsx
 msgid "select sprint"
@@ -1074,7 +1074,7 @@ msgstr "Nastavit datum a čas"
 
 #: src/views/settings/settings.tsx
 msgid "Settings"
-msgstr ""
+msgstr "Nastavení"
 
 #: src/components/logs-view/logs-view.tsx
 msgid "Share"
@@ -1114,7 +1114,7 @@ msgstr "Zobrazit všechny problémy označené \"{{tagName}}\"..."
 #: src/components/activity-stream/activity__stream-vcs.tsx
 #: src/views/inbox-threads/inbox-threads__subscription.tsx
 msgid "Show more"
-msgstr ""
+msgstr "Zobrazit další"
 
 #: src/views/issues/index.ts
 msgid "Small"
@@ -1238,7 +1238,7 @@ msgstr "Autor commitu není řešitelem projektu."
 
 #: src/components/error/error-message-data.ts
 msgid "The search query contains unknown values"
-msgstr ""
+msgstr "Vyhledávací dotaz obsahuje neznámé hodnoty"
 
 #: src/actions/app-actions.ts
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
