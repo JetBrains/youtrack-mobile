@@ -421,7 +421,7 @@ msgstr "Tmavý motiv"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 #: src/components/user-agreement/user-agreement.tsx
 msgid "Decline"
