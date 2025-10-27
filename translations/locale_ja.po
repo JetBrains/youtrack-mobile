@@ -83,7 +83,7 @@ msgstr "同意します"
 
 #: src/components/tip/tips/notifications-settings.tsx
 msgid "Activate the \"Unread only\" option to filter your notifications, then swipe right to mark them as read and keep your list clean."
-msgstr ""
+msgstr "\"未読のみ\" オプションを有効にして通知を絞り込み、右にスワイプして既読にすると、リストをすっきりと保つことができます。"
 
 #: src/components/issue-tabbed/issue-tabbed.tsx
 msgid "Activity"
@@ -208,7 +208,7 @@ msgstr "作者"
 
 #: src/components/custom-field/Issue-sprints-field.tsx
 msgid "Boards"
-msgstr ""
+msgstr "ボード"
 
 #: src/views/attachment-preview/attachment-preview.tsx
 msgid "Browser"
@@ -220,7 +220,7 @@ msgstr "ログインすることで、プライバシーポリシーに同意し
 
 #: src/views/settings/settings.tsx
 msgid "Cache cleared"
-msgstr ""
+msgstr "キャッシュをクリアしました"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Camera"
@@ -253,7 +253,7 @@ msgstr "CC"
 
 #: src/views/settings/settings.tsx
 msgid "Clear cache"
-msgstr ""
+msgstr "キャッシュのクリア"
 
 #: src/components/error/error-message-data.ts
 msgid "Clear the current search context"
@@ -620,7 +620,7 @@ msgstr "期待した結果と異なる場合は、次のいずれかの解決方
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "In addition to our built-in error reporting, YouTrack Mobile uses Sentry, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Sentry if you agree to allow us to do so."
-msgstr ""
+msgstr "組み込みのエラー報告機能に加えて、YouTrack Mobile では問題の診断とアプリケーションの安定性監視に役立つサードパーティサービスである Sentry を使用しています。レポートデータは同意いただいた場合のみ Sentry と共有されます。"
 
 #: src/views/article/article.tsx
 msgid "in revision"
@@ -869,7 +869,7 @@ msgstr "写真とビデオのライブラリ"
 
 #: src/components/activity-stream/activity__stream.tsx
 msgid "Pinned comments"
-msgstr ""
+msgstr "ピン留めされたコメント"
 
 #: src/views/issues/issues__settings.tsx
 msgid "Preview Size"
@@ -970,7 +970,7 @@ msgstr "記事を検索"
 
 #: src/components/error/error-message-data.ts
 msgid "Search for a different value"
-msgstr "別の月を検索"
+msgstr "別の値を検索"
 
 #: src/components/custom-fields-panel/custom-fields-panel.tsx
 msgid "Search for the project"
@@ -995,11 +995,11 @@ msgstr "リストから課題を選択"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Select an option"
-msgstr ""
+msgstr "オプションの選択"
 
 #: src/components/custom-field/Issue-sprints-field.tsx
 msgid "select sprint"
-msgstr ""
+msgstr "スプリントの選択"
 
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Select users, groups, and teams"
@@ -1011,7 +1011,7 @@ msgstr "クラッシュレポートの送信"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Send extended report to Sentry"
-msgstr ""
+msgstr "Sentry に拡張レポートを送信"
 
 #: src/views/settings/settings.tsx
 msgid "Send feedback"
@@ -1031,7 +1031,7 @@ msgstr "クラッシュレポートを送信中…"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Sentry Privacy Policy"
-msgstr ""
+msgstr "Sentry プライバシーポリシー"
 
 #: src/components/date-picker/date-time-picker.tsx
 #: src/views/helpdesk-feedback/index.ts
@@ -1314,7 +1314,7 @@ msgstr "更新ユーザー："
 
 #: src/components/error/error-message-data.ts
 msgid "Use fewer search parameters"
-msgstr "使用する検索パラメータを減らしてください"
+msgstr "使用する検索パラメーターを減らす"
 
 #: src/components/error/error-message-data.ts
 msgid "User account is banned"
@@ -1392,7 +1392,7 @@ msgstr "はい"
 
 #: src/actions/app-actions.ts
 msgid "You are trying to open a link from another server. Please add this server to the app first."
-msgstr ""
+msgstr "別サーバーのリンクを開こうとしています。まずはこのサーバーをアプリに追加してください。"
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "You can only CC a maximum of 5 reporters per ticket"
@@ -1416,7 +1416,7 @@ msgstr "あなたのアカウントにはこの操作を実行するのに必要
 
 #: src/actions/app-actions.ts
 msgid "Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator."
-msgstr ""
+msgstr "認証トークンが期限切れか無効です。ログイン認証情報を再入力してトークンを更新してください。それでもログインできない場合は、管理者に連絡してください。"
 
 #: src/components/storage/storage.ts
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."

@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, ActivityIndicator, TextInput} from 'react-native';
 
-import InputScrollView from 'react-native-input-scroll-view';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-controller';
 import {useActionSheet} from '@expo/react-native-action-sheet';
 
 import Header from 'components/header/header';
@@ -139,11 +139,7 @@ const SettingsFeedbackForm = () => {
         }
       />
 
-      <InputScrollView
-        topOffset={styles.feedbackFormBottomIndent.height}
-        multilineInputStyle={styles.feedbackFormText}
-        style={styles.feedbackContainer}
-      >
+      <KeyboardAwareScrollView>
         <View style={styles.feedbackForm}>
           <TouchableOpacity style={buttonStyle} onPress={() => renderContextActions(true)}>
             <Text testID="settingsFeedbackType" style={styles.feedbackFormText}>
@@ -192,7 +188,7 @@ const SettingsFeedbackForm = () => {
 
           <View style={styles.feedbackFormBottomIndent} />
         </View>
-      </InputScrollView>
+      </KeyboardAwareScrollView>
     </>
   );
 };

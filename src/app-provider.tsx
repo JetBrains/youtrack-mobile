@@ -2,11 +2,11 @@ import React from 'react';
 import {StatusBar} from 'react-native';
 
 import {Host} from 'react-native-portalize';
-import {
-  SafeAreaView,
-  SafeAreaProvider,
-  initialWindowMetrics,
-} from 'react-native-safe-area-context';
+import {KeyboardAvoidingView} from 'react-native-keyboard-controller';
+import {SafeAreaView, SafeAreaProvider, initialWindowMetrics} from 'react-native-safe-area-context';
+
+import {KeyboardProvider} from 'react-native-keyboard-controller';
+
 import LogsView from 'components/logs-view/logs-view';
 import ErrorBoundary from 'components/error-boundary/error-boundary';
 import Navigation from './navigation';
@@ -19,11 +19,12 @@ import {
   getUITheme,
   getThemeMode,
 } from 'components/theme/theme';
+import {getKeyboardMargin} from 'components/responsive/responsive-helper';
 import {ThemeContext} from 'components/theme/theme-context';
+import {menuHeight} from 'components/common-styles/header';
 
 import type {Theme, UITheme} from 'types/Theme';
 import type {ViewStyleProp} from 'types/Internal';
-
 
 const AppProvider = () => {
   const [mode, setMode] = React.useState<string | undefined>();
@@ -46,27 +47,37 @@ const AppProvider = () => {
           const backgroundStyle = {backgroundColor: uiTheme.colors.$background};
           return (
             <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-              <StatusBar
-                backgroundColor={backgroundStyle.backgroundColor}
-                barStyle={uiTheme.barStyle}
-                translucent={true}
-              />
-              <SafeAreaView style={[flexStyle, backgroundStyle]}>
-                <ErrorBoundary>
-                  <Host>
-                    <Navigation/>
-                    <UserAgreement/>
-                    <LogsView
-                      logsStyle={{
-                        ...backgroundStyle,
-                        textColor: uiTheme.colors.$text,
-                        separatorColor: uiTheme.colors.$separator,
-                      }}
-                    />
-                  </Host>
-                </ErrorBoundary>
-                <Network/>
-              </SafeAreaView>
+              <KeyboardProvider>
+                <StatusBar
+                  backgroundColor={backgroundStyle.backgroundColor}
+                  barStyle={uiTheme.barStyle}
+                  translucent={true}
+                />
+                <SafeAreaView
+                  style={[flexStyle, backgroundStyle]}
+                >
+                  <KeyboardAvoidingView
+                    behavior="padding"
+                    keyboardVerticalOffset={(StatusBar.currentHeight || 0) - menuHeight - getKeyboardMargin()}
+                    style={flexStyle}
+                  >
+                  <ErrorBoundary>
+                    <Host>
+                      <Navigation />
+                      <UserAgreement />
+                      <LogsView
+                        logsStyle={{
+                          ...backgroundStyle,
+                          textColor: uiTheme.colors.$text,
+                          separatorColor: uiTheme.colors.$separator,
+                        }}
+                      />
+                    </Host>
+                  </ErrorBoundary>
+                  </KeyboardAvoidingView>
+                  <Network />
+                </SafeAreaView>
+              </KeyboardProvider>
             </SafeAreaProvider>
           );
         }}

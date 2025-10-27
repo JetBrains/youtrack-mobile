@@ -83,7 +83,7 @@ msgstr "수락"
 
 #: src/components/tip/tips/notifications-settings.tsx
 msgid "Activate the \"Unread only\" option to filter your notifications, then swipe right to mark them as read and keep your list clean."
-msgstr ""
+msgstr "알림을 필터링하려면 '안 읽은 항목만' 옵션을 활성화하고, 오른쪽으로 밀어 읽음으로 표시해 목록을 깔끔하게 유지하세요."
 
 #: src/components/issue-tabbed/issue-tabbed.tsx
 msgid "Activity"
@@ -208,7 +208,7 @@ msgstr "작성자"
 
 #: src/components/custom-field/Issue-sprints-field.tsx
 msgid "Boards"
-msgstr ""
+msgstr "보드"
 
 #: src/views/attachment-preview/attachment-preview.tsx
 msgid "Browser"
@@ -220,7 +220,7 @@ msgstr "로그인하면 개인정보 보호정책에 동의하는 것입니다."
 
 #: src/views/settings/settings.tsx
 msgid "Cache cleared"
-msgstr ""
+msgstr "캐시 삭제됨"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Camera"
@@ -253,7 +253,7 @@ msgstr "참조"
 
 #: src/views/settings/settings.tsx
 msgid "Clear cache"
-msgstr ""
+msgstr "캐시 삭제"
 
 #: src/components/error/error-message-data.ts
 msgid "Clear the current search context"
@@ -620,7 +620,7 @@ msgstr "이 작업을 원한 것이 아니라면 다음 솔루션을 시도해�
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "In addition to our built-in error reporting, YouTrack Mobile uses Sentry, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Sentry if you agree to allow us to do so."
-msgstr ""
+msgstr "YouTrack Mobile은 기본 제공되는 오류 보고 기능 외에도 문제 진단과 앱 안정성 모니터링을 위해 타사 서비스인 Sentry를 사용합니다. 동의하신 경우에만 보고 데이터를 Sentry와 공유합니다."
 
 #: src/views/article/article.tsx
 msgid "in revision"
@@ -824,7 +824,7 @@ msgstr "알림 없음"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "No type"
-msgstr "유형 없음"
+msgstr "타입 없음"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "No user information provided by Upsource."
@@ -869,7 +869,7 @@ msgstr "사진 및 비디오 라이브러리"
 
 #: src/components/activity-stream/activity__stream.tsx
 msgid "Pinned comments"
-msgstr ""
+msgstr "고정된 코멘트"
 
 #: src/views/issues/issues__settings.tsx
 msgid "Preview Size"
@@ -995,11 +995,11 @@ msgstr "목록에서 이슈 선택"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Select an option"
-msgstr ""
+msgstr "옵션 선택"
 
 #: src/components/custom-field/Issue-sprints-field.tsx
 msgid "select sprint"
-msgstr ""
+msgstr "스프린트 선택"
 
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Select users, groups, and teams"
@@ -1011,7 +1011,7 @@ msgstr "충돌 보고서 보내기"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Send extended report to Sentry"
-msgstr ""
+msgstr "Sentry로 확장 보고서 보내기"
 
 #: src/views/settings/settings.tsx
 msgid "Send feedback"
@@ -1031,7 +1031,7 @@ msgstr "충돌 보고서를 보내는 중…"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Sentry Privacy Policy"
-msgstr ""
+msgstr "Sentry 개인정보 처리방침"
 
 #: src/components/date-picker/date-time-picker.tsx
 #: src/views/helpdesk-feedback/index.ts
@@ -1280,7 +1280,7 @@ msgstr "다시 시도"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Type"
-msgstr "유형"
+msgstr "타입"
 
 #: src/components/agile-row/agile-row.tsx
 msgid "Uncategorized Cards"
@@ -1392,7 +1392,7 @@ msgstr "예"
 
 #: src/actions/app-actions.ts
 msgid "You are trying to open a link from another server. Please add this server to the app first."
-msgstr ""
+msgstr "다른 서버의 링크를 열려고 합니다. 먼저 이 서버를 앱에 추가하세요."
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "You can only CC a maximum of 5 reporters per ticket"
@@ -1416,7 +1416,7 @@ msgstr "귀하의 계정에는 이 작업을 수행할 수 있는 권한이 없�
 
 #: src/actions/app-actions.ts
 msgid "Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator."
-msgstr ""
+msgstr "사용자의 토큰이 만료되었거나 유효하지 않습니다. 로그인 자격 증명을 다시 입력해 토큰을 새로 고침하세요. 그래도 로그인할 수 없으면 관리자에게 문의하세요."
 
 #: src/components/storage/storage.ts
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."

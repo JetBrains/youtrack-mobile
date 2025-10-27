@@ -1,7 +1,6 @@
 import React, {memo, useContext, useEffect, useState} from 'react';
 import {ActivityIndicator, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
-import InputScrollView from 'react-native-input-scroll-view';
 import {useSelector} from 'react-redux';
 import {useDispatch} from 'hooks/use-dispatch';
 
@@ -278,118 +277,112 @@ const AddSpentTimeForm = (props: Props) => {
     <View style={styles.container}>
       {renderHeader()}
 
-      <InputScrollView
-        topOffset={styles.feedbackFormBottomIndent.height}
-        multilineInputStyle={styles.feedbackFormText}
-        style={styles.feedbackContainer}
-      >
-        <View style={styles.feedbackForm}>
-          <TouchableOpacity
-            style={buttonStyle}
-            disabled={!props.canCreateNotOwn}
-            onPress={() => {
-              updateSelectProps(getUserSelectProps(author));
-              updateSelectVisibility(true);
-            }}
-          >
-            <Text style={styles.feedbackFormTextSup}>{i18n('Author')}</Text>
-            <Text style={[styles.feedbackFormText, styles.feedbackFormTextMain]}>{getEntityPresentation(author)}</Text>
-            {props.canCreateNotOwn && iconAngleRight}
-          </TouchableOpacity>
+      <View style={styles.feedbackForm}>
+        <TouchableOpacity
+          style={buttonStyle}
+          disabled={!props.canCreateNotOwn}
+          onPress={() => {
+            updateSelectProps(getUserSelectProps(author));
+            updateSelectVisibility(true);
+          }}
+        >
+          <Text style={styles.feedbackFormTextSup}>{i18n('Author')}</Text>
+          <Text style={[styles.feedbackFormText, styles.feedbackFormTextMain]}>{getEntityPresentation(author)}</Text>
+          {props.canCreateNotOwn && iconAngleRight}
+        </TouchableOpacity>
 
-          <TouchableOpacity style={buttonStyle} onPress={() => setDatePickerVisibility(true)}>
-            <Text style={styles.feedbackFormTextSup}>{i18n('Date')}</Text>
-            <Text style={[styles.feedbackFormText, styles.feedbackFormTextMain]}>{absDate(draft.date, true)}</Text>
-            {iconAngleRight}
-          </TouchableOpacity>
+        <TouchableOpacity style={buttonStyle} onPress={() => setDatePickerVisibility(true)}>
+          <Text style={styles.feedbackFormTextSup}>{i18n('Date')}</Text>
+          <Text style={[styles.feedbackFormText, styles.feedbackFormTextMain]}>{absDate(draft.date, true)}</Text>
+          {iconAngleRight}
+        </TouchableOpacity>
 
-          <View style={buttonStyle}>
-            <Text style={[styles.feedbackFormTextSup, hasError && styles.feedbackFormTextError]}>
-              {i18n('Spent time')}
-            </Text>
-            <TextInput
-              {...commonInputProps}
-              style={[styles.feedbackInput, styles.feedbackFormTextMain]}
-              placeholder={i18n('1w 1d 1h 1m')}
-              value={spentTime}
-              onChangeText={(periodValue: string) => {
-                setHasError(false);
-                setSpentTime(periodValue);
-                updateDraftWorkItem({
-                  ...draft,
-                  duration: {
-                    presentation: periodValue,
-                  },
-                });
-              }}
-            />
-          </View>
-          {hasError && <Text style={styles.feedbackInputErrorHint}>{i18n('1w 1d 1h 1m')}</Text>}
-
-          <TouchableOpacity
-            style={buttonStyle}
-            onPress={() => {
-              updateSelectProps(getProjectTimeTrackingSettingsWorkTypes());
-              updateSelectVisibility(true);
-            }}
-          >
-            <Text style={styles.feedbackFormTextSup}>{i18n('Type')}</Text>
-            <Text style={[styles.feedbackFormText, styles.feedbackFormTextMain]} numberOfLines={1}>
-              {!!draft?.type?.color && <ColorBullet color={draft.type.color} />}
-              {draft.type?.name || <Text style={styles.placeholderText}>{getDefaultType().name}</Text>}
-            </Text>
-            {!!draft.type?.name && renderResetButton(() => {
-              update({type: null});
-            })}
-            {iconAngleRight}
-          </TouchableOpacity>
-
-          {!!draft.attributes?.length && (
-            <>
-              {draft.attributes.map(attr => (
-                <TouchableOpacity
-                  key={attr.id}
-                  style={buttonStyle}
-                  onPress={() => {
-                    updateSelectProps(getProjectTimeTrackingSettingsAttributes(attr.id));
-                    updateSelectVisibility(true);
-                  }}
-                >
-                  <Text style={styles.feedbackFormTextSup}>{attr.name}</Text>
-                  <Text style={[styles.feedbackFormText, styles.feedbackFormTextMain]} numberOfLines={1}>
-                    {attr?.value?.color && <ColorBullet color={attr.value.color} />}
-                    {attr?.value?.name || <Text style={styles.placeholderText}>{i18n('Select an option')}</Text>}
-                  </Text>
-                  <>
-                    {!!attr?.value?.name &&
-                      renderResetButton(() => {
-                        update({
-                          attributes: draft.attributes!.reduce((akk: WorkItemAttribute[], a) => {
-                            akk.push(a.id === attr.id ? {...a, value: null} : a);
-                            return akk;
-                          }, []),
-                        });
-                      })}
-                    {iconAngleRight}
-                  </>
-                </TouchableOpacity>
-              ))}
-            </>
-          )}
-
+        <View style={buttonStyle}>
+          <Text style={[styles.feedbackFormTextSup, hasError && styles.feedbackFormTextError]}>
+            {i18n('Spent time')}
+          </Text>
           <TextInput
             {...commonInputProps}
-            multiline
-            textAlignVertical="top"
-            style={[styles.feedbackFormInputMultiline, styles.commentInput]}
-            placeholder={i18n('Write a comment, @mention people')}
-            value={draft?.text || undefined}
-            onChangeText={(comment: string) => updateDraftWorkItem({...draft, text: comment})}
+            style={[styles.feedbackInput, styles.feedbackFormTextMain]}
+            placeholder={i18n('1w 1d 1h 1m')}
+            value={spentTime}
+            onChangeText={(periodValue: string) => {
+              setHasError(false);
+              setSpentTime(periodValue);
+              updateDraftWorkItem({
+                ...draft,
+                duration: {
+                  presentation: periodValue,
+                },
+              });
+            }}
           />
-
-          <View style={styles.feedbackFormBottomIndent} />
         </View>
-      </InputScrollView>
+        {hasError && <Text style={styles.feedbackInputErrorHint}>{i18n('1w 1d 1h 1m')}</Text>}
+
+        <TouchableOpacity
+          style={buttonStyle}
+          onPress={() => {
+            updateSelectProps(getProjectTimeTrackingSettingsWorkTypes());
+            updateSelectVisibility(true);
+          }}
+        >
+          <Text style={styles.feedbackFormTextSup}>{i18n('Type')}</Text>
+          <Text style={[styles.feedbackFormText, styles.feedbackFormTextMain]} numberOfLines={1}>
+            {!!draft?.type?.color && <ColorBullet color={draft.type.color} />}
+            {draft.type?.name || <Text style={styles.placeholderText}>{getDefaultType().name}</Text>}
+          </Text>
+          {!!draft.type?.name && renderResetButton(() => {
+            update({type: null});
+          })}
+          {iconAngleRight}
+        </TouchableOpacity>
+
+        {!!draft.attributes?.length && (
+          <>
+            {draft.attributes.map(attr => (
+              <TouchableOpacity
+                key={attr.id}
+                style={buttonStyle}
+                onPress={() => {
+                  updateSelectProps(getProjectTimeTrackingSettingsAttributes(attr.id));
+                  updateSelectVisibility(true);
+                }}
+              >
+                <Text style={styles.feedbackFormTextSup}>{attr.name}</Text>
+                <Text style={[styles.feedbackFormText, styles.feedbackFormTextMain]} numberOfLines={1}>
+                  {attr?.value?.color && <ColorBullet color={attr.value.color} />}
+                  {attr?.value?.name || <Text style={styles.placeholderText}>{i18n('Select an option')}</Text>}
+                </Text>
+                <>
+                  {!!attr?.value?.name &&
+                    renderResetButton(() => {
+                      update({
+                        attributes: draft.attributes!.reduce((akk: WorkItemAttribute[], a) => {
+                          akk.push(a.id === attr.id ? {...a, value: null} : a);
+                          return akk;
+                        }, []),
+                      });
+                    })}
+                  {iconAngleRight}
+                </>
+              </TouchableOpacity>
+            ))}
+          </>
+        )}
+
+        <TextInput
+          {...commonInputProps}
+          multiline
+          textAlignVertical="top"
+          style={[styles.feedbackFormInputMultiline, styles.commentInput]}
+          placeholder={i18n('Write a comment, @mention people')}
+          value={draft?.text || undefined}
+          onChangeText={(comment: string) => updateDraftWorkItem({...draft, text: comment})}
+        />
+
+        <View style={styles.feedbackFormBottomIndent} />
+      </View>
       {isSelectVisible && !!selectProps && renderSelect(selectProps)}
       {isDatePickerVisible && <ModalView>{renderDatePicker()}</ModalView>}
     </View>

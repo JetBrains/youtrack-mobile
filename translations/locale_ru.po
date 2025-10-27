@@ -104,7 +104,7 @@ msgstr "Принять"
 
 #: src/components/tip/tips/notifications-settings.tsx
 msgid "Activate the \"Unread only\" option to filter your notifications, then swipe right to mark them as read and keep your list clean."
-msgstr ""
+msgstr "Включите параметр «Только непрочитанные», чтобы отфильтровать уведомления, затем смахните вправо, чтобы отметить их как прочитанные и очистить список."
 
 #: src/components/issue-tabbed/issue-tabbed.tsx
 msgid "Activity"
@@ -232,7 +232,7 @@ msgstr "Автор"
 
 #: src/components/custom-field/Issue-sprints-field.tsx
 msgid "Boards"
-msgstr ""
+msgstr "Доски"
 
 #: src/views/attachment-preview/attachment-preview.tsx
 msgid "Browser"
@@ -244,7 +244,7 @@ msgstr "Входя в систему, вы соглашаетесь с Поли�
 
 #: src/views/settings/settings.tsx
 msgid "Cache cleared"
-msgstr ""
+msgstr "Кэш очищен"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Camera"
@@ -277,7 +277,7 @@ msgstr "Копии"
 
 #: src/views/settings/settings.tsx
 msgid "Clear cache"
-msgstr ""
+msgstr "Очистить кэш"
 
 #: src/components/error/error-message-data.ts
 msgid "Clear the current search context"
@@ -644,7 +644,7 @@ msgstr "Если вы ожидали другого результата, поп
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "In addition to our built-in error reporting, YouTrack Mobile uses Sentry, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Sentry if you agree to allow us to do so."
-msgstr ""
+msgstr "Помимо собственной системы сбора информации об ошибках, в YouTrack Mobile используется сервис Sentry. Он помогает нам диагностировать проблемы и следить за стабильной работой приложения. Мы отправляем данные в Sentry только с вашего разрешения."
 
 #: src/views/article/article.tsx
 msgid "in revision"
@@ -899,7 +899,7 @@ msgstr "Библиотека Фото/видео"
 
 #: src/components/activity-stream/activity__stream.tsx
 msgid "Pinned comments"
-msgstr ""
+msgstr "Закрепленные комментарии"
 
 #: src/views/issues/issues__settings.tsx
 msgid "Preview Size"
@@ -1025,11 +1025,11 @@ msgstr "Выбрать задачу из списка"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Select an option"
-msgstr ""
+msgstr "Выберите вариант"
 
 #: src/components/custom-field/Issue-sprints-field.tsx
 msgid "select sprint"
-msgstr ""
+msgstr "выберите спринт"
 
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Select users, groups, and teams"
@@ -1041,7 +1041,7 @@ msgstr "Отправить отчет об ошибке"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Send extended report to Sentry"
-msgstr ""
+msgstr "Отправить подробный отчет в Sentry"
 
 #: src/views/settings/settings.tsx
 msgid "Send feedback"
@@ -1061,7 +1061,7 @@ msgstr "Отправка отчета об ошибке…"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Sentry Privacy Policy"
-msgstr ""
+msgstr "Политика конфиденциальности Sentry"
 
 #: src/components/date-picker/date-time-picker.tsx
 #: src/views/helpdesk-feedback/index.ts
@@ -1425,7 +1425,7 @@ msgstr "Да"
 
 #: src/actions/app-actions.ts
 msgid "You are trying to open a link from another server. Please add this server to the app first."
-msgstr ""
+msgstr "Вы пытаетесь открыть ссылку с другого сервера. Сначала добавьте этот сервер в приложение."
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "You can only CC a maximum of 5 reporters per ticket"
@@ -1449,7 +1449,7 @@ msgstr "У вас недостаточно разрешений, чтобы вы
 
 #: src/actions/app-actions.ts
 msgid "Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator."
-msgstr ""
+msgstr "Ваш токен авторизации истек или недействителен. Еще раз введите свои учетные данные для обновления токена. Если и после этого вам не удастся войти, обратитесь к своему администратору."
 
 #: src/components/storage/storage.ts
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
