@@ -409,7 +409,7 @@ msgstr "vytvořeno"
 
 #: src/components/issue-tabbed/issue-tabbed__created-updated.tsx
 msgid "Created by"
-msgstr ""
+msgstr "Autor"
 
 #: src/views/create-issue/create-issue.tsx
 msgid "Current issue"
@@ -1343,7 +1343,7 @@ msgstr "aktualizováno"
 
 #: src/components/issue-tabbed/issue-tabbed__created-updated.tsx
 msgid "Updated by"
-msgstr ""
+msgstr "Aktualizováno uživatelem"
 
 #: src/components/error/error-message-data.ts
 msgid "Use fewer search parameters"
