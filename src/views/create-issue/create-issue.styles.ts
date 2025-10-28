@@ -11,7 +11,7 @@ export default EStyleSheet.create({
     backgroundColor: '$background',
   },
   content: {
-    paddingLeft: UNIT,
+    paddingBottom: UNIT * 8,
   },
   title: {
     paddingLeft: UNIT * 2,
@@ -32,7 +32,6 @@ export default EStyleSheet.create({
     height: 20,
   },
   separator: {
-    height: 1,
     marginVertical: UNIT,
     ...separator,
     borderColor: '$separator',

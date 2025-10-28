@@ -14,7 +14,6 @@ import HTML from 'components/wiki/markdown/markdown-html';
 import IssueCustomFieldText from 'components/custom-field/issue-custom-field-text';
 import IssueMarkdown from './issue__markdown';
 import IssueUsersCC from 'views/issue/issue-user-cc';
-import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
 import LinkedIssues from 'components/linked-issues/linked-issues';
 import LinkedIssuesTitle from 'components/linked-issues/linked-issues-title';
 import log from 'components/log/log';
@@ -416,8 +415,6 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
         )}
 
         {issue?.attachments && this.renderAttachments(issue.attachments)}
-
-        {editMode && <KeyboardSpacerIOS />}
       </View>
     );
   }

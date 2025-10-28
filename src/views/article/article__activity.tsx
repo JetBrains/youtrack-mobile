@@ -11,7 +11,6 @@ import ArticleActivityStreamCommentEdit from 'views/article/article__edit-commen
 import ArticleAddComment from './article__add-comment';
 import CommentVisibilityControl from 'components/visibility/comment-visibility-control';
 import IssuePermissions from 'components/issue-permissions/issue-permissions';
-import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
 import ReactionsPanel from 'views/issue/activity/issue__activity-reactions-dialog';
 import TipActivityActionAccessTouch from 'components/tip/tips/activity-touch-actions';
 import usage from 'components/usage/usage';
@@ -344,7 +343,6 @@ const ArticleActivities = (props: Props) => {
               }}
             />
           )}
-          <KeyboardSpacerIOS top={98} />
         </>
       )}
       <TipActivityActionAccessTouch canAddComment={canCommentOn} />

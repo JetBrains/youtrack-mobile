@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 import {View, TouchableOpacity, Text, TextInput, ActivityIndicator} from 'react-native';
 
 import debounce from 'lodash.debounce';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-controller';
 
 import ApiHelper from 'components/api/api__helper';
 import CommandDialogSuggestions from 'components/command-dialog/command-dialog-suggestions';
-import KeyboardSpacerIOS from '../platform/keyboard-spacer.ios';
 import ModalPortal from 'components/modal-view/modal-portal';
 import ModalView from 'components/modal-view/modal-view';
 import {i18n} from 'components/i18n/i18n';
@@ -171,10 +171,10 @@ export default class CommandDialog extends Component<Props, State> {
         {this._renderCommandPreview()}
 
         {!!suggestions && (
-          <CommandDialogSuggestions suggestions={suggestions} onApplySuggestion={this.onApplySuggestion} />
+          <KeyboardAwareScrollView>
+            <CommandDialogSuggestions suggestions={suggestions} onApplySuggestion={this.onApplySuggestion} />
+          </KeyboardAwareScrollView>
         )}
-
-        {<KeyboardSpacerIOS />}
       </View>
     );
   }

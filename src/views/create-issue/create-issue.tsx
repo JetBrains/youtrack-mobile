@@ -20,7 +20,6 @@ import CustomFieldsPanel from 'components/custom-fields-panel/custom-fields-pane
 import Header from 'components/header/header';
 import IssueCustomFieldText from 'components/custom-field/issue-custom-field-text';
 import IssueDrafts from 'views/create-issue/create-issue-drafts';
-import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
 import LinkedIssues from 'components/linked-issues/linked-issues';
 import LinkedIssuesAddLink from 'components/linked-issues/linked-issues-add-link';
 import LinkedIssuesTitle from 'components/linked-issues/linked-issues-title';
@@ -477,6 +476,7 @@ class CreateIssue extends PureComponent<Props, State> {
               <ScrollView
                 keyboardShouldPersistTaps="handled"
                 keyboardDismissMode="interactive"
+                contentContainerStyle={styles.content}
               >
                 <SummaryDescriptionForm
                   analyticsId={ANALYTICS_ISSUE_CREATE_PAGE}
@@ -606,8 +606,6 @@ class CreateIssue extends PureComponent<Props, State> {
                   </>
                 )}
               </ScrollView>
-
-              <KeyboardSpacerIOS/>
 
               {isAttachFileDialogVisible && this.renderAttachFileDialog()}
               {!this.isProcessing() &&

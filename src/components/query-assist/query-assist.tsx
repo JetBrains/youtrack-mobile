@@ -2,9 +2,9 @@ import React from 'react';
 import {View, TouchableOpacity, TextInput} from 'react-native';
 
 import debounce from 'lodash.debounce';
+import {KeyboardAvoidingView} from 'react-native-keyboard-controller';
 import {View as AnimatedView} from 'react-native-animatable';
 
-import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
 import ModalPortal from 'components/modal-view/modal-portal';
 import ModalView from 'components/modal-view/modal-view';
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
@@ -232,9 +232,10 @@ export class QueryAssist<P extends Props, S extends State> extends React.PureCom
   render() {
     return (
       <ModalView visible={true} animationType="fade" style={styles.modal}>
-        {this._renderInput()}
-        {this._renderSuggestions()}
-        <KeyboardSpacerIOS />
+        <KeyboardAvoidingView behavior="padding" style={styles.container}>
+          {this._renderInput()}
+          {this._renderSuggestions()}
+        </KeyboardAvoidingView>
       </ModalView>
     );
   }

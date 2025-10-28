@@ -5,6 +5,9 @@ import {elevation1, UNIT} from 'components/common-styles';
 
 
 export default EStyleSheet.create({
+  container: {
+    flex: 1,
+  },
   modal: {
     height: '100%',
   },
