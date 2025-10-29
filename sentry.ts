@@ -18,14 +18,11 @@ export const initSentry = async (dsn: string) => {
     profilesSampleRate: 0.1,
     // @ts-ignore
     beforeSend(event, hint) {
-      if (isNoPermissionError(hint) || !isAppCodeError(event)) {
+      if (isInvalidTokenError(hint) || !isAppCodeError(event)) {
         return null;
       }
-      sanitizeEventUrls(event);
-      return event;
+      return sanitizeEventUrls(event);
     },
-    tracePropagationTargets: __DEV__ ? [] : [/^\/api\//],
-    // spotlight: __DEV__,
   });
 
   const deviceId = await getDeviceId();
@@ -54,24 +51,25 @@ function isAppCodeError(event: ErrorEvent) {
   return true;
 }
 
-function isNoPermissionError(hint: EventHint) {
+function isInvalidTokenError(hint: EventHint) {
   const error = hint?.originalException;
   if (!error || typeof error !== 'object') {
     return false;
   }
-  let errorCode: number | null = 'status' in error && typeof error.status === 'number' ? error.status : null;
-  if (errorCode === null && 'statusCode' in error && typeof error.statusCode === 'number') {
-    errorCode = error.statusCode;
+  if ('status' in error && typeof error.status === 'number') {
+    return error.status === 401;
   }
-  return typeof errorCode === 'number' && errorCode === 401;
+  return false;
 }
 
 function sanitizeEventUrls(event: ErrorEvent) {
-  if (Array.isArray(event.breadcrumbs)) {
-    event.breadcrumbs.forEach(b => {
+  const ev = {...event};
+  if (Array.isArray(ev.breadcrumbs)) {
+    ev.breadcrumbs.forEach(b => {
       if((b.category === 'xhr' || b.category === 'fetch') && b.data?.url) {
         b.data.url = anonymizeYTApiEntityId(b.data.url);
       }
     });
   }
+  return ev;
 }
