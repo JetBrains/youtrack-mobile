@@ -131,7 +131,7 @@
     "@babel/core": "^7.25.2",
     "@babel/plugin-transform-named-capturing-groups-regex": "^7.25.9",
     "@babel/runtime": "^7.25.0",
-    "@react-native-community/cli": "^13",
+    "@react-native-community/cli": "^20",
     "@react-native-community/cli-platform-android": "^13",
     "@react-native-community/cli-platform-ios": "^13",
     "@react-native/babel-preset": "0.77.3",
