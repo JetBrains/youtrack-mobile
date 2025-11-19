@@ -37,6 +37,7 @@ const CommandDialogSuggestions = ({
 
   return (
     <FlatList
+      style={styles.suggestionsList}
       data={suggestions.suggestions}
       keyExtractor={guid}
       renderItem={renderSuggestion}

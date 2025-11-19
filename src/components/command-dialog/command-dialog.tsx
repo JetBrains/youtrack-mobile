@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {View, TouchableOpacity, Text, TextInput, ActivityIndicator} from 'react-native';
 
 import debounce from 'lodash.debounce';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-controller';
 
 import ApiHelper from 'components/api/api__helper';
 import CommandDialogSuggestions from 'components/command-dialog/command-dialog-suggestions';
@@ -10,6 +9,7 @@ import ModalPortal from 'components/modal-view/modal-portal';
 import ModalView from 'components/modal-view/modal-view';
 import {i18n} from 'components/i18n/i18n';
 import {IconBack, IconCheck} from 'components/icon/icon';
+import {KeyboardWrapper} from 'components/keyboard/keboard-wrapper';
 
 import styles from './command-dialog.styles';
 
@@ -139,43 +139,43 @@ export default class CommandDialog extends Component<Props, State> {
     const {isApplying, uiTheme, suggestions} = this.props;
     const canApply = this.canApplyCommand();
     return (
-      <View style={styles.container}>
-        <View style={styles.inputWrapper}>
-          <TouchableOpacity
-            testID="test:id/selectBackButton"
-            accessibilityLabel="selectBackButton"
-            accessible={true}
-            onPress={this.props.onCancel}
-          >
-            <IconBack />
-          </TouchableOpacity>
+      <KeyboardWrapper isInModal={true}>
+        <View style={styles.container}>
+          <View style={styles.inputWrapper}>
+            <TouchableOpacity
+              testID="test:id/selectBackButton"
+              accessibilityLabel="selectBackButton"
+              accessible={true}
+              onPress={this.props.onCancel}
+            >
+              <IconBack />
+            </TouchableOpacity>
 
-          {this._renderInput()}
+            {this._renderInput()}
 
-          <TouchableOpacity
-            testID="test:id/applyButton"
-            accessibilityLabel="applyButton"
-            accessible={true}
-            disabled={!canApply}
-            style={styles.applyButton}
-            onPress={() => this.onApply()}
-          >
-            {isApplying ? (
-              <ActivityIndicator color={uiTheme.colors.$link} />
-            ) : (
-              <IconCheck color={canApply ? uiTheme.colors.$link : uiTheme.colors.$disabled} />
-            )}
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity
+              testID="test:id/applyButton"
+              accessibilityLabel="applyButton"
+              accessible={true}
+              disabled={!canApply}
+              style={styles.applyButton}
+              onPress={() => this.onApply()}
+            >
+              {isApplying ? (
+                <ActivityIndicator color={uiTheme.colors.$link} />
+              ) : (
+                <IconCheck color={canApply ? uiTheme.colors.$link : uiTheme.colors.$disabled} />
+              )}
+            </TouchableOpacity>
+          </View>
 
-        {this._renderCommandPreview()}
+          {this._renderCommandPreview()}
 
-        {!!suggestions && (
-          <KeyboardAwareScrollView>
+          {!!suggestions && (
             <CommandDialogSuggestions suggestions={suggestions} onApplySuggestion={this.onApplySuggestion} />
-          </KeyboardAwareScrollView>
-        )}
-      </View>
+          )}
+        </View>
+      </KeyboardWrapper>
     );
   }
 

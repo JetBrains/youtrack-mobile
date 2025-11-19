@@ -6,7 +6,7 @@ import {inputWrapper, searchInputWithMinHeight} from 'components/common-styles/s
 
 export default EStyleSheet.create({
   container: {
-    height: '100%',
+    flex: 1,
     backgroundColor: '$background',
   },
   inputWrapper: {
@@ -54,5 +54,8 @@ export default EStyleSheet.create({
   },
   applyButton: {
     paddingRight: UNIT,
+  },
+  suggestionsList: {
+    flex: 1,
   },
 });
