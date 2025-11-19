@@ -2,7 +2,6 @@ import React from 'react';
 import {View, TouchableOpacity, TextInput} from 'react-native';
 
 import debounce from 'lodash.debounce';
-import {KeyboardAvoidingView} from 'react-native-keyboard-controller';
 import {View as AnimatedView} from 'react-native-animatable';
 
 import ModalPortal from 'components/modal-view/modal-portal';
@@ -232,10 +231,8 @@ export class QueryAssist<P extends Props, S extends State> extends React.PureCom
   render() {
     return (
       <ModalView visible={true} animationType="fade" style={styles.modal}>
-        <KeyboardAvoidingView behavior="padding" style={styles.container}>
-          {this._renderInput()}
-          {this._renderSuggestions()}
-        </KeyboardAvoidingView>
+        {this._renderInput()}
+        {this._renderSuggestions()}
       </ModalView>
     );
   }
