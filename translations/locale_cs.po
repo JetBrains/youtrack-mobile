@@ -30,7 +30,7 @@ msgstr "(Vymazat hodnotu)"
 
 #: src/components/activity/activity__history-title.ts
 msgid "[Removed field]"
-msgstr ""
+msgstr "[Odstraněné pole]"
 
 #: src/views/article/article__details.tsx
 msgid "{{amount}} article"

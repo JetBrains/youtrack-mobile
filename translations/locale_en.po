@@ -522,7 +522,7 @@ msgstr "Email address for follow-up"
 msgid "Enter command"
 msgstr "Enter command"
 
-#: src/components/query-assist/query-assist.tsx:181
+#: src/components/query-assist/query-assist.tsx:180
 #: src/components/query-assist/query-preview.tsx:24
 msgid "Enter search request"
 msgstr "Enter search request"
