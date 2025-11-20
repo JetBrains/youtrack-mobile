@@ -13,35 +13,43 @@ import {until} from 'util/util';
 
 import styles from './select.styles';
 
-import type {AnyError} from 'types/Error';
 import type {IItem} from 'components/select/select';
-import type {Tag} from 'types/CustomFields';
 
 
-export interface ISSWithItemActionsProps extends ISectionedProps {
-  onStar(item: IItem): Promise<AnyError | Tag>;
-  hasStar(item: IItem): boolean;
+export interface ISSWithItemActionsProps<T extends IItem> extends ISectionedProps<T> {
+  onStar(item: T): Promise<unknown>;
+  hasStar(item: T): boolean;
 }
 
-interface ISSWithItemActionsState extends ISectionedState {
+interface ISSWithItemActionsState<T extends IItem> extends ISectionedState<T> {
   visible: boolean;
 }
 
-export class SectionedSelectWithItemActions<S extends ISSWithItemActionsState = ISSWithItemActionsState> extends SelectSectioned<S> {
-  _renderTitle(item: IItem) {
+export class SectionedSelectWithItemActions<
+  T extends IItem = IItem,
+  S extends ISSWithItemActionsState<T> = ISSWithItemActionsState<T>,
+> extends SelectSectioned<T, S> {
+  private readonly sectionedProps: ISSWithItemActionsProps<T>;
+
+  constructor(props: ISSWithItemActionsProps<T>) {
+    super(props);
+    this.sectionedProps = props;
+  }
+
+  _renderTitle(item: T) {
     const name: string = `${item.name}${item.shortName ? ` (${item.shortName})` : ''}`;
     return (
       <>
         {!!item.id && <Star
           style={styles.itemStar}
           canStar={true}
-          hasStar={(this.props as ISSWithItemActionsProps).hasStar(item)}
+          hasStar={this.sectionedProps.hasStar(item)}
           onStarToggle={async () => {
-            const [error] = await until((this.props as ISSWithItemActionsProps).onStar(item));
+            const [error] = await until(this.sectionedProps.onStar(item));
             if (error) {
               notifyError(error);
             } else {
-              this._onSearch(this.state.query);
+              this.onSearch(this.state.query);
             }
           }}/>}
         <Text style={styles.itemTitle}>
@@ -52,7 +60,10 @@ export class SectionedSelectWithItemActions<S extends ISSWithItemActionsState = 
   }
 }
 
-export class SectionedSelectWithItemActionsModal<S extends ISSWithItemActionsState = ISSWithItemActionsState> extends SelectSectionedModal<S> {
+export class SectionedSelectWithItemActionsModal<
+  T extends IItem = IItem,
+  S extends ISSWithItemActionsState<T> = ISSWithItemActionsState<T>,
+> extends SelectSectionedModal<T, S> {
   render = () => {
     return (
       <ModalPortal

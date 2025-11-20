@@ -8,38 +8,43 @@ import styles from './select.styles';
 
 import {SectionListData} from 'react-native/Libraries/Lists/SectionList';
 
+function toSelectProps<T extends IItem>(props: ISectionedProps<T>): ISelectProps<T> {
+  return props as unknown as ISelectProps<T>;
+}
 
-interface Section extends SectionListData<IItem, IItem>{
+interface Section<T extends IItem> extends SectionListData<T, {title: string}> {
   title: string;
-  data: IItem[];
+  data: T[];
 }
 
-export type ISectionedState = Omit<ISelectState<IItem>, 'filteredItems' | 'items' | 'selectedItems'> & {
-  filteredItems: Section[];
-  items: IItem[];
-  selectedItems: IItem[];
+export type ISectionedState<T extends IItem> = Omit<ISelectState<T>, 'filteredItems' | 'items'> & {
+  filteredItems: Section<T>[];
+  items: Section<T>[];
+};
+
+export interface ISectionedProps<T extends IItem> extends Omit<ISelectProps<T>, 'dataSource'> {
+  dataSource: (query: string) => Promise<Section<T>[]>;
 }
 
-export interface ISectionedProps extends Omit<ISelectProps<IItem>, 'dataSource'> {
-  dataSource: (query: string) => Promise<IItem[]>;
-}
+export default class SelectSectioned<
+  T extends IItem = IItem,
+  S extends ISectionedState<T> = ISectionedState<T>,
+> extends Select<T, S & ISelectState<T>> {
+  private readonly _props: ISectionedProps<T>;
 
-
-export default class SelectSectioned<S extends ISectionedState = ISectionedState> extends Select<IItem, S> {
-
-  constructor(props: ISectionedProps) {
-    super(props);
+  constructor(props: ISectionedProps<T>) {
+    super(toSelectProps(props));
+    this._props = props;
     this.state = {
       filteredItems: [],
       items: [],
       loaded: false,
       query: '',
       selectedItems: props.selectedItems || [],
-      visible: true,
-    };
+    } as unknown as S & ISelectState<T>;
   }
 
-  renderSectionHeader = ({section}: { section: IItem }) => {
+  renderSectionHeader = ({section}: {section: Section<T>}) => {
     return section.title ? (
       <View style={[styles.sectionHeader, !section.title.trim() && styles.sectionHeaderEmpty]}>
         <Text style={styles.sectionHeaderText}>{section.title}</Text>
@@ -47,55 +52,58 @@ export default class SelectSectioned<S extends ISectionedState = ISectionedState
     ) : null;
   };
 
-  removeDuplicateItems(source: IItem[], duplicates: IItem[]): Section[] {
+  removeDuplicateItems(source: Section<T>[], duplicates: T[]): Section<T>[] {
     const selectedMap: Record<string, string> = duplicates.reduce(
-      (akk: Record<string, string>, it: IItem) => (
-        {...akk, [it.id]: it.id}),
-      {}
+      (akk: Record<string, string>, it: T) => ({...akk, [it.id]: it.id}),
+      {},
     );
     return source
-      ?.reduce((akk, it) => {
+      ?.reduce((akk: Section<T>[], it: Section<T>) => {
         akk.push({
           ...it,
-          data: it.data.filter((i: IItem) => !(i.id in selectedMap)),
+          data: it.data.filter((i: T) => !(i.id in selectedMap)),
         });
         return akk;
       }, [])
-      .filter((it: IItem) => it.data.length > 0);
+      .filter((it: Section<T>) => it.data.length > 0);
   }
 
-  getFilteredItems(items: IItem[], query?: string): Section[] {
+  // @ts-expect-error - Override with incompatible return type (Section<T>[] vs T[]) due to sectioned data structure
+  override getFilteredItems(items: Section<T>[] = [], query?: string): Section<T>[] {
     const {selectedItems} = this.state;
-    let _selectedItems: IItem[] = selectedItems;
+    let _selectedItems: T[] = selectedItems;
 
     if (_selectedItems?.length) {
-      const itemsMap: Record<string, IItem> = items.reduce((akk, it: IItem) => {
+      const itemsMap: Record<string, T> = items.reduce((akk: Record<string, T>, it: Section<T>) => {
         if (it?.data) {
           akk = {
             ...akk,
-            ...it.data.reduce((a: Record<string, IItem>, i: IItem) => ({...a, [i.id]: i}), {}),
+            ...it.data.reduce((a: Record<string, T>, i: T) => ({...a, [i.id]: i}), {}),
           };
         }
         return akk;
       }, {});
 
-      _selectedItems = _selectedItems.reduce((akk: IItem[], it: IItem) => {
+      _selectedItems = _selectedItems.reduce((akk: T[], it: T) => {
         return [...akk, itemsMap[it.id] ? {...it, ...itemsMap[it.id]} : it];
       }, []);
     }
-    return [
-      {title: '', data: _selectedItems},
-    ...this.removeDuplicateItems(items, _selectedItems),
-    ];
+    return [{title: '', data: _selectedItems}, ...this.removeDuplicateItems(items, _selectedItems)];
+  }
+
+  // @ts-expect-error - Override with incompatible return type (Section<T>[] vs T[]) due to sectioned data structure
+  override async doLoadItems(query: string = ''): Promise<Section<T>[]> {
+    this.setState({loaded: false});
+    const items: Section<T>[] = await this._props.dataSource(query);
+    this.setState({loaded: true, items} as unknown as Pick<S & ISelectState<T>, 'loaded' | 'items'>);
+    return items;
   }
 
   async onSearch(query: string) {
-    const filterByLabel = (data: IItem[]): IItem[] => (data || []).filter(
-      (it: IItem) => this.filterItemByLabel(it, query)
-    );
-    const doSearch = (items: IItem[]): Section[] => (
-      this.getFilteredItems(items).reduce((akk: Section[], it: IItem) => {
-        const data: IItem[] = filterByLabel(it.data);
+    const filterByLabel = (data: T[]): T[] => (data || []).filter((it: T) => this.filterItemByLabel(it, query));
+    const doSearch = (items: Section<T>[]): Section<T>[] =>
+      this.getFilteredItems(items).reduce((akk: Section<T>[], it: Section<T>) => {
+        const data: T[] = filterByLabel(it.data);
         if (data.length > 0) {
           akk.push({
             title: it.title,
@@ -103,22 +111,21 @@ export default class SelectSectioned<S extends ISectionedState = ISectionedState
           });
         }
         return akk;
-      }, [])
-    );
+      }, []);
 
     const items = await this.doLoadItems(query);
-    this.setState({filteredItems: doSearch(items)});
+    this.setState({filteredItems: doSearch(items)} as unknown as Pick<S & ISelectState<T>, 'filteredItems'>);
   }
 
   renderHeader() {
     return null;
   }
 
-  _onTouchItem(item: IItem): IItem[] {
-    const selectedItems: IItem[] = super._onTouchItem(item);
+  _onTouchItem(item: T): T[] {
+    const selectedItems: T[] = super._onTouchItem(item);
     this.setState({
       filteredItems: this.getFilteredItems(this.state.items),
-    });
+    } as unknown as Pick<S & ISelectState<T>, 'filteredItems'>);
     return selectedItems;
   }
 
@@ -146,11 +153,13 @@ export default class SelectSectioned<S extends ISectionedState = ISectionedState
   }
 }
 
+export type ISelectionedStateModal<T extends IItem> = ISectionedState<T> & {visible: boolean};
 
-export type ISelectionedStateModal = ISectionedState & { visible: boolean };
-
-export class SelectSectionedModal<S extends ISelectionedStateModal = ISelectionedStateModal> extends SelectSectioned<S> {
-  constructor(props: ISectionedProps) {
+export class SelectSectionedModal<
+  T extends IItem = IItem,
+  S extends ISelectionedStateModal<T> = ISelectionedStateModal<T>,
+> extends SelectSectioned<T, S> {
+  constructor(props: ISectionedProps<T>) {
     super(props);
     this.state = {...this.state, visible: true};
   }
@@ -164,7 +173,7 @@ export class SelectSectionedModal<S extends ISelectionedStateModal = ISelectione
     this.props?.onCancel?.();
     this.onHide();
   };
-  onSelect = (item: IItem | IItem[] | null) => {
+  onSelect = (item: T | T[] | null) => {
     this.props.onSelect(item);
     this.onHide();
   };
@@ -176,11 +185,7 @@ export class SelectSectionedModal<S extends ISelectionedStateModal = ISelectione
   };
   render = () => {
     return (
-      <ModalPortal
-        testID="test:id/selectModalContainer"
-        style={styles.modalPortalSelectContent}
-        onHide={this.onCancel}
-      >
+      <ModalPortal testID="test:id/selectModalContainer" style={styles.modalPortalSelectContent} onHide={this.onCancel}>
         {this.state.visible && this.renderContent()}
       </ModalPortal>
     );
