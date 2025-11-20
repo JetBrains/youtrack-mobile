@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useEffect} from 'react';
 
 import {Modalize} from 'react-native-modalize';
 
@@ -13,21 +13,41 @@ const BottomSheetModal = React.forwardRef(function SheetModal(props: any, ref: R
   const modalizeRef = React.useRef<Modalize | null>(null);
 
   const [modalData, updateModalData] = React.useState<BottomSheetModalData>({});
+  const shouldOpenRef = React.useRef<boolean>(false);
+
+  useEffect(() => {
+    if (shouldOpenRef.current && modalData?.children && modalizeRef.current) {
+      shouldOpenRef.current = false;
+      requestAnimationFrame(() => {
+        modalizeRef.current?.open();
+      });
+    }
+  }, [modalData]);
+
+  const setRef = useCallback((modalizeInstance: Modalize | null) => {
+    modalizeRef.current = modalizeInstance;
+    if (modalizeInstance && shouldOpenRef.current) {
+      requestAnimationFrame(() => {
+        modalizeInstance.open();
+      });
+    }
+  }, []);
 
   const proto = React.useMemo(() => ({
       open: (data: BottomSheetModalData) => {
         if (data?.children) {
+          shouldOpenRef.current = true;
           updateModalData(data);
-          modalizeRef?.current?.open();
         }
       },
       close: () => {
+        shouldOpenRef.current = false;
         updateModalData({});
-        modalizeRef?.current?.close();
+        modalizeRef.current?.close();
 
       },
     }),
-    [modalizeRef]
+    []
   );
 
   React.useImperativeHandle(
@@ -57,7 +77,7 @@ const BottomSheetModal = React.forwardRef(function SheetModal(props: any, ref: R
       modalStyle={styles.modal}
       onClose={onClose}
       panGestureComponentEnabled={false}
-      ref={modalizeRef}
+      ref={setRef}
       snapPoint={snapPoint}
       useNativeDriver={true}
       withHandle={withHandle}
