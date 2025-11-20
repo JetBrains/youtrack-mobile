@@ -161,8 +161,8 @@ export class Select<T extends IItem, S extends ISelectState<T> = ISelectState<T>
   }
 
   async onSearch(query: string) {
-    await this.doLoadItems(query);
-    const filteredItems: T[] = this.getFilteredItems(this.state.items || [], query);
+    const items = await this.doLoadItems(query);
+    const filteredItems: T[] = this.getFilteredItems(items || [], query);
     this.setState({
       filteredItems: this.getSortedItems(filteredItems),
     });

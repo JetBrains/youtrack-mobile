@@ -93,8 +93,8 @@ export default class SelectSectioned<S extends ISectionedState = ISectionedState
     const filterByLabel = (data: IItem[]): IItem[] => (data || []).filter(
       (it: IItem) => this.filterItemByLabel(it, query)
     );
-    const doSearch = (): Section[] => (
-      this.getFilteredItems(this.state.items).reduce((akk: Section[], it: IItem) => {
+    const doSearch = (items: IItem[]): Section[] => (
+      this.getFilteredItems(items).reduce((akk: Section[], it: IItem) => {
         const data: IItem[] = filterByLabel(it.data);
         if (data.length > 0) {
           akk.push({
@@ -106,8 +106,8 @@ export default class SelectSectioned<S extends ISectionedState = ISectionedState
       }, [])
     );
 
-    await this.doLoadItems(query);
-    this.setState({filteredItems: doSearch()});
+    const items = await this.doLoadItems(query);
+    this.setState({filteredItems: doSearch(items)});
   }
 
   renderHeader() {
