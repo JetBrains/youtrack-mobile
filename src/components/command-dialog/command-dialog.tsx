@@ -39,6 +39,7 @@ export default class CommandDialog extends Component<Props, State> {
     caret: 0,
   };
   lastUsedParams: {command: string | null; caret: number} = {command: null, caret: 0};
+  private textInputRef: React.RefObject<TextInput> = React.createRef<TextInput>();
 
   onSearch = debounce((command: string, caret: number) => {
     if (this.lastUsedParams.command === command && this.lastUsedParams.caret === caret) {
@@ -72,6 +73,7 @@ export default class CommandDialog extends Component<Props, State> {
       oldQuery.substring(0, suggestion.completionStart) + suggestionText + oldQuery.substring(suggestion.completionEnd);
     this.setState({inputValue: newQuery});
     this.onSearch(newQuery, suggestion.caret);
+    setTimeout(() => this.textInputRef.current?.focus(), 0);
   };
 
   onApply = () => {
@@ -89,6 +91,7 @@ export default class CommandDialog extends Component<Props, State> {
     const {isApplying, uiTheme} = this.props;
     return (
       <TextInput
+        ref={this.textInputRef}
         style={styles.searchInput}
         placeholderTextColor={uiTheme.colors.$icon}
         placeholder={i18n('Enter command')}
