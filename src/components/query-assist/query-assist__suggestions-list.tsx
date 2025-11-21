@@ -15,26 +15,24 @@ import {mainText, secondaryText, UNIT} from 'components/common-styles';
 import {uuid} from 'util/util';
 
 import type {AssistSuggest, TransformedSuggestion} from 'types/Issue';
+import type {SectionListData} from 'react-native/Libraries/Lists/SectionList';
+import type {ViewStyleProp} from 'types/Internal';
 
-type Props = {
-  style?: any;
+interface Props {
+  style?: ViewStyleProp;
   suggestions: AssistSuggest[];
-  onApplySuggestion: (suggestion: TransformedSuggestion) => any;
-  onApplySavedQuery: (savedQuery?: TransformedSuggestion) => any;
-};
-
+  onApplySuggestion: (suggestion: TransformedSuggestion) => void;
+  onApplySavedQuery: (savedQuery?: TransformedSuggestion) => void;
+}
 
 export default class QueryAssistSuggestionsList extends Component<Props, void> {
-  onApplySuggestion: (suggestion: TransformedSuggestion) => any = (
-    suggestion: TransformedSuggestion,
-  ) => {
+  onApplySuggestion = (suggestion: TransformedSuggestion) => {
     const isSuggestion = suggestion.caret;
     const {onApplySuggestion, onApplySavedQuery} = this.props;
-    return isSuggestion
-      ? onApplySuggestion(suggestion)
-      : onApplySavedQuery(suggestion);
+    return isSuggestion ? onApplySuggestion(suggestion) : onApplySavedQuery(suggestion);
   };
-  renderRow: (arg0: TransformedSuggestion)=> React.ReactNode = ({item}: TransformedSuggestion) => {
+
+  renderRow = ({item}: {item: TransformedSuggestion}) => {
     const isSuggestion = item.caret;
     return (
       <TouchableOpacity
@@ -44,18 +42,14 @@ export default class QueryAssistSuggestionsList extends Component<Props, void> {
         accessibilityLabel="suggestRow"
         accessible={false}
       >
-        <Text style={styles.searchText}
-          testID="test:id/suggestRowText"
-        >
+        <Text style={styles.searchText} testID="test:id/suggestRowText">
           {isSuggestion ? item.option : item.name}
         </Text>
       </TouchableOpacity>
     );
   };
 
-  renderSectionHeader = ({
-    section,
-  }: Record<string, any>) => {
+  renderSectionHeader = ({section}: {section: SectionListData<AssistSuggest>}) => {
     if (section.title) {
       return (
         <View style={styles.sectionHeader}>
@@ -65,7 +59,7 @@ export default class QueryAssistSuggestionsList extends Component<Props, void> {
     }
   };
 
-  render(): React.ReactNode {
+  render() {
     const {suggestions, style} = this.props;
     return (
       <View style={[styles.container, style]}>

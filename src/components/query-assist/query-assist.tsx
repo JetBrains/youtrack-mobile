@@ -34,13 +34,9 @@ interface State {
   suggestionsListTop: number;
 }
 
-
 export class QueryAssist<P extends Props, S extends State> extends React.PureComponent<P, S> {
   private searchInputRef: React.RefObject<TextInput> = React.createRef<TextInput>();
-  lastQueryParams: {
-    query: string;
-    caret: number;
-  } = {
+  private lastQueryParams: {query: string; caret: number;} = {
     query: '',
     caret: 0,
   };
@@ -53,28 +49,20 @@ export class QueryAssist<P extends Props, S extends State> extends React.PureCom
 
   constructor(props: P) {
     super(props);
-    this.state = Object.assign({}, this.initialState);
+    this.state = Object.assign({}, this.initialState) as S;
   }
 
-  onSearch: any = debounce((query: string, caret: number) => {
-    if (
-      this.lastQueryParams.query === query ||
-      this.lastQueryParams.caret === caret
-    ) {
+  onSearch = debounce((query: string, caret: number) => {
+    if (this.lastQueryParams.query === query || this.lastQueryParams.caret === caret) {
       return;
     }
 
-    this.lastQueryParams = {
-      query,
-      caret,
-    };
-    this.setState({
-      inputValue: query,
-      caret,
-    });
+    this.lastQueryParams = {query, caret};
+    this.setState({inputValue: query, caret});
     this.props.onChange(query, caret);
   }, 100);
-  resetState: () => void = () => {
+
+  resetState = () => {
     this.setState(this.initialState);
   };
 
@@ -122,31 +110,25 @@ export class QueryAssist<P extends Props, S extends State> extends React.PureCom
     });
   }
 
-  onApplySuggestion: (suggestion: TransformedSuggestion) => void = (
-    suggestion: TransformedSuggestion,
-  ) => {
+  onApplySuggestion: (suggestion: TransformedSuggestion) => void = (suggestion: TransformedSuggestion) => {
     const suggestionText = `${suggestion.prefix}${suggestion.option}${suggestion.suffix}`;
     const oldQuery = this.state.inputValue || '';
-    const leftPartAndNewQuery =
-      oldQuery.substring(0, suggestion.completionStart) + suggestionText;
-    const newQuery =
-      leftPartAndNewQuery + oldQuery.substring(suggestion.completionEnd);
+    const leftPartAndNewQuery = oldQuery.substring(0, suggestion.completionStart) + suggestionText;
+    const newQuery = leftPartAndNewQuery + oldQuery.substring(suggestion.completionEnd);
     this.setState({
       inputValue: newQuery,
     });
     this.props.onChange(newQuery, leftPartAndNewQuery.length);
     setTimeout(() => this.focusInput(), 0);
   };
-  onApplySavedQuery: (savedQuery: Folder) => void = (
-    savedQuery: Folder,
-  ) => {
-    this.setState({
-      inputValue: savedQuery.query,
-    });
+
+  onApplySavedQuery = (savedQuery: Folder) => {
+    this.setState({inputValue: savedQuery.query});
     this.blurInput();
     this.props.onApplyQuery(savedQuery.query);
   };
-  onClose = (): void => {
+
+  onClose = () => {
     this.cancelSearch();
     this.props.onClose(this.state.inputValue);
   };
@@ -158,10 +140,7 @@ export class QueryAssist<P extends Props, S extends State> extends React.PureCom
   _renderInput() {
     const {inputValue} = this.state;
     return (
-      <View
-        style={[styles.inputWrapper, styles.inputWrapperActive]}
-        ref={node => (this.queryAssistContainer = node)}
-      >
+      <View style={[styles.inputWrapper, styles.inputWrapperActive]}>
         <TouchableOpacity
           testID="query-assist-cancel"
           accessibilityLabel="query-assist-cancel"
@@ -191,18 +170,12 @@ export class QueryAssist<P extends Props, S extends State> extends React.PureCom
               inputValue: text,
             })
           }
-          onSelectionChange={event =>
-            this.onSearch(inputValue, event.nativeEvent.selection.start)
-          }
+          onSelectionChange={event => this.onSearch(inputValue, event.nativeEvent.selection.start)}
           value={inputValue}
         />
 
         {!!inputValue && (
-          <TouchableOpacity
-            onPress={this.resetState}
-            hitSlop={HIT_SLOP}
-            style={styles.clearIcon}
-          >
+          <TouchableOpacity onPress={this.resetState} hitSlop={HIT_SLOP} style={styles.clearIcon}>
             <IconClose size={18} color={styles.clearIcon.color} />
           </TouchableOpacity>
         )}
@@ -253,7 +226,7 @@ export class QueryAssistModal extends QueryAssist<Props, State & { visible: bool
     });
   };
 
-  onClose(): void {
+  onClose() {
     super.onClose();
     this.onHide();
   }
