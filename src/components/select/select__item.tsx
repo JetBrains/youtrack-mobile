@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {View, TouchableOpacity, Text} from 'react-native';
+import {View, TouchableOpacity, Text, GestureResponderEvent} from 'react-native';
 
 import Avatar from 'components/avatar/avatar';
 import ImageWithProgress from 'components/image/image-with-progress';
@@ -11,23 +11,23 @@ import styles from './select.styles';
 import type {IItem} from 'components/select/select';
 import type {ViewStyleProp} from 'types/Internal';
 
-export interface Props {
-  item: IItem;
+export interface Props<T> {
+  item: T;
   isSelected?: boolean;
-  onPress?: (item: IItem) => void;
-  onLongPress?: (item: IItem) => void;
+  onPress?: (item: T) => void;
+  onLongPress?: (event: GestureResponderEvent) => void;
   disabled?: boolean;
-  titleRenderer?: (item: IItem) => React.ReactNode;
+  titleRenderer?: (item: T) => React.ReactNode;
   style?: ViewStyleProp;
 }
 
-export default class ListSelectItem extends PureComponent<Props, Readonly<{}>> {
+export default class ListSelectItem<T extends IItem = IItem> extends PureComponent<Props<T>, Readonly<{}>> {
 
-  getDefaultTitle(item: Record<string, any>): string {
+  getDefaultTitle(item: T): string {
     return getEntityPresentation(item);
   }
 
-  renderTitle(item: Record<string, any>): any | string {
+  renderTitle(item: T) {
     if (this.props.titleRenderer) {
       return this.props.titleRenderer(item);
     }
@@ -35,7 +35,7 @@ export default class ListSelectItem extends PureComponent<Props, Readonly<{}>> {
     return this.getDefaultTitle(item);
   }
 
-  onSelect: () => void = () => {
+  onSelect = () => {
     const {item, onPress} = this.props;
     if (onPress) {
       onPress(item);
@@ -43,7 +43,13 @@ export default class ListSelectItem extends PureComponent<Props, Readonly<{}>> {
   };
 
   render() {
-    const {item, isSelected = false, style, onLongPress = () => {}, disabled = false} = this.props;
+    const {
+      item,
+      isSelected = false,
+      style,
+      onLongPress = () => {},
+      disabled = false,
+    } = this.props;
 
     return !item ? null : (
       <TouchableOpacity
