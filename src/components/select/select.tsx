@@ -24,6 +24,10 @@ interface TitleRenderer<T> {
   (item: T): React.ReactNode;
 }
 
+interface FilterItems<T> {
+  (item: T): T[];
+}
+
 export interface ISelectProps<T extends IItem> {
   dataSource: (query: string) => Promise<T[]>;
   onSelect: (item: any | any[]) => any;
@@ -31,7 +35,7 @@ export interface ISelectProps<T extends IItem> {
   onCancel?: () => void;
   getTitle?: (item: T) => string;
   header?: () => any;
-  titleRenderer?: TitleRenderer<T>;
+  titleRenderer?: TitleRenderer<any>;
   getValue?: (item: T) => string;
   selectedItems: T[];
   placeholder?: string;
@@ -43,7 +47,7 @@ export interface ISelectProps<T extends IItem> {
   getWrapperComponent?: () => React.ElementType;
   getWrapperProps?: () => Partial<ViewProps> | ViewProps | null;
   isSelectionDisabled?: (selected: any[], current: any) => boolean;
-  filterItems?: (items: T[]) => T[];
+  filterItems?: FilterItems<any>;
   closeIcon?: React.ElementType;
 }
 
@@ -239,7 +243,9 @@ export class Select<T extends IItem, S extends ISelectState<T> = ISelectState<T>
         item={item}
         isSelected={this._isSelected(item)}
         onPress={() => this._onTouchItem(item)}
-        titleRenderer={() => (this.props.titleRenderer ? this.props.titleRenderer(item) : this._renderTitle(item))}
+        titleRenderer={() => {
+          return this.props.titleRenderer ? this.props.titleRenderer(item) : this._renderTitle(item);
+        }}
       />
     );
   };

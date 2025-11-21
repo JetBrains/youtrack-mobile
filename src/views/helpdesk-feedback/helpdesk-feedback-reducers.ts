@@ -2,14 +2,14 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 import {SET_PROGRESS} from 'actions/action-types';
 
-import {CustomError} from 'types/Error';
-import {FeedbackBlock, FeedbackFormBlockFieldValue} from 'views/helpdesk-feedback/index';
-import {FeedbackForm} from 'types/FeedbackForm';
-import {ISelectWithCustomInput} from 'components/select/select-with-custom-input';
-import {ProjectHelpdesk} from 'types/Project';
+import type {AnyError, CustomError} from 'types/Error';
+import type {FeedbackBlock, FeedbackFormBlockFieldValue} from 'views/helpdesk-feedback/index';
+import type {FeedbackForm} from 'types/FeedbackForm';
+import type {ISelectWithCustomInput} from 'components/select/select-with-custom-input';
+import type {ProjectHelpdesk} from 'types/Project';
 
 export interface HelpDeskFeedbackFormState {
-  error: CustomError | null;
+  error: CustomError | AnyError | null;
   form: FeedbackForm | null;
   formBlocks: FeedbackBlock[] | null;
   fieldValues: Array<FeedbackFormBlockFieldValue> | null;
@@ -46,7 +46,7 @@ const {reducer, actions} = createSlice({
       state.selectProps = action.payload;
     },
 
-    setError(state: HelpDeskFeedbackFormState, action: PayloadAction<CustomError | null>) {
+    setError(state: HelpDeskFeedbackFormState, action: PayloadAction<CustomError | AnyError | null>) {
       state.error = action.payload;
     },
 
