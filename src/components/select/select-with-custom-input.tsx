@@ -2,27 +2,29 @@ import React from 'react';
 
 import {TextInput, View} from 'react-native';
 
-import Select, {ISelectProps, ISelectState} from 'components/select/select';
+import Select from 'components/select/select';
+
+import type {IItem, ISelectProps, ISelectState} from 'components/select/select';
 
 import styles from 'components/select/select.styles';
 
-export interface ISelectWithCustomInput extends ISelectProps {
+export interface ISelectWithCustomInput<T extends IItem = IItem> extends ISelectProps<T> {
   customInput?: string | undefined;
   customInputPlaceholder?: string;
   customInputValidator?: RegExp | ((v: string) => boolean) | null;
 }
 
-export default class SelectWithCustomInput extends Select<
-  ISelectWithCustomInput,
-  ISelectState & {customInput?: string, customInputError: boolean}
+export default class SelectWithCustomInput<T extends IItem = IItem> extends Select<
+  T,
+  ISelectState<T> & {customInput?: string; customInputError: boolean}
 > {
-  constructor(props: ISelectWithCustomInput) {
+  constructor(props: ISelectWithCustomInput<T>) {
     super(props);
     this.state = {...this.state, customInput: props.customInput, customInputError: false};
   }
 
   renderInputValueItem() {
-    const {onSelect, customInputValidator, customInputPlaceholder} = this.props;
+    const {onSelect, customInputValidator, customInputPlaceholder} = this.props as ISelectWithCustomInput<T>;
     const {customInput, customInputError} = this.state;
     return customInput !== undefined ? (
       <View>
