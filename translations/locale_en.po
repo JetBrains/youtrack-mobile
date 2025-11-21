@@ -518,11 +518,11 @@ msgstr "Email address"
 msgid "Email address for follow-up"
 msgstr "Email address for follow-up"
 
-#: src/components/command-dialog/command-dialog.tsx:94
+#: src/components/command-dialog/command-dialog.tsx:97
 msgid "Enter command"
 msgstr "Enter command"
 
-#: src/components/query-assist/query-assist.tsx:180
+#: src/components/query-assist/query-assist.tsx:159
 #: src/components/query-assist/query-preview.tsx:24
 msgid "Enter search request"
 msgstr "Enter search request"
@@ -555,7 +555,7 @@ msgstr "Filter boards by name"
 msgid "Filter existing accounts by name or username"
 msgstr "Filter existing accounts by name or username"
 
-#: src/components/select/select.tsx:328
+#: src/components/select/select.tsx:334
 msgid "Filter items"
 msgstr "Filter items"
 
@@ -700,7 +700,7 @@ msgstr "Link to comment copied"
 msgid "Linked issues"
 msgstr "Linked issues"
 
-#: src/components/select/select.tsx:285
+#: src/components/select/select.tsx:291
 msgid "Loading values…"
 msgstr "Loading values…"
 
@@ -818,7 +818,7 @@ msgstr "No favorites projects found"
 msgid "No issues found"
 msgstr "No issues found"
 
-#: src/components/select/select.tsx:289
+#: src/components/select/select.tsx:295
 msgid "No items"
 msgstr "No items"
 
