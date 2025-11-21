@@ -8,9 +8,6 @@ export default EStyleSheet.create({
   container: {
     flex: 1,
   },
-  modal: {
-    height: '100%',
-  },
   suggestContainer: {
     flex: 1,
     flexGrow: 1,

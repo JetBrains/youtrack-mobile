@@ -1,6 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 
+import ModalPortal from 'components/modal-view/modal-portal';
 import QueryAssist, {QueryAssistModal} from './query-assist';
 import {isSplitView} from 'components/responsive/responsive-helper';
 
@@ -25,16 +26,18 @@ const QueryAssistPanel = (props: Props): React.JSX.Element => {
   const Component = isSplitView() ? QueryAssistModal : QueryAssist;
 
   return (
-    <View style={props.style}>
-      <Component
-        suggestions={props.queryAssistSuggestions}
-        currentQuery={props.query}
-        onChange={loadSuggests}
-        onApplyQuery={applyQuery}
-        onClose={props.onClose}
-        clearButtonMode={props.clearButtonMode}
-      />
-    </View>
+    <ModalPortal onHide={() => {}} popup>
+      <View style={props.style}>
+        <Component
+          suggestions={props.queryAssistSuggestions}
+          currentQuery={props.query}
+          onChange={loadSuggests}
+          onApplyQuery={applyQuery}
+          onClose={props.onClose}
+          clearButtonMode={props.clearButtonMode}
+        />
+      </View>
+    </ModalPortal>
   );
 };
 

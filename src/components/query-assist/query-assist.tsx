@@ -10,6 +10,7 @@ import QueryAssistSuggestionsList from './query-assist__suggestions-list';
 import {HIT_SLOP} from 'components/common-styles/button';
 import {i18n} from 'components/i18n/i18n';
 import {IconBack, IconClose} from 'components/icon/icon';
+import {KeyboardWrapper} from 'components/keyboard/keboard-wrapper';
 
 import styles from './query-assist.styles';
 
@@ -35,8 +36,7 @@ interface State {
 
 
 export class QueryAssist<P extends Props, S extends State> extends React.PureComponent<P, S> {
-  searchInput: TextInput | undefined;
-  queryAssistContainer: Record<string, any> | null | undefined;
+  private searchInputRef: React.RefObject<TextInput> = React.createRef<TextInput>();
   lastQueryParams: {
     query: string;
     caret: number;
@@ -79,11 +79,11 @@ export class QueryAssist<P extends Props, S extends State> extends React.PureCom
   };
 
   blurInput() {
-    this.searchInput?.blur?.();
+    this.searchInputRef.current?.blur?.();
   }
 
   focusInput() {
-    this.searchInput?.focus?.();
+    this.searchInputRef.current?.focus?.();
   }
 
   cancelSearch() {
@@ -134,8 +134,8 @@ export class QueryAssist<P extends Props, S extends State> extends React.PureCom
     this.setState({
       inputValue: newQuery,
     });
-    this.focusInput();
     this.props.onChange(newQuery, leftPartAndNewQuery.length);
+    setTimeout(() => this.focusInput(), 0);
   };
   onApplySavedQuery: (savedQuery: Folder) => void = (
     savedQuery: Folder,
@@ -172,7 +172,7 @@ export class QueryAssist<P extends Props, S extends State> extends React.PureCom
         </TouchableOpacity>
 
         <TextInput
-          ref={this.searchInput}
+          ref={this.searchInputRef}
           testID="test:id/query-assist-input"
           accessible={true}
           style={styles.searchInputWithMinHeight}
@@ -230,9 +230,11 @@ export class QueryAssist<P extends Props, S extends State> extends React.PureCom
 
   render() {
     return (
-      <ModalView visible={true} animationType="fade" style={styles.modal}>
-        {this._renderInput()}
-        {this._renderSuggestions()}
+      <ModalView animationType="fade" style={styles.container}>
+        <KeyboardWrapper>
+          {this._renderInput()}
+          {this._renderSuggestions()}
+        </KeyboardWrapper>
       </ModalView>
     );
   }
@@ -273,8 +275,10 @@ export class QueryAssistModal extends QueryAssist<Props, State & { visible: bool
   render() {
     return (
       <ModalPortal onHide={this.onClose}>
-        {this._renderInput()}
-        {this._renderSuggestions()}
+        <KeyboardWrapper isInModal={true}>
+          {this._renderInput()}
+          {this._renderSuggestions()}
+        </KeyboardWrapper>
       </ModalPortal>
     );
   }

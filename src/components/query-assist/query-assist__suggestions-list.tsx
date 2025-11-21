@@ -74,8 +74,7 @@ export default class QueryAssistSuggestionsList extends Component<Props, void> {
           testID="test:id/selectItem"
           accessibilityLabel="selectItem"
           accessible={false}
-          keyboardShouldPersistTaps="handled"
-          keyboardDismissMode="on-drag"
+          keyboardShouldPersistTaps="always"
           scrollEventThrottle={10}
           sections={suggestions}
           keyExtractor={uuid}
