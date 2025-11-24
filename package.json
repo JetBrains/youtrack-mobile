@@ -52,6 +52,7 @@
     "@react-native-masked-view/masked-view": "^0.3.1",
     "@reduxjs/toolkit": "1.7.2",
     "@sentry/react-native": "^6.18.1",
+    "auto-bind": "^5.0.1",
     "base64-js": "1.5.1",
     "cssfilter": "^0.0.10",
     "date-fns": "^2.29.3",

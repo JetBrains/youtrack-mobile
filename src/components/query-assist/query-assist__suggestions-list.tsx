@@ -8,13 +8,14 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
+import autoBind from 'auto-bind';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import Select from 'components/select/select';
 import {mainText, secondaryText, UNIT} from 'components/common-styles';
 import {uuid} from 'util/util';
 
-import type {AssistSuggest, TransformedSuggestion} from 'types/Issue';
+import type {AssistSuggest, TransformedSuggestion, UsedQuery} from 'types/Issue';
 import type {SectionListData} from 'react-native/Libraries/Lists/SectionList';
 import type {ViewStyleProp} from 'types/Internal';
 
@@ -22,18 +23,33 @@ interface Props {
   style?: ViewStyleProp;
   suggestions: AssistSuggest[];
   onApplySuggestion: (suggestion: TransformedSuggestion) => void;
-  onApplySavedQuery: (savedQuery?: TransformedSuggestion) => void;
+  onApplySavedQuery: (query: string) => void;
 }
 
-export default class QueryAssistSuggestionsList extends Component<Props, void> {
-  onApplySuggestion = (suggestion: TransformedSuggestion) => {
-    const isSuggestion = suggestion.caret;
-    const {onApplySuggestion, onApplySavedQuery} = this.props;
-    return isSuggestion ? onApplySuggestion(suggestion) : onApplySavedQuery(suggestion);
-  };
+export default class QueryAssistSuggestionsList extends Component<Props, Readonly<{}>> {
+  constructor(props: Props) {
+    super(props);
+    autoBind(this);
+  }
 
-  renderRow = ({item}: {item: TransformedSuggestion}) => {
-    const isSuggestion = item.caret;
+  onApplySuggestion(suggestion: TransformedSuggestion | UsedQuery) {
+    const {onApplySuggestion, onApplySavedQuery} = this.props;
+    if ('caret' in suggestion && suggestion.caret >= 0) {
+      onApplySuggestion(suggestion);
+    }
+    if ('query' in suggestion) {
+      onApplySavedQuery(suggestion.query);
+    }
+  }
+
+  renderRow({item}: {item: TransformedSuggestion | UsedQuery}) {
+    let label = '';
+    if ('caret' in item && item.caret >= 0) {
+      label = item.option;
+    } else if ('query' in item) {
+      label = item.name;
+    }
+
     return (
       <TouchableOpacity
         style={styles.searchRow}
@@ -43,13 +59,13 @@ export default class QueryAssistSuggestionsList extends Component<Props, void> {
         accessible={false}
       >
         <Text style={styles.searchText} testID="test:id/suggestRowText">
-          {isSuggestion ? item.option : item.name}
+          {label}
         </Text>
       </TouchableOpacity>
     );
-  };
+  }
 
-  renderSectionHeader = ({section}: {section: SectionListData<AssistSuggest>}) => {
+  renderSectionHeader({section}: {section: SectionListData<AssistSuggest>}) {
     if (section.title) {
       return (
         <View style={styles.sectionHeader}>
@@ -57,7 +73,7 @@ export default class QueryAssistSuggestionsList extends Component<Props, void> {
         </View>
       );
     }
-  };
+  }
 
   render() {
     const {suggestions, style} = this.props;

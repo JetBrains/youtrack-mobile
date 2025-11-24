@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, TouchableOpacity, TextInput} from 'react-native';
 
+import autoBind from 'auto-bind';
 import debounce from 'lodash.debounce';
 import {View as AnimatedView} from 'react-native-animatable';
 
@@ -15,16 +16,15 @@ import {KeyboardWrapper} from 'components/keyboard/keboard-wrapper';
 import styles from './query-assist.styles';
 
 import type {AssistSuggest, TransformedSuggestion} from 'types/Issue';
-import type {Folder} from 'types/User';
 
 const SHOW_LIST_ANIMATION_DURATION = 500;
 
 interface Props {
   suggestions: AssistSuggest[];
   currentQuery: string;
-  onApplyQuery: (query: string) => any;
-  onChange: (query: string, caret: number) => any;
-  onClose: (query: string) => any;
+  onApplyQuery: (query: string) => void;
+  onChange: (query: string, caret: number) => void;
+  onClose: (query: string) => void;
 }
 
 interface State {
@@ -36,7 +36,7 @@ interface State {
 
 export class QueryAssist<P extends Props, S extends State> extends React.PureComponent<P, S> {
   private searchInputRef: React.RefObject<TextInput> = React.createRef<TextInput>();
-  private lastQueryParams: {query: string; caret: number;} = {
+  private lastQueryParams: {query: string; caret: number} = {
     query: '',
     caret: 0,
   };
@@ -49,6 +49,7 @@ export class QueryAssist<P extends Props, S extends State> extends React.PureCom
 
   constructor(props: P) {
     super(props);
+    autoBind(this);
     this.state = Object.assign({}, this.initialState) as S;
   }
 
@@ -62,9 +63,9 @@ export class QueryAssist<P extends Props, S extends State> extends React.PureCom
     this.props.onChange(query, caret);
   }, 100);
 
-  resetState = () => {
+  resetState() {
     this.setState(this.initialState);
-  };
+  }
 
   blurInput() {
     this.searchInputRef.current?.blur?.();
@@ -91,10 +92,10 @@ export class QueryAssist<P extends Props, S extends State> extends React.PureCom
     this.props.onChange(inputValue, inputValue.length);
   }
 
-  onSubmitEditing = () => {
+  onSubmitEditing() {
     this.blurInput();
     this.props.onApplyQuery(this.state.inputValue || '');
-  };
+  }
 
   UNSAFE_componentWillReceiveProps(newProps: Props) {
     if (newProps.currentQuery !== this.props.currentQuery) {
@@ -110,7 +111,7 @@ export class QueryAssist<P extends Props, S extends State> extends React.PureCom
     });
   }
 
-  onApplySuggestion: (suggestion: TransformedSuggestion) => void = (suggestion: TransformedSuggestion) => {
+  onApplySuggestion(suggestion: TransformedSuggestion) {
     const suggestionText = `${suggestion.prefix}${suggestion.option}${suggestion.suffix}`;
     const oldQuery = this.state.inputValue || '';
     const leftPartAndNewQuery = oldQuery.substring(0, suggestion.completionStart) + suggestionText;
@@ -120,24 +121,24 @@ export class QueryAssist<P extends Props, S extends State> extends React.PureCom
     });
     this.props.onChange(newQuery, leftPartAndNewQuery.length);
     setTimeout(() => this.focusInput(), 0);
-  };
+  }
 
-  onApplySavedQuery = (savedQuery: Folder) => {
-    this.setState({inputValue: savedQuery.query});
+  onApplySavedQuery(query: string) {
+    this.setState({inputValue: query});
     this.blurInput();
-    this.props.onApplyQuery(savedQuery.query);
-  };
+    this.props.onApplyQuery(query);
+  }
 
-  onClose = () => {
+  onClose() {
     this.cancelSearch();
     this.props.onClose(this.state.inputValue);
-  };
+  }
 
   renderCloseButton() {
     return <IconBack color={styles.link.color} />;
   }
 
-  _renderInput() {
+  renderInput() {
     const {inputValue} = this.state;
     return (
       <View style={[styles.inputWrapper, styles.inputWrapperActive]}>
@@ -183,7 +184,7 @@ export class QueryAssist<P extends Props, S extends State> extends React.PureCom
     );
   }
 
-  _renderSuggestions() {
+  renderSuggestions() {
     const {suggestions} = this.props;
     return (
       <AnimatedView
@@ -205,8 +206,8 @@ export class QueryAssist<P extends Props, S extends State> extends React.PureCom
     return (
       <ModalView animationType="fade" style={styles.container}>
         <KeyboardWrapper>
-          {this._renderInput()}
-          {this._renderSuggestions()}
+          {this.renderInput()}
+          {this.renderSuggestions()}
         </KeyboardWrapper>
       </ModalView>
     );
@@ -214,25 +215,26 @@ export class QueryAssist<P extends Props, S extends State> extends React.PureCom
 }
 
 
-export class QueryAssistModal extends QueryAssist<Props, State & { visible: boolean }> {
+export class QueryAssistModal extends QueryAssist<Props, State & {visible: boolean}> {
   constructor(props: Props) {
     super(props);
+    autoBind(this);
     this.state = {...this.state, visible: true};
   }
 
-  onHide = (): void => {
+  onHide() {
     this.setState({
       visible: false,
     });
-  };
+  }
 
   onClose() {
     super.onClose();
     this.onHide();
   }
 
-  onApplySavedQuery(savedQuery: Folder) {
-    super.onApplyQuery(savedQuery.query);
+  onApplySavedQuery(query: string) {
+    super.onApplySavedQuery(query);
     this.onHide();
   }
 
@@ -249,8 +251,8 @@ export class QueryAssistModal extends QueryAssist<Props, State & { visible: bool
     return (
       <ModalPortal onHide={this.onClose}>
         <KeyboardWrapper isInModal={true}>
-          {this._renderInput()}
-          {this._renderSuggestions()}
+          {this.renderInput()}
+          {this.renderSuggestions()}
         </KeyboardWrapper>
       </ModalPortal>
     );
