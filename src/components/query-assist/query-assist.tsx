@@ -57,13 +57,14 @@ export class QueryAssist<P extends Props, S extends State> extends React.PureCom
   }
 
   onSearch = debounce((query: string, caret: number) => {
-    if (this.lastQueryParams.query === query || this.lastQueryParams.caret === caret) {
+    if (this.lastQueryParams.query === query && this.lastQueryParams.caret === caret) {
       return;
     }
 
     this.lastQueryParams = {query, caret};
-    this.setState({inputValue: query, caret});
-    this.props.onChange(query, caret);
+    this.setState({caret});
+    const currentQuery = this.state.inputValue;
+    this.props.onChange(currentQuery, caret);
   }, 100);
 
   resetState() {
