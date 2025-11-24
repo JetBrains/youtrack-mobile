@@ -19,7 +19,7 @@ updateJsonFile('package.json', data => {
   if (!process.env.STAGING) {
     data.config.KONNECTOR_URL = KONNECTOR_URL;
   }
-  data.sentryDsn = SENTRY_DSN;
+  data.config.SENTRY_DSN = SENTRY_DSN;
 
   console.info('Config', data.config); //eslint-disable-line
 
