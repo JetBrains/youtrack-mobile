@@ -262,7 +262,7 @@ const openContextSelect = (): ReduxAction => {
     trackEvent(`${isHelpDeskMode() ? 'Tickets' : 'Issue list'} context select`);
     const api = getApi();
     const currentSearchContext = dispatch(getSearchContext());
-    const searchContextSelectProps: Partial<ISSWithItemActionsProps> & { isSectioned: boolean } = {
+    const searchContextSelectProps: Partial<ISSWithItemActionsProps<Folder>> & { isSectioned: boolean } = {
       isSectioned: true,
       placeholder: i18n('Filter projects, saved searches, and tags'),
       dataSource: async (query: string = ''): Promise<ContextDataSource[]> => {
