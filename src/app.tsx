@@ -3,6 +3,7 @@ import {UIManager} from 'react-native';
 
 import Toast from 'react-native-easy-toast';
 import {ActionSheetProvider, connectActionSheet} from '@expo/react-native-action-sheet';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Notifications, Notification} from 'react-native-notifications';
 import {Provider} from 'react-redux';
 
@@ -216,16 +217,18 @@ class AppContainer extends Component<void, void> {
 
   render() {
     return (
-      <Provider store={store}>
-        <BottomSheetProvider>
-          <>
-            <ActionSheetProvider ref={this.setActionSheetRef} useModal={true}>
-              <AppActionSheetConnected/>
-            </ActionSheetProvider>
-            <Toast ref={toast => toast ? setNotificationComponent(toast) : null}/>
-          </>
-        </BottomSheetProvider>
-      </Provider>
+      <GestureHandlerRootView>
+        <Provider store={store}>
+          <BottomSheetProvider>
+            <>
+              <ActionSheetProvider ref={this.setActionSheetRef} useModal={true}>
+                <AppActionSheetConnected/>
+              </ActionSheetProvider>
+              <Toast ref={toast => toast ? setNotificationComponent(toast) : null}/>
+            </>
+          </BottomSheetProvider>
+        </Provider>
+      </GestureHandlerRootView>
     );
   }
 }
