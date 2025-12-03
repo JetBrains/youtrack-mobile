@@ -27,7 +27,7 @@ index 8ff8469..992c73b 100644
  import ViewTransformer from '../ViewTransformer';
  
 diff --git a/node_modules/react-native-image-gallery/src/libraries/ViewPager/index.js b/node_modules/react-native-image-gallery/src/libraries/ViewPager/index.js
-index b786ad1..8b3446b 100644
+index b786ad1..3a1a558 100644
 --- a/node_modules/react-native-image-gallery/src/libraries/ViewPager/index.js
 +++ b/node_modules/react-native-image-gallery/src/libraries/ViewPager/index.js
 @@ -2,10 +2,10 @@ import React, { PureComponent } from 'react';
@@ -42,3 +42,23 @@ index b786ad1..8b3446b 100644
  import PropTypes from 'prop-types';
  import Scroller from '../Scroller';
  import { createResponder } from '../GestureResponder';
+diff --git a/node_modules/react-native-image-gallery/src/libraries/ViewTransformer/index.js b/node_modules/react-native-image-gallery/src/libraries/ViewTransformer/index.js
+index f919e99..9e6c48b 100644
+--- a/node_modules/react-native-image-gallery/src/libraries/ViewTransformer/index.js
++++ b/node_modules/react-native-image-gallery/src/libraries/ViewTransformer/index.js
+@@ -1,5 +1,5 @@
+ import React from 'react';
+-import ReactNative, { View, Animated, Easing, NativeModules } from 'react-native';
++import ReactNative, { View, Animated, Easing, UIManager } from 'react-native';
+ import Scroller from '../Scroller';
+ import PropTypes from 'prop-types';
+ import { createResponder } from '../GestureResponder';
+@@ -162,7 +162,7 @@ export default class ViewTransformer extends React.Component {
+ 
+     measureLayout () {
+         let handle = ReactNative.findNodeHandle(this.refs['innerViewRef']);
+-        NativeModules.UIManager.measure(handle, (x, y, width, height, pageX, pageY) => {
++        UIManager.measure(handle, (x, y, width, height, pageX, pageY) => {
+             if (typeof pageX === 'number' && typeof pageY === 'number') { // avoid undefined values on Android devices
+                 if (this.state.pageX !== pageX || this.state.pageY !== pageY) {
+                     this.setState({ pageX: pageX, pageY: pageY });
