@@ -216,7 +216,7 @@ msgstr "Boards"
 msgid "Browser"
 msgstr "Browser"
 
-#: src/views/log-in/log-in.tsx:294
+#: src/views/log-in/log-in.tsx:297
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr "By logging in, you agree to the Privacy Policy."
 
@@ -704,15 +704,15 @@ msgstr "Linked issues"
 msgid "Loading values…"
 msgstr "Loading values…"
 
-#: src/views/log-in/log-in.tsx:264
+#: src/views/log-in/log-in.tsx:267
 msgid "Log in"
 msgstr "Log in"
 
-#: src/views/log-in/log-in.tsx:188
+#: src/views/log-in/log-in.tsx:191
 msgid "Log in to YouTrack"
 msgstr "Log in to YouTrack"
 
-#: src/views/log-in/log-in.tsx:317
+#: src/views/log-in/log-in.tsx:320
 msgid "Log in with Browser"
 msgstr "Log in with Browser"
 
@@ -855,7 +855,7 @@ msgstr "Other"
 msgid "Other groups and teams"
 msgstr "Other groups and teams"
 
-#: src/views/log-in/log-in.tsx:227
+#: src/views/log-in/log-in.tsx:230
 msgid "Password"
 msgstr "Password"
 
@@ -1325,7 +1325,7 @@ msgstr "Use fewer search parameters"
 msgid "User account is banned"
 msgstr "User account is banned"
 
-#: src/views/log-in/log-in.tsx:204
+#: src/views/log-in/log-in.tsx:207
 msgid "Username or email"
 msgstr "Username or email"
 
@@ -1411,7 +1411,7 @@ msgstr "You don’t have any unread notifications"
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
 msgstr "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
 
-#: src/views/log-in/log-in.tsx:285
+#: src/views/log-in/log-in.tsx:288
 msgid ""
 "You need a YouTrack account to use the app.\n"
 ""
