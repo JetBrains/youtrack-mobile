@@ -108,7 +108,7 @@
     "react-native-safe-area-context": "5.0.0",
     "react-native-screens": "4.16.0",
     "react-native-skeleton-placeholder": "^5.2.4",
-    "react-native-svg": "^15.3.0",
+    "react-native-svg": "15.12.1",
     "react-native-svg-transformer": "^1.4.0",
     "react-native-swiper": "1.6.0",
     "react-native-switch-pro": "1.0.5",

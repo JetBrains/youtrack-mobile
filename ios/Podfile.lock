@@ -2067,7 +2067,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - Sentry/HybridSDK (= 8.53.2)
     - Yoga
-  - RNSVG (15.10.1):
+  - RNSVG (15.12.1):
     - React-Core
   - RNVectorIcons (10.2.0):
     - DoubleConversion
@@ -2526,7 +2526,7 @@ SPEC CHECKSUMS:
   RNReanimated: a9ca924b8236f08843994cb0067e44268b6cf3a2
   RNScreens: 1d84139259b7999ee93e00764556a9042d43d0b5
   RNSentry: 809d60a292df5caa54010c019368f9a2b5505b85
-  RNSVG: 3421710ac15f4f2dc47e5c122f2c2e4282116830
+  RNSVG: 2e59e14c2723a1967cd1bba71038a59142cbc616
   RNVectorIcons: 68661e35101c98d574fa61a326d2043aec3e049a
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
