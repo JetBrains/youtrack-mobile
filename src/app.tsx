@@ -217,7 +217,7 @@ class AppContainer extends Component<void, void> {
 
   render() {
     return (
-      <GestureHandlerRootView>
+      <GestureHandlerRootView style={{flex: 1}}>
         <Provider store={store}>
           <BottomSheetProvider>
             <>

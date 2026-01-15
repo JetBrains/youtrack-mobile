@@ -38,6 +38,7 @@ class Router {
 
   _navigator: Navigator | undefined;
   _currentRoute: NavigationNavigateActionPayload | null = null;
+  _pendingNavigation: (() => void) | null = null;
   rootRoutes: Array<string> = [];
   onDispatchCallbacks: Array<(...args: any[]) => any> = [];
   routes: {[routeName: string]: AppRoute} = {};
@@ -46,6 +47,11 @@ class Router {
 
   setNavigator = (navigator: Navigator) => {
     this._navigator = navigator;
+    // Process any pending navigation that was queued before navigator was ready
+    if (this._pendingNavigation) {
+      this._pendingNavigation();
+      this._pendingNavigation = null;
+    }
   };
 
   getTransitionConfig = () => {
@@ -105,12 +111,15 @@ class Router {
 
   navigate(routeName: string, props: Record<string, any>, {forceReset = false} = {}) {
     log.info(`Router(navigate): -> ${routeName}`);
-    if (!this._navigator) {
-      throw 'Router(navigate): call setNavigator(navigator) first!';
-    }
 
     if (!this.routes[routeName]) {
       throw `no such route ${routeName}`;
+    }
+
+    if (!this._navigator) {
+      log.info(`Router(navigate): navigator not ready, queueing navigation to ${routeName}`);
+      this._pendingNavigation = () => this.navigate(routeName, props, {forceReset});
+      return;
     }
 
     if (this.rootRoutes.includes(routeName) || props?.store === true) {
