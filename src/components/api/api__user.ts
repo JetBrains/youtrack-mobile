@@ -3,7 +3,14 @@ import issueFields from './api__issue-fields';
 import {ResourceTypes} from './api__resource-types';
 
 import type Auth from '../auth/oauth2';
-import type {Folder, User, UserAppearanceProfile, UserHelpdeskProfile} from 'types/User';
+import {
+  Folder,
+  User,
+  UserAppearanceProfile,
+  UserHelpdeskProfile,
+  YtCurrentUser,
+  YtCurrentUserWithRelatedGroup,
+} from 'types/User';
 import type {IssueComment} from 'types/CustomFields';
 import type {Reaction} from 'types/Reaction';
 
@@ -48,28 +55,14 @@ export default class UserAPI extends ApiBase {
 
   constructor(auth: Auth) {
     super(auth);
-    this.apiUrl = `${this.youTrackApiUrl}${
-      this.isActualAPI ? '' : '/admin'
-    }/users`;
+    this.apiUrl = `${this.youTrackApiUrl}${this.isActualAPI ? '' : '/admin'}/users`;
   }
 
-  async getUserCard(userId: string): Promise<User> {
-    return this.getUser(userId, 'avatarUrl,email,fullName,login,issueRelatedGroup(icon)');
-  }
-  async getUser(userId: string = 'me', fields?: string): Promise<User> {
-    const queryString = ApiBase.createFieldsQuery(fields ? [fields] : [
-      'id',
-      'ringId',
-      'avatarUrl',
-      'login',
-      'guest',
-      'fullName',
-      'userType(id)',
-      {
-        profiles: userProfiles,
-      },
-    ]);
-    const user: User = await this.makeAuthorizedRequest(`${this.apiUrl}/${userId}?${queryString}`);
+  async getUserCard(userId: string): Promise<YtCurrentUserWithRelatedGroup> {
+    const user = await this.getUser<YtCurrentUserWithRelatedGroup>(
+      userId,
+      'avatarUrl,email,fullName,login,issueRelatedGroup(icon)',
+    );
     if (user?.issueRelatedGroup?.icon) {
       user.issueRelatedGroup.icon = this.convertToAbsURL(user.issueRelatedGroup.icon);
     }
@@ -79,11 +72,30 @@ export default class UserAPI extends ApiBase {
     };
   }
 
+  async getUser<T = YtCurrentUser>(userId: string = 'me', fields?: string): Promise<T> {
+    const queryString = ApiBase.createFieldsQuery(
+      fields
+        ? [fields]
+        : [
+            'id',
+            'ringId',
+            'avatarUrl',
+            'login',
+            'guest',
+            'fullName',
+            'userType(id)',
+            {
+              profiles: userProfiles,
+            },
+            {featureFlags: ['id', 'enabled']},
+          ],
+    );
+    return this.makeAuthorizedRequest(`${this.apiUrl}/${userId}?${queryString}`);
+  }
+
   async getUserFolders(folderId: string = '', fields?: string[]): Promise<Folder[]> {
     const queryString = ApiBase.createFieldsQuery(fields || issueFields.issueFolder);
-    return await this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/userIssueFolders/${folderId}?${queryString}`,
-    );
+    return await this.makeAuthorizedRequest(`${this.youTrackApiUrl}/userIssueFolders/${folderId}?${queryString}`);
   }
 
   async updateUserAppearanceProfile(
