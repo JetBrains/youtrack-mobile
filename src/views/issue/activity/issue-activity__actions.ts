@@ -17,10 +17,10 @@ import {WORK_ITEM_CREATE, WORK_ITEM_UPDATE} from 'components/issue-permissions/i
 import type Api from 'components/api/api';
 import type {Activity, ActivityType} from 'types/Activity';
 import type {AnyIssue, IssueOnListProject} from 'types/Issue';
-import type {DraftWorkItem, ProjectTimeTrackingSettings, TimeTracking} from 'types/Work';
+import type {DraftWorkItem, TimeTracking} from 'types/Work';
 import type {Entity} from 'types/Entity';
 import type {IssueState} from 'views/issue/issue-base-reducer';
-import type {Project, ProjectTeam} from 'types/Project';
+import type {Project, ProjectTeam, ProjectTimeTrackingSettings} from 'types/Project';
 import type {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
 import type {User} from 'types/User';
 import type {WorkItem} from 'types/Work';

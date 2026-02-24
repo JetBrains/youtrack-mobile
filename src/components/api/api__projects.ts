@@ -2,8 +2,7 @@ import ApiBase from './api__base';
 import {USER_GROUP_FIELDS} from 'components/api/api__issue-fields';
 
 import type Auth from '../auth/oauth2';
-import type {Project, ProjectTeam, ProjectWithTeam} from 'types/Project';
-import type {ProjectTimeTrackingSettings} from 'types/Work';
+import type {Project, ProjectTeam, ProjectTimeTrackingSettings, ProjectWithTeam} from 'types/Project';
 
 export default class ProjectsAPI extends ApiBase {
   projectsURL: string = `${this.youTrackApiUrl}/admin/projects`;

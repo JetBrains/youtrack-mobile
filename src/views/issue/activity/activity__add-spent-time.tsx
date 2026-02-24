@@ -34,12 +34,12 @@ import type {User} from 'types/User';
 import type {ViewStyleProp} from 'types/Internal';
 import type {
   DraftWorkItem,
-  ProjectTimeTrackingSettings,
   WorkItem,
   WorkItemAttribute,
   WorkItemAttributeValue,
   WorkItemType,
 } from 'types/Work';
+import {ProjectTimeTrackingSettings} from 'types/Project';
 
 interface Props {
   issue: IssueFull;

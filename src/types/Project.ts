@@ -1,5 +1,5 @@
-import {EntityBase} from 'types/Entity';
-import {WorkItemType} from 'types/Work';
+import type {EntityBase} from 'types/Entity';
+import type {WorkItemAttributeValue, WorkItemType} from 'types/Work';
 
 export interface ProjectTimeTrackingTimeSpent {
   id: string;
@@ -39,16 +39,25 @@ export interface ProjectBase extends ProjectEntity {
   template: boolean;
 }
 
+export interface ProjectTimeTrackingSettings {
+  enabled: boolean;
+  timeSpent: ProjectTimeTrackingTimeSpent;
+  workItemTypes: WorkItemType[];
+  attributes: Array<{
+    id: string;
+    name: string;
+    values: WorkItemAttributeValue[];
+  }>;
+}
+
+export interface ProjectPlugins {
+  helpDeskSettings: ProjectHelpDeskSettingsBase;
+  timeTrackingSettings?: ProjectTimeTrackingSettings;
+}
+
 export interface Project extends ProjectBase {
   pinned: boolean;
-  plugins?: {
-    helpDeskSettings?: ProjectHelpDeskSettingsBase;
-    timeTrackingSettings?: {
-      enabled: boolean;
-      timeSpent?: ProjectTimeTrackingTimeSpent;
-      workItemTypes?: WorkItemType[];
-    };
-  };
+  plugins?: ProjectPlugins;
 }
 
 export interface UserProject extends ProjectEntity {

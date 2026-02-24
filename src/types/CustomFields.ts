@@ -1,5 +1,5 @@
 import type {ColorCoding} from 'components/color-field/color-field';
-import type {Entity, EntityBase} from 'types/Entity';
+import type {EntityBase, EntityWithProject} from 'types/Entity';
 import type {IssueFull, IssueOnListExtended} from './Issue';
 import type {Mentions} from 'components/wiki/markdown-view-rules';
 import type {Reaction} from './Reaction';
@@ -208,7 +208,7 @@ export type IssueLink = {
 };
 
 export interface DraftCommentData {
-  entity: Entity;
+  entity: EntityWithProject;
   getCommentDraft: () => Promise<IssueComment | null>,
   setDraft: Function;
 }
