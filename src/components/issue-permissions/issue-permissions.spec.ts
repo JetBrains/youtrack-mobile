@@ -17,10 +17,10 @@ import {issuePermissionsNull} from './issue-permissions-helper';
 
 import PermissionsStore from 'components/permissions-store/permissions-store';
 import {CustomField, IssueComment} from 'types/CustomFields';
-import {Entity} from 'types/Entity';
+import {EntityWithProject, EntityWithReporter} from 'types/Entity';
 import {IssueOnListExtended} from 'types/Issue';
 import {PermissionCacheItem} from 'types/Permission';
-import {Project, ProjectTimeTrackingTimeSpent} from 'types/Project';
+import {Project, ProjectPlugins, ProjectTimeTrackingTimeSpent} from 'types/Project';
 import {User, UserHelpdeskProfile} from 'types/User';
 
 describe('IssuePermissions', function () {
@@ -29,7 +29,7 @@ describe('IssuePermissions', function () {
   let currentUserMock: User;
   let issuePermissions: IssuePermissions;
   let permissionsStore: PermissionsStore;
-  let issueMock: any;
+  let issueMock: EntityWithReporter;
   let commentMock: IssueComment;
   let fieldMock: CustomField;
   let permissionItemMock: PermissionCacheItem;
@@ -48,14 +48,15 @@ describe('IssuePermissions', function () {
         ringId: USER_ID,
       } as User,
       project: {
+        id: 'project',
         ringId: PROJECT_ID,
         plugins: {
           timeTrackingSettings: {
             enabled: false,
           },
-        },
+        } as ProjectPlugins,
       },
-    } as IssueOnListExtended;
+    };
     commentMock = {
       author: {
         ringId: USER_ID,
@@ -113,11 +114,11 @@ describe('IssuePermissions', function () {
     });
 
     it('should return NULL if a param has no `project` field', () => {
-      expect(IssuePermissions.getIssueProjectRingId({} as Entity)).toBeNull();
+      expect(IssuePermissions.getIssueProjectRingId({} as EntityWithProject)).toBeNull();
     });
 
     it('should return NULL if a param has no `ringId` field', () => {
-      expect(IssuePermissions.getIssueProjectRingId({project: {}} as Entity)).toBeNull();
+      expect(IssuePermissions.getIssueProjectRingId({project: {}} as EntityWithProject)).toBeNull();
     });
 
     it('should return issue project `ringId` field', () => {
@@ -126,7 +127,7 @@ describe('IssuePermissions', function () {
           project: {
             ringId: USER_ID,
           },
-        } as Entity)
+        } as EntityWithProject)
       ).toEqual(USER_ID);
     });
   });
@@ -134,7 +135,7 @@ describe('IssuePermissions', function () {
 
   describe('isCurrentUser', () => {
     it('should return FALSE if a parameter is not provided', () => {
-      expect(issuePermissions.isCurrentUser()).toEqual(false);
+      expect(issuePermissions.isCurrentUser(undefined as any)).toEqual(false);
     });
 
     it('should return FALSE if `ringId` field is missing', () => {
@@ -157,7 +158,7 @@ describe('IssuePermissions', function () {
 
   describe('_canUpdatePublicField', () => {
     it('should return false if issue parameter is not passed', () => {
-      expect(issuePermissions._canUpdatePublicField(null)).toEqual(false);
+      expect(issuePermissions._canUpdatePublicField(undefined as any)).toEqual(false);
     });
   });
 
@@ -207,7 +208,7 @@ describe('IssuePermissions', function () {
 
   describe('isSameAuthor', () => {
     it('should return FALSE if the passed param has no `user`', () => {
-      expect(issuePermissions.isCurrentUser()).toEqual(false);
+      expect(issuePermissions.isCurrentUser(undefined as any)).toEqual(false);
     });
 
     it('should return TRUE if user has the same `id` as the current user', () => {
@@ -504,7 +505,7 @@ describe('IssuePermissions', function () {
       });
     });
 
-    const entity = {project: {id: '1'}} as Entity;
+    const entity = {project: {id: '1'}, reporter: {id: 'reporter'}} as EntityWithReporter;
 
     describe('canCommentPublicly', () => {
       it('should returns TRUE if it is no a helpdesk project', () => {
@@ -516,7 +517,7 @@ describe('IssuePermissions', function () {
       it('should returns TRUE if there is no project in the entity', () => {
         setIsHelpdeskProject(false);
 
-        expect(issuePermissions.canCommentPublicly({} as Entity)).toEqual(true);
+        expect(issuePermissions.canCommentPublicly({} as unknown as EntityWithReporter)).toEqual(true);
       });
 
       it('should returns TRUE if the user is in the reporters list of projects', () => {
@@ -533,7 +534,7 @@ describe('IssuePermissions', function () {
         expect(issuePermissions.canCommentPublicly(entity)).toEqual(true);
       });
 
-      it('should returns FALSE if the user neither in agents nor in the reporters list of projects', () => {
+      it('should returns FALSE if the user is not in the agent or reporter in the project', () => {
         setIsHelpdeskProject(true);
         jest.spyOn(issuePermissions, 'isAgentInProject').mockReturnValueOnce(false);
         jest.spyOn(issuePermissions, 'isReporterInProject').mockReturnValueOnce(false);

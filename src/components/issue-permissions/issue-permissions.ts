@@ -2,12 +2,12 @@ import {isHelpdeskProject} from 'components/helpdesk';
 
 import type {Article} from 'types/Article';
 import type {Attachment, CustomField, IssueComment} from 'types/CustomFields';
+import type {BaseEntity, BaseEntityWithRingId, EntityWithProject, EntityWithReporter} from 'types/Entity';
 import type {PermissionsStore} from '../permissions-store/permissions-store';
-import type {User, UserHelpdeskProfile} from 'types/User';
+import type {Project} from 'types/Project';
+import type {UserCurrent} from 'types/User';
+import type {UserHelpdeskProfile} from 'types/User';
 import type {WorkItem} from 'types/Work';
-import {Entity, EntityWithProject} from 'types/Entity';
-import {Project} from 'types/Project';
-import {UserCurrent} from 'types/User';
 
 export const CREATE_ISSUE = 'JetBrains.YouTrack.CREATE_ISSUE';
 export const READ_ISSUE = 'JetBrains.YouTrack.READ_ISSUE';
@@ -49,7 +49,7 @@ export default class IssuePermissions {
   permissionsStore: PermissionsStore;
   currentUser: UserCurrent;
 
-  constructor(permissionsStore: PermissionsStore, currentUser: User) {
+  constructor(permissionsStore: PermissionsStore, currentUser: UserCurrent) {
     this.permissionsStore = permissionsStore;
     this.currentUser = currentUser;
   }
@@ -75,7 +75,7 @@ export default class IssuePermissions {
     return !!projectRingId && this.permissionsStore.has(permissionName, projectRingId);
   };
 
-  isCurrentUser = (user?: User | null): boolean => {
+  isCurrentUser = (user: BaseEntityWithRingId): boolean => {
     if (!user || !user.ringId || !this.currentUser || !this.currentUser.id) {
       return false;
     }
@@ -87,7 +87,7 @@ export default class IssuePermissions {
     return entity ? this.hasPermissionFor(entity, CREATE_ISSUE) : false;
   };
 
-  canUpdateGeneralInfo = (issue: EntityWithProject | null): boolean => {
+  canUpdateGeneralInfo = (issue: EntityWithReporter | null): boolean => {
     if (!issue) {
       return false;
     }
@@ -96,10 +96,10 @@ export default class IssuePermissions {
       return true;
     }
 
-    return this.isCurrentUser(issue?.reporter) && this.hasPermissionFor(issue, CREATE_ISSUE);
+    return this.isCurrentUser(issue.reporter) && this.hasPermissionFor(issue, CREATE_ISSUE);
   };
 
-  _canUpdatePublicField = (issue: Entity): boolean => {
+  _canUpdatePublicField = (issue: EntityWithReporter): boolean => {
     if (this.isCurrentUser(issue?.reporter) && this.hasPermissionFor(issue, CREATE_ISSUE)) {
       return true;
     }
@@ -124,7 +124,7 @@ export default class IssuePermissions {
     return isSpentTime; // Spent Time field is always disabled to edit – calculating automatically
   };
 
-  canUpdateField = (issue: EntityWithProject, field: CustomField): boolean => {
+  canUpdateField = (issue: EntityWithReporter, field: CustomField): boolean => {
     if (!issue) {
       return false;
     }
@@ -144,16 +144,16 @@ export default class IssuePermissions {
     return this.currentUser?.ytCurrentUser?.profiles?.helpdesk || null;
   };
 
-  isInProject = (project: {id: string}, projects: Array<{id: string}>): boolean => {
-    return projects.some((p: {id: string}) => p.id === project.id);
+  isInProject = (project: BaseEntity, projects: Array<BaseEntity>): boolean => {
+    return projects.some((p: BaseEntity) => p.id === project.id);
   };
 
-  isAgentInProject = (project: {id: string}): boolean => {
+  isAgentInProject = (project: BaseEntity): boolean => {
     const settings = this.getUserProfileHelpdeskSettings();
     return settings ? this.isInProject(project, settings.agentInProjects) : false;
   };
 
-  isReporterInProject = (project: {id: string}): boolean => {
+  isReporterInProject = (project: BaseEntity): boolean => {
     const settings = this.getUserProfileHelpdeskSettings();
     return settings ? this.isInProject(project, settings.reporterInProjects) : false;
   };
@@ -240,7 +240,7 @@ export default class IssuePermissions {
       CAN_CREATE_COMMENT,
     );
 
-  canVote = (issue: Entity): boolean =>
+  canVote = (issue: EntityWithReporter): boolean =>
     !!issue && !!this.currentUser && !this.isCurrentUser(issue?.reporter) && !this.currentUser.guest;
 
   canTag = (issue: EntityWithProject): boolean =>
@@ -248,7 +248,7 @@ export default class IssuePermissions {
 
   canStar = (): boolean => !this.currentUser?.guest;
 
-  canRunCommand = (issue: EntityWithProject): boolean => {
+  canRunCommand = (issue: EntityWithReporter): boolean => {
     const has = this.permissionsStore.has;
 
     return this.isCurrentUser(issue.reporter) || hasSomePermissionToUpdate();
@@ -284,11 +284,11 @@ export default class IssuePermissions {
     return this.hasPermissionFor(entity, CAN_LINK_ISSUE);
   };
 
-  canReadUser(user: User) {
+  canReadUser(user: BaseEntityWithRingId) {
     return this.isCurrentUser(user) || this.permissionsStore.has('jetbrains.jetpass.user-read');
   }
 
-  canReadUserBasic(user: User) {
+  canReadUserBasic(user: BaseEntityWithRingId) {
     return this.isCurrentUser(user) || this.permissionsStore.has('jetbrains.jetpass.user-read-basic');
   }
   canCreateProject() {
