@@ -1,5 +1,5 @@
-import {Entity} from 'types/Entity';
+import {EntityWithProject} from 'types/Entity';
 
-const isHelpdeskProject = (entity: Entity): boolean => !!entity?.project?.plugins?.helpDeskSettings?.enabled;
+const isHelpdeskProject = (entity: EntityWithProject): boolean => !!entity?.project?.plugins?.helpDeskSettings?.enabled;
 
 export {isHelpdeskProject};

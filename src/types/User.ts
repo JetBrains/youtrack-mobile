@@ -67,6 +67,10 @@ export interface User extends UserBase {
   endUserAgreementConsent?: {
     accepted: boolean;
   };
+ featureFlags: {
+   id: string;
+   enabled: boolean;
+ };
 }
 
 export type UserCurrent = UserHub & {
@@ -141,9 +145,7 @@ export interface UserHelpdeskProfile {
   agentInProjects: {
     id: string;
   }[];
-  reporterInProjects: {
-    id: string;
-  }[];
+  reporterInProjects: Array<{id: string;}>;
   ticketFilters: string[],
 }
 

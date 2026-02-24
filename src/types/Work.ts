@@ -1,4 +1,5 @@
 import type {ColorCoding} from 'components/color-field/color-field';
+import type {ProjectTimeTrackingTimeSpent} from 'types/Project';
 import type {User} from './User';
 
 export type WorkTimeSettings =
@@ -25,16 +26,15 @@ export interface WorkItemAttributeValue {
   hasRunningJobs: boolean;
 }
 
-export interface WorkItemProjectAttribute {
-  id: string;
-  name: string;
-  values: WorkItemAttributeValue[];
-}
-
 export interface ProjectTimeTrackingSettings {
   enabled: boolean;
+  timeSpent: ProjectTimeTrackingTimeSpent;
   workItemTypes: WorkItemType[];
-  attributes: WorkItemProjectAttribute[];
+  attributes: Array<{
+    id: string;
+    name: string;
+    values: WorkItemAttributeValue[];
+  }>;
 }
 
 export interface WorkItemTemplate {
