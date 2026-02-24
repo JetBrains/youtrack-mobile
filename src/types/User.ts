@@ -64,29 +64,33 @@ export interface User extends UserBase {
   banned: boolean;
   issueRelatedGroup?: IssueRelatedGroup;
   profiles: UserProfiles;
-  endUserAgreementConsent?: {
-    accepted: boolean;
-  };
- featureFlags: {
-   id: string;
-   enabled: boolean;
- };
+  featureFlags: Array<FeatureFlag>;
+}
+
+export interface YtCurrentUserWithRelatedGroup extends YtCurrentUser {
+  issueRelatedGroup: IssueRelatedGroup | null;
+}
+
+export interface YtCurrentUser extends UserBase {
+  email: string;
+  guest: boolean;
+  profiles: UserProfiles;
+  featureFlags: Array<FeatureFlag>;
 }
 
 export type UserCurrent = UserHub & {
-  ytCurrentUser?: User;
+  ytCurrentUser: YtCurrentUser;
 };
 export type IssueRelatedGroup = {
   $type?: string;
   icon: string;
 };
-export type FeatureFlags = {
-  $type: string;
+export type FeatureFlag = {
   enabled: boolean;
   id: string;
 };
 export type UserProfiles = {
-  $type: string;
+  $type: 'UserProfiles';
   appearance?: UserAppearanceProfile;
   articles: UserArticlesProfile;
   general: UserGeneralProfile;

@@ -22,24 +22,23 @@ import {useUserCardAsync} from 'components/hooks/use-user-card-async';
 
 import styles from './user-card.styles';
 
-import type {Article} from 'types/Article';
 import type {DraftCommentData} from 'types/CustomFields';
-import type {User} from 'types/User';
+import type {UserBase, YtCurrentUserWithRelatedGroup} from 'types/User';
 
 
-const UserCard = ({user}: { user: User}) => {
+const UserCard = ({user}: { user: UserBase}) => {
   const dispatch = useDispatch();
   const {closeBottomSheet} = useBottomSheetContext();
 
-  const loadedUser: User | null = useUserCardAsync(user.id);
-  const usr: User = {...loadedUser, ...user};
+  const loadedUser: YtCurrentUserWithRelatedGroup | null = useUserCardAsync(user.id);
+  const usr = {...user, ...loadedUser};
 
   const data: DraftCommentData = useCardData();
   const issuePermissions: IssuePermissions = usePermissions();
-  const canComment = !!data?.entity && (
-    issuePermissions.canCommentOn(data.entity) ||
-    issuePermissions.articleCanCommentOn(data.entity as Article)
-  );
+
+  const canComment = data.entity
+    ? issuePermissions.canCommentOn(data.entity) || issuePermissions.articleCanCommentOn(data.entity)
+    : false;
   const canReadUserBasic: boolean = !!issuePermissions?.canReadUserBasic?.(user);
   const canReadUser: boolean = !!issuePermissions?.canReadUser?.(user);
 
