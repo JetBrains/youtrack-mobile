@@ -1416,7 +1416,7 @@ msgstr "あなたのアカウントにはこの操作を実行するのに必要
 
 #: src/actions/app-actions.ts
 msgid "Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator."
-msgstr "認証トークンが期限切れか無効です。ログイン認証情報を再入力してトークンを更新してください。それでもログインできない場合は、管理者に連絡してください。"
+msgstr "認可トークンが期限切れか無効です。ログイン認証情報を再入力してトークンを更新してください。それでもログインできない場合は、管理者に連絡してください。"
 
 #: src/components/storage/storage.ts
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
