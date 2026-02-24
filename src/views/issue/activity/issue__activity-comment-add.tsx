@@ -4,8 +4,8 @@ import {useSelector} from 'react-redux';
 import {useDispatch} from 'hooks/use-dispatch';
 
 import IssueCommentEdit from 'components/comment/comment-edit';
-import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import IssueVisibility from 'components/visibility/issue-visibility';
+import {AppState} from 'reducers';
 import {attachmentActions} from './issue-activity__attachment-actions-and-types';
 import {createActivityCommentActions} from './issue-activity__comment-actions';
 import {getApi} from 'components/api/api__instance';
@@ -13,9 +13,8 @@ import {IssueContext} from 'views/issue/issue-context';
 
 import type {IssueComment} from 'types/CustomFields';
 import type {IssueContextData} from 'types/Issue';
-import {AppState} from 'reducers';
-import {NormalizedAttachment} from 'types/Attachment';
-import {Visibility} from 'types/Visibility';
+import type {NormalizedAttachment} from 'types/Attachment';
+import type {Visibility} from 'types/Visibility';
 
 interface Props {
   comment: IssueComment;
@@ -29,22 +28,18 @@ const IssueActivityStreamCommentAdd = (props: Props) => {
   const dispatch = useDispatch();
   const team = useSelector((state: AppState) => state.issueActivity.defaultProjectTeam);
 
-  const issueContext: IssueContextData = React.useContext(IssueContext);
-  const issue = issueContext.issue;
-  const issuePermissions: IssuePermissions = issueContext.issuePermissions;
+  const {issuePermissions, issue}: IssueContextData = React.useContext(IssueContext);
 
   const canAttach = issuePermissions.canAddAttachmentTo(issue);
   const canCommentPublicly = issuePermissions.canCommentPublicly(issue);
   const canUpdateCommentVisibility = issuePermissions.canUpdateCommentVisibility(issue);
-  const isAgent = issuePermissions.helpdesk.isAgent(issue);
-  const isHelpdeskProject = issuePermissions.helpdesk.isHelpdeskProject(issue);
 
   const doUploadFileToComment = (files: NormalizedAttachment[], comment: IssueComment) => {
     return attachmentActions.doUploadFileToComment(false, files, issue, comment);
   };
 
-  let visibility: Visibility | null | undefined = props?.comment?.visibility;
-  if (!visibility && isHelpdeskProject && !isAgent && team) {
+  let visibility: Visibility | null = props?.comment?.visibility || null;
+  if (!visibility && (!canCommentPublicly || issuePermissions.isPrivateAgentCommentByDefault()) && team) {
     visibility = IssueVisibility.createLimitedVisibility([team]);
   }
 
@@ -57,13 +52,15 @@ const IssueActivityStreamCommentAdd = (props: Props) => {
         ...props.comment,
         issue: {id: issue.id},
         visibility,
-        canUpdateVisibility: props.comment?.canUpdateVisibility || !isHelpdeskProject,
+        canUpdateVisibility:
+          typeof props.comment?.canUpdateVisibility === 'boolean'
+            ? props.comment.canUpdateVisibility
+            : canUpdateCommentVisibility,
       }}
       getCommentSuggestions={async (query: string) =>
         dispatch(createActivityCommentActions(props.stateFieldName).loadCommentSuggestions(query))
       }
       canAttach={canAttach}
-      canCommentPublicly={canCommentPublicly}
       canUpdateCommentVisibility={canUpdateCommentVisibility}
       canRemoveAttach={() => canAttach}
       onAddSpentTime={props.onAddSpentTime}

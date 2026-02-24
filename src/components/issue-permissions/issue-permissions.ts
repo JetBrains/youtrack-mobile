@@ -1,6 +1,6 @@
+import {FEATURE_FLAG} from '../../constants';
 import {isHelpdeskProject} from 'components/helpdesk';
 
-import type {Article} from 'types/Article';
 import type {Attachment, CustomField, IssueComment} from 'types/CustomFields';
 import type {BaseEntity, BaseEntityWithRingId, EntityWithProject, EntityWithReporter} from 'types/Entity';
 import type {PermissionsStore} from '../permissions-store/permissions-store';
@@ -158,10 +158,28 @@ export default class IssuePermissions {
     return settings ? this.isInProject(project, settings.reporterInProjects) : false;
   };
 
-  canCommentPublicly = (entity: EntityWithProject): boolean => {
+  isAuthor = (user: BaseEntity): boolean => {
+    return user.id === this.currentUser.id;
+  };
+
+  isPrivateAgentCommentByDefault = () => this.currentUser.ytCurrentUser.featureFlags?.some(
+    f => f.id === FEATURE_FLAG.privateAgentCommentByDefault && f.enabled,
+  );
+
+  canCommentPublicly = (entity: EntityWithReporter): boolean => {
     if (entity.project && isHelpdeskProject(entity)) {
-      return this.isReporterInProject(entity.project) || this.isAgentInProject(entity.project);
+      const isReporter = this.isReporterInProject(entity.project);
+      const isAgent = this.isAgentInProject(entity.project);
+
+      if (isReporter || isAgent) {
+        return true;
+      }
+
+      if (!isReporter && !isAgent) {
+        return !!entity.reporter && this.isAuthor(entity.reporter);
+      }
     }
+
     return true;
   };
 
@@ -169,7 +187,7 @@ export default class IssuePermissions {
     if (!entity?.project) {
       return false;
     }
-    if (entity.project && isHelpdeskProject(entity)) {
+    if (isHelpdeskProject(entity)) {
       return this.isAgentInProject(entity.project);
     }
     return true;
@@ -302,7 +320,7 @@ export default class IssuePermissions {
   /*
    Articles
    */
-  canUpdateArticle = (article: Article): boolean => {
+  canUpdateArticle = (article: EntityWithReporter): boolean => {
     if (!article) {
       return false;
     }

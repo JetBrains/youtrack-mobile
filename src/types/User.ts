@@ -1,5 +1,6 @@
 import type {Article} from './Article';
-import {EntityBase} from 'types/Entity';
+import type {FEATURE_FLAG} from '../constants';
+import type {EntityBase} from 'types/Entity';
 
 export enum UserTypeId {
   AGENT = 'AGENT',
@@ -87,7 +88,7 @@ export type IssueRelatedGroup = {
 };
 export type FeatureFlag = {
   enabled: boolean;
-  id: string;
+  id: FEATURE_FLAG;
 };
 export type UserProfiles = {
   $type: 'UserProfiles';

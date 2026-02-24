@@ -16,17 +16,17 @@ import mocks from 'test/mocks';
 import {issuePermissionsNull} from './issue-permissions-helper';
 
 import PermissionsStore from 'components/permissions-store/permissions-store';
-import {CustomField, IssueComment} from 'types/CustomFields';
-import {EntityWithProject, EntityWithReporter} from 'types/Entity';
-import {IssueOnListExtended} from 'types/Issue';
-import {PermissionCacheItem} from 'types/Permission';
-import {Project, ProjectPlugins, ProjectTimeTrackingTimeSpent} from 'types/Project';
-import {User, UserHelpdeskProfile} from 'types/User';
+
+import type {CustomField, IssueComment} from 'types/CustomFields';
+import type {EntityWithProject, EntityWithReporter} from 'types/Entity';
+import type {PermissionCacheItem} from 'types/Permission';
+import type {Project, ProjectPlugins, ProjectTimeTrackingTimeSpent} from 'types/Project';
+import type {User, UserCurrent, UserHelpdeskProfile, UserProfiles} from 'types/User';
 
 describe('IssuePermissions', function () {
   const USER_ID = 'some-user-id';
   const PROJECT_ID = 'some-project-id';
-  let currentUserMock: User;
+  let currentUserMock: UserCurrent;
   let issuePermissions: IssuePermissions;
   let permissionsStore: PermissionsStore;
   let issueMock: EntityWithReporter;
@@ -57,11 +57,13 @@ describe('IssuePermissions', function () {
         } as ProjectPlugins,
       },
     };
+
     commentMock = {
       author: {
         ringId: USER_ID,
       },
     } as IssueComment;
+
     fieldMock = {
       projectCustomField: {
         isPublic: true,
@@ -70,11 +72,8 @@ describe('IssuePermissions', function () {
         },
       },
     } as CustomField;
-    currentUserMock = {
-      id: USER_ID,
-      guest: false,
-      profiles: {},
-    } as User;
+
+    currentUserMock = mocks.createUserCurrentMock({ringId: USER_ID});
 
     permissionsStore = new PermissionsStore([permissionItemMock]);
     issuePermissions = createInstance(permissionsStore, currentUserMock);
@@ -374,9 +373,9 @@ describe('IssuePermissions', function () {
         guest: true,
       });
 
-      expect(
-        issuePermissions.canVote({reporter: currentUserMock} as IssueOnListExtended)
-      ).toEqual(false);
+      expect(issuePermissions.canVote({reporter: mocks.createUserMock()} as unknown as EntityWithReporter)).toEqual(
+        false,
+      );
     });
 
     it('should return TRUE if user is not the Author and is not Guest', () => {
@@ -434,7 +433,9 @@ describe('IssuePermissions', function () {
 
   describe('HelpDesk', () => {
     it('should returns NULL if there is no helpdesk user profile', async () => {
-      expect(issuePermissions.getUserProfileHelpdeskSettings()).toEqual(null);
+      const ip = createInstance(permissionsStore, mocks.createUserCurrentMock());
+      ip.currentUser.ytCurrentUser.profiles = {} as UserProfiles;
+      expect(ip.getUserProfileHelpdeskSettings()).toEqual(null);
     });
 
     it('should returns helpdesk user profile', async () => {
@@ -523,12 +524,14 @@ describe('IssuePermissions', function () {
       it('should returns TRUE if the user is in the reporters list of projects', () => {
         setIsHelpdeskProject(true);
         jest.spyOn(issuePermissions, 'isReporterInProject').mockReturnValueOnce(true);
+        jest.spyOn(issuePermissions, 'isAgentInProject').mockReturnValueOnce(false);
 
         expect(issuePermissions.canCommentPublicly(entity)).toEqual(true);
       });
 
       it('should returns TRUE if the user is in the agents list of projects', () => {
         setIsHelpdeskProject(true);
+        jest.spyOn(issuePermissions, 'isReporterInProject').mockReturnValueOnce(false);
         jest.spyOn(issuePermissions, 'isAgentInProject').mockReturnValueOnce(true);
 
         expect(issuePermissions.canCommentPublicly(entity)).toEqual(true);
@@ -538,6 +541,24 @@ describe('IssuePermissions', function () {
         setIsHelpdeskProject(true);
         jest.spyOn(issuePermissions, 'isAgentInProject').mockReturnValueOnce(false);
         jest.spyOn(issuePermissions, 'isReporterInProject').mockReturnValueOnce(false);
+
+        expect(issuePermissions.canCommentPublicly(entity)).toEqual(false);
+      });
+
+      it('should returns TRUE if the user is not in the agent or reporter in the project, but is the author', () => {
+        setIsHelpdeskProject(true);
+        jest.spyOn(issuePermissions, 'isAgentInProject').mockReturnValueOnce(false);
+        jest.spyOn(issuePermissions, 'isReporterInProject').mockReturnValueOnce(false);
+        jest.spyOn(issuePermissions, 'isAuthor').mockReturnValueOnce(true);
+
+        expect(issuePermissions.canCommentPublicly(entity)).toEqual(true);
+      });
+
+      it('should returns FALSE if the user is not in the agent or reporter in the project and not the author', () => {
+        setIsHelpdeskProject(true);
+        jest.spyOn(issuePermissions, 'isAgentInProject').mockReturnValueOnce(false);
+        jest.spyOn(issuePermissions, 'isReporterInProject').mockReturnValueOnce(false);
+        jest.spyOn(issuePermissions, 'isAuthor').mockReturnValueOnce(false);
 
         expect(issuePermissions.canCommentPublicly(entity)).toEqual(false);
       });
@@ -582,7 +603,7 @@ describe('IssuePermissions', function () {
       ytCurrentUser: {
         profiles: {helpdesk},
       },
-    } as User);
+    } as unknown as UserCurrent);
   }
 
   function permissionStoreHasReturnsTrueForPermission(permission: string) {
@@ -591,7 +612,7 @@ describe('IssuePermissions', function () {
     );
   }
 
-  function createInstance(permissions: PermissionsStore, user: User) {
+  function createInstance(permissions: PermissionsStore, user: UserCurrent) {
     return new IssuePermissions(permissions, user);
   }
 

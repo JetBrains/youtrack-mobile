@@ -18,7 +18,6 @@ import BottomSheetModal from 'components/modal-panel-bottom/bottom-sheet-modal';
 import Header from 'components/header/header';
 import {IconAdd} from 'components/icon/icon';
 import IconTime from 'components/icon/assets/time.svg';
-import IssueVisibility from 'components/visibility/issue-visibility';
 import log from 'components/log/log';
 import Mentions from 'components/mentions/mentions';
 import Router from 'components/router/router';
@@ -52,7 +51,7 @@ interface EditingComment extends IssueComment {
 
 export interface Props {
   canAttach: boolean;
-  canCommentPublicly: boolean;
+  canCommentPublicly?: boolean;
   canRemoveAttach: (attachment: Attachment) => boolean;
   canUpdateCommentVisibility?: boolean;
   editingComment: EditingComment;
@@ -473,9 +472,7 @@ const CommentEdit = (props: Props) => {
     } = state;
 
     const showVisibilityControl = !mentionsVisible && (
-      IssueVisibility.isSecured(editingComment.visibility) ||
       !!editingComment.text ||
-      editingComment.visibility ||
       !!editingComment?.attachments?.length ||
       (isVisibilitySelectVisible || isVisibilityControlVisible)
     );
@@ -510,7 +507,7 @@ const CommentEdit = (props: Props) => {
           )}
 
           <View
-            style={[styles.commentInputContainer, !props.canCommentPublicly && styles.commentInputContainerHighlighted]}
+            style={[styles.commentInputContainer, editingComment.visibility && styles.commentInputContainerHighlighted]}
           >
             {renderCommentInput(
               props.focus || !!editingComment.reply,

@@ -73,6 +73,24 @@ const navigatorMock = {
   updater: jest.fn(),
 };
 
+function createUserCurrentMock(data) {
+  return {
+    id: data?.ringId || uuid(),
+    name: randomWord(),
+    guest: false,
+    banned: false,
+    endUserAgreementConsent: {
+      accepted: true,
+    },
+    profile: {
+      avatar: {
+        url: randomWord(),
+      },
+    },
+    ytCurrentUser: createUserMock(data),
+  };
+}
+
 function createUserMock(data = {}) {
   return deepmerge(
     {
@@ -313,6 +331,7 @@ export default {
   createIssueFieldMock: createIssuePriorityFieldMock,
   createCommentMock,
   createUserMock,
+  createUserCurrentMock,
   createThreadMock,
   createFolder,
 
