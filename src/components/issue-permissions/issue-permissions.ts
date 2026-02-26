@@ -1,5 +1,6 @@
 import {FEATURE_FLAG} from '../../constants';
 import {isHelpdeskProject} from 'components/helpdesk';
+import {isPermissionCacheInYT} from 'components/feature/feature-helper';
 
 import type {Attachment, CustomField, IssueComment} from 'types/CustomFields';
 import type {BaseEntity, BaseEntityWithRingId, EntityWithProject, EntityWithReporter} from 'types/Entity';
@@ -54,7 +55,7 @@ export default class IssuePermissions {
     this.currentUser = currentUser;
   }
 
-  static getRingId(entity: Project | Partial<Project>): string | null {
+  static getRingId(entity: BaseEntityWithRingId): string | null {
     if (!entity || !entity.ringId) {
       return null;
     }
@@ -62,17 +63,17 @@ export default class IssuePermissions {
     return entity.ringId;
   }
 
-  static getIssueProjectRingId(entity: EntityWithProject | null): string | null {
+  static getIssueProjectId(entity: EntityWithProject | null): string | null {
     if (!entity || !entity.project) {
       return null;
     }
-
-    return this.getRingId(entity.project);
+    // From 2024.2 permission cache is migrated into YT
+    return isPermissionCacheInYT() ? entity.project.id : this.getRingId(entity.project);
   }
 
   hasPermissionFor = (entity: EntityWithProject | null, permissionName: string): boolean => {
-    const projectRingId = IssuePermissions.getIssueProjectRingId(entity);
-    return !!projectRingId && this.permissionsStore.has(permissionName, projectRingId);
+    const projectId = IssuePermissions.getIssueProjectId(entity);
+    return !!projectId && this.permissionsStore.has(permissionName, projectId);
   };
 
   isCurrentUser = (user: BaseEntityWithRingId): boolean => {
@@ -162,9 +163,10 @@ export default class IssuePermissions {
     return user.id === this.currentUser.id;
   };
 
-  isPrivateAgentCommentByDefault = () => this.currentUser.ytCurrentUser.featureFlags?.some(
-    f => f.id === FEATURE_FLAG.privateAgentCommentByDefault && f.enabled,
-  );
+  isPrivateAgentCommentByDefault = () =>
+    this.currentUser.ytCurrentUser.featureFlags?.some(
+      f => f.id === FEATURE_FLAG.privateAgentCommentByDefault && f.enabled,
+    );
 
   canCommentPublicly = (entity: EntityWithReporter): boolean => {
     if (entity.project && isHelpdeskProject(entity)) {
@@ -272,7 +274,7 @@ export default class IssuePermissions {
     return this.isCurrentUser(issue.reporter) || hasSomePermissionToUpdate();
 
     function hasSomePermissionToUpdate(): boolean {
-      const projectRingId = IssuePermissions.getIssueProjectRingId(issue);
+      const projectRingId = IssuePermissions.getIssueProjectId(issue);
       return (
         !!projectRingId &&
         (has(CAN_CREATE_COMMENT, projectRingId) ||

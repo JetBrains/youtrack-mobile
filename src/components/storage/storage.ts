@@ -16,8 +16,8 @@ import type {Board, Sprint} from 'types/Agile';
 import type {Folder, UserCurrent} from 'types/User';
 import type {InboxThread, Notification, ThreadsStateFilterId} from 'types/Inbox';
 import type {AuthParams} from 'types/Auth';
-import type {PermissionCacheItem} from 'types/Permission';
-import {Project} from 'types/Project';
+import type {CachedPermission, PermissionCacheItem} from 'types/Permission';
+import type {Project} from 'types/Project';
 
 const OTHER_ACCOUNTS_KEY = 'YT_OTHER_ACCOUNTS_STORAGE_KEY';
 export const MAX_STORED_QUERIES = 5;
@@ -91,7 +91,7 @@ export type StorageState = TipsState & FeatureState & {
     | undefined;
   currentAppVersion: string | null;
   issueActivitiesEnabledTypes: ActivityType[] | null;
-  permissions: PermissionCacheItem[] | null;
+  permissions: CachedPermission[] | PermissionCacheItem[] | null;
   themeMode: string | null;
   vcsChanges: boolean | null;
   forceHandsetMode: boolean | null;

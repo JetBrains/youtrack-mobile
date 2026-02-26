@@ -9,6 +9,7 @@ import {
   getStoredSecurelyAuthParams,
   storeSecurelyAuthParams,
 } from '../storage/storage__oauth';
+import {getPermissionCacheURL} from 'components/permissions-store/permissions-helper';
 import {USER_AGENT} from 'components/usage/usage';
 
 import type {AnyError, CustomError} from 'types/Error';
@@ -33,7 +34,8 @@ export class AuthBase {
       query: `service:{0-0-0-0-0} or service:{${config.auth.youtrackServiceId}}`,
       fields: 'permission/key,global,projects(id)',
     });
-    this.PERMISSIONS_CACHE_URL = `${this.config.auth.serverUri}/api/rest/permissions/cache?${permissionsQueryString}`;
+    const permissionsCacheURL = getPermissionCacheURL(this.config.auth.serverUri, this.config.backendUrl);
+    this.PERMISSIONS_CACHE_URL = `${permissionsCacheURL}?${permissionsQueryString}`;
     this.getAuthorizationHeaders = this.getAuthorizationHeaders.bind(this);
     this.onTokenRefreshError = onTokenRefreshError;
   }

@@ -1,4 +1,5 @@
 import * as helpdeskHelper from 'components/helpdesk';
+import * as featureHelper from 'components/feature/feature-helper';
 
 import IssuePermissions, {
   CAN_UPDATE_COMMENT,
@@ -19,7 +20,7 @@ import PermissionsStore from 'components/permissions-store/permissions-store';
 
 import type {CustomField, IssueComment} from 'types/CustomFields';
 import type {EntityWithProject, EntityWithReporter} from 'types/Entity';
-import type {PermissionCacheItem} from 'types/Permission';
+import type {CachedPermission} from 'types/Permission';
 import type {Project, ProjectPlugins, ProjectTimeTrackingTimeSpent} from 'types/Project';
 import type {User, UserCurrent, UserHelpdeskProfile, UserProfiles} from 'types/User';
 
@@ -32,16 +33,14 @@ describe('IssuePermissions', function () {
   let issueMock: EntityWithReporter;
   let commentMock: IssueComment;
   let fieldMock: CustomField;
-  let permissionItemMock: PermissionCacheItem;
+  let permissionItemMock: CachedPermission;
 
   beforeEach(() => {
     permissionItemMock = {
+      id: 'permissionName',
       global: false,
       projects: [{id: 'p1'}, {id: 'p2'}],
       projectIds: ['p1', 'p2'],
-      permission: {
-        key: 'permissionName',
-      },
     };
     issueMock = {
       reporter: {
@@ -85,48 +84,66 @@ describe('IssuePermissions', function () {
 
   it('should create dummy `IssuePermissions` instance', () => {
     expect(issuePermissionsNull).toBeTruthy();
-    expect(() => issuePermissionsNull.hasPermissionFor(null, '')).not.toThrow();
+    expect(() => issuePermissionsNull.hasPermissionFor(undefined as any, '')).not.toThrow();
   });
 
 
   describe('getRingId', () => {
-    it('should not throw without a param and return NULL', () => {
-      expect(IssuePermissions.getRingId({})).toBeNull();
+    it('should not throw and return NULL', () => {
+      expect(IssuePermissions.getRingId(undefined as any)).toBeNull();
+      expect(IssuePermissions.getRingId({} as any)).toBeNull();
     });
 
-    it('should return NULL if a param has no `ringId` field', () => {
-      expect(IssuePermissions.getRingId({})).toBeNull();
+    it('should not throw and return NULL if a param has no `ringId` field', () => {
+      expect(IssuePermissions.getRingId(undefined as any)).toBeNull();
+      expect(IssuePermissions.getRingId({} as any)).toBeNull();
     });
 
     it('should return entity `ringId` field', () => {
       expect(
         IssuePermissions.getRingId({
+          id: 'id',
           ringId: USER_ID,
         })
       ).toEqual(USER_ID);
     });
   });
 
-  describe('getIssueProjectRingId', () => {
-    it('should not throw without a param and return NULL', () => {
-      expect(IssuePermissions.getIssueProjectRingId(null)).toBeNull();
+  describe('getIssueProjectId', () => {
+    it('should not throw and return NULL', () => {
+      expect(IssuePermissions.getIssueProjectId(undefined as any)).toBeNull();
+      expect(IssuePermissions.getIssueProjectId(null)).toBeNull();
     });
 
-    it('should return NULL if a param has no `project` field', () => {
-      expect(IssuePermissions.getIssueProjectRingId({} as EntityWithProject)).toBeNull();
+    it('should not throw ans return NULL without the `project` field', () => {
+      expect(IssuePermissions.getIssueProjectId({} as EntityWithProject)).toBeNull();
     });
 
-    it('should return NULL if a param has no `ringId` field', () => {
-      expect(IssuePermissions.getIssueProjectRingId({project: {}} as EntityWithProject)).toBeNull();
+    it('should not throw and return NULL without the `ringId` field', () => {
+      expect(IssuePermissions.getIssueProjectId({project: {}} as EntityWithProject)).toBeNull();
     });
 
     it('should return issue project `ringId` field', () => {
       expect(
-        IssuePermissions.getIssueProjectRingId({
+        IssuePermissions.getIssueProjectId({
           project: {
+            id: 'id',
             ringId: USER_ID,
           },
-        } as EntityWithProject)
+        })
+      ).toEqual(USER_ID);
+    });
+
+    it('should return issue project `id` field', () => {
+      jest.spyOn(featureHelper, 'isPermissionCacheInYT').mockReturnValue(true);
+
+      expect(
+        IssuePermissions.getIssueProjectId({
+          project: {
+            ringId: 'ringId',
+            id: USER_ID,
+          },
+        })
       ).toEqual(USER_ID);
     });
   });

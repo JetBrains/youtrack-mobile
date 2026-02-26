@@ -8,4 +8,5 @@ export default {
   issuesGetter: '2020.1',
   issuesSettings: '2023.3.1',
   helpDesk: '2023.1',
+  permissionCache: '2024.2',
 };

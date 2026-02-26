@@ -1,4 +1,3 @@
-import * as PermissionsHelper from 'components/permissions-store/permissions-helper';
 import log from 'components/log/log';
 import {
   flushStoragePart,
@@ -8,30 +7,16 @@ import {
 
 import {removeTrailingSlash} from 'util/util';
 
-import type {PermissionCacheItem} from 'types/Permission';
+import type {PermissionCacheResponse} from 'components/permissions-store/permissions-helper';
 import type {StorageState} from 'components/storage/storage';
-import type {User} from 'types/User';
+import type {YtCurrentUser} from 'types/User';
 
-function updateCachedPermissions(
-  permissions: PermissionCacheItem[],
-): void {
+function updateCachedPermissions(permissions: PermissionCacheResponse | null) {
   flushStoragePart({permissions});
 }
 
-function getCachedPermissions(): PermissionCacheItem[] | null {
+function getCachedPermissions(): PermissionCacheResponse | null {
   return getStorageState().permissions;
-}
-
-function loadPermissions(
-  token_type: string,
-  access_token: string,
-  permissionsCacheUrl: string,
-): Promise<PermissionCacheItem[]> {
-  return PermissionsHelper.loadPermissions(
-    token_type,
-    access_token,
-    permissionsCacheUrl,
-  );
 }
 
 async function targetAccountToSwitchTo(targetBackendUrl: string = '', backendUrl: string): Promise<StorageState | null> {
@@ -56,16 +41,15 @@ async function targetAccountToSwitchTo(targetBackendUrl: string = '', backendUrl
   return targetAccount;
 }
 
-async function storeYTCurrentUser(user: User): Promise<void> {
+async function storeYTCurrentUser(ytCurrentUser: YtCurrentUser): Promise<void> {
   await flushStoragePart({
-    currentUser: {...getStorageState().currentUser, ytCurrentUser: user},
+    currentUser: {...getStorageState().currentUser, ytCurrentUser},
   });
 }
 
 export {
   getCachedPermissions,
   updateCachedPermissions,
-  loadPermissions,
   targetAccountToSwitchTo,
   storeYTCurrentUser,
 };

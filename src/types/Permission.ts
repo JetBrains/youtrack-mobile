@@ -1,12 +1,14 @@
-export type CacheItemProject = {
-  id: string;
-};
-
-export type PermissionCacheItem = {
+export interface PermissionCacheItem {
   global: boolean;
   permission: {
     key: string;
   };
+  projects: Array<{id: string}> | undefined;
+}
+
+export interface CachedPermission {
+  global: boolean;
+  id: string;
   projectIds: string[];
-  projects: CacheItemProject[];
-};
+  projects: Array<{id: string}> | null;
+}

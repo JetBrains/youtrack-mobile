@@ -19,9 +19,9 @@ import API from 'components/api/api';
 import log from 'components/log/log';
 import mocks from 'test/mocks';
 import OAuth2 from 'components/auth/oauth2';
-import PermissionsStore from 'components/permissions-store/permissions-store';
 import PushNotifications from 'components/push-notifications/push-notifications';
 import Router from 'components/router/router';
+import {createPermissionsStore} from 'components/permissions-store/permissions-helper';
 import {folderIdAllKey} from 'views/inbox-threads/inbox-threads-helper';
 
 import type {AppConfig} from 'types/AppConfig';
@@ -29,10 +29,11 @@ import type {AppState} from 'reducers';
 import type {AuthParams} from 'types/Auth';
 import type {InboxFolder} from 'types/Inbox';
 import type {PermissionCacheItem} from 'types/Permission';
+import type {PermissionCacheResponse} from 'components/permissions-store/permissions-helper';
 import type {ReduxThunkDispatch} from 'types/Redux';
 import type {RootState} from 'reducers/app-reducer';
 import type {StorageState} from 'components/storage/storage';
-import type {User, UserCurrent, UserHub} from 'types/User';
+import type {User, UserCurrent, UserHub, YtCurrentUser} from 'types/User';
 
 jest.mock('components/storage/storage', () => {
   const st = jest.requireActual('components/storage/storage');
@@ -266,7 +267,7 @@ describe('app-actions', () => {
       expect(storeAction).toHaveLength(1);
       expect(JSON.stringify(storeAction[0])).toEqual(JSON.stringify({
         type: types.SET_PERMISSIONS,
-        permissionsStore: new PermissionsStore(actualPermissionsMock),
+        permissionsStore: createPermissionsStore(actualPermissionsMock),
         currentUser: appStateMock.auth!.currentUser,
       }));
     });
@@ -276,7 +277,7 @@ describe('app-actions', () => {
       await dispatch(actions.loadUserPermissions());
       expect(JSON.stringify(store.getActions()[0])).toEqual(JSON.stringify({
         type: types.SET_PERMISSIONS,
-        permissionsStore: new PermissionsStore(actualPermissionsMock),
+        permissionsStore: createPermissionsStore(actualPermissionsMock),
         currentUser: appStateMock.auth!.currentUser,
       }));
     });
@@ -289,7 +290,7 @@ describe('app-actions', () => {
       );
     });
 
-    function setCachedPermissions(permissions: PermissionCacheItem[] | null) {
+    function setCachedPermissions(permissions: PermissionCacheResponse | null) {
       storage.__setStorageState({
         permissions: permissions,
       } as StorageState);
@@ -404,14 +405,14 @@ describe('app-actions', () => {
     });
 
     it('should check for inbox thread update', async () => {
-      jest.spyOn(feature, 'checkVersion').mockReturnValueOnce(true);
+      jest.spyOn(feature, 'checkVersion').mockReturnValue(true);
 
       await dispatch(actions.completeInitialization());
       expect(apiMock.inbox.getFolders).toHaveBeenCalled();
     });
 
     it('should not check for inbox thread update', async () => {
-      jest.spyOn(feature, 'checkVersion').mockReturnValueOnce(false);
+      jest.spyOn(feature, 'checkVersion').mockReturnValue(false);
       await dispatch(actions.completeInitialization());
       expect(apiMock.inbox.getFolders).not.toHaveBeenCalled();
     });
@@ -583,7 +584,7 @@ describe('app-actions', () => {
     setYTCurrentUser(ytCurrentUser);
   }
 
-  function setYTCurrentUser(ytCurrentUser: User) {
+  function setYTCurrentUser(ytCurrentUser: YtCurrentUser) {
     storage.__setStorageState({
       currentUser: {ytCurrentUser},
     } as StorageState);

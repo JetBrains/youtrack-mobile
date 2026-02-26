@@ -1,23 +1,21 @@
-import type {CacheItemProject, PermissionCacheItem} from 'types/Permission';
+import type {CachedPermission} from 'types/Permission';
 
 class PermissionsStore {
-  permissionsMap: Record<string, any>;
+  permissionsMap: Map<string, CachedPermission> = new Map();
 
-  constructor(permissions: PermissionCacheItem[]) {
-    const permissionsWithProjects = (Array.isArray(permissions)
-      ? permissions
-      : []
-    ).map((permission: PermissionCacheItem) => {
-      permission.projectIds = (permission.projects || []).map(
-        (project: CacheItemProject) => project.id,
-      );
-      return permission;
+  constructor(permissions: CachedPermission[]) {
+    this.createPermissionsMap(permissions);
+  }
+
+  createPermissionsMap(permissions: CachedPermission[]) {
+    permissions.forEach(p => {
+      p.projectIds = p.projects?.map(proj => proj.id) ?? [];
+      this.permissionsMap.set(p.id, p);
     });
-    this.permissionsMap = new Map(permissionsWithProjects.map(it => [it.permission.key, it]));
   }
 
   has = (permissionId: string, projectId?: string): boolean => {
-    const permission: PermissionCacheItem = this.permissionsMap.get(permissionId);
+    const permission = this.permissionsMap.get(permissionId);
 
     if (!permission) {
       return false;
@@ -34,13 +32,11 @@ class PermissionsStore {
     return permission.projectIds.length > 0;
   };
 
-  hasEvery = (permissionIds: string[], projectId?: string): boolean => (permissionIds || []).every(permissionId =>
-    this.has(permissionId, projectId),
-  );
+  hasEvery = (permissionIds: string[], projectId?: string): boolean =>
+    (permissionIds || []).every(permissionId => this.has(permissionId, projectId));
 
-  hasSome = (permissionIds: string[], projectId?: string): boolean => (permissionIds || []).some(permissionId =>
-    this.has(permissionId, projectId),
-  );
+  hasSome = (permissionIds: string[], projectId?: string): boolean =>
+    (permissionIds || []).some(permissionId => this.has(permissionId, projectId));
 }
 
 export type {PermissionsStore};

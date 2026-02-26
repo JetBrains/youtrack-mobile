@@ -1,35 +1,67 @@
 import PermissionsStore from './permissions-store';
-import {PermissionCacheItem} from 'types/Permission';
 
-const PER_PROJECT_PERMISSION = 'per-project-permission';
-const GLOBAL_PERMISSION = 'global-permission';
-const GLOBAL_PERMISSION_TWO = 'global-permission-two';
-const PERMITTED_PROJECT_ID = 'permitted-project';
-
-let permissionsStore: PermissionsStore;
+import type {CachedPermission} from 'types/Permission';
 
 describe('PermissionsStore', () => {
+  const PER_PROJECT_PERMISSION = 'per-project-permission';
+  const GLOBAL_PERMISSION = 'global-permission';
+  const GLOBAL_PERMISSION_TWO = 'global-permission-two';
+  const PERMITTED_PROJECT_ID = 'permitted-project';
+
+  const permissionsMock: CachedPermission[] = [
+    {
+      id: GLOBAL_PERMISSION,
+      global: true,
+      projectIds: [],
+      projects: null,
+    },
+    {
+      id: GLOBAL_PERMISSION_TWO,
+      global: true,
+      projectIds: [],
+      projects: null,
+    },
+    {
+      id: PER_PROJECT_PERMISSION,
+      global: false,
+      projectIds: [PERMITTED_PROJECT_ID],
+      projects: [{id: PERMITTED_PROJECT_ID}],
+    },
+    {
+      id: 'permissionId',
+      global: false,
+      projectIds: [],
+      projects: null,
+    },
+  ];
+
+  let permissionsStore: PermissionsStore;
+
   beforeEach(() => {
-    permissionsStore = new PermissionsStore(createPermissions());
+
+    permissionsStore = new PermissionsStore(permissionsMock);
   });
 
   it('should map project ids', () => {
-    expect(permissionsStore.permissionsMap.get(PER_PROJECT_PERMISSION).projectIds[0]).toEqual(PERMITTED_PROJECT_ID);
+    const permission = permissionsStore.permissionsMap.get(PER_PROJECT_PERMISSION);
+
+    expect(permission).toBeDefined();
+    expect(permission!.projectIds[0]).toEqual(PERMITTED_PROJECT_ID);
   });
 
-  it('should return false if user has no such permission at all', () => {
+  it('should return false if a user has no such permission at all', () => {
     expect(permissionsStore.has('non-exist')).toBeFalsy();
   });
 
-  it('should return true if user has global permission', () => {
+  it('should return true if a user has global permission', () => {
     expect(permissionsStore.has(GLOBAL_PERMISSION)).toEqual(true);
   });
 
-  it('should return false if user has permission but not in specified project', () => {
+  it('should return false if a user has permission but not in specified project', () => {
     expect(permissionsStore.has(PER_PROJECT_PERMISSION, 'non-exist-project')).toEqual(false);
   });
 
-  it('should return true if user has permission in specified project', () => {
+  it('should return true if a user has permission in specified project', () => {
     expect(permissionsStore.has(PER_PROJECT_PERMISSION, PERMITTED_PROJECT_ID)).toEqual(true);
   });
 
@@ -41,7 +73,7 @@ describe('PermissionsStore', () => {
     expect(permissionsStore.has('other-project-permission')).toEqual(false);
   });
 
-  it('should return true if has every permission', () => {
+  it('should return true if it has every permission', () => {
     expect(permissionsStore.hasEvery([GLOBAL_PERMISSION, GLOBAL_PERMISSION_TWO])).toEqual(true);
   });
 
@@ -49,43 +81,11 @@ describe('PermissionsStore', () => {
     expect(permissionsStore.hasEvery([GLOBAL_PERMISSION, 'non-exist'])).toEqual(false);
   });
 
-  it('should return true if has some permission', () => {
+  it('should return true if it has some permission', () => {
     expect(permissionsStore.hasSome([GLOBAL_PERMISSION, 'non-exist'])).toEqual(true);
   });
 
-  it('should return fasle if has not some permission', () => {
+  it('should return fasle if it has not some permission', () => {
     expect(permissionsStore.hasSome(['non-exist1', 'non-exist2'])).toEqual(false);
   });
 });
-
-function createPermissions() {
-  return [
-    {
-      global: true,
-      permission: {
-        key: GLOBAL_PERMISSION,
-      },
-      projectIds: [],
-      projects: [],
-    },
-    {
-      global: true,
-      permission: {
-        key: GLOBAL_PERMISSION_TWO,
-      },
-      projectIds: [],
-      projects: [],
-    },
-    {
-      permission: {
-        key: PER_PROJECT_PERMISSION,
-      },
-      projectIds: [],
-      projects: [
-        {
-          id: PERMITTED_PROJECT_ID,
-        },
-      ],
-    },
-  ] as PermissionCacheItem[];
-}

@@ -17,9 +17,8 @@ import type OAuth2 from 'components/auth/oauth2';
 import type {AppState} from 'reducers';
 import type {MockStore} from 'redux-mock-store';
 import type {NavigationContainer, NavigationContainerComponent} from 'react-navigation';
-import type {PermissionCacheItem} from 'types/Permission';
 import type {RootState} from 'reducers/app-reducer';
-import type {User} from 'types/User';
+import type {User, UserCurrent} from 'types/User';
 
 type Navigator = NavigationContainer & NavigationContainerComponent;
 
@@ -40,9 +39,9 @@ describe('<Menu/>', () => {
   beforeEach(() => {
     jest.restoreAllMocks();
 
-    const currentUser = mocks.createUserMock()  as unknown as User;
+    const currentUser = mocks.createUserMock()  as unknown as UserCurrent;
     issuePermissions = new IssuePermissions(
-      new PermissionsStore([{permission: {key: 'permissionName'}} as PermissionCacheItem]),
+      new PermissionsStore([{id: 'permissionName', global: false, projectIds: [], projects: []}]),
       currentUser
     );
     stateMock = {

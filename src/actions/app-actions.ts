@@ -4,13 +4,13 @@ import DeviceInfo from 'react-native-device-info';
 import UrlParse from 'url-parse';
 
 import * as appActionsHelper from './app-actions-helper';
+import * as permissionsHelper from 'components/permissions-store/permissions-helper';
 import * as storage from 'components/storage/storage';
 import * as types from './action-types';
 import Api from 'components/api/api';
 import log from 'components/log/log';
 import OAuth2 from 'components/auth/oauth2';
 import packageJson from '../../package.json';
-import PermissionsStore from 'components/permissions-store/permissions-store';
 import PushNotifications from 'components/push-notifications/push-notifications';
 import pushNotificationsHelper from 'components/push-notifications/push-notifications-helper';
 import PushNotificationsProcessor from 'components/push-notifications/push-notifications-processor';
@@ -21,6 +21,7 @@ import {
   folderIdMap,
 } from 'views/inbox-threads/inbox-threads-helper';
 import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
+import {createPermissionsStore} from 'components/permissions-store/permissions-helper';
 import {
   extractArticleId, extractHelpdeskFormId,
   extractIssueId,
@@ -51,17 +52,12 @@ import type {AppState} from 'reducers';
 import type {Article} from 'types/Article';
 import type {AuthParams} from 'types/Auth';
 import type {AnyError} from 'types/Error';
-import type {
-  User,
-  UserAppearanceProfile,
-  UserArticlesProfile,
-  UserHelpdeskProfile,
-} from 'types/User';
+import type {User, UserAppearanceProfile, UserArticlesProfile, UserHelpdeskProfile, YtCurrentUser} from 'types/User';
 import type {DraftCommentData, IssueComment} from 'types/CustomFields';
 import type {InboxFolder, InboxThread} from 'types/Inbox';
 import type {NetInfoState} from '@react-native-community/netinfo';
 import type {NotificationRouteData} from 'types/Notification';
-import type {PermissionCacheItem} from 'types/Permission';
+import type {PermissionCacheResponse} from 'components/permissions-store/permissions-helper';
 import type {ReduxAction, ReduxStateGetter, ReduxAPIGetter, ReduxThunkDispatch} from 'types/Redux';
 import type {StorageState} from 'components/storage/storage';
 import type {UserGeneralProfileLocale} from 'types/User';
@@ -530,11 +526,11 @@ export function signOutFromAccount(): ReduxAction {
   };
 }
 
-function setUserPermissions(permissions: PermissionCacheItem[]): ReduxAction {
+function setUserPermissions(permissions: PermissionCacheResponse): ReduxAction {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     dispatch({
       type: types.SET_PERMISSIONS,
-      permissionsStore: new PermissionsStore(permissions),
+      permissionsStore: createPermissionsStore(permissions),
       currentUser: {
         ...getState().app?.auth?.currentUser,
         ...storage.getStorageState().currentUser,
@@ -548,7 +544,7 @@ export function loadUserPermissions(): ReduxAction {
     const auth: OAuth2 = (getState().app.auth as any) as OAuth2;
 
     try {
-      const permissions: PermissionCacheItem[] = await appActionsHelper.loadPermissions(
+      const permissions: PermissionCacheResponse = await permissionsHelper.loadPermissions(
         auth.getTokenType(),
         auth.getAccessToken(),
         auth.getPermissionsCacheURL(),
@@ -578,7 +574,7 @@ export function completeInitialization(
       hidden: storage.getStorageState().helpdeskMenuHidden,
     });
     log.info('App Actions: Completing initialization');
-    const cachedCurrentUser: User | undefined = storage.getStorageState()?.currentUser?.ytCurrentUser;
+    const cachedCurrentUser = storage.getStorageState()?.currentUser?.ytCurrentUser;
     const cachedLocale: UserGeneralProfileLocale | undefined = cachedCurrentUser?.profiles?.general?.locale;
     const currentUser: User = await dispatch(loadYTCurrentUser());
     const userProfileLocale: UserGeneralProfileLocale | undefined = currentUser?.profiles?.general?.locale;
@@ -629,7 +625,7 @@ export function completeInitialization(
   };
 }
 
-export function setYTCurrentUser(user: User): ReduxAction {
+export function setYTCurrentUser(user: YtCurrentUser): ReduxAction {
   return async (dispatch: ReduxThunkDispatch) => {
     await dispatch({
       type: types.RECEIVE_USER,
@@ -962,13 +958,18 @@ export function initializeApp(
 ): ReduxAction {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     const currentUser = storage.getStorageState()?.currentUser;
-    const cachedCurrentUser: User | undefined = currentUser?.ytCurrentUser;
+    const cachedCurrentUser = currentUser?.ytCurrentUser;
     if (cachedCurrentUser) {
       await dispatch(setYTCurrentUser(cachedCurrentUser));
     }
-    const cachedPermissions: PermissionCacheItem[] | null = getCachedPermissions();
+    const cachedPermissions: PermissionCacheResponse | null = getCachedPermissions();
     if (cachedPermissions) {
-      await dispatch(setUserPermissions(cachedPermissions));
+      try {
+        await dispatch(setUserPermissions(cachedPermissions));
+      } catch (error) {
+        log.warn('App Actions: permissions cache corrupted, recreate', error);
+        appActionsHelper.updateCachedPermissions(null);
+      }
     }
 
     const profiles = cachedCurrentUser?.profiles;
