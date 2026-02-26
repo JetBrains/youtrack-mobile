@@ -33,13 +33,14 @@ const IssueActivityStreamCommentAdd = (props: Props) => {
   const canAttach = issuePermissions.canAddAttachmentTo(issue);
   const canCommentPublicly = issuePermissions.canCommentPublicly(issue);
   const canUpdateCommentVisibility = issuePermissions.canUpdateCommentVisibility(issue);
+  const isHelpdeskIssue = issuePermissions.helpdesk.isHelpdeskProject(issue);
 
   const doUploadFileToComment = (files: NormalizedAttachment[], comment: IssueComment) => {
     return attachmentActions.doUploadFileToComment(false, files, issue, comment);
   };
 
   let visibility: Visibility | null = props?.comment?.visibility || null;
-  if (!visibility && (!canCommentPublicly || issuePermissions.isPrivateAgentCommentByDefault()) && team) {
+  if (!visibility && (!canCommentPublicly || (isHelpdeskIssue && issuePermissions.isPrivateAgentCommentByDefault())) && team) {
     visibility = IssueVisibility.createLimitedVisibility([team]);
   }
 

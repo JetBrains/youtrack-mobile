@@ -144,7 +144,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
       this.loadDraftComment();
     }
     if (issue?.project) {
-      await this.props.setDefaultProjectTeam(issue.project);
+      await this.props.setDefaultProjectTeam(issue);
     }
   };
   loadDraftComment = async () => {

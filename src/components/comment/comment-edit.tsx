@@ -44,6 +44,7 @@ import type {NormalizedAttachment} from 'types/Attachment';
 import type {Theme} from 'types/Theme';
 import type {User, UserMentions} from 'types/User';
 import type {Visibility, VisibilityGroups} from 'types/Visibility';
+import IssueVisibility from 'components/visibility/issue-visibility';
 
 interface EditingComment extends IssueComment {
   reply?: boolean;
@@ -507,7 +508,10 @@ const CommentEdit = (props: Props) => {
           )}
 
           <View
-            style={[styles.commentInputContainer, editingComment.visibility && styles.commentInputContainerHighlighted]}
+            style={[
+              styles.commentInputContainer,
+              IssueVisibility.isSecured(editingComment) && styles.commentInputContainerHighlighted,
+            ]}
           >
             {renderCommentInput(
               props.focus || !!editingComment.reply,

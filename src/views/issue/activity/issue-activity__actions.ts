@@ -7,6 +7,7 @@ import {DEFAULT_ISSUE_STATE_FIELD_NAME} from '../issue-base-actions-creater';
 import {flushStoragePart, getStorageState} from 'components/storage/storage';
 import {getActivityAllTypes, getActivityCategories} from 'components/activity/activity-helper';
 import {i18n} from 'components/i18n/i18n';
+import {isHelpdeskProject} from 'components/helpdesk';
 import {logEvent} from 'components/log/log-helper';
 import {notifyError} from 'components/notification/notification';
 import {sortAlphabetically} from 'components/search/sorting';
@@ -17,7 +18,7 @@ import type Api from 'components/api/api';
 import type {Activity, ActivityType} from 'types/Activity';
 import type {AnyIssue} from 'types/Issue';
 import type {DraftWorkItem, TimeTracking} from 'types/Work';
-import type {BaseEntity} from 'types/Entity';
+import type {EntityWithProject} from 'types/Entity';
 import type {IssueState} from 'views/issue/issue-base-reducer';
 import type {ProjectTeam, ProjectTimeTrackingSettings} from 'types/Project';
 import type {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
@@ -59,7 +60,7 @@ export interface IssueActivityActions {
     issueActivityTypes: ActivityType[];
     type: string;
   };
-  setDefaultProjectTeam: (project: BaseEntity) => ReduxAction;
+  setDefaultProjectTeam: (entity: EntityWithProject) => ReduxAction;
   loadActivitiesPage: (doNotReset?: boolean, issueId?: string, commentsOnly?: boolean) => ReduxAction;
   doUpdateWorkItem: (workItem: WorkItem) => ReduxAction;
   submitWorkItem: (draft: WorkItem | DraftWorkItem, issueId?: string) => ReduxAction<Promise<WorkItem | null>>;
@@ -277,9 +278,12 @@ export const createIssueActivityActions = (stateFieldName = DEFAULT_ISSUE_STATE_
         });
       };
     },
-    setDefaultProjectTeam: function (project: BaseEntity): ReduxAction {
+    setDefaultProjectTeam: function (entity: EntityWithProject): ReduxAction {
       return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
-        const [error, team] = await until<ProjectTeam>(getApi().projects.getTeam(project.id));
+        if (!entity?.project || !isHelpdeskProject(entity)) {
+          return;
+        }
+        const [error, team] = await until<ProjectTeam>(getApi().projects.getTeam(entity.project.id));
         if (!error) {
           dispatch({
             type: types.SET_HELPDESK_DEFAULT_PROJECT_TEAM,
