@@ -8,10 +8,15 @@ import type {Visibility, VisibilityItem} from 'types/Visibility';
 export default class IssueVisibility {
   static visibility(visibility: Visibility | null = null, isLimited: boolean = false): Visibility {
     const isSecured: boolean =
-      isLimited || !!visibility?.permittedGroups?.length || !!visibility?.permittedUsers?.length;
+      isLimited ||
+      !!visibility?.permittedGroups?.length ||
+      !!visibility?.permittedUsers?.length ||
+      !!visibility?.implicitPermittedUsers?.length;
+
     return {
       permittedUsers: [],
       permittedGroups: [],
+      implicitPermittedUsers: [],
       ...visibility,
       $type: isSecured ? ResourceTypes.VISIBILITY_LIMITED : ResourceTypes.VISIBILITY_UNLIMITED,
     };
@@ -19,7 +24,7 @@ export default class IssueVisibility {
 
   static createLimitedVisibility(
     permittedGroups: (UserGroup | Partial<UserGroup>)[] = [],
-    permittedUsers: (User | Partial<User>)[] = []
+    permittedUsers: (User | Partial<User>)[] = [],
   ): Visibility {
     return {
       permittedUsers,
@@ -28,22 +33,16 @@ export default class IssueVisibility {
     } as Visibility;
   }
 
-  static hasUsersOrGroups(visibility: Visibility): boolean {
-    if (!visibility) {
-      return false;
-    }
-
-    const v = this.visibility(visibility);
-
-    return !!(v?.permittedUsers?.length || v?.permittedGroups?.length);
-  }
-
   static isSecured(visibility?: Visibility | null): boolean {
     if (!visibility) {
       return false;
     }
 
-    return this.hasUsersOrGroups(visibility);
+    return (
+      !!visibility?.permittedGroups?.length ||
+      !!visibility?.permittedUsers?.length ||
+      !!visibility?.implicitPermittedUsers?.length
+    );
   }
 
   static getVisibilityAsArray(visibility: Visibility | null): VisibilityItem[] {
