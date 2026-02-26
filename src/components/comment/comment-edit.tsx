@@ -510,7 +510,7 @@ const CommentEdit = (props: Props) => {
           <View
             style={[
               styles.commentInputContainer,
-              IssueVisibility.isSecured(editingComment) && styles.commentInputContainerHighlighted,
+              IssueVisibility.isSecured(editingComment.visibility) && styles.commentInputContainerHighlighted,
             ]}
           >
             {renderCommentInput(
