@@ -107,7 +107,7 @@ msgstr "Add project to favorites"
 msgid "Add reaction"
 msgstr "Add reaction"
 
-#: src/components/comment/comment-edit.tsx:593
+#: src/components/comment/comment-edit.tsx:597
 msgid "Add spent time"
 msgstr "Add spent time"
 
@@ -160,7 +160,7 @@ msgstr "Are you sure you want to delete this article?"
 msgid "Are you sure you want to delete this draft?"
 msgstr "Are you sure you want to delete this draft?"
 
-#: src/views/issue/activity/issue-activity__actions.ts:268
+#: src/views/issue/activity/issue-activity__actions.ts:269
 msgid "Are you sure you want to delete this work item?"
 msgstr "Are you sure you want to delete this work item?"
 
@@ -180,7 +180,7 @@ msgstr "Article published"
 msgid "Article removed from favorites"
 msgstr "Article removed from favorites"
 
-#: src/components/comment/comment-edit.tsx:562
+#: src/components/comment/comment-edit.tsx:566
 #: src/views/issue/issue-base-actions-creater.ts:543
 msgid "Attach file"
 msgstr "Attach file"
@@ -319,7 +319,7 @@ msgstr "Confirm logout"
 msgid "Confirmation required"
 msgstr "Confirmation required"
 
-#: src/actions/app-actions.ts:897
+#: src/actions/app-actions.ts:893
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
@@ -416,7 +416,7 @@ msgstr "declined the pull request"
 #: src/views/create-issue/create-issue-drafts.tsx:41
 #: src/views/issue/activity/issue__activity-stream.tsx:179
 #: src/views/issue/activity/issue__activity.tsx:232
-#: src/views/issue/activity/issue-activity__actions.ts:268
+#: src/views/issue/activity/issue-activity__actions.ts:269
 #: src/views/issue/activity/issue-activity__comment-actions.ts:263
 #: src/views/issue/issue-base-actions-creater.ts:573
 msgid "Delete"
@@ -501,7 +501,7 @@ msgstr "Drafts"
 msgid "Edit"
 msgstr "Edit"
 
-#: src/components/comment/comment-edit.tsx:610
+#: src/components/comment/comment-edit.tsx:614
 msgid "Edit comment"
 msgstr "Edit comment"
 
@@ -1212,7 +1212,7 @@ msgstr "The commit author is not an assignee in the project."
 msgid "The search query contains unknown values"
 msgstr "The search query contains unknown values"
 
-#: src/actions/app-actions.ts:462
+#: src/actions/app-actions.ts:458
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 msgstr "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 
@@ -1386,7 +1386,7 @@ msgstr "Woah, you can't touch this!"
 msgid "Wrap attribute values that contain spaces in braces {like this}."
 msgstr "Wrap attribute values that contain spaces in braces {like this}."
 
-#: src/components/comment/comment-edit.tsx:429
+#: src/components/comment/comment-edit.tsx:430
 #: src/views/issue/activity/activity__add-spent-time.tsx:379
 msgid "Write a comment, @mention people"
 msgstr "Write a comment, @mention people"
@@ -1395,7 +1395,7 @@ msgstr "Write a comment, @mention people"
 msgid "Yes"
 msgstr "Yes"
 
-#: src/actions/app-actions.ts:807
+#: src/actions/app-actions.ts:803
 msgid "You are trying to open a link from another server. Please add this server to the app first."
 msgstr "You are trying to open a link from another server. Please add this server to the app first."
 
@@ -1423,7 +1423,7 @@ msgstr ""
 msgid "Your account has insufficient permission to perform this operation."
 msgstr "Your account has insufficient permission to perform this operation."
 
-#: src/actions/app-actions.ts:262
+#: src/actions/app-actions.ts:258
 msgid "Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator."
 msgstr "Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator."
 
