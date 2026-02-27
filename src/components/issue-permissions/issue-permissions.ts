@@ -121,7 +121,9 @@ export default class IssuePermissions {
       return false;
     }
 
-    const isSpentTime = timeTrackingSettings.timeSpent.field.id === field.projectCustomField.field.id;
+    const spentTimeFieldId = timeTrackingSettings.timeSpent.field?.id;
+    const fieldId = field.projectCustomField?.field?.id;
+    const isSpentTime = !!spentTimeFieldId && spentTimeFieldId === fieldId;
     return isSpentTime; // Spent Time field is always disabled to edit – calculating automatically
   };
 
