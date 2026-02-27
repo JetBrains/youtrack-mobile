@@ -55,6 +55,7 @@ import type {RequestHeaders} from 'types/Auth';
 import type {RootState} from 'reducers/app-reducer';
 import type {ScrollData} from 'types/Markdown';
 import type {IssueState} from './issue-base-reducer';
+import type {IssueTabbedState} from 'components/issue-tabbed/issue-tabbed';
 import type {Theme, UITheme} from 'types/Theme';
 import type {User, UserCC} from 'types/User';
 
@@ -80,7 +81,11 @@ export type IssueProps = IssueState &
   AdditionalProps;
 
 
-export class Issue<T extends IssueProps> extends IssueTabbed<IssueProps & T> {
+interface IssueComponentState extends IssueTabbedState {
+  isSpentTimeFormVisible?: boolean;
+}
+
+export class Issue extends IssueTabbed<IssueProps, IssueComponentState> {
   imageHeaders: RequestHeaders = getApi().auth.getAuthorizationHeaders();
   backendUrl: string = getApi().config.backendUrl;
   renderRefreshControl: (
@@ -260,6 +265,7 @@ export class Issue<T extends IssueProps> extends IssueTabbed<IssueProps & T> {
         setCustomFieldValue={setCustomFieldValue}
         isSplitView={isSplitView}
         scrollData={scrollData}
+        onSpentTimePress={this.onOpenAddSpentTime}
       />
     );
   };
@@ -316,6 +322,8 @@ export class Issue<T extends IssueProps> extends IssueTabbed<IssueProps & T> {
           activityId: navigateToActivity,
           commentId,
         }}
+        isSpentTimeFormVisible={this.state.isSpentTimeFormVisible}
+        onSpentTimeFormOpen={() => this.setState({isSpentTimeFormVisible: false})}
       />
     );
   };
@@ -330,6 +338,11 @@ export class Issue<T extends IssueProps> extends IssueTabbed<IssueProps & T> {
     return (
       !editMode && !isSavingEditedIssue && !isRefreshing && !attachingImage
     );
+  };
+
+  onOpenAddSpentTime = () => {
+    this.switchToActivityTab();
+    this.setState({isSpentTimeFormVisible: true});
   };
 
   handleOnBack = () => {

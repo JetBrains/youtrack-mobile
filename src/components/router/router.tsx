@@ -61,7 +61,9 @@ class Router {
     const nav = this._navigator.state.nav;
     const currentRouteName = nav ? nav.routes[nav.index].routeName : '';
     const route = this.routes[currentRouteName];
-    if (route.modal || this._modalTransition) {
+    const isModal = route.modal || this._modalTransition;
+    this._modalTransition = false;
+    if (isModal) {
       return StackViewTransitionConfigs.ModalSlideFromBottomIOS;
     }
     return StackViewTransitionConfigs.SlideFromRightIOS;

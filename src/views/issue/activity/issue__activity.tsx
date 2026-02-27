@@ -76,6 +76,8 @@ type IssueActivityProps = IssueActivityState &
     issuePermissions: IssuePermissions;
     updateOptimisticallyActivityPage: (activityPage: Activity[]) => void;
     selectProps: ISelectProps<unknown>;
+    isSpentTimeFormVisible?: boolean;
+    onSpentTimeFormOpen?: () => void;
   };
 
 interface State {
@@ -101,6 +103,10 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
   }
 
   async componentDidMount() {
+    if (this.props.isSpentTimeFormVisible) {
+      this.props.onSpentTimeFormOpen?.();
+      this.renderAddSpentTimePage();
+    }
     await this.load(this.getCurrentIssue());
   }
 
@@ -130,6 +136,11 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
       return;
     } else if (isIssueOpenedFromList || isRedirectedFromIssueToIssue) {
       await this.load(this.getCurrentIssue());
+    }
+
+    if (!prevProps.isSpentTimeFormVisible && this.props.isSpentTimeFormVisible) {
+      this.props.onSpentTimeFormOpen?.();
+      this.renderAddSpentTimePage();
     }
   }
 
@@ -352,7 +363,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
   }
 
   renderAddSpentTimePage = (workItem?: WorkItem) => {
-    const {issue} = this.props;
+    const issue = this.getCurrentIssue();
     const isSplitViewMode: boolean = isSplitView();
 
     const onHide = () =>

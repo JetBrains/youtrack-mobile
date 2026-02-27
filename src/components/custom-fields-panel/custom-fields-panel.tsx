@@ -59,6 +59,8 @@ interface Props {
   accessibilityLabel?: string;
   modal?: boolean;
   helpDeskProjectsOnly: boolean;
+  spentTimeFieldId?: string;
+  onSpentTimeFieldPress?: () => void;
 }
 
 interface SelectState extends ISelectProps<CustomFieldSelect> {
@@ -96,9 +98,11 @@ export default function CustomFieldsPanel(props: Props) {
   const api: Api = getApi();
   let currentScrollX: number = 0;
   const isComponentMounted = React.useRef<boolean>(false);
-  const isConnected = useSelector((state: AppState) => state.app.networkState?.isConnected);
   const user = useSelector((state: AppState) => state.app.user);
+
+  const isConnected = useSelector((state: AppState) => state.app.networkState?.isConnected);
   const isReporter = !!user?.profiles?.helpdesk?.isReporter;
+  const editingDisabled = isConnected === false || isReporter;
 
   const [selectState, setSelectState] = React.useState<SelectState | null>(null);
   const [simpleValueState, setSimpleValue] = React.useState<SimpleValueState | null>(null);
@@ -361,10 +365,8 @@ export default function CustomFieldsPanel(props: Props) {
     }
   };
 
-  const isFieldDisabled = () => isConnected === false || isReporter;
-
   const renderFields = () => {
-    const {issueProject = {name: '', id: ''}, onUpdateSprints} = props;
+    const {issueProject = {name: '', id: ''}, onUpdateSprints, onSpentTimeFieldPress, spentTimeFieldId} = props;
     return (
       <>
         {!props.fields && <SkeletonIssueCustomFields />}
@@ -384,7 +386,7 @@ export default function CustomFieldsPanel(props: Props) {
             >
               <View key="Project">
                 <CustomField
-                  disabled={!props.hasPermission.canEditProject || isFieldDisabled()}
+                  disabled={!props.hasPermission.canEditProject || editingDisabled}
                   onPress={onSelectProject}
                   active={isEditingProject}
                   field={createNullProjectCustomField(issueProject.name, getProjectLabel())}
@@ -393,16 +395,29 @@ export default function CustomFieldsPanel(props: Props) {
               </View>
 
               {props.fields.map((field: IssueCustomField, index: number) => {
+                const canAddSpentTime =
+                  !!spentTimeFieldId &&
+                  !editingDisabled &&
+                  !!onSpentTimeFieldPress &&
+                  field.projectCustomField?.field?.id === spentTimeFieldId;
+
                 const isDisabled: boolean =
-                  isFieldDisabled() ||
-                  !(props.hasPermission.canUpdateField && props.hasPermission.canUpdateField(field)) ||
-                  !field?.projectCustomField?.field?.fieldType;
+                  !canAddSpentTime && (
+                    editingDisabled ||
+                    !(props.hasPermission.canUpdateField && props.hasPermission.canUpdateField(field)) ||
+                    !field?.projectCustomField?.field?.fieldType
+                  );
+
                 return (
                   <React.Fragment key={field.id || `${field.name}-${index}`}>
                     <CustomField
                       absDate={!!user?.profiles.appearance?.useAbsoluteDates}
                       field={field}
-                      onPress={() => onEditField(field)}
+                      onPress={
+                        canAddSpentTime
+                          ? onSpentTimeFieldPress
+                          : () => onEditField(field)
+                      }
                       active={editingField === field}
                       disabled={isDisabled}
                     />

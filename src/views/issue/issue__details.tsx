@@ -110,7 +110,10 @@ export interface IssueDetailsProps {
   isReporter: boolean;
   isAgent: boolean;
   usersCC: Array<UserCC> | null;
+  onSpentTimePress?: () => void;
 }
+
+const noop = () => false;
 
 export default class IssueDetails extends Component<IssueDetailsProps, void> {
   imageHeaders: any = getApi().auth.getAuthorizationHeaders();
@@ -424,13 +427,13 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
   }
 
   getIssuePermissions = (): IssuePermissions => {
-    const noop = () => false;
     return (
       this.props.issuePermissions || {
         canCreateIssueToProject: noop,
         canUpdateField: noop,
         canUpdateGeneralInfo: noop,
         canEditProject: noop,
+        canCreateWork: noop,
       }
     );
   };
@@ -448,6 +451,11 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
 
   renderCustomFieldPanel = () => {
     const i = this.getIssue();
+    const spentTimeFieldId = i?.project?.plugins?.timeTrackingSettings?.timeSpent?.field?.id;
+    const canAddSpentTime =
+      !!spentTimeFieldId &&
+      !!i?.project?.plugins?.timeTrackingSettings?.enabled &&
+      this.getIssuePermissions().canCreateWork(i);
 
     return (
       <CustomFieldsPanel
@@ -467,6 +475,8 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
         uiTheme={this.uiTheme!}
         modal={this.props.modal}
         helpDeskProjectsOnly={!!i?.project?.plugins?.helpDeskSettings?.enabled}
+        spentTimeFieldId={spentTimeFieldId}
+        onSpentTimeFieldPress={canAddSpentTime ? this.props.onSpentTimePress : undefined}
       />
     );
   };

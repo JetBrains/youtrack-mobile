@@ -21,7 +21,7 @@ export interface IssueTabbedState {
 }
 
 
-export default class IssueTabbed<P = {}> extends PureComponent<P, IssueTabbedState> {
+export default class IssueTabbed<P = {}, S extends IssueTabbedState = IssueTabbedState> extends PureComponent<P, S> {
   initialWindowDimensions: ScaledSize;
   tabRoutes: TabRoute[];
   unsubscribeOnDimensionsChange: EventSubscription | undefined;
@@ -42,7 +42,7 @@ export default class IssueTabbed<P = {}> extends PureComponent<P, IssueTabbedSta
       isTransitionInProgress: false,
       isSplitView: isSplitView(),
       navigateToActivity: false,
-    };
+    } as S;
   }
 
   componentDidMount() {
