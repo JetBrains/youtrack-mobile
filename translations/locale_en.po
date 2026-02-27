@@ -347,11 +347,11 @@ msgstr "Content revised"
 msgid "Copied"
 msgstr "Copied"
 
-#: src/views/issue/issue__details.tsx:369
+#: src/views/issue/issue__details.tsx:372
 msgid "Copy description"
 msgstr "Copy description"
 
-#: src/views/issue/issue__details.tsx:258
+#: src/views/issue/issue__details.tsx:261
 msgid "Copy field text"
 msgstr "Copy field text"
 
@@ -415,7 +415,7 @@ msgstr "declined the pull request"
 #: src/views/article/article__activity.tsx:249
 #: src/views/create-issue/create-issue-drafts.tsx:41
 #: src/views/issue/activity/issue__activity-stream.tsx:179
-#: src/views/issue/activity/issue__activity.tsx:232
+#: src/views/issue/activity/issue__activity.tsx:243
 #: src/views/issue/activity/issue-activity__actions.ts:269
 #: src/views/issue/activity/issue-activity__comment-actions.ts:263
 #: src/views/issue/issue-base-actions-creater.ts:573
@@ -496,7 +496,7 @@ msgstr "Drafts"
 #: src/views/article/arcticle-actions.ts:264
 #: src/views/article/article__activity.tsx:178
 #: src/views/issue/activity/issue__activity-stream.tsx:101
-#: src/views/issue/activity/issue__activity.tsx:221
+#: src/views/issue/activity/issue__activity.tsx:232
 #: src/views/issue/issue-base-actions-creater.ts:523
 msgid "Edit"
 msgstr "Edit"
@@ -531,7 +531,7 @@ msgstr "Enter search request"
 msgid "Enter the web address for a YouTrack installation where you have a registered account"
 msgstr "Enter the web address for a YouTrack installation where you have a registered account"
 
-#: src/components/custom-fields-panel/custom-fields-panel.tsx:198
+#: src/components/custom-fields-panel/custom-fields-panel.tsx:202
 msgid "Enter time value"
 msgstr "Enter time value"
 
@@ -790,7 +790,7 @@ msgstr "New messages"
 msgid "Next"
 msgstr "Next"
 
-#: src/components/activity-stream/activity__stream.tsx:540
+#: src/components/activity-stream/activity__stream.tsx:545
 msgid "No activity yet"
 msgstr "No activity yet"
 
@@ -871,7 +871,7 @@ msgstr "People added as CCs receive the same notifications that are sent to the 
 msgid "Photo and video library"
 msgstr "Photo and video library"
 
-#: src/components/activity-stream/activity__stream.tsx:532
+#: src/components/activity-stream/activity__stream.tsx:537
 msgid "Pinned comments"
 msgstr "Pinned comments"
 
@@ -976,7 +976,7 @@ msgstr "Search articles"
 msgid "Search for a different value"
 msgstr "Search for a different value"
 
-#: src/components/custom-fields-panel/custom-fields-panel.tsx:180
+#: src/components/custom-fields-panel/custom-fields-panel.tsx:184
 msgid "Search for the project"
 msgstr "Search for the project"
 
@@ -1341,7 +1341,7 @@ msgstr "VCS changes"
 msgid "View comment"
 msgstr "View comment"
 
-#: src/views/issue/issue__details.tsx:494
+#: src/views/issue/issue__details.tsx:504
 msgid "View comments and other activity"
 msgstr "View comments and other activity"
 
