@@ -24,7 +24,7 @@ const light: UITheme = {
     $mask: '#00000057',
     $navigation: '#737577',
     $private: 'rgba(178, 92, 0, 1)',
-    $privateBackground: 'rgba(250, 236, 205, 0.25)',
+    $privateBackground: 'rgb(255, 246, 222)',
     $separator: '#dfe5eb',
     ...themeColorsPalette,
   },
