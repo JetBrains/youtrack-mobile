@@ -199,6 +199,20 @@ export const rowStyles = {
   },
   activityCommentReactions: {
     alignItems: 'center',
+    marginLeft: UNIT * 5.5,
+    marginTop: -UNIT / 6,
+  },
+  activityCommentReactionsSecured: {
+    alignSelf: 'stretch',
+    marginTop: -UNIT,
+    marginLeft: UNIT * 4.5,
+    paddingTop: UNIT,
+    paddingRight: UNIT,
+    paddingLeft: UNIT,
+    paddingBottom: UNIT / 2,
+    backgroundColor: '$privateBackground',
+    borderBottomLeftRadius: UNIT,
+    borderBottomRightRadius: UNIT,
   },
   activityCommentAttachments: {
     marginTop: UNIT,

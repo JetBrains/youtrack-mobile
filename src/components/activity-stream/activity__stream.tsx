@@ -172,11 +172,11 @@ export const ActivityStream = (props: ActivityStreamProps) => {
     }, 100);
   }, [highlight, scrollToActivity]);
 
-  const renderCommentReactions = (activityGroup: ActivityGroup) => {
+  const renderCommentReactions = (activityGroup: ActivityGroup, secured: boolean = false) => {
     const comment = getCommentFromActivityGroup(activityGroup);
     return comment && !comment.deleted ? (
       <CommentReactions
-        style={styles.activityCommentReactions}
+        style={[styles.activityCommentReactions, secured && styles.activityCommentReactionsSecured]}
         comment={comment}
         currentUser={props.currentUser}
         onReactionSelect={props.onSelectReaction}
@@ -241,7 +241,7 @@ export const ActivityStream = (props: ActivityStreamProps) => {
     }
   };
 
-  const isSecured = (c?: IssueComment): boolean => !!c && IssueVisibility.isSecured(c?.visibility);
+  const isSecured = (c: IssueComment | null): boolean => !!c && IssueVisibility.isSecured(c.visibility);
 
   const renderCommentVisibilityPresentation = (
     comment: IssueComment | null,
@@ -348,7 +348,7 @@ export const ActivityStream = (props: ActivityStreamProps) => {
     const isRelatedChange: boolean = Boolean(
       activityGroup?.comment || activityGroup?.work || activityGroup?.vcs,
     );
-    let renderedItem: any = null;
+    let renderedItem = null;
 
     switch (true) {
       case !!activityGroup.comment:
@@ -439,7 +439,6 @@ export const ActivityStream = (props: ActivityStreamProps) => {
                 ))}
               </View>
             )}
-            {!!props.onSelectReaction && renderCommentReactions(activityGroup)}
           </Component>
         </View>
       </>
@@ -460,7 +459,7 @@ export const ActivityStream = (props: ActivityStreamProps) => {
     }
     const children = doRenderActivity(activityGroup);
     const comment = activityGroup.comment ? entity as IssueComment : null;
-    return menuConfig ? (
+    const wrappedContent = menuConfig ? (
       <ContextActionsProvider
         auxiliaryPreview={
           !props.isReporter && comment
@@ -473,6 +472,12 @@ export const ActivityStream = (props: ActivityStreamProps) => {
       </ContextActionsProvider>
     ) : (
       <>{children}</>
+    );
+    return (
+      <>
+        {wrappedContent}
+        {!!props.onSelectReaction && renderCommentReactions(activityGroup, isSecured(comment))}
+      </>
     );
   };
 
