@@ -1,4 +1,4 @@
-import React, {MutableRefObject, useCallback, useLayoutEffect, useRef} from 'react';
+import React, {MutableRefObject, useCallback, useLayoutEffect, useMemo, useRef} from 'react';
 
 import IconPin from '@jetbrains/icons/pin-filled.svg';
 
@@ -106,21 +106,24 @@ export const ActivityStream = (props: ActivityStreamProps) => {
     firstActivityChange(activityGroup.comment) as IssueComment;
 
   const {openBottomSheet, closeBottomSheet} = useBottomSheetContext();
-  let pinnedActivities: ActivityGroup[] = [];
-  if (activities?.length) {
-    pinnedActivities = activities?.reduce(
+  const pinnedActivities: ActivityGroup[] = useMemo(() => {
+    if (!activities?.length) return [];
+    return activities.reduce(
       (acc, activityGroup) => {
         const isPinnedComment = !!(activityGroup.comment && getCommentFromActivityGroup(activityGroup).pinned);
         if (isPinnedComment) {
-          activityGroup.id = `${activityGroup.id}-pinned`;
-          activityGroup.merged = false;
-          acc.push(activityGroup);
+          acc.push({
+            ...activityGroup,
+            id: `${activityGroup.id}-pinned`,
+            merged: false,
+          });
         }
         return acc;
       },
       [] as ActivityGroup[]
     );
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activities]);
 
   const onScroll = ({nativeEvent}: { nativeEvent: NativeScrollEvent }) => (
     scrollOffset.current = nativeEvent.contentOffset.y
