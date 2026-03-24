@@ -35,35 +35,50 @@ const IssueActivityStreamCommentAdd = (props: Props) => {
   const canUpdateCommentVisibility = issuePermissions.canUpdateCommentVisibility(issue);
   const isHelpdeskIssue = issuePermissions.helpdesk.isHelpdeskProject(issue);
 
-  const doUploadFileToComment = (files: NormalizedAttachment[], comment: IssueComment) => {
-    return attachmentActions.doUploadFileToComment(false, files, issue, comment);
-  };
+  const doUploadFileToComment = React.useCallback(
+    (files: NormalizedAttachment[], comment: IssueComment) =>
+      attachmentActions.doUploadFileToComment(false, files, issue, comment),
+    [issue]
+  );
+
+  const getVisibilityOptions = React.useCallback(
+    (q: string) => getApi().issue.getVisibilityOptions(issue.id, q),
+    [issue.id]
+  );
+
+  const getCommentSuggestions = React.useCallback(
+    async (query: string) =>
+      dispatch(createActivityCommentActions(props.stateFieldName).loadCommentSuggestions(query)),
+    [dispatch, props.stateFieldName]
+  );
+
+  const canRemoveAttach = React.useCallback(() => canAttach, [canAttach]);
 
   let visibility: Visibility | null = props?.comment?.visibility || null;
   if (!visibility && (!canCommentPublicly || (isHelpdeskIssue && issuePermissions.isPrivateAgentCommentByDefault())) && team) {
     visibility = IssueVisibility.createLimitedVisibility([team]);
   }
 
+  const editingComment = React.useMemo(() => ({
+    ...props.comment,
+    issue: {id: issue.id},
+    visibility,
+    canUpdateVisibility:
+      typeof props.comment?.canUpdateVisibility === 'boolean'
+        ? props.comment.canUpdateVisibility
+        : canUpdateCommentVisibility,
+  }), [props.comment, issue.id, visibility, canUpdateCommentVisibility]);
+
   return (
     <IssueCommentEdit
       onCommentChange={props.onCommentChange}
-      getVisibilityOptions={(q: string) => getApi().issue.getVisibilityOptions(issue.id, q)}
+      getVisibilityOptions={getVisibilityOptions}
       onSubmitComment={props.onSubmitComment}
-      editingComment={{
-        ...props.comment,
-        issue: {id: issue.id},
-        visibility,
-        canUpdateVisibility:
-          typeof props.comment?.canUpdateVisibility === 'boolean'
-            ? props.comment.canUpdateVisibility
-            : canUpdateCommentVisibility,
-      }}
-      getCommentSuggestions={async (query: string) =>
-        dispatch(createActivityCommentActions(props.stateFieldName).loadCommentSuggestions(query))
-      }
+      editingComment={editingComment}
+      getCommentSuggestions={getCommentSuggestions}
       canAttach={canAttach}
       canUpdateCommentVisibility={canUpdateCommentVisibility}
-      canRemoveAttach={() => canAttach}
+      canRemoveAttach={canRemoveAttach}
       onAddSpentTime={props.onAddSpentTime}
       onAttach={doUploadFileToComment}
     />
