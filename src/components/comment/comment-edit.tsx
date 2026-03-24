@@ -71,7 +71,6 @@ export interface Props {
 
 interface State {
   attachFileSource: string | null;
-  commentCaret: number;
   editingComment: EditingComment;
   height: number;
   isAttachActionsVisible: boolean;
@@ -100,10 +99,10 @@ const CommentEdit = (props: Props) => {
 
   const editCommentInput = React.useRef<TextInput | null>(null);
   const editingCommentRef = React.useRef<EditingComment>(EMPTY_COMMENT);
+  const caretRef = React.useRef<number>(0);
 
   const [state, updateState] = React.useState<State>({
     attachFileSource: null,
-    commentCaret: 0,
     editingComment: {...EMPTY_COMMENT, ...props.editingComment},
     height: UNIT * 4,
     isAttachActionsVisible: false,
@@ -200,7 +199,7 @@ const CommentEdit = (props: Props) => {
       ) {
         const comment: EditingComment = {...state.editingComment, ...props.editingComment};
         setEditingComment(comment);
-        changeState({commentCaret: comment.text?.length});
+        caretRef.current = comment.text?.length ?? 0;
         if (props.editingComment.reply) {
           focus();
         }
@@ -247,7 +246,7 @@ const CommentEdit = (props: Props) => {
     const newText = composeSuggestionText(
       user,
       state.editingComment.text,
-      state.commentCaret,
+      caretRef.current,
     );
 
     if (newText) {
@@ -435,12 +434,12 @@ const CommentEdit = (props: Props) => {
         placeholderTextColor={styles.commentInputPlaceholder.color}
         autoCapitalize="sentences"
         onSelectionChange={event => {
-          changeState({commentCaret: event.nativeEvent.selection.start});
+          caretRef.current = event.nativeEvent.selection.start;
         }}
         onChangeText={(text: string) => {
           const updatedDraftComment = getCurrentComment({text});
           setEditingComment(updatedDraftComment);
-          onMentionsShow(text, state.commentCaret);
+          onMentionsShow(text, caretRef.current);
         }}
         onContentSizeChange={event => {
           changeState({height: event.nativeEvent.contentSize.height});
