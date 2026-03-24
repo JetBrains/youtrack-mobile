@@ -71,4 +71,4 @@ const StreamComment = ({
   );
 };
 
-export default StreamComment;
+export default React.memo(StreamComment);
