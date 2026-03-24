@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useCallback, useContext, useMemo} from 'react';
 
 import Markdown from 'react-native-markdown-display';
 
@@ -26,7 +26,6 @@ type Props = {
   isHTML?: boolean;
 };
 
-
 function MarkdownView(props: Props) {
   const theme: Theme = useContext(ThemeContext);
   const {
@@ -36,33 +35,33 @@ function MarkdownView(props: Props) {
     onCheckboxUpdate = (checked: boolean, position: number, md: string) => {},
     isHTML,
   } = props;
-  const attaches: Attachment[] = apiHelper.convertAttachmentRelativeToAbsURLs(
-    attachments,
-    getApi().config.backendUrl,
+
+  const attaches: Attachment[] = useMemo(
+    () => apiHelper.convertAttachmentRelativeToAbsURLs(attachments, getApi().config.backendUrl),
+    [attachments],
   );
 
-  const onCheckBoxPress = (checked: boolean, position: number): void => {
-    onCheckboxUpdate(
-      checked,
-      position,
-      updateMarkdownCheckbox(children, position, checked),
-    );
-  };
+  const onCheckBoxPress = useCallback(
+    (checked: boolean, position: number): void => {
+      onCheckboxUpdate(checked, position, updateMarkdownCheckbox(children, position, checked));
+    },
+    [children, onCheckboxUpdate],
+  );
+
+  const rules = useMemo(
+    () => getMarkdownRules(attaches, theme.uiTheme, mentions, onCheckBoxPress, props.textStyle),
+    [attaches, theme.uiTheme, mentions, onCheckBoxPress, props.textStyle],
+  );
+
+  const styles = useMemo(
+    () => markdownStyles(theme.uiTheme, props.textStyle),
+    [theme.uiTheme, props.textStyle],
+  );
 
   return isHTML ? (
     <HTML html={prepareHTML(children)} />
   ) : (
-    <Markdown
-      style={markdownStyles(theme.uiTheme, props.textStyle)}
-      markdownit={MarkdownItInstance}
-      rules={getMarkdownRules(
-        attaches,
-        theme.uiTheme,
-        mentions,
-        onCheckBoxPress,
-        props.textStyle,
-      )}
-    >
+    <Markdown style={styles} markdownit={MarkdownItInstance} rules={rules}>
       {children}
     </Markdown>
   );
