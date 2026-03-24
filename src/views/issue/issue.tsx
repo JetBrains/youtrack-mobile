@@ -171,11 +171,11 @@ export class Issue extends IssueTabbed<IssueProps, IssueComponentState> {
 
   async loadIssue(issuePlaceholder?: Partial<IssueFull> | null) {
     const issueId: string = this.props.issueId || this.props?.issuePlaceholder?.id || this.props.issue?.id;
+    this.loadIssueSprints();
     await this.props.loadIssue(issuePlaceholder);
     if (isHelpdeskProject(this.props.issue)) {
       this.props.loadUsersCC(issueId);
     }
-    this.loadIssueSprints();
   }
 
   createIssueDetails: (
