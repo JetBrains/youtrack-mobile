@@ -1373,7 +1373,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-keyboard-controller (1.18.6):
+  - react-native-keyboard-controller (1.21.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1398,7 +1398,7 @@ PODS:
     - React-Core
   - react-native-notifications (4.3.3):
     - React-Core
-  - react-native-pager-view (6.6.1):
+  - react-native-pager-view (6.9.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1801,7 +1801,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNDeviceInfo (14.0.1):
+  - RNDeviceInfo (14.1.1):
     - React-Core
   - RNFastImage (8.6.3):
     - React-Core
@@ -2044,7 +2044,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNSentry (6.18.1):
+  - RNSentry (6.22.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2065,11 +2065,11 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - Sentry/HybridSDK (= 8.53.2)
+    - Sentry/HybridSDK (= 8.56.2)
     - Yoga
   - RNSVG (15.12.1):
     - React-Core
-  - RNVectorIcons (10.2.0):
+  - RNVectorIcons (10.3.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2096,7 +2096,7 @@ PODS:
   - SDWebImageWebPCoder (0.8.5):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
-  - Sentry/HybridSDK (8.53.2)
+  - Sentry/HybridSDK (8.56.2)
   - SocketRocket (0.7.1)
   - TOCropViewController (2.7.4)
   - Yoga (0.0.0)
@@ -2476,10 +2476,10 @@ SPEC CHECKSUMS:
   react-native-eventsource: 567ba6733dddf7481c2e9302704fb66e5d80eed1
   react-native-ios-context-menu: 4ded248ee0855c3469ba4be078d7792f248d868d
   react-native-ios-utilities: f6e684c53670f98a23b11ec2fe53b60cff278af1
-  react-native-keyboard-controller: efc4ddc0429b197b50fcb34c4705eba9c2528681
+  react-native-keyboard-controller: f5e9ea44a1a849a1e11e6dc5c9d09c1529a894b9
   react-native-netinfo: be701059f57093572e5ba08cba14483d334b425d
   react-native-notifications: a2b0c4ee378a77a250af238db1b148225ac5ba86
-  react-native-pager-view: e72c43e76e4c92da4a9dc43c1a9e116c13e1f867
+  react-native-pager-view: c24e4b57aeefa30c0fa1f2717da671d30d1d47a5
   react-native-render-html: 5afc4751f1a98621b3009432ef84c47019dcb2bd
   react-native-restart: 0bc732f4461709022a742bb29bcccf6bbc5b4863
   react-native-safe-area-context: 314537f8fca6fe2c06bd53fc8905efa9e6aaaf59
@@ -2516,7 +2516,7 @@ SPEC CHECKSUMS:
   ReactCommon: 06cde9e035d27f37e0e5d2bb23606e10aedd866b
   RNCAsyncStorage: b6410dead2732b5c72a7fdb1ecb5651bbcf4674b
   RNCMaskedView: aef76c02bdf36e6baa5255b36672a640df938964
-  RNDeviceInfo: afc27b3f24bd0e97181bf3e9f23cfa4c9040dd32
+  RNDeviceInfo: bcce8752b5043a623fe3c26789679b473f705d3c
   RNFastImage: 462a183c4b0b6b26fdfd639e1ed6ba37536c3b87
   RNFBAnalytics: d618294d10feda7d749a7713a3f1c54b0363a550
   RNFBApp: 22c91c2d4ef60be1de426d3544f68c348e036bb0
@@ -2525,12 +2525,12 @@ SPEC CHECKSUMS:
   RNReactNativeHapticFeedback: 92bb48cffe0a8738a109d66cdb5984732b9cb496
   RNReanimated: a9ca924b8236f08843994cb0067e44268b6cf3a2
   RNScreens: 1d84139259b7999ee93e00764556a9042d43d0b5
-  RNSentry: 809d60a292df5caa54010c019368f9a2b5505b85
+  RNSentry: 1dc68638de00329aada963be4bc525e39a25e9bb
   RNSVG: 2e59e14c2723a1967cd1bba71038a59142cbc616
-  RNVectorIcons: 68661e35101c98d574fa61a326d2043aec3e049a
+  RNVectorIcons: 9220340395b3a94edad59be7d507ca0aa443e6fb
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
-  Sentry: 59993bffde4a1ac297ba6d268dc4bbce068d7c1b
+  Sentry: b53951377b78e21a734f5dc8318e333dbfc682d7
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   TOCropViewController: 80b8985ad794298fb69d3341de183f33d1853654
   Yoga: 2b02f3f767761bb4ffd25b1bb56fd264be57bd6b
