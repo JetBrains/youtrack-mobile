@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useMemo, useRef, useState} from 'react';
 import {Text, View} from 'react-native';
 
 import {stringToTokens, tokensToAST} from 'react-native-markdown-display';
@@ -15,7 +15,7 @@ import {updateMarkdownCheckbox} from './markdown-helper';
 
 import type {ASTNode} from 'react-native-markdown-display';
 import type {Attachment} from 'types/CustomFields';
-import type {MarkdownToken} from 'types/Markdown';
+
 import type {TextStyleProp} from 'types/Internal';
 
 type Props = {
@@ -30,11 +30,6 @@ type Props = {
   isHTML?: boolean;
 };
 const DEFAULT_CHUNK_SIZE: number = 10;
-let chunks: ASTNode[] = [];
-let rules: Record<string, any> = {};
-let tokens: MarkdownToken[] = [];
-let md: string | null = null;
-
 
 const MarkdownViewChunks = (props: Props) => {
   const theme: Theme = useContext(ThemeContext);
@@ -43,18 +38,17 @@ const MarkdownViewChunks = (props: Props) => {
     children,
     scrollData = {},
     mentions,
-    onCheckboxUpdate = (
-      checked: boolean,
-      position: number,
-      markdown: string,
-    ) => {},
+    onCheckboxUpdate = () => {},
     maxChunks,
   } = props;
   const [chunksToRender, updateChunksToRender] = useState(1);
-  const [astToRender, updateAstToRender] = useState<ASTNode[]>([]);
+  const [astToRender, updateAstToRender] = useState<ASTNode[][]>([]);
 
-  const createChunks = (astNodes: ASTNode[], size: number = DEFAULT_CHUNK_SIZE): ASTNode[] => {
-    const nodes: ASTNode[] = [];
+  const chunksRef = useRef<ASTNode[][]>([]);
+  const mdRef = useRef<string | null>(null);
+
+  const createChunks = (astNodes: ASTNode[], size: number = DEFAULT_CHUNK_SIZE): ASTNode[][] => {
+    const nodes: ASTNode[][] = [];
     let index = 0;
     while (index < astNodes.length) {
       nodes.push(astNodes.slice(index, size + index));
@@ -64,75 +58,51 @@ const MarkdownViewChunks = (props: Props) => {
   };
 
   const createMarkdown = useCallback(
-    (markdown: string): void => {
-      tokens = stringToTokens(markdown, MarkdownItInstance);
-      chunks = createChunks(tokensToAST(tokens), props.chunkSize);
-      updateAstToRender(chunks);
+    (markdown: string) => {
+      const tokens = stringToTokens(markdown, MarkdownItInstance);
+      const newChunks = createChunks(tokensToAST(tokens), props.chunkSize);
+      chunksRef.current = newChunks;
+      updateAstToRender(newChunks);
     },
     [props.chunkSize],
   );
 
-  const onCheckboxPress = (checked: boolean, position: number): void => {
-    if (md && maxChunks == null) {
-      onCheckboxUpdate(
-        checked,
-        position,
-        updateMarkdownCheckbox(md, position, checked),
-      );
-    }
-  };
+  const onCheckboxPress = useCallback(
+    (checked: boolean, position: number) => {
+      if (mdRef.current && maxChunks == null) {
+        onCheckboxUpdate(checked, position, updateMarkdownCheckbox(mdRef.current, position, checked));
+      }
+    },
+    [maxChunks, onCheckboxUpdate],
+  );
 
-  const createRules = (): Record<string, any> => {
-    const attaches: Attachment[] = apiHelper.convertAttachmentRelativeToAbsURLs(
-      props.attachments || [],
-      getApi().config.backendUrl,
-    );
-    return getMarkdownRules(
-      attaches,
-      theme.uiTheme,
-      mentions,
-      onCheckboxPress,
-      props.textStyle,
-    );
-  };
+  const attaches: Attachment[] = useMemo(
+    () => apiHelper.convertAttachmentRelativeToAbsURLs(props.attachments || [], getApi().config.backendUrl),
+    [props.attachments],
+  );
 
-  useEffect(() => {
-    rules = createRules();
-    return () => {
-      tokens = [];
-      rules = {};
-      md = null;
-    }; // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const rules = useMemo(
+    () => getMarkdownRules(attaches, theme.uiTheme, mentions, onCheckboxPress, props.textStyle),
+    [attaches, theme.uiTheme, mentions, onCheckboxPress, props.textStyle],
+  );
+
   useEffect(() => {
     createMarkdown(children);
-    md = children;
+    mdRef.current = children;
   }, [children, createMarkdown]);
 
   const renderAST = (
     ast: ASTNode[],
     key: string,
-  ): React.ReactElement<
-    React.ComponentProps<typeof MarkdownAST>,
-    typeof MarkdownAST
-  > => {
-    return (
-      <MarkdownAST
-        textStyle={props.textStyle}
-        testID="chunk"
-        key={key}
-        ast={ast}
-        rules={rules}
-      />
-    );
+  ): React.ReactElement<React.ComponentProps<typeof MarkdownAST>, typeof MarkdownAST> => {
+    return <MarkdownAST textStyle={props.textStyle} testID="chunk" key={key} ast={ast} rules={rules} />;
   };
 
   if (!children || astToRender?.length === 0) {
     return null;
   }
 
-  const hasMore: boolean =
-    maxChunks != null ? false : chunksToRender + 1 <= chunks.length;
+  const hasMore: boolean = maxChunks != null ? false : chunksToRender + 1 <= chunksRef.current.length;
 
   scrollData.loadMore = () => {
     if (maxChunks != null) {
@@ -141,24 +111,19 @@ const MarkdownViewChunks = (props: Props) => {
 
     const number = chunksToRender + 1;
 
-    if (number <= chunks.length) {
+    if (number <= chunksRef.current.length) {
       updateChunksToRender(number);
     }
   };
 
   return (
     <View testID="markdownViewChunks">
-      {astToRender
-        .slice(0, maxChunks || chunksToRender)
-        .map((astPart, index) => renderAST(astPart, `chunk-${index}`))}
+      {astToRender.slice(0, maxChunks || chunksToRender).map((astPart, index) => renderAST(astPart, `chunk-${index}`))}
 
       {hasMore && <SkeletonIssueContent />}
-      {maxChunks != null && astToRender.length > maxChunks && (
-        <Text>{'…\n'}</Text>
-      )}
+      {maxChunks != null && astToRender.length > maxChunks && <Text>{'…\n'}</Text>}
     </View>
   );
 };
-
 
 export default React.memo<Props>(MarkdownViewChunks);
