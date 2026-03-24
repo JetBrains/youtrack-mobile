@@ -1,3 +1,4 @@
+import debounce from 'lodash.debounce';
 import React from 'react';
 import {
   ActivityIndicator,
@@ -99,6 +100,7 @@ const CommentEdit = (props: Props) => {
   const editCommentInput = React.useRef<TextInput | null>(null);
   const editingCommentRef = React.useRef<EditingComment>(EMPTY_COMMENT);
   const caretRef = React.useRef<number>(0);
+  const mentionRequestIdRef = React.useRef<number>(0);
   const [inputHeight, setInputHeight] = React.useState(UNIT * 4);
 
   const [state, updateState] = React.useState<State>({
@@ -180,6 +182,7 @@ const CommentEdit = (props: Props) => {
 
   React.useEffect(() => {
     return () => {
+      debouncedFetchMentions.cancel();
       if (editingCommentRef.current.id || editingCommentRef.current.text || editingCommentRef.current.visibility) {
         onCommentChange(getCurrentComment(editingCommentRef.current)).then(() => setEditingComment(EMPTY_COMMENT));
       } else {
@@ -216,30 +219,39 @@ const CommentEdit = (props: Props) => {
     changeState({isVisibilityControlVisible});
   };
 
-  const onMentionsShow = async (
-    text: string,
-    caret: number,
-  ): Promise<void> => {
-    const word = (getSuggestWord(text, caret));
-    if (!word) {
-      changeState({
-        mentionsVisible: false,
-        mentionsQuery: '',
-      });
-    } else if (word[0] === '@') {
-      const mentionsQuery = word.slice(1);
-      changeState({
-        mentionsVisible: true,
-        mentionsQuery,
-        mentionsLoading: true,
-      });
+  const debouncedFetchMentions = React.useMemo(
+    () => debounce(async (mentionsQuery: string) => {
+      const requestId = ++mentionRequestIdRef.current;
       const mentions: UserMentions = await props.getCommentSuggestions(mentionsQuery);
-      changeState({
-        mentionsLoading: false,
-        mentions,
-      });
-    }
-  };
+      if (requestId === mentionRequestIdRef.current) {
+        changeState({mentionsLoading: false, mentions});
+      }
+    }, 150),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [props.getCommentSuggestions]
+  );
+
+  const onMentionsShow = React.useCallback(
+    (text: string, caret: number): void => {
+      const word = getSuggestWord(text, caret);
+      if (!word) {
+        debouncedFetchMentions.cancel();
+        changeState({
+          mentionsVisible: false,
+          mentionsQuery: '',
+        });
+      } else if (word[0] === '@') {
+        const mentionsQuery = word.slice(1);
+        changeState({
+          mentionsVisible: true,
+          mentionsQuery,
+          mentionsLoading: true,
+        });
+        debouncedFetchMentions(mentionsQuery);
+      }
+    },
+    [debouncedFetchMentions]
+  );
 
   const applySuggestion = (user: User) => {
     const newText = composeSuggestionText(
