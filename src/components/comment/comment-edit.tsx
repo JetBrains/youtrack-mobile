@@ -72,7 +72,6 @@ export interface Props {
 interface State {
   attachFileSource: string | null;
   editingComment: EditingComment;
-  height: number;
   isAttachActionsVisible: boolean;
   isAttachFileDialogVisible: boolean;
   isSaving: boolean;
@@ -100,11 +99,11 @@ const CommentEdit = (props: Props) => {
   const editCommentInput = React.useRef<TextInput | null>(null);
   const editingCommentRef = React.useRef<EditingComment>(EMPTY_COMMENT);
   const caretRef = React.useRef<number>(0);
+  const [inputHeight, setInputHeight] = React.useState(UNIT * 4);
 
   const [state, updateState] = React.useState<State>({
     attachFileSource: null,
     editingComment: {...EMPTY_COMMENT, ...props.editingComment},
-    height: UNIT * 4,
     isAttachActionsVisible: false,
     isAttachFileDialogVisible: false,
     isSaving: false,
@@ -442,14 +441,15 @@ const CommentEdit = (props: Props) => {
           onMentionsShow(text, caretRef.current);
         }}
         onContentSizeChange={event => {
-          changeState({height: event.nativeEvent.contentSize.height});
+          const newHeight = event.nativeEvent.contentSize.height;
+          setInputHeight(prev => prev === newHeight ? prev : newHeight);
         }}
         onFocus={onFocus}
         onBlur={onBlur}
         style={[
           styles.commentInput,
           {
-            height: Math.max(MIN_INPUT_SIZE, state.height + 8),
+            height: Math.max(MIN_INPUT_SIZE, inputHeight + 8),
           },
         ]}
       />
