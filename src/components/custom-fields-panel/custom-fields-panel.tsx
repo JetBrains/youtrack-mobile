@@ -94,7 +94,7 @@ const dataPickerDefault: DatePickerState = {
   withTime: false,
 };
 
-export default function CustomFieldsPanel(props: Props) {
+function CustomFieldsPanel(props: Props) {
   const api: Api = getApi();
   let currentScrollX: number = 0;
   const isComponentMounted = React.useRef<boolean>(false);
@@ -454,3 +454,5 @@ export default function CustomFieldsPanel(props: Props) {
     </View>
   );
 }
+
+export default React.memo(CustomFieldsPanel);
