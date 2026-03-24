@@ -22,7 +22,7 @@ interface Props {
 }
 
 
-export default function Mentions(props: Props) {
+function Mentions(props: Props) {
   const AVATAR_SIZE: number = 24;
   const {mentions, isLoading, onApply, style} = props;
   return (
@@ -68,3 +68,5 @@ export default function Mentions(props: Props) {
     </ScrollView>
   );
 }
+
+export default React.memo(Mentions);
