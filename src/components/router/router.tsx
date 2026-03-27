@@ -13,6 +13,7 @@ import {
   NavigationNavigateActionPayload,
 } from 'react-navigation';
 import {createStackNavigator, StackViewTransitionConfigs} from 'react-navigation-stack';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 import log from 'components/log/log';
 import {flushStoragePart} from 'components/storage/storage';
@@ -63,10 +64,13 @@ class Router {
     const route = this.routes[currentRouteName];
     const isModal = route.modal || this._modalTransition;
     this._modalTransition = false;
-    if (isModal) {
-      return StackViewTransitionConfigs.ModalSlideFromBottomIOS;
-    }
-    return StackViewTransitionConfigs.SlideFromRightIOS;
+    const config = isModal
+      ? StackViewTransitionConfigs.ModalSlideFromBottomIOS
+      : StackViewTransitionConfigs.SlideFromRightIOS;
+    return {
+      ...config,
+      containerStyle: {backgroundColor: EStyleSheet.value('$background')},
+    };
   };
 
   registerRoute({name, component, props, type, modal, tabletComponentName}: Record<string, any>) {

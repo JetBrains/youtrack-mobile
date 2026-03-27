@@ -1,6 +1,8 @@
 import React, {PureComponent} from 'react';
 import {StyleSheet, View} from 'react-native';
 
+import EStyleSheet from 'react-native-extended-stylesheet';
+
 import Menu from 'components/menu/menu';
 import Router from 'components/router/router';
 import {menuHeight} from 'components/common-styles/header';
@@ -45,18 +47,11 @@ export default class Navigation extends PureComponent<{}, { isMenuShown: boolean
     };
 
     return (
-      <View style={styles.flexBox}>
+      <View style={[styles.flexBox, {backgroundColor: EStyleSheet.value('$background')}]}>
         <View style={styles.view}>{Router.renderNavigatorView(onRoute)}</View>
 
-        <View
-          style={[
-            styles.navigation,
-            this.state.isMenuShown ? null : styles.navigationHidden,
-          ]}
-        >
-          <ThemeContext.Consumer>
-            {(theme: Theme) => <Menu />}
-          </ThemeContext.Consumer>
+        <View style={[styles.navigation, this.state.isMenuShown ? null : styles.navigationHidden]}>
+          <ThemeContext.Consumer>{(theme: Theme) => <Menu />}</ThemeContext.Consumer>
         </View>
       </View>
     );
