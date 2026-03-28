@@ -40,6 +40,7 @@ class Router {
   _navigator: Navigator | undefined;
   _currentRoute: NavigationNavigateActionPayload | null = null;
   _pendingNavigation: (() => void) | null = null;
+  _isTransitioning: boolean = false;
   rootRoutes: Array<string> = [];
   onDispatchCallbacks: Array<(...args: any[]) => any> = [];
   routes: {[routeName: string]: AppRoute} = {};
@@ -96,6 +97,17 @@ class Router {
       initialRouteName,
       headerMode: 'none',
       transitionConfig: this.getTransitionConfig,
+      onTransitionStart: () => {
+        this._isTransitioning = true;
+      },
+      onTransitionEnd: () => {
+        this._isTransitioning = false;
+        if (this._pendingNavigation) {
+          const pending = this._pendingNavigation;
+          this._pendingNavigation = null;
+          pending();
+        }
+      },
     });
     this.AppNavigator = createAppContainer(MainNavigator);
   }
@@ -124,6 +136,11 @@ class Router {
 
     if (!this._navigator) {
       log.info(`Router(navigate): navigator not ready, queueing navigation to ${routeName}`);
+      this._pendingNavigation = () => this.navigate(routeName, props, {forceReset});
+      return;
+    }
+
+    if (this._isTransitioning) {
       this._pendingNavigation = () => this.navigate(routeName, props, {forceReset});
       return;
     }
