@@ -22,6 +22,7 @@ interface Props {
 }
 
 const IssueCustomFieldText = (props: Props) => {
+  const {onUpdateFieldValue} = props;
   const timeout: {current: NodeJS.Timeout | string | number | undefined} = useRef();
 
   useEffect(() => {
@@ -30,10 +31,10 @@ const IssueCustomFieldText = (props: Props) => {
   const onChange = useCallback(
     (text: string) => {
       timeout.current = setTimeout(() => {
-        props.onUpdateFieldValue(text.trim());
+        onUpdateFieldValue(text.trim());
       }, 300);
     },
-    [props]
+    [onUpdateFieldValue],
   );
   const fieldValue: string = props.textField?.value?.text || '';
 
