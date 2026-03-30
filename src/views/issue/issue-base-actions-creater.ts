@@ -323,7 +323,6 @@ export const createActions = (
         if (!err) {
           log.info('Issue Actions: Field value updated');
           await dispatch(actions.loadIssue());
-          dispatch(dispatchActions.issueUpdated(getIssue()));
         } else {
           const error = await resolveError(err);
           if (error.error_type === 'workflow' && error.error_workflow_type === 'require') {
