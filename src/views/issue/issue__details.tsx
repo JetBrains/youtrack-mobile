@@ -488,7 +488,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
         refreshControl={renderRefreshControl()}
         keyboardDismissMode="interactive"
         keyboardShouldPersistTaps="handled"
-        scrollEventThrottle={16}
+        scrollEventThrottle={100}
       >
         {this.renderCustomFieldPanel()}
         {isHelpdeskProject(this.props.issue) && (
