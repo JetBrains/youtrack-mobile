@@ -8,8 +8,15 @@ export default class GlobalSettingsAPI extends ApiBase {
   }
 
   async getSettings(): Promise<GlobalSettings> {
-    return await this.makeAuthorizedRequest(
-      `${this.auth.config.auth.serverUri}/api/rest/settings/public?fields=helpdeskEnabled`
+    const config = this.auth.config;
+    const legacySettings = await this.makeAuthorizedRequest(
+      `${config.auth.serverUri}/api/rest/settings/public?fields=helpdeskEnabled`,
     );
+
+    if (legacySettings.helpdeskEnabled !== undefined) {
+      return legacySettings;
+    }
+
+    return await this.makeAuthorizedRequest(`${config.backendUrl}/api/config?fields=helpdeskEnabled`);
   }
 }
