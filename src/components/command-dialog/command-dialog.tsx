@@ -29,16 +29,15 @@ interface Props {
 interface State {
   displayCancelSearch: boolean;
   inputValue: string;
-  caret: number;
 }
 
 export default class CommandDialog extends Component<Props, State> {
   state: State = {
     displayCancelSearch: false,
     inputValue: '',
-    caret: 0,
   };
   lastUsedParams: {command: string | null; caret: number} = {command: null, caret: 0};
+  latestInputValueForSearch: string = '';
   private textInputRef: React.RefObject<TextInput> = React.createRef<TextInput>();
 
   onSearch = debounce((command: string, caret: number) => {
@@ -47,7 +46,6 @@ export default class CommandDialog extends Component<Props, State> {
     }
 
     this.lastUsedParams = {command, caret};
-    this.setState({inputValue: command, caret});
     if (this.props.onChange) {
       this.props.onChange(command, caret);
     }
@@ -57,20 +55,35 @@ export default class CommandDialog extends Component<Props, State> {
     const {initialCommand} = this.props;
 
     if (initialCommand) {
+      this.latestInputValueForSearch = initialCommand;
       this.setState({
         inputValue: initialCommand,
-        caret: initialCommand.length,
       });
     }
 
     this.onSearch(initialCommand, initialCommand.length);
   }
 
+  componentWillUnmount() {
+    this.onSearch.cancel();
+  }
+
+  onChangeText = (text: string) => {
+    this.latestInputValueForSearch = text;
+    this.setState({inputValue: text});
+  };
+
+  onSelectionChange = (event: Record<string, any>) => {
+    const caret = event.nativeEvent.selection.start;
+    this.onSearch(this.latestInputValueForSearch, caret);
+  };
+
   onApplySuggestion = (suggestion: CommandSuggestion) => {
     const suggestionText = `${suggestion.prefix || ''}${suggestion.option}${suggestion.suffix || ''}`;
     const oldQuery = this.state.inputValue || '';
     const newQuery =
       oldQuery.substring(0, suggestion.completionStart) + suggestionText + oldQuery.substring(suggestion.completionEnd);
+    this.latestInputValueForSearch = newQuery;
     this.setState({inputValue: newQuery});
     this.onSearch(newQuery, suggestion.caret);
     setTimeout(() => this.textInputRef.current?.focus(), 0);
@@ -111,8 +124,8 @@ export default class CommandDialog extends Component<Props, State> {
             this.onApply();
           }
         }}
-        onChangeText={text => this.setState({inputValue: text})}
-        onSelectionChange={event => this.onSearch(inputValue, event.nativeEvent.selection.start)}
+        onChangeText={this.onChangeText}
+        onSelectionChange={this.onSelectionChange}
       />
     );
   }
