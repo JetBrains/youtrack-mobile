@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useRef, useEffect, useMemo} from 'react';
 import {TextInput} from 'react-native';
 
 import {isIOSPlatform} from 'util/util';
@@ -12,15 +12,22 @@ const MAX_DEFAULT_HEIGHT = 200;
 const MIN_DEFAULT_HEIGHT = UNIT * 4;
 const DEFAULT_FONT_SIZE = 16;
 
-type Props = {
+interface Props extends TextInputProps {
   adaptive?: boolean;
   maxInputHeight?: number;
   autoFocus?: boolean;
   style?: ViewStyleProp | ViewStyleProp[];
-};
+}
 
 const MultilineInput = (props: Props) => {
-  const {style, adaptive = true, maxInputHeight = MAX_DEFAULT_HEIGHT, autoFocus, ...rest} = props;
+  const {
+    style,
+    adaptive = true,
+    maxInputHeight = MAX_DEFAULT_HEIGHT,
+    autoFocus,
+    onFocus,
+    ...rest
+  } = props;
 
   const [inputHeight, setInputHeight] = useState<number | null>(null);
   const inputRef = useRef<TextInput | null>(null);
@@ -29,13 +36,16 @@ const MultilineInput = (props: Props) => {
   const textInputProps: TextInputProps = {...rest};
 
   if (!iOSPlatform) {
-    textInputProps.onFocus = () => {
+    textInputProps.onFocus = event => {
       if (isFirstFocus.current) {
         isFirstFocus.current = false;
         setSelection({start: 0, end: 0});
       }
       setSelection(undefined);
+      onFocus?.(event);
     };
+  } else {
+    textInputProps.onFocus = onFocus;
   }
 
   useEffect(() => {
@@ -55,6 +65,11 @@ const MultilineInput = (props: Props) => {
     setInputHeight(Math.ceil(newHeight));
   };
 
+  const inputStyle = useMemo(
+    () => [{fontSize: DEFAULT_FONT_SIZE}, style, adaptive ? {height: inputHeight} : null],
+    [style, adaptive, inputHeight]
+  );
+
   return (
     <TextInput
       {...textInputProps}
@@ -66,7 +81,7 @@ const MultilineInput = (props: Props) => {
       multiline={true}
       selection={selection}
       onContentSizeChange={onContentSizeChange}
-      style={[{fontSize: DEFAULT_FONT_SIZE}, style, adaptive ? {height: inputHeight} : null]}
+      style={inputStyle}
     />
   );
 };

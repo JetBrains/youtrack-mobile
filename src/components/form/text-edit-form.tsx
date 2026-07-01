@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useEffect, useRef} from 'react';
+import React, {useCallback, useContext, useEffect, useMemo, useRef, useState} from 'react';
 import MultilineInput from '../multiline-input/multiline-input';
 import {ThemeContext} from '../theme/theme-context';
 import styles from './summary-description-form.style';
@@ -11,41 +11,62 @@ type Props = {
   description: string;
   placeholderText?: string;
   multiline: boolean;
-  onDescriptionChange: (text: string) => any;
-  onSelectionChange?: (event: Record<string, any>) => any;
+  onDescriptionChange: (text: string) => void;
+  onSelectionChange?: (event: Record<string, any>) => void;
   style?: ViewStyleProp;
   uiTheme?: UITheme;
 };
 
-const TextEditForm = (props: Props): React.ReactNode => {
+const TextEditForm = (props: Props) => {
   const {onDescriptionChange = (text: string) => {}} = props;
-  const timeout: {
-    current: TimeoutID | null | undefined;
-  } = useRef(null);
+  const [text, setText] = useState(props.description);
+  const hasEditedText = useRef(false);
+  const isFocused = useRef(false);
   const theme: Theme = useContext(ThemeContext);
+
   useEffect(() => {
-    return clearTimeout(timeout.current);
-  }, [timeout]);
+    if ((!hasEditedText.current || !isFocused.current) && props.description !== text) {
+      setText(props.description);
+    }
+  }, [props.description, text]);
+
   const onChange = useCallback(
     (text: string) => {
-      timeout.current = setTimeout(() => {
-        onDescriptionChange(text);
-      }, 300);
+      hasEditedText.current = true;
+      isFocused.current = true;
+      setText(text);
+      onDescriptionChange(text);
     },
     [onDescriptionChange],
+  );
+  const handleFocus = useCallback(() => {
+    isFocused.current = true;
+  }, []);
+  const handleBlur = useCallback(() => {
+    isFocused.current = false;
+  }, []);
+  const onSelectionChange = props.onSelectionChange;
+  const handleSelectionChange = useCallback(
+    (event: Record<string, any>) => {
+      if (onSelectionChange) {
+        onSelectionChange(event);
+      }
+    },
+    [onSelectionChange],
   );
   const {
     adaptive = false,
     autoFocus = false,
-    description,
     editable = false,
     multiline = true,
     placeholderText = 'Description',
     style,
   } = props;
+  const inputStyle = useMemo(() => [styles.descriptionInput, style], [style]);
+
   return (
     <MultilineInput
-      style={[styles.descriptionInput, style]}
+      style={inputStyle}
       adaptive={adaptive}
       autoFocus={autoFocus}
       multiline={multiline}
@@ -58,21 +79,13 @@ const TextEditForm = (props: Props): React.ReactNode => {
       textAlignVertical="top"
       keyboardAppearance={theme.uiTheme.name}
       underlineColorAndroid="transparent"
-      defaultValue={description}
-      onChangeText={(text: string) => {
-        clearTimeout(timeout.current);
-        onChange(text);
-      }}
-      onSelectionChange={(event: Record<string, any>) => {
-        if (props.onSelectionChange) {
-          props.onSelectionChange(event);
-        }
-      }}
+      value={text}
+      onChangeText={onChange}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      onSelectionChange={handleSelectionChange}
     />
   );
 };
 
-export default React.memo<Props>(TextEditForm) as React$AbstractComponent<
-  Props,
-  unknown
->;
+export default React.memo<Props>(TextEditForm);

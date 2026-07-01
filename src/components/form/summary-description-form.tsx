@@ -1,8 +1,7 @@
-import React, {useCallback, useContext, useMemo} from 'react';
+import React, {useCallback, useContext, useEffect, useMemo, useRef, useState} from 'react';
 import {View, TextInput} from 'react-native';
 
 import once from 'lodash.once';
-import throttle from 'lodash.throttle';
 
 import TextEditForm from './text-edit-form';
 import usage from 'components/usage/usage';
@@ -25,8 +24,6 @@ interface Props {
   testID?: string;
 }
 
-const DELAY: number = 300;
-
 const SummaryDescriptionForm = (props: Props) => {
   const {
     editable,
@@ -41,6 +38,20 @@ const SummaryDescriptionForm = (props: Props) => {
   } = props;
 
   const theme = useContext(ThemeContext);
+  const [summaryText, setSummaryText] = useState(summary);
+  const [descriptionText, setDescriptionText] = useState(description);
+  const hasEditedSummary = useRef(false);
+  const isSummaryFocused = useRef(false);
+
+  useEffect(() => {
+    if ((!hasEditedSummary.current || !isSummaryFocused.current) && summary !== summaryText) {
+      setSummaryText(summary);
+    }
+  }, [summary, summaryText]);
+
+  useEffect(() => {
+    setDescriptionText(description);
+  }, [description]);
 
   const trackChange = useCallback(
     (message: string) => {
@@ -61,31 +72,33 @@ const SummaryDescriptionForm = (props: Props) => {
     [trackChange]
   );
 
-  const throttledSummaryChange = useMemo(
-    () => throttle((text: string) => {
+  const handleSummaryChange = useCallback(
+    (text: string) => {
+      hasEditedSummary.current = true;
+      isSummaryFocused.current = true;
+      setSummaryText(text);
       trackSummaryChangeFn();
       onSummaryChange(text);
-    }, DELAY),
+    },
     [trackSummaryChangeFn, onSummaryChange]
   );
 
-  const throttledDescriptionChange = useMemo(
-    () => throttle((text: string) => {
+  const handleDescriptionChange = useCallback(
+    (text: string) => {
+      setDescriptionText(text);
       trackDescriptionChangeFn();
       onDescriptionChange(text);
-    }, DELAY),
+    },
     [trackDescriptionChangeFn, onDescriptionChange]
   );
 
-  const handleSummaryChange = useCallback(
-    (text: string) => throttledSummaryChange(text),
-    [throttledSummaryChange]
-  );
+  const handleSummaryFocus = useCallback(() => {
+    isSummaryFocused.current = true;
+  }, []);
 
-  const handleDescriptionChange = useCallback(
-    (text: string) => throttledDescriptionChange(text),
-    [throttledDescriptionChange]
-  );
+  const handleSummaryBlur = useCallback(() => {
+    isSummaryFocused.current = false;
+  }, []);
 
   return (
     <View {...rest}>
@@ -102,15 +115,17 @@ const SummaryDescriptionForm = (props: Props) => {
         keyboardAppearance={theme.uiTheme?.name || 'dark'}
         returnKeyType="next"
         autoCapitalize="sentences"
-        defaultValue={summary}
+        value={summaryText}
         onChangeText={handleSummaryChange}
+        onFocus={handleSummaryFocus}
+        onBlur={handleSummaryBlur}
       />
 
       <View style={styles.separator} />
 
       <TextEditForm
         editable={editable}
-        description={description}
+        description={descriptionText}
         placeholderText={descriptionPlaceholder}
         multiline={true}
         onDescriptionChange={handleDescriptionChange}
