@@ -891,7 +891,7 @@ msgstr "Problema"
 
 #: src/components/custom-fields-panel/index.ts
 msgid "Project"
-msgstr ""
+msgstr "Progetto"
 
 #: src/views/issues/issues-actions.ts
 #: src/views/knowledge-base/knowledge-base.tsx
@@ -952,7 +952,7 @@ msgstr ""
 #: src/views/issue/issue-user-cc.tsx
 #: src/views/issue/issue-user-cc.tsx
 msgid "Reporter"
-msgstr ""
+msgstr "Creatore"
 
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Reset visibility"
@@ -1054,11 +1054,11 @@ msgstr "Imposta data e ora"
 
 #: src/views/settings/settings.tsx
 msgid "Settings"
-msgstr ""
+msgstr "Impostazioni"
 
 #: src/components/logs-view/logs-view.tsx
 msgid "Share"
-msgstr ""
+msgstr "Condividi"
 
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/article__activity.tsx

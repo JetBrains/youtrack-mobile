@@ -976,7 +976,7 @@ msgstr "Автор запроса"
 
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Reset visibility"
-msgstr "Сбросить видимость"
+msgstr "Сбросить настройки видимости"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Restart"

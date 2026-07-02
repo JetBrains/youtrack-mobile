@@ -814,7 +814,7 @@ msgstr "Nové zprávy"
 
 #: src/views/enter-server/enter-server.tsx
 msgid "Next"
-msgstr "Násl"
+msgstr "Další"
 
 #: src/components/activity-stream/activity__stream.tsx
 msgid "No activity yet"
@@ -1170,7 +1170,7 @@ msgstr "Odběry"
 #: src/views/helpdesk-feedback/index.ts
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Summary"
-msgstr "Přehled"
+msgstr "Souhrn"
 
 #: src/components/activity/activity__history-title.ts
 msgid "Summary changed"

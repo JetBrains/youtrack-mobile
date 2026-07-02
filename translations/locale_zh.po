@@ -401,7 +401,7 @@ msgstr "日期"
 
 #: src/components/user-agreement/user-agreement.tsx
 msgid "Decline"
-msgstr "数据库大小<br>(不带 blobs)"
+msgstr "拒绝"
 
 #: src/components/activity-stream/activity__stream-vcs.tsx
 msgid "declined the pull request"
@@ -768,7 +768,7 @@ msgstr "已合并 Pull Request"
 
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mute thread"
-msgstr "忽略话题"
+msgstr "忽略消息串"
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "New Article"
@@ -1237,11 +1237,11 @@ msgstr "此操作将删除所有草稿，包括未发布的子文章"
 
 #: src/views/inbox-threads/inbox-threads-actions.ts
 msgid "Thread muted"
-msgstr "已忽略话题"
+msgstr "已忽略消息串"
 
 #: src/views/inbox-threads/inbox-threads-actions.ts
 msgid "Thread unmuted"
-msgstr "已取消忽略话题"
+msgstr "已取消忽略消息串"
 
 #: src/views/issues/issues-actions.ts
 #: src/views/issues/issues-reducers.ts
@@ -1288,7 +1288,7 @@ msgstr "未分类的卡片"
 
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Unmute thread"
-msgstr "取消忽略话题"
+msgstr "取消忽略消息串"
 
 #: src/views/inbox-threads/inbox-threads.tsx
 msgid "Unread only"
