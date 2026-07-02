@@ -99,16 +99,13 @@ export const baseMarkdownStyles = {
   ordered_list: {},
   list_item: {},
 
-  bullet_list_icon: {
-    marginTop: UNIT,
-  },
+  bullet_list_icon: {},
   bullet_list_icon_checkbox: {
     color: 'transparent',
   },
 
   bullet_list_content: {
     flex: 1,
-    flexWrap: 'wrap',
   },
 
   ordered_list_icon: {

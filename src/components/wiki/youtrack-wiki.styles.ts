@@ -90,6 +90,30 @@ export default EStyleSheet.create({
     backgroundColor: '$boxBackground',
     color: '$text',
   },
+  bulletListItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+  bulletListMarker: {
+    color: '$text',
+    fontSize: MAIN_FONT_SIZE,
+    // Same line box as the text's first line, so the marker's glyph centers on that
+    // line; alignSelf keeps it pinned to the first line instead of stretching across
+    // the whole (possibly multi-line) item.
+    lineHeight: MAIN_FONT_SIZE * 1.3,
+    alignSelf: 'flex-start',
+    marginLeft: UNIT / 2,
+    marginRight: UNIT,
+  },
+  // Applied only when the list item keeps its wrapping paragraph (loose lists / AST
+  // input): matches the paragraph's own marginTop so the marker and the first text
+  // line start at the same Y. String input strips the paragraph, so no top margin.
+  bulletListMarkerSpaced: {
+    marginTop: UNIT,
+  },
+  bulletListContent: {
+    flex: 1,
+  },
   exception: {
     ...monospace,
     padding: 0,

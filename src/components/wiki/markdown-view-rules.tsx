@@ -168,6 +168,24 @@ function getMarkdownRules(
       inheritedStyles: TextStyleProp = {},
     ) => {
       const hasCheckbox: boolean = isMarkdownNodeContainsCheckbox(node);
+      const isBulletList: boolean = parent.some(it => it.type === 'bullet_list');
+
+      if (isBulletList && !hasCheckbox) {
+        // Loose lists (and AST input) keep a wrapping paragraph whose marginTop offsets
+        // the first line; string input strips it (see lib's omitListItemParagraph). Match
+        // that offset on the marker so it aligns with the first line's center either way.
+        const hasParagraph: boolean =
+          Array.isArray(node.children) && node.children.some(it => it.type === 'paragraph');
+        return (
+          <View key={node.key} style={styles.bulletListItem}>
+            <Text style={[styles.bulletListMarker, hasParagraph && styles.bulletListMarkerSpaced]}>
+              {'•'}
+            </Text>
+            <View style={styles.bulletListContent}>{children}</View>
+          </View>
+        );
+      }
+
       return renderRules.list_item(
         node,
         children,
