@@ -170,12 +170,20 @@ function getMarkdownRules(
       const hasCheckbox: boolean = isMarkdownNodeContainsCheckbox(node);
       const isBulletList: boolean = parent.some(it => it.type === 'bullet_list');
 
-      if (isBulletList && !hasCheckbox) {
+      if (isBulletList) {
         // Loose lists (and AST input) keep a wrapping paragraph whose marginTop offsets
-        // the first line; string input strips it (see lib's omitListItemParagraph). Match
-        // that offset on the marker so it aligns with the first line's center either way.
+        // the first line; string input strips it (see lib's omitListItemParagraph).
         const hasParagraph: boolean =
           Array.isArray(node.children) && node.children.some(it => it.type === 'paragraph');
+
+        if (hasCheckbox) {
+          return (
+            <View key={node.key} style={!hasParagraph && styles.checkboxListItemSpaced}>
+              {children}
+            </View>
+          );
+        }
+
         return (
           <View key={node.key} style={styles.bulletListItem}>
             <Text style={[styles.bulletListMarker, hasParagraph && styles.bulletListMarkerSpaced]}>
@@ -186,21 +194,7 @@ function getMarkdownRules(
         );
       }
 
-      return renderRules.list_item(
-        node,
-        children,
-        parent,
-        hasCheckbox
-          ? {
-              ...style,
-              bullet_list_icon: {
-                ...style.bullet_list_icon,
-                ...style.bullet_list_icon_checkbox,
-              },
-            }
-          : style,
-        inheritedStyles
-      );
+      return renderRules.list_item(node, children, parent, style, inheritedStyles);
     },
     inline: (
       node: MarkdownNode,
@@ -266,7 +260,7 @@ function getMarkdownRules(
             attachments={attachments}
             mentions={mentions}
             node={node}
-            style={[textStyle, inheritedStyles, styles.checkboxRow]}
+            style={[textStyle, inheritedStyles, styles.checkboxRow, style.checkboxText]}
             uiTheme={uiTheme}
           />
         </MarkdownCheckbox>

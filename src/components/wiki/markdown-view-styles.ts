@@ -153,6 +153,9 @@ export const baseMarkdownStyles = {
   text: {
     color: DEFAULT_THEME.colors.$text,
   },
+  checkboxText: {
+    flex: 1,
+  },
   textgroup: {},
   paragraph: {
     marginTop: UNIT,

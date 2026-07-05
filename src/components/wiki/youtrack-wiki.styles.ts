@@ -125,6 +125,11 @@ export default EStyleSheet.create({
     flexWrap: 'wrap',
     flexShrink: 1,
   },
+  // Top spacing between checkbox list items. The library's paragraph provides this for
+  // loose/AST lists; string input strips the paragraph, so we add it back here.
+  checkboxListItemSpaced: {
+    marginTop: UNIT,
+  },
   checkboxIconContainer: {
     position: 'absolute',
     left: -28,
