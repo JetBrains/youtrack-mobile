@@ -22,6 +22,47 @@ $RNFirebaseAnalyticsWithoutAdIdSupport = true
 
 use_frameworks! :linkage => :static
 
+def patch_fmt_for_xcode_26
+  fmt_header = File.join(
+    __dir__,
+    'Pods',
+    'fmt',
+    'include',
+    'fmt',
+    'base.h'
+  )
+
+  unless File.exist?(fmt_header)
+    raise "fmt header was not found: #{fmt_header}"
+  end
+
+  old_code =
+    '#elif defined(__apple_build_version__) && __apple_build_version__ < 14000029L'
+
+  new_code =
+    '#elif defined(__apple_build_version__)'
+
+  content = File.read(fmt_header)
+
+  if content.include?(old_code)
+    patched_content = content.sub(old_code, new_code)
+    File.write(fmt_header, patched_content)
+
+    Pod::UI.puts 'Applied fmt compatibility patch for Xcode 26'.green
+  elsif content.include?(new_code)
+    Pod::UI.puts 'fmt compatibility patch is already applied'.green
+  else
+    raise <<~MESSAGE
+      Unable to apply the fmt Xcode 26 compatibility patch.
+
+      The expected code was not found in:
+      #{fmt_header}
+
+      The fmt dependency may have changed. Review the patch before continuing.
+    MESSAGE
+  end
+end
+
 target 'YouTrackMobile' do
   config = use_native_modules!
 
@@ -43,5 +84,7 @@ target 'YouTrackMobile' do
       config[:reactNativePath],
       :mac_catalyst_enabled => false
     )
+    
+    patch_fmt_for_xcode_26
   end
 end
