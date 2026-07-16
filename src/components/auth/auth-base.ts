@@ -34,7 +34,11 @@ export class AuthBase {
       query: `service:{0-0-0-0-0} or service:{${config.auth.youtrackServiceId}}`,
       fields: 'permission/key,global,projects(id)',
     });
-    const permissionsCacheURL = getPermissionCacheURL(this.config.auth.serverUri, this.config.backendUrl);
+    const permissionsCacheURL = getPermissionCacheURL(
+      this.config.auth.serverUri,
+      this.config.backendUrl,
+      this.config.version,
+    );
     this.PERMISSIONS_CACHE_URL = `${permissionsCacheURL}?${permissionsQueryString}`;
     this.getAuthorizationHeaders = this.getAuthorizationHeaders.bind(this);
     this.onTokenRefreshError = onTokenRefreshError;

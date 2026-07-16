@@ -45,6 +45,19 @@ describe('permissions-helper', () => {
         'https://youtrack.example.com/hub/api/rest/permissions/cache',
       );
     });
+
+    it('should resolve the endpoint from the passed version without the API instance', () => {
+      // No spy: exercises the real `isPermissionCacheInYT(version)` path used by
+      // the auth layer before the API is initialized.
+      jest.restoreAllMocks();
+
+      expect(getPermissionCacheURL(HUB_URL, YT_URL, '2024.2')).toEqual(
+        'https://youtrack.example.com/api/permissions/cache',
+      );
+      expect(getPermissionCacheURL(HUB_URL, YT_URL, '2024.1')).toEqual(
+        'https://youtrack.example.com/hub/api/rest/permissions/cache',
+      );
+    });
   });
 
   describe('normalizePermissions', () => {

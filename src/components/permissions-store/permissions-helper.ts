@@ -31,8 +31,8 @@ async function loadPermissions(
     });
 }
 
-function getPermissionCacheURL(hubURL: string, ytURL: string): string {
-  const isNewCache = isPermissionCacheInYT();
+function getPermissionCacheURL(hubURL: string, ytURL: string, version?: string): string {
+  const isNewCache = isPermissionCacheInYT(version);
   const url = isNewCache ? ytURL : hubURL;
   return `${url}${isNewCache ? '/api/permissions/cache' : '/api/rest/permissions/cache'}`;
 }

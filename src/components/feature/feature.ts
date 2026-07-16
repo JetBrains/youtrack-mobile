@@ -12,7 +12,7 @@ type Props = {
   version?: string;
 };
 
-function convertToNumber(semverVersion: string) {
+export function convertToNumber(semverVersion: string) {
   const parts = semverVersion.split('.').reverse();
   return parts.reduce((acc, part, index) => {
     return acc + Number.parseInt(part) * Math.pow(1000, index);
