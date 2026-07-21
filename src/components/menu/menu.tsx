@@ -159,6 +159,7 @@ export default function Menu() {
         routeMap.KnowledgeBase === routeName &&
         (routes.prevRouteName === routeMap.Article ||
           routes.prevRouteName === routeMap.KnowledgeBase ||
+          routes.prevRouteName === routeMap.Page ||
           routes.prevRouteName === routeMap.PageModal)
       );
     }

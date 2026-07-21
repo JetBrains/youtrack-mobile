@@ -79,6 +79,7 @@ const ArticleDetails = (props: Props) => {
     } else {
       Router.Page({
         children: renderSubArticles(article),
+        forceNew: true,
       });
     }
   }
@@ -105,6 +106,7 @@ const ArticleDetails = (props: Props) => {
                 storePrevArticle: true,
                 store: true,
                 storeRouteName: routeMap.ArticleSingle,
+                forceNew: true,
               });
             }
           }}
