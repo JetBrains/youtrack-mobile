@@ -1,7 +1,5 @@
 import { Linking } from 'react-native';
 
-import {waitFor} from '@testing-library/react-native';
-
 import {
   extractIssueId,
   extractArticleId,
@@ -37,6 +35,18 @@ describe('Parse URL', () => {
         extractIssueId('https://sample.com/oauth?state=%2Fissue%2FXX-1')
       ).toEqual('XX-1');
     });
+
+    it('should stop at the title slug and not capture it', () => {
+      expect(
+        extractIssueId('http://localhost:8088/issue/DEMO-11/Import-issues-and-articles')
+      ).toEqual('DEMO-11');
+    });
+
+    it('should not extract an issue id from an article URL whose slug mentions issues', () => {
+      expect(
+        extractIssueId('http://localhost:8088/articles/HD-A-1/Getting-Started-with-the-Knowledge-Base-in-YouTrack')
+      ).toEqual(null);
+    });
   });
 
   describe('extractArticleId', () => {
@@ -47,6 +57,18 @@ describe('Parse URL', () => {
       expect(
         extractArticleId('https://sample.com/articles/X-X-123-45')
       ).toEqual('X-X-123-45');
+    });
+
+    it('should stop at the title slug and not capture it', () => {
+      expect(
+        extractArticleId('http://localhost:8088/articles/HD-A-1/Getting-Started-with-the-Knowledge-Base-in-YouTrack')
+      ).toEqual('HD-A-1');
+    });
+
+    it('should not extract an article id from an issue URL whose slug mentions articles', () => {
+      expect(
+        extractArticleId('http://localhost:8088/issue/DEMO-11/Import-issues-and-articles')
+      ).toEqual(null);
     });
   });
 
@@ -59,53 +81,37 @@ describe('Parse URL', () => {
         extractHelpdeskFormId('http://sample.com/form/999-eee--123-45')
       ).toEqual('999-eee--123-45');
     });
+
+    it('should extract a full uuid form id', () => {
+      expect(
+        extractHelpdeskFormId('http://localhost:8088/form/81f2c3d4-5678-90ab-cdef-1234567890ab')
+      ).toEqual('81f2c3d4-5678-90ab-cdef-1234567890ab');
+    });
+
+    it('should stop at the title slug and not capture it', () => {
+      expect(
+        extractHelpdeskFormId('http://localhost:8088/form/999-eee--123-45/Contact-Support')
+      ).toEqual('999-eee--123-45');
+    });
+
+    it('should not extract a form id from issue or article URLs', () => {
+      expect(
+        extractHelpdeskFormId('http://localhost:8088/issue/DEMO-11/Import-issues-and-articles')
+      ).toEqual(null);
+      expect(
+        extractHelpdeskFormId('http://localhost:8088/articles/HD-A-1/Getting-Started-with-the-Knowledge-Base-in-YouTrack')
+      ).toEqual(null);
+    });
   });
 
-  describe.skip('openByUrlDetector', () => {
-    let idMock: string;
-    let urlMock: string;
-    let onIdDetected: (
-      url: string,
-      issueId?: string,
-      articleId?: string
-    ) => any;
-    let onQueryDetected: (url: string, query: string) => any;
+  describe('openByUrlDetector runtime subscription', () => {
+    it('should only subscribe to URLs opened while the app is running (cold-start URLs are handled during app init)', () => {
+      const onIdDetected = jest.fn();
+      const onQueryDetected = jest.fn();
 
-    beforeEach(() => {
-      idMock = 'ID-1';
-      urlMock = `https://example.com/issue/${idMock}`;
-      onIdDetected = jest.fn();
-      onQueryDetected = jest.fn();
-    });
+      openByUrlDetector(onIdDetected, onQueryDetected);
 
-    it('should invoke issue id detect callback', async () => {
-      Linking.getInitialURL.mockResolvedValueOnce(urlMock);
-
-      await openByUrlDetector(onIdDetected, onQueryDetected);
-
-      waitFor(() => {
-        expect(onIdDetected).toHaveBeenCalledWith(urlMock, idMock, undefined);
-      });
-    });
-
-    it('should invoke article id detect callback', async () => {
-      urlMock = `https://example.com/articles/${idMock}`;
-      Linking.getInitialURL.mockResolvedValueOnce(urlMock);
-
-      await openByUrlDetector(onIdDetected, onQueryDetected);
-
-      waitFor(() => {
-        expect(onIdDetected).toHaveBeenCalledWith(urlMock, undefined, idMock);
-      });
-    });
-
-    it('should subscribe to press URL event', () => {
-      openByUrlDetector(jest.fn(), jest.fn());
-
-      expect(Linking.addEventListener).toHaveBeenCalledWith(
-        'url',
-        expect.any(Function)
-      );
+      expect(Linking.addEventListener).toHaveBeenCalledWith('url', expect.any(Function));
     });
   });
 });

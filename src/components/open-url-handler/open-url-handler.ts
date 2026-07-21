@@ -89,20 +89,12 @@ function parseUrl(
   DeviceEventEmitter.emit('openWithUrl', decodeURIComponent(url));
 }
 
-const openByUrlDetector = async (
+const openByUrlDetector = (
   onIdDetected: (url: string, issueId?: string, articleId?: string, formId?: string) => any,
   onQueryDetected: (url: string, query: string) => any,
 ) => {
-  setTimeout(() => {
-    Linking.getInitialURL().then((url: string | null) => {
-      if (url) {
-        log.info('Open URL Handler: App has been initially started by pressing an URL');
-        return parseUrl(url, onIdDetected, onQueryDetected);
-      }
-    });
-  }, 100);
-
-  const onURLOpen = (event: { url: string } | string) => {
+  // Cold-start URLs (the launch URL) are handled during app initialization in initializeApp
+  const onURLOpen = (event: {url: string} | string) => {
     const url: string = typeof event === 'string' ? event : event?.url;
     if (url) {
       log.info(`Open URL Handler: On URL press event is fired`);

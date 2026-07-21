@@ -559,6 +559,13 @@ export function loadUserPermissions(): ReduxAction {
   };
 }
 
+// A deep-link URL captured before the app was ready to open it — either a
+// cold start (the launch URL, see `initializeApp`) or a URL opened while the
+// user is still logged out (see `subscribeToURL`). It is replayed by
+// `handlePendingURL` once initialization completes and the user is authorized,
+// so a deep link is never silently dropped.
+let pendingDeepLinkURL: string | null = null;
+
 export function completeInitialization(
   issueId?: string,
   articleId?: string,
@@ -587,7 +594,7 @@ export function completeInitialization(
     if (isLanguageChanged && userProfileLocale?.language) {
       loadTranslation(userProfileLocale?.locale, userProfileLocale?.language);
 
-      if (!issueId && !articleId) {
+      if (!issueId && !articleId && !helpdeskFormId) {
         redirectToHome(storage.getStorageState()?.config?.backendUrl);
       }
     }
@@ -598,7 +605,7 @@ export function completeInitialization(
 
     const isStackNotEmpty = Router.getRoutes().length <= 1;
     log.info(`App Actions(completeInitialization): stack: ${JSON.stringify(Router.getRoutes())}`);
-    if (isStackNotEmpty && !isRedirected) {
+    if (isStackNotEmpty && !isRedirected && !pendingDeepLinkURL) {
       if (currentUser.profiles?.helpdesk?.isReporter) {
         Router.Tickets();
       } else {
@@ -621,6 +628,7 @@ export function completeInitialization(
     if (checkVersion(FEATURE_VERSION.inboxThreads)) {
       dispatch(inboxCheckUpdateStatus());
     }
+    dispatch(handlePendingURL());
     log.info('App Actions(completeInitialization): Initialization completed');
   };
 }
@@ -828,38 +836,49 @@ async function navigateToScreen(
 }
 
 export function subscribeToURL(): ReduxAction {
-  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
-    openByUrlDetector(
-      async (url: string, issueId?: string, articleId?: string, helpdeskFormId?: string) => {
-        if (isAuthorized()) {
-          usage.trackEvent('app_actions', 'Open issue in app by URL');
-          navigateToScreen(
-            getApi().config.backendUrl,
-            dispatch,
-            url,
-            true,
-            issueId,
-            articleId,
-            undefined,
-            helpdeskFormId
-          );
-        }
-      },
-      async (url: string, searchQuery: string) => {
-        if (isAuthorized()) {
-          usage.trackEvent('app_actions', 'Open issues query in app by URL');
-          navigateToScreen(getApi().config.backendUrl, dispatch, url, true, undefined, undefined, searchQuery);
-        }
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
+    // Both detector callbacks funnel the raw URL through the same pipeline: if
+    // the user is authorized, open it immediately via `handleURL` (the canonical
+    // parser); otherwise stash it so `handlePendingURL` can replay it after login.
+    const onDeepLinkURL = (url: string) => {
+      if (isAuthorized()) {
+        usage.trackEvent('app_actions', 'Open in app by URL');
+        dispatch(handleURL(url));
+      } else {
+        pendingDeepLinkURL = url;
       }
+    };
+
+    openByUrlDetector(
+      (url: string) => onDeepLinkURL(url),
+      (url: string) => onDeepLinkURL(url)
     );
 
     function isAuthorized(): boolean {
       const isUserAuthorized = !!getState().app?.auth?.currentUser;
       if (!isUserAuthorized) {
-        log.info(`App Actions: User is not authorized, URL won't be opened`);
+        log.info(`App Actions: User is not authorized, URL will be opened after authorization`);
       }
       return isUserAuthorized;
     }
+  };
+}
+
+// Opens a deep-link URL that arrived before the app was ready to handle it —
+// either a cold start or a URL opened while the user was logged out. Dispatched
+// once initialization completes so a deep link is never silently dropped.
+export function handlePendingURL(): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
+    if (!pendingDeepLinkURL) {
+      return;
+    }
+    if (!getState().app?.auth?.currentUser) {
+      return;
+    }
+    const url = pendingDeepLinkURL;
+    pendingDeepLinkURL = null;
+    log.info('App Actions: Opening a URL received before the app was ready');
+    dispatch(handleURL(url));
   };
 }
 
@@ -1019,16 +1038,20 @@ export function initializeApp(
       }
     }
 
+    const url = await Linking.getInitialURL();
+    if (url) {
+      pendingDeepLinkURL = url;
+    }
+
     await dispatch(checkUserAgreement());
 
     if (!getState().app.showUserAgreement) {
-      const url = await Linking.getInitialURL();
       await dispatch(
         completeInitialization(
           issueId,
           articleId,
           navigateToActivity,
-          extractIssuesQuery(url) ?? undefined,
+          undefined,
           isRedirected,
         ),
       );
