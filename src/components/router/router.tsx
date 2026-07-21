@@ -152,6 +152,20 @@ class Router {
     const newRoute = Object.assign({}, this.routes[routeName]);
     newRoute.props = Object.assign({}, newRoute.props, props);
     const prevRouteName: string | undefined = this._currentRoute?.routeName;
+
+    // Opt-in: push a fresh screen (unique key) instead of the default
+    // key===routeName "less-pushy" navigate, so same-route screens can stack
+    // (e.g. nested Knowledge Base sub-articles). Reset routes are unaffected.
+    const isResetNavigation = newRoute.type === 'reset' || forceReset;
+    if (!isResetNavigation && props?.forceNew === true) {
+      this.dispatch(
+        StackActions.push({routeName, params: newRoute.props}),
+        routeName,
+        prevRouteName,
+      );
+      return;
+    }
+
     const navigationData: NavigationNavigateAction = NavigationActions.navigate({
       routeName,
       params: newRoute.props,

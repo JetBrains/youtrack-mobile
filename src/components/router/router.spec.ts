@@ -60,6 +60,16 @@ describe('Router', () => {
         Router.navigate(routeNameMock);
         expect(navigatorMock.dispatch).toHaveBeenCalled();
       });
+      it('should push a new screen when forceNew is set', () => {
+        Router.registerRoute({name: routeNameMock});
+        Router.navigate(routeNameMock, {forceNew: true});
+        expect(navigatorMock.dispatch).toHaveBeenCalledWith(
+          expect.objectContaining({
+            type: 'Navigation/PUSH',
+            routeName: routeNameMock,
+          }),
+        );
+      });
     });
   });
   describe('Dispatch callbacks', () => {
