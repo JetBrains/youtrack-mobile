@@ -10,6 +10,7 @@ import * as appActionHelper from './app-actions-helper';
 import * as feature from 'components/feature/feature';
 import * as Notification from 'components/notification/notification';
 import * as permissionsHelper from 'components/permissions-store/permissions-helper';
+import * as responsiveHelper from 'components/responsive/responsive-helper';
 import * as routerHelper from 'components/router/router-helper';
 import * as storage from 'components/storage/storage';
 import * as storageOauth from 'components/storage/storage__oauth';
@@ -394,6 +395,70 @@ describe('app-actions', () => {
         },
       });
     });
+
+    it('should open the launch URL after a cold start', async () => {
+      fetchMock.reset();
+      fetchMock.mock(`${backendURLMock}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,build,statisticsEnabled,l10n(language,locale,predefinedQueries)`, {
+        version: '2018',
+        mobile: {serviceId: 'youtrack'},
+        ring: {serviceId: 'id', url: '/'},
+      });
+      fetchMock.mock(`${backendURLMock}/hub/api/rest/permissions/cache?query=service%3A%7B0-0-0-0-0%7D%20or%20service%3A%7B%7D&fields=permission%2Fkey%2Cglobal%2Cprojects%28id%29`, {});
+      fetchMock.mock(`${backendURLMock}/api/userNotifications/subscribe?fields=token&$top=-1`, {});
+
+      Router.Issue = jest.fn();
+      jest.spyOn(responsiveHelper, 'isSplitView').mockReturnValue(false);
+      (appActionHelper.getCachedPermissions as jest.Mock)?.mockReturnValue?.(null);
+      (urlUtils.extractIssueId as jest.Mock).mockReturnValue('I-1');
+      (urlUtils.extractArticleId as jest.Mock).mockReturnValue(undefined);
+      (urlUtils.extractHelpdeskFormId as jest.Mock).mockReturnValue(undefined);
+      (urlUtils.extractIssuesQuery as jest.Mock).mockReturnValue(undefined);
+      (Linking.getInitialURL as jest.Mock).mockResolvedValueOnce(`${backendURLMock}/issue/I-1`);
+
+      await dispatch(actions.initializeApp(appConfigMock));
+
+      expect(Router.Issue).toHaveBeenCalledWith(
+        {issueId: 'I-1', issuePlaceholder: {id: 'I-1'}, navigateToActivity: undefined},
+        {forceReset: true}
+      );
+    });
+
+    it('should preserve the launch URL across the End-User-Agreement gate and open it after acceptance', async () => {
+      fetchMock.reset();
+      fetchMock.mock(`${backendURLMock}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,build,statisticsEnabled,l10n(language,locale,predefinedQueries)`, {
+        version: '2018',
+        mobile: {serviceId: 'youtrack'},
+        ring: {serviceId: 'id', url: '/'},
+      });
+      fetchMock.mock(`${backendURLMock}/hub/api/rest/permissions/cache?query=service%3A%7B0-0-0-0-0%7D%20or%20service%3A%7B%7D&fields=permission%2Fkey%2Cglobal%2Cprojects%28id%29`, {});
+      fetchMock.mock(`${backendURLMock}/api/userNotifications/subscribe?fields=token&$top=-1`, {});
+
+      // The user has not yet accepted the EUA, so initialization is gated.
+      updateStore({app: {...appStateMock, showUserAgreement: true}} as AppState);
+
+      Router.Issue = jest.fn();
+      jest.spyOn(responsiveHelper, 'isSplitView').mockReturnValue(false);
+      (appActionHelper.getCachedPermissions as jest.Mock)?.mockReturnValue?.(null);
+      (urlUtils.extractIssueId as jest.Mock).mockReturnValue('I-1');
+      (urlUtils.extractArticleId as jest.Mock).mockReturnValue(undefined);
+      (urlUtils.extractHelpdeskFormId as jest.Mock).mockReturnValue(undefined);
+      (urlUtils.extractIssuesQuery as jest.Mock).mockReturnValue(undefined);
+      (Linking.getInitialURL as jest.Mock).mockResolvedValueOnce(`${backendURLMock}/issue/I-1`);
+
+      await dispatch(actions.initializeApp(appConfigMock));
+
+      // EUA still pending: completeInitialization is skipped, so nothing navigates yet.
+      expect(Router.Issue).not.toHaveBeenCalled();
+
+      // Accepting the EUA reaches completeInitialization -> handlePendingURL, which
+      // replays the launch URL captured before the gate.
+      await dispatch(actions.handlePendingURL());
+
+      expect(Router.Issue).toHaveBeenCalledWith(
+        {issueId: 'I-1', issuePlaceholder: {id: 'I-1'}, navigateToActivity: undefined},
+        {forceReset: true}
+      );
+    });
   });
 
 
@@ -572,6 +637,83 @@ describe('app-actions', () => {
       (Linking.getInitialURL as jest.Mock).mockResolvedValueOnce(url);
       await actions.subscribeToURL()(jest.fn(), store.getState, () => ({} as API));
     }
+  });
+
+
+  describe('Deep link via subscribeToURL', () => {
+    const issueUrl = `${backendURLMock}/issue/I-1`;
+    // subscribeToURL forwards the raw URL to both detector callbacks; capture it.
+    let capturedOnURL: (url: string, ...rest: any[]) => any;
+
+    beforeEach(() => {
+      Router.Issue = jest.fn();
+      jest.spyOn(responsiveHelper, 'isSplitView').mockReturnValue(false);
+      // The deep-link pipeline re-parses the raw URL through handleURL, which
+      // relies on the (auto-mocked) extractors.
+      (urlUtils.extractIssueId as jest.Mock).mockReturnValue('I-1');
+      (urlUtils.extractArticleId as jest.Mock).mockReturnValue(undefined);
+      (urlUtils.extractHelpdeskFormId as jest.Mock).mockReturnValue(undefined);
+      (urlUtils.extractIssuesQuery as jest.Mock).mockReturnValue(undefined);
+      (urlUtils.openByUrlDetector as jest.Mock).mockImplementation((onURL: typeof capturedOnURL) => {
+        capturedOnURL = onURL;
+      });
+      updateStore({app: {auth: createAuthInstanceMock()}} as AppState);
+    });
+
+    afterEach(async () => {
+      // drain any URL left pending so it does not leak into other tests
+      updateStore({app: {auth: createAuthInstanceMock({} as User)}} as AppState);
+      await actions.handlePendingURL()(dispatch, store.getState, getApi);
+    });
+
+    it('should not navigate and should remember the URL when the user is not authorized', async () => {
+      await actions.subscribeToURL()(dispatch, store.getState, getApi);
+
+      await capturedOnURL(issueUrl);
+
+      expect(Router.Issue).not.toHaveBeenCalled();
+    });
+
+    it('should open the remembered URL once the user becomes authorized', async () => {
+      await actions.subscribeToURL()(dispatch, store.getState, getApi);
+      await capturedOnURL(issueUrl);
+      expect(Router.Issue).not.toHaveBeenCalled();
+
+      updateStore({app: {auth: createAuthInstanceMock({} as User)}} as AppState);
+      await actions.handlePendingURL()(dispatch, store.getState, getApi);
+
+      expect(Router.Issue).toHaveBeenCalledWith(
+        {issueId: 'I-1', issuePlaceholder: {id: 'I-1'}, navigateToActivity: undefined},
+        {forceReset: true}
+      );
+    });
+
+    it('should open the URL immediately when the user is already authorized', async () => {
+      updateStore({app: {auth: createAuthInstanceMock({} as User)}} as AppState);
+
+      await actions.subscribeToURL()(dispatch, store.getState, getApi);
+      await capturedOnURL(issueUrl);
+
+      expect(Router.Issue).toHaveBeenCalledWith(
+        {issueId: 'I-1', issuePlaceholder: {id: 'I-1'}, navigateToActivity: undefined},
+        {forceReset: true}
+      );
+    });
+  });
+
+
+  describe('handleURL', () => {
+    it('should navigate to the default route with the search query for an issues query URL', async () => {
+      (urlUtils.extractIssueId as jest.Mock).mockReturnValue(undefined);
+      (urlUtils.extractArticleId as jest.Mock).mockReturnValue(undefined);
+      (urlUtils.extractHelpdeskFormId as jest.Mock).mockReturnValue(undefined);
+      (urlUtils.extractIssuesQuery as jest.Mock).mockReturnValue('find');
+      updateStore({app: {auth: createAuthInstanceMock({} as User)}} as AppState);
+
+      await actions.handleURL(`${backendURLMock}/issues?q=find`)(dispatch, store.getState, getApi);
+
+      expect(Router.navigateToDefaultRoute).toHaveBeenCalledWith({searchQuery: 'find'});
+    });
   });
 
 
