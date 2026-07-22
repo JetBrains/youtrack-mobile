@@ -11,12 +11,6 @@ prepare_react_native_project!
 # Disable New Architecture (Fabric) for compatibility with existing dependencies
 ENV['RCT_NEW_ARCH_ENABLED'] = '0'
 
-linkage = ENV['USE_FRAMEWORKS']
-#if linkage != nil
-#  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
-#  use_frameworks! :linkage => linkage.to_sym
-#end
-
 $RNFirebaseAsStaticFramework = true
 $RNFirebaseAnalyticsWithoutAdIdSupport = true
 
@@ -65,11 +59,16 @@ end
 
 target 'YouTrackMobile' do
   config = use_native_modules!
+  
+  Pod::UI.puts "RCT_BUILD_HERMES_FROM_SOURCE=#{ENV['RCT_BUILD_HERMES_FROM_SOURCE'].inspect}".yellow
+  Pod::UI.puts "REACT_NATIVE_OVERRIDE_HERMES_DIR=#{ENV['REACT_NATIVE_OVERRIDE_HERMES_DIR'].inspect}".yellow
+  Pod::UI.puts "HERMES_ENGINE_TARBALL_PATH=#{ENV['HERMES_ENGINE_TARBALL_PATH'].inspect}".yellow
 
   use_react_native!(
     :path => config[:reactNativePath],
     # An absolute path to your application root.
-    :app_path => "#{Pod::Config.instance.installation_root}/.."
+    :app_path => "#{Pod::Config.instance.installation_root}/..",
+    :hermes_enabled => true
   )
 
   target 'YouTrackMobileTests' do
