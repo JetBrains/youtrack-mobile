@@ -46,6 +46,7 @@ jest.mock('components/storage/storage', () => {
 
 jest.mock('components/router/router', () => ({
   navigateToDefaultRoute: jest.fn(),
+  resetWithRoot: jest.fn(),
   Home: jest.fn(),
   EnterServer: jest.fn(),
   Issues: jest.fn(),
@@ -406,7 +407,7 @@ describe('app-actions', () => {
       fetchMock.mock(`${backendURLMock}/hub/api/rest/permissions/cache?query=service%3A%7B0-0-0-0-0%7D%20or%20service%3A%7B%7D&fields=permission%2Fkey%2Cglobal%2Cprojects%28id%29`, {});
       fetchMock.mock(`${backendURLMock}/api/userNotifications/subscribe?fields=token&$top=-1`, {});
 
-      Router.Issue = jest.fn();
+      Router.resetWithRoot = jest.fn();
       jest.spyOn(responsiveHelper, 'isSplitView').mockReturnValue(false);
       (appActionHelper.getCachedPermissions as jest.Mock)?.mockReturnValue?.(null);
       (urlUtils.extractIssueId as jest.Mock).mockReturnValue('I-1');
@@ -417,9 +418,10 @@ describe('app-actions', () => {
 
       await dispatch(actions.initializeApp(appConfigMock));
 
-      expect(Router.Issue).toHaveBeenCalledWith(
-        {issueId: 'I-1', issuePlaceholder: {id: 'I-1'}, navigateToActivity: undefined},
-        {forceReset: true}
+      expect(Router.resetWithRoot).toHaveBeenCalledWith(
+        'Issues',
+        'Issue',
+        {issueId: 'I-1', issuePlaceholder: {id: 'I-1'}, navigateToActivity: undefined}
       );
     });
 
@@ -436,7 +438,7 @@ describe('app-actions', () => {
       // The user has not yet accepted the EUA, so initialization is gated.
       updateStore({app: {...appStateMock, showUserAgreement: true}} as AppState);
 
-      Router.Issue = jest.fn();
+      Router.resetWithRoot = jest.fn();
       jest.spyOn(responsiveHelper, 'isSplitView').mockReturnValue(false);
       (appActionHelper.getCachedPermissions as jest.Mock)?.mockReturnValue?.(null);
       (urlUtils.extractIssueId as jest.Mock).mockReturnValue('I-1');
@@ -448,15 +450,16 @@ describe('app-actions', () => {
       await dispatch(actions.initializeApp(appConfigMock));
 
       // EUA still pending: completeInitialization is skipped, so nothing navigates yet.
-      expect(Router.Issue).not.toHaveBeenCalled();
+      expect(Router.resetWithRoot).not.toHaveBeenCalled();
 
       // Accepting the EUA reaches completeInitialization -> handlePendingURL, which
       // replays the launch URL captured before the gate.
       await dispatch(actions.handlePendingURL());
 
-      expect(Router.Issue).toHaveBeenCalledWith(
-        {issueId: 'I-1', issuePlaceholder: {id: 'I-1'}, navigateToActivity: undefined},
-        {forceReset: true}
+      expect(Router.resetWithRoot).toHaveBeenCalledWith(
+        'Issues',
+        'Issue',
+        {issueId: 'I-1', issuePlaceholder: {id: 'I-1'}, navigateToActivity: undefined}
       );
     });
   });
@@ -581,15 +584,16 @@ describe('app-actions', () => {
     describe('Navigate to an issue', () => {
       const issueIdMock = `I-1`;
       beforeEach(() => {
-        Router.Issue = jest.fn();
+        Router.resetWithRoot = jest.fn();
       });
 
       it('should navigate to an issue', async () => {
         await assert(`${backendURLMock}/issue/${issueIdMock}`);
 
         setTimeout(() => {
-          expect(Router.Issue).toHaveBeenCalledWith(
-            {issueId: issueIdMock}, {forceReset: true}
+          expect(Router.resetWithRoot).toHaveBeenCalledWith(
+            'Issues', 'Issue',
+            {issueId: issueIdMock, issuePlaceholder: {id: issueIdMock}, navigateToActivity: undefined}
           );
         }, 100);
       });
@@ -598,8 +602,9 @@ describe('app-actions', () => {
         await assert(`${backendURLMock}/issue/${issueIdMock}#focus=Comments-${activityIdMock}`);
 
         setTimeout(() => {
-          expect(Router.Issue).toHaveBeenCalledWith(
-            {issueId: issueIdMock, navigateToActivity: activityIdMock}, {forceReset: true}
+          expect(Router.resetWithRoot).toHaveBeenCalledWith(
+            'Issues', 'Issue',
+            {issueId: issueIdMock, issuePlaceholder: {id: issueIdMock}, navigateToActivity: activityIdMock}
           );
         }, 100);
       });
@@ -609,15 +614,16 @@ describe('app-actions', () => {
     describe.skip('Navigate to an article', () => {
       const articleIdMock = `A-A-1`;
       beforeEach(() => {
-        Router.Article = jest.fn();
+        Router.resetWithRoot = jest.fn();
       });
 
       it('should navigate to an article', async () => {
         await assert(`${backendURLMock}/articles/${articleIdMock}`);
 
         setTimeout(() => {
-          expect(Router.Article).toHaveBeenCalledWith(
-            {articlePlaceholder: {id: articleIdMock}}, {forceReset: true}
+          expect(Router.resetWithRoot).toHaveBeenCalledWith(
+            'KnowledgeBase', 'Article',
+            {articlePlaceholder: {id: articleIdMock}, navigateToActivity: undefined}
           );
         }, 100);
       });
@@ -626,8 +632,9 @@ describe('app-actions', () => {
         await assert(`${backendURLMock}/articles/${articleIdMock}#focus=Comments-${activityIdMock}`);
 
         setTimeout(() => {
-          expect(Router.Article).toHaveBeenCalledWith(
-            {articlePlaceholder: {id: articleIdMock}, navigateToActivity: activityIdMock}, {forceReset: true}
+          expect(Router.resetWithRoot).toHaveBeenCalledWith(
+            'KnowledgeBase', 'Article',
+            {articlePlaceholder: {id: articleIdMock}, navigateToActivity: activityIdMock}
           );
         });
       });
@@ -646,7 +653,7 @@ describe('app-actions', () => {
     let capturedOnURL: (url: string, ...rest: any[]) => any;
 
     beforeEach(() => {
-      Router.Issue = jest.fn();
+      Router.resetWithRoot = jest.fn();
       jest.spyOn(responsiveHelper, 'isSplitView').mockReturnValue(false);
       // The deep-link pipeline re-parses the raw URL through handleURL, which
       // relies on the (auto-mocked) extractors.
@@ -671,20 +678,20 @@ describe('app-actions', () => {
 
       await capturedOnURL(issueUrl);
 
-      expect(Router.Issue).not.toHaveBeenCalled();
+      expect(Router.resetWithRoot).not.toHaveBeenCalled();
     });
 
     it('should open the remembered URL once the user becomes authorized', async () => {
       await actions.subscribeToURL()(dispatch, store.getState, getApi);
       await capturedOnURL(issueUrl);
-      expect(Router.Issue).not.toHaveBeenCalled();
+      expect(Router.resetWithRoot).not.toHaveBeenCalled();
 
       updateStore({app: {auth: createAuthInstanceMock({} as User)}} as AppState);
       await actions.handlePendingURL()(dispatch, store.getState, getApi);
 
-      expect(Router.Issue).toHaveBeenCalledWith(
-        {issueId: 'I-1', issuePlaceholder: {id: 'I-1'}, navigateToActivity: undefined},
-        {forceReset: true}
+      expect(Router.resetWithRoot).toHaveBeenCalledWith(
+        'Issues', 'Issue',
+        {issueId: 'I-1', issuePlaceholder: {id: 'I-1'}, navigateToActivity: undefined}
       );
     });
 
@@ -694,9 +701,9 @@ describe('app-actions', () => {
       await actions.subscribeToURL()(dispatch, store.getState, getApi);
       await capturedOnURL(issueUrl);
 
-      expect(Router.Issue).toHaveBeenCalledWith(
-        {issueId: 'I-1', issuePlaceholder: {id: 'I-1'}, navigateToActivity: undefined},
-        {forceReset: true}
+      expect(Router.resetWithRoot).toHaveBeenCalledWith(
+        'Issues', 'Issue',
+        {issueId: 'I-1', issuePlaceholder: {id: 'I-1'}, navigateToActivity: undefined}
       );
     });
   });

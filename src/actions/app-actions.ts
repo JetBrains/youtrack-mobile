@@ -813,20 +813,27 @@ async function navigateToScreen(
   } else {
     const navigateToActivity: string | undefined = url.split('#focus=Comments-')?.[1];
     if (helpdeskFormId) {
-      Router.HelpDeskFeedback({uuid: helpdeskFormId});
+      Router.resetWithRoot(routeMap.Issues, routeMap.HelpDeskFeedback, {uuid: helpdeskFormId});
     } else {
       const splitView = isSplitView();
       if (issueId) {
             if (splitView) {
               Router.Issues({issueId, issuePlaceholder: {id: issueId}, navigateToActivity});
             } else {
-              Router.Issue({issueId, issuePlaceholder: {id: issueId}, navigateToActivity}, {forceReset});
+              Router.resetWithRoot(routeMap.Issues, routeMap.Issue, {
+                issueId,
+                issuePlaceholder: {id: issueId},
+                navigateToActivity,
+              });
             }
           } else if (articleId) {
             if (splitView) {
               Router.KnowledgeBase({lastVisitedArticle: {id: articleId}, navigateToActivity, preventReload: true}, {forceReset});
             } else {
-              Router.Article({articlePlaceholder: {id: articleId}, navigateToActivity}, {forceReset});
+              Router.resetWithRoot(routeMap.KnowledgeBase, routeMap.Article, {
+                articlePlaceholder: {id: articleId},
+                navigateToActivity,
+              });
             }
           } else {
             Router.navigateToDefaultRoute({searchQuery});

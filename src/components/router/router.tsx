@@ -199,6 +199,57 @@ class Router {
     }
   }
 
+  // Reset the stack to `[root, target]` in a single dispatch so a deep-linked
+  // target (issue/article/helpdesk form) renders immediately on top while the
+  // default root list sits beneath it, keeping back navigation working.
+  resetWithRoot(rootRouteName: string, targetRouteName: string, targetParams: Record<string, any> = {}) {
+    if (!this.routes[rootRouteName] || !this.routes[targetRouteName]) {
+      throw `no such route ${rootRouteName} / ${targetRouteName}`;
+    }
+
+    if (!this._navigator) {
+      log.info(`Router(resetWithRoot): navigator not ready, queueing reset to ${targetRouteName}`);
+      this._pendingNavigation = () => this.resetWithRoot(rootRouteName, targetRouteName, targetParams);
+      return;
+    }
+
+    if (this._isTransitioning) {
+      log.info(`[NAVDBG] resetWithRoot(${targetRouteName}) QUEUED because _isTransitioning=true`);
+      this._pendingNavigation = () => this.resetWithRoot(rootRouteName, targetRouteName, targetParams);
+      return;
+    }
+
+    const rootProps = Object.assign({}, this.routes[rootRouteName].props);
+    const targetProps = Object.assign({}, this.routes[targetRouteName].props, targetParams);
+    const prevRouteName: string | undefined = this._currentRoute?.routeName;
+
+    // Persist the focused root-type target so "resume last route" keeps working.
+    if (this.rootRoutes.includes(targetRouteName)) {
+      flushStoragePart({lastRoute: targetRouteName});
+    }
+
+    try {
+      if (this._navigator && isIOSPlatform()) {
+        this._navigator._navigation.dismiss();
+      }
+    } catch (e) {
+      log.info('Router:(resetWithRoot dismiss)', e);
+    }
+
+    this.dispatch(
+      StackActions.reset({
+        index: 1,
+        actions: [
+          NavigationActions.navigate({routeName: rootRouteName, params: rootProps, key: rootRouteName}),
+          NavigationActions.navigate({routeName: targetRouteName, params: targetProps, key: targetRouteName}),
+        ],
+        key: null,
+      }),
+      targetRouteName,
+      prevRouteName,
+    );
+  }
+
   navigateToDefaultRoute(props?: {
     issueId?: string;
     articleId?: string;
@@ -226,7 +277,16 @@ class Router {
       route = routeMap.HelpDeskFeedback;
       log.info(`Router: navigate to HELPDESK ${JSON.stringify(this.props)}`);
     }
-    if (route) {
+    if (route && route !== defaultRoute) {
+      // A non-root target (Issue/ArticleSingle/HelpDeskFeedback): open it on top
+      // of a root so back returns to a list. Articles go back to the Knowledge
+      // Base; everything else to the default root list.
+      const isArticle = route === routeMap.ArticleSingle;
+      const rootRoute = isArticle ? routeMap.KnowledgeBase : defaultRoute;
+      const targetRoute = isArticle ? routeMap.Article : route;
+      this.resetWithRoot(rootRoute, targetRoute, params);
+    } else if (route) {
+      // `route === defaultRoute` (e.g. a search query lands on Issues): plain reset.
       this.navigate(route, params, {forceReset: true});
     } else {
       this.navigate(defaultRoute, params);
