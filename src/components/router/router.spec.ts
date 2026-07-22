@@ -70,6 +70,24 @@ describe('Router', () => {
           }),
         );
       });
+      it('should reset to [root, target] when resetWithRoot is called', () => {
+        Router.registerRoute({name: 'rootFoo'});
+        Router.registerRoute({name: 'targetBar'});
+        Router.resetWithRoot('rootFoo', 'targetBar', {id: 'X-1'});
+        expect(navigatorMock.dispatch).toHaveBeenCalledWith(
+          expect.objectContaining({
+            type: 'Navigation/RESET',
+            index: 1,
+            actions: [
+              expect.objectContaining({routeName: 'rootFoo'}),
+              expect.objectContaining({
+                routeName: 'targetBar',
+                params: expect.objectContaining({id: 'X-1'}),
+              }),
+            ],
+          }),
+        );
+      });
     });
   });
   describe('Dispatch callbacks', () => {

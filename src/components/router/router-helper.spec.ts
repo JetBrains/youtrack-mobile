@@ -8,6 +8,7 @@ jest.mock('components/router/router', () => ({
   Tickets: jest.fn(),
   ArticleSingle: jest.fn(),
   KnowledgeBase: jest.fn(),
+  resetWithRoot: jest.fn(),
 }));
 
 const entityId = 'ID-1';
@@ -86,45 +87,67 @@ describe('Router', () => {
       expect(isRedirected).toEqual(false);
     });
 
-    it('should navigate to `Issue` with issue id', () => {
+    it('should reset to `[Issues, Issue]` with issue id', () => {
       const isRedirected = navigateToRouteById(entityId, undefined, undefined);
 
-      expect(Router.Issue).toHaveBeenCalledWith({issueId: entityId}, {forceReset: true});
+      expect(Router.resetWithRoot).toHaveBeenCalledWith('Issues', 'Issue', {
+        issueId: entityId,
+        issuePlaceholder: {id: entityId},
+        navigateToActivity: undefined,
+      });
       expect(isRedirected).toEqual(true);
     });
 
-    it('should navigate to `Issue` with issue id and activity param', () => {
+    it('should reset to `[Issues, Issue]` with issue id and activity param', () => {
       const isRedirected = navigateToRouteById(entityId, undefined, navigateToActivity);
 
-      expect(Router.Issue).toHaveBeenCalledWith({issueId: entityId, navigateToActivity}, {forceReset: true});
+      expect(Router.resetWithRoot).toHaveBeenCalledWith('Issues', 'Issue', {
+        issueId: entityId,
+        issuePlaceholder: {id: entityId},
+        navigateToActivity,
+      });
       expect(isRedirected).toEqual(true);
     });
 
-    it('should navigate to `Tickets` with issue id', () => {
+    it('should reset to `[Tickets, Issue]` with issue id for a reporter', () => {
       const isRedirected = navigateToRouteById(entityId, undefined, undefined, true);
 
-      expect(Router.Issue).toHaveBeenCalledWith({issueId: entityId}, {forceReset: true});
+      expect(Router.resetWithRoot).toHaveBeenCalledWith('Tickets', 'Issue', {
+        issueId: entityId,
+        issuePlaceholder: {id: entityId},
+        navigateToActivity: undefined,
+      });
       expect(isRedirected).toEqual(true);
     });
 
-    it('should navigate to `Tickets` with issue id and activity param', () => {
+    it('should reset to `[Tickets, Issue]` with issue id and activity param for a reporter', () => {
       const isRedirected = navigateToRouteById(entityId, undefined, navigateToActivity, true);
 
-      expect(Router.Issue).toHaveBeenCalledWith({issueId: entityId, navigateToActivity}, {forceReset: true});
+      expect(Router.resetWithRoot).toHaveBeenCalledWith('Tickets', 'Issue', {
+        issueId: entityId,
+        issuePlaceholder: {id: entityId},
+        navigateToActivity,
+      });
       expect(isRedirected).toEqual(true);
     });
 
-    it('should navigate to `ArticleSingle` with article id', () => {
+    it('should reset to `[KnowledgeBase, Article]` with article id (reporter root ignored for articles)', () => {
       const isRedirected = navigateToRouteById(undefined, entityId, undefined, true);
 
-      expect(Router.ArticleSingle).toHaveBeenCalledWith({articlePlaceholder: {id: entityId}}, {forceReset: true});
+      expect(Router.resetWithRoot).toHaveBeenCalledWith('KnowledgeBase', 'Article', {
+        articlePlaceholder: {id: entityId},
+        navigateToActivity: undefined,
+      });
       expect(isRedirected).toEqual(true);
     });
 
-    it('should navigate to `ArticleSingle` with article id and activity param', () => {
+    it('should reset to `[KnowledgeBase, Article]` with article id and activity param', () => {
       const isRedirected = navigateToRouteById(undefined, entityId, navigateToActivity);
 
-      expect(Router.ArticleSingle).toHaveBeenCalledWith({articlePlaceholder: {id: entityId}, navigateToActivity}, {forceReset: true});
+      expect(Router.resetWithRoot).toHaveBeenCalledWith('KnowledgeBase', 'Article', {
+        articlePlaceholder: {id: entityId},
+        navigateToActivity,
+      });
       expect(isRedirected).toEqual(true);
     });
   });

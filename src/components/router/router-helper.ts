@@ -1,5 +1,9 @@
 import Router from 'components/router/router';
 import {isSplitView} from 'components/responsive/responsive-helper';
+import {routeMap} from 'app-routes';
+
+const getDefaultRootRoute = (isReporter?: boolean): string =>
+  isReporter ? routeMap.Tickets : routeMap.Issues;
 
 const navigateToRouteById = (
   issueId?: string,
@@ -20,11 +24,21 @@ const navigateToRouteById = (
         Router.KnowledgeBase({lastVisitedArticle: {id: articleId}, navigateToActivity});
       }
     } else {
+      const root = getDefaultRootRoute(isReporter);
       if (issueId) {
-        Router.Issue({issueId, navigateToActivity}, {forceReset: true});
+        Router.resetWithRoot(root, routeMap.Issue, {
+          issueId,
+          issuePlaceholder: {id: issueId},
+          navigateToActivity,
+        });
       }
       if (articleId) {
-        Router.ArticleSingle({articlePlaceholder: {id: articleId}, navigateToActivity}, {forceReset: true});
+        // Articles go back to their natural home, the Knowledge Base, not the
+        // issue/ticket list.
+        Router.resetWithRoot(routeMap.KnowledgeBase, routeMap.Article, {
+          articlePlaceholder: {id: articleId},
+          navigateToActivity,
+        });
       }
     }
   }
@@ -32,6 +46,7 @@ const navigateToRouteById = (
 };
 
 export {
+  getDefaultRootRoute,
   navigateToRouteById,
 };
 
