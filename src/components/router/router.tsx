@@ -99,12 +99,15 @@ class Router {
       transitionConfig: this.getTransitionConfig,
       onTransitionStart: () => {
         this._isTransitioning = true;
+        log.info(`[NAVDBG] onTransitionStart -> ${this.getCurrentRouteName()} (routes=${this.getRoutes().length})`);
       },
       onTransitionEnd: () => {
         this._isTransitioning = false;
+        log.info(`[NAVDBG] onTransitionEnd -> ${this.getCurrentRouteName()} (routes=${this.getRoutes().length}) pending=${!!this._pendingNavigation}`);
         if (this._pendingNavigation) {
           const pending = this._pendingNavigation;
           this._pendingNavigation = null;
+          log.info(`[NAVDBG] flushing pending navigation from onTransitionEnd`);
           pending();
         }
       },
@@ -141,6 +144,7 @@ class Router {
     }
 
     if (this._isTransitioning) {
+      log.info(`[NAVDBG] navigate(${routeName}) QUEUED because _isTransitioning=true`);
       this._pendingNavigation = () => this.navigate(routeName, props, {forceReset});
       return;
     }
@@ -158,6 +162,7 @@ class Router {
     // (e.g. nested Knowledge Base sub-articles). Reset routes are unaffected.
     const isResetNavigation = newRoute.type === 'reset' || forceReset;
     if (!isResetNavigation && props?.forceNew === true) {
+      log.info(`[NAVDBG] PUSH ${routeName} (forceNew) _isTransitioning=${this._isTransitioning} routes=${this.getRoutes().length}`);
       this.dispatch(
         StackActions.push({routeName, params: newRoute.props}),
         routeName,
@@ -236,6 +241,7 @@ class Router {
   };
 
   pop(isModalTransition?: boolean, options?: Record<string, any>) {
+    log.info(`[NAVDBG] pop() called _isTransitioning=${this._isTransitioning} routes=${this.getRoutes().length} hasNoParent=${this.hasNoParentRoute()}`);
     if (this.hasNoParentRoute()) {
       return false;
     }
