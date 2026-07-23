@@ -41,6 +41,7 @@ class Router {
   _currentRoute: NavigationNavigateActionPayload | null = null;
   _pendingNavigation: (() => void) | null = null;
   _isTransitioning: boolean = false;
+  _transitionWatchdog: ReturnType<typeof setTimeout> | null = null;
   rootRoutes: Array<string> = [];
   onDispatchCallbacks: Array<(...args: any[]) => any> = [];
   routes: {[routeName: string]: AppRoute} = {};
@@ -100,20 +101,43 @@ class Router {
       onTransitionStart: () => {
         this._isTransitioning = true;
         log.info(`[NAVDBG] onTransitionStart -> ${this.getCurrentRouteName()} (routes=${this.getRoutes().length})`);
+        // Failsafe: `onTransitionEnd` is not guaranteed to fire (it early-returns
+        // on an unmounted Transitioner and only runs via requestAnimationFrame),
+        // and `_isTransitioning` is otherwise cleared nowhere else. Without this,
+        // one missed end permanently wedges every subsequent push. The default
+        // slide is 250ms; 1s is a safe margin that never fires mid-transition.
+        if (this._transitionWatchdog) {
+          clearTimeout(this._transitionWatchdog);
+        }
+        this._transitionWatchdog = setTimeout(() => {
+          log.info('[NAVDBG] transition watchdog fired -> forcing _endTransition');
+          this._endTransition();
+        }, 1000);
       },
       onTransitionEnd: () => {
-        this._isTransitioning = false;
         log.info(`[NAVDBG] onTransitionEnd -> ${this.getCurrentRouteName()} (routes=${this.getRoutes().length}) pending=${!!this._pendingNavigation}`);
-        if (this._pendingNavigation) {
-          const pending = this._pendingNavigation;
-          this._pendingNavigation = null;
-          log.info(`[NAVDBG] flushing pending navigation from onTransitionEnd`);
-          pending();
-        }
+        this._endTransition();
       },
     });
     this.AppNavigator = createAppContainer(MainNavigator);
   }
+
+  // Single exit point for a transition: clear the flag + watchdog and flush any
+  // navigation that was queued while transitioning. Called by onTransitionEnd
+  // and, as a failsafe, by the watchdog if that end event never arrives.
+  _endTransition = () => {
+    this._isTransitioning = false;
+    if (this._transitionWatchdog) {
+      clearTimeout(this._transitionWatchdog);
+      this._transitionWatchdog = null;
+    }
+    if (this._pendingNavigation) {
+      const pending = this._pendingNavigation;
+      this._pendingNavigation = null;
+      log.info(`[NAVDBG] flushing pending navigation`);
+      pending();
+    }
+  };
 
   setOnDispatchCallback(onDispatch: (...args: any[]) => any) {
     this.onDispatchCallbacks.push(onDispatch);
@@ -143,7 +167,14 @@ class Router {
       return;
     }
 
-    if (this._isTransitioning) {
+    // Reset navigations replace the whole stack (logout -> EnterServer, account
+    // switch, Home) — critical state changes that must never be swallowed by the
+    // transition guard, whose only job is to avoid janky rapid *pushes*.
+    // react-navigation queues concurrent dispatches internally, so dispatching a
+    // reset mid-transition is safe. Guarding them risks a permanently stuck
+    // `_isTransitioning` (a missed onTransitionEnd) silently dropping the reset.
+    const isResetNavigation = this.routes[routeName].type === 'reset' || forceReset;
+    if (this._isTransitioning && !isResetNavigation) {
       log.info(`[NAVDBG] navigate(${routeName}) QUEUED because _isTransitioning=true`);
       this._pendingNavigation = () => this.navigate(routeName, props, {forceReset});
       return;
@@ -160,7 +191,6 @@ class Router {
     // Opt-in: push a fresh screen (unique key) instead of the default
     // key===routeName "less-pushy" navigate, so same-route screens can stack
     // (e.g. nested Knowledge Base sub-articles). Reset routes are unaffected.
-    const isResetNavigation = newRoute.type === 'reset' || forceReset;
     if (!isResetNavigation && props?.forceNew === true) {
       log.info(`[NAVDBG] PUSH ${routeName} (forceNew) _isTransitioning=${this._isTransitioning} routes=${this.getRoutes().length}`);
       this.dispatch(
@@ -209,12 +239,6 @@ class Router {
 
     if (!this._navigator) {
       log.info(`Router(resetWithRoot): navigator not ready, queueing reset to ${targetRouteName}`);
-      this._pendingNavigation = () => this.resetWithRoot(rootRouteName, targetRouteName, targetParams);
-      return;
-    }
-
-    if (this._isTransitioning) {
-      log.info(`[NAVDBG] resetWithRoot(${targetRouteName}) QUEUED because _isTransitioning=true`);
       this._pendingNavigation = () => this.resetWithRoot(rootRouteName, targetRouteName, targetParams);
       return;
     }
