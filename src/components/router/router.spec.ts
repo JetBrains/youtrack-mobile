@@ -88,6 +88,85 @@ describe('Router', () => {
           }),
         );
       });
+      describe('while a transition is in progress', () => {
+        afterEach(() => {
+          Router._isTransitioning = false;
+          Router._pendingNavigation = null;
+        });
+        it('should dispatch a reset navigation (e.g. logout) instead of swallowing it', () => {
+          Router.registerRoute({name: routeNameMock, type: 'reset'});
+          Router._isTransitioning = true;
+          Router.navigate(routeNameMock);
+          expect(navigatorMock.dispatch).toHaveBeenCalledWith(
+            expect.objectContaining({type: 'Navigation/RESET'}),
+          );
+        });
+        it('should dispatch a forceReset navigation instead of swallowing it', () => {
+          Router.registerRoute({name: routeNameMock});
+          Router._isTransitioning = true;
+          Router.navigate(routeNameMock, {}, {forceReset: true});
+          expect(navigatorMock.dispatch).toHaveBeenCalledWith(
+            expect.objectContaining({type: 'Navigation/RESET'}),
+          );
+        });
+        it('should dispatch resetWithRoot instead of swallowing it', () => {
+          Router.registerRoute({name: 'rootFoo'});
+          Router.registerRoute({name: 'targetBar'});
+          Router._isTransitioning = true;
+          Router.resetWithRoot('rootFoo', 'targetBar');
+          expect(navigatorMock.dispatch).toHaveBeenCalledWith(
+            expect.objectContaining({type: 'Navigation/RESET'}),
+          );
+        });
+        it('should still queue a non-reset navigate (push) to avoid rapid pushes', () => {
+          Router.registerRoute({name: routeNameMock});
+          Router._isTransitioning = true;
+          Router.navigate(routeNameMock);
+          expect(navigatorMock.dispatch).not.toHaveBeenCalled();
+          expect(typeof Router._pendingNavigation).toBe('function');
+        });
+      });
+    });
+    describe('transition watchdog', () => {
+      beforeEach(() => {
+        jest.useFakeTimers();
+      });
+      afterEach(() => {
+        Router._isTransitioning = false;
+        Router._pendingNavigation = null;
+        if (Router._transitionWatchdog) {
+          clearTimeout(Router._transitionWatchdog);
+          Router._transitionWatchdog = null;
+        }
+        jest.useRealTimers();
+      });
+      it('clears a stuck _isTransitioning and flushes pending nav if onTransitionEnd is missed', () => {
+        Router.registerRoute({name: routeNameMock});
+        // Simulate a transition start that never gets a matching end.
+        Router._isTransitioning = true;
+        Router._transitionWatchdog = setTimeout(() => Router._endTransition(), 1000);
+        // A push arrives mid-transition and is queued.
+        Router.navigate(routeNameMock);
+        expect(navigatorMock.dispatch).not.toHaveBeenCalled();
+        expect(typeof Router._pendingNavigation).toBe('function');
+        // The end event never fires; the watchdog fires instead.
+        jest.advanceTimersByTime(1000);
+        expect(Router._isTransitioning).toBe(false);
+        expect(navigatorMock.dispatch).toHaveBeenCalled();
+        expect(Router._pendingNavigation).toBeNull();
+      });
+      it('_endTransition clears the flag, watchdog and flushes pending nav', () => {
+        Router.registerRoute({name: routeNameMock});
+        Router._isTransitioning = true;
+        Router._transitionWatchdog = setTimeout(() => {}, 1000);
+        Router._pendingNavigation = jest.fn();
+        const pending = Router._pendingNavigation;
+        Router._endTransition();
+        expect(Router._isTransitioning).toBe(false);
+        expect(Router._transitionWatchdog).toBeNull();
+        expect(pending).toHaveBeenCalled();
+        expect(Router._pendingNavigation).toBeNull();
+      });
     });
   });
   describe('Dispatch callbacks', () => {
