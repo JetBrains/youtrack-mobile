@@ -506,16 +506,20 @@ export function signOutFromAccount(): ReduxAction {
     getApi: ReduxAPIGetter,
   ) => {
     const otherAccounts: StorageState[] = getState().app.otherAccounts || [];
+    const login: string | undefined = getState().app.user?.login;
+
     setRegisteredForPush(false);
-    try {
-      await PushNotifications.unregister(getState().app.user?.login!);
-    } catch (err) {
-      log.warn('Failed to unsubscribe from push notifications', err);
-    }
-    await getApi().user.logout();
+    log.info('App Actions: Signing out — firing best-effort remote cleanup');
+    PushNotifications.unregister(login!).catch((err: unknown) =>
+      log.warn('Failed to unsubscribe from push notifications', err),
+    );
+    getApi()?.user?.logout?.()?.catch((err: unknown) =>
+      log.warn('Failed to log out on the server; proceeding with local logout', err),
+    );
+
     dispatch(logOut());
 
-    log.info('App Actions: Logging out from the curren account');
+    log.info('App Actions: Logging out from the current account');
     if (otherAccounts.length > 0) {
       log.info('App Actions: Switching an account');
       redirectToHome(otherAccounts[0].config?.backendUrl);

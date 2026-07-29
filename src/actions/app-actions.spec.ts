@@ -229,6 +229,34 @@ describe('app-actions', () => {
 
       expect(PushNotifications.unregister).toHaveBeenCalled();
     });
+
+    it('should complete local logout and navigate even if the server logout request rejects', async () => {
+      (apiMock.user.logout as jest.Mock).mockRejectedValueOnce(new Error('Network error'));
+      (Router.EnterServer as jest.Mock).mockClear();
+      const auth = appStateMock.auth as OAuth2;
+      jest.spyOn(auth, 'logOut');
+
+      await dispatch(actions.signOutFromAccount());
+
+      expect(auth.logOut).toHaveBeenCalled();
+      expect(Router.EnterServer).toHaveBeenCalled();
+    });
+
+    it('should complete local logout and navigate even if the remote cleanup calls never resolve (hang)', async () => {
+      // Un-timed network/native calls that never settle. Awaiting either would
+      // stall the thunk forever; the local logout + navigation must not.
+      const neverResolves = () => new Promise(() => {});
+      (PushNotifications.unregister as jest.Mock).mockReset().mockImplementation(neverResolves);
+      (apiMock.user.logout as jest.Mock).mockReset().mockImplementation(neverResolves);
+      (Router.EnterServer as jest.Mock).mockClear();
+      const auth = appStateMock.auth as OAuth2;
+      jest.spyOn(auth, 'logOut');
+
+      await dispatch(actions.signOutFromAccount());
+
+      expect(auth.logOut).toHaveBeenCalled();
+      expect(Router.EnterServer).toHaveBeenCalled();
+    });
   });
 
 
