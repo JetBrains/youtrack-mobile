@@ -888,7 +888,7 @@ export function handlePendingURL(): ReduxAction {
     }
     const url = pendingDeepLinkURL;
     pendingDeepLinkURL = null;
-    log.info('App Actions: Opening a URL received before the app was ready');
+    log.info('App Actions(handlePendingURL): Opening a URL received before the app was ready', url);
     dispatch(handleURL(url));
   };
 }
@@ -1038,6 +1038,7 @@ export function initializeApp(
       try {
         configCurrent = await refreshConfig(config.backendUrl);
       } catch (err) {
+        log.warn('App Actions: Failed to reload config', err);
         return Router.Home({backendUrl: config.backendUrl, err});
       }
 
@@ -1051,6 +1052,7 @@ export function initializeApp(
 
     const url = await Linking.getInitialURL();
     if (url) {
+      log.info('App Actions: Deep link URL received: pendingDeepLinkURL=', url);
       pendingDeepLinkURL = url;
     }
 
