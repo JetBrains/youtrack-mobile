@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-native/sdks/hermes-engine/hermes-utils.rb b/node_modules/react-native/sdks/hermes-engine/hermes-utils.rb
+index 5356dc1..0045ac0 100644
+--- a/node_modules/react-native/sdks/hermes-engine/hermes-utils.rb
++++ b/node_modules/react-native/sdks/hermes-engine/hermes-utils.rb
+@@ -204,7 +204,7 @@ def hermestag_file(react_native_path)
+ end
+ 
+ def release_tarball_url(version, build_type)
+-    maven_repo_url = "https://repo1.maven.org/maven2"
++    maven_repo_url = "https://cache-redirector.jetbrains.com/repo1.maven.org/maven2"
+     namespace = "com/facebook/react"
+     # Sample url from Maven:
+     # https://repo1.maven.org/maven2/com/facebook/react/react-native-artifacts/0.71.0/react-native-artifacts-0.71.0-hermes-ios-debug.tar.gz

@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 ruby '>= 2.6.10'
 
+# Keep Podfile.lock reproducible across local and CI installs.
 gem 'cocoapods', '1.17.0'
 gem 'activesupport', '>= 6.1.7.5', '!= 7.1.0'
 gem 'xcodeproj', '1.28.1'
