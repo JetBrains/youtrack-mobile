@@ -490,6 +490,49 @@ describe('app-actions', () => {
         {issueId: 'I-1', issuePlaceholder: {id: 'I-1'}, navigateToActivity: undefined}
       );
     });
+
+    it('should open the launch URL target directly (no Issues flash) when permissions are cached', async () => {
+      fetchMock.reset();
+      fetchMock.mock(`${backendURLMock}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,build,statisticsEnabled,l10n(language,locale,predefinedQueries)`, {
+        version: '2018',
+        mobile: {serviceId: 'youtrack'},
+        ring: {serviceId: 'id', url: '/'},
+      });
+      fetchMock.mock(`${backendURLMock}/hub/api/rest/permissions/cache?query=service%3A%7B0-0-0-0-0%7D%20or%20service%3A%7B%7D&fields=permission%2Fkey%2Cglobal%2Cprojects%28id%29`, {});
+      fetchMock.mock(`${backendURLMock}/api/userNotifications/subscribe?fields=token&$top=-1`, {});
+
+      Router.resetWithRoot = jest.fn();
+      Router.Issues = jest.fn();
+      jest.spyOn(responsiveHelper, 'isSplitView').mockReturnValue(false);
+      setStoreAndCurrentUser({guest: false} as User);
+      // Permissions are cached, so the deep-link target must be opened up front
+      // as the first navigation instead of Issues -> (delay) -> Issue.
+      jest.spyOn(appActionHelper, 'getCachedPermissions').mockReturnValueOnce([] as any);
+      (urlUtils.extractIssueId as jest.Mock).mockReturnValue('I-1');
+      (urlUtils.extractArticleId as jest.Mock).mockReturnValue(undefined);
+      (urlUtils.extractHelpdeskFormId as jest.Mock).mockReturnValue(undefined);
+      (urlUtils.extractIssuesQuery as jest.Mock).mockReturnValue(undefined);
+      (Linking.getInitialURL as jest.Mock).mockResolvedValueOnce(`${backendURLMock}/issue/I-1`);
+
+      await dispatch(actions.initializeApp(appConfigMock));
+
+      // The issue is opened directly from the launch URL...
+      expect(Router.resetWithRoot).toHaveBeenCalledWith(
+        'Issues',
+        'Issue',
+        {issueId: 'I-1', issuePlaceholder: {id: 'I-1'}, navigateToActivity: undefined}
+      );
+      // ...and only once — the URL is not additionally replayed via handlePendingURL.
+      expect(Router.resetWithRoot).toHaveBeenCalledTimes(1);
+
+      // The Issues list is never opened, so there is no "Issues flash" before the
+      // target issue appears — this is the regression the fix prevents.
+      expect(Router.Issues).not.toHaveBeenCalled();
+
+      // A subsequent handlePendingURL is a no-op because the URL was consumed.
+      await dispatch(actions.handlePendingURL());
+      expect(Router.resetWithRoot).toHaveBeenCalledTimes(1);
+    });
   });
 
 

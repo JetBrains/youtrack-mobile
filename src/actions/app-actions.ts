@@ -607,9 +607,9 @@ export function completeInitialization(
     await dispatch(cacheProjects());
     log.info('App Actions: Initialization completed');
 
-    const isStackNotEmpty = Router.getRoutes().length <= 1;
+    const isStackAtRoot = Router.getRoutes().length <= 1;
     log.info(`App Actions(completeInitialization): stack: ${JSON.stringify(Router.getRoutes())}`);
-    if (isStackNotEmpty && !isRedirected && !pendingDeepLinkURL) {
+    if (isStackAtRoot && !isRedirected && !pendingDeepLinkURL) {
       if (currentUser.profiles?.helpdesk?.isReporter) {
         Router.Tickets();
       } else {
@@ -1011,9 +1011,20 @@ export function initializeApp(
     await dispatch(migrateToIssuesFilterSearch());
     await createAPIInstance();
 
+    // Read the cold-start launch URL up front so a deep link can be opened as the
+    // very first navigation. `issueId`/`articleId` from a push notification take
+    // precedence; otherwise fall back to the entity encoded in the launch URL.
+    const launchUrl: string | null = await Linking.getInitialURL();
+    const isSameServerUrl: boolean =
+      !!launchUrl && !!config.backendUrl && launchUrl.indexOf(config.backendUrl) !== -1;
+    const urlIssueId: string | undefined = isSameServerUrl ? (extractIssueId(launchUrl!) ?? undefined) : undefined;
+    const urlArticleId: string | undefined = isSameServerUrl ? (extractArticleId(launchUrl!) ?? undefined) : undefined;
+    const targetIssueId: string | undefined = issueId || urlIssueId;
+    const targetArticleId: string | undefined = articleId || urlArticleId;
+
     let isRedirected: boolean = false;
     if (cachedPermissions) {
-      isRedirected = navigateToRouteById(issueId, articleId, navigateToActivity, !!profiles?.helpdesk?.isReporter);
+      isRedirected = navigateToRouteById(targetIssueId, targetArticleId, navigateToActivity, !!profiles?.helpdesk?.isReporter);
     }
 
     let configCurrent = config;
@@ -1050,10 +1061,13 @@ export function initializeApp(
       }
     }
 
-    const url = await Linking.getInitialURL();
-    if (url) {
-      log.info('App Actions: Deep link URL received: pendingDeepLinkURL=', url);
-      pendingDeepLinkURL = url;
+    // If the launch URL was already opened directly above, don't replay it.
+    // Otherwise stash it so `handlePendingURL` (or the EUA gate) opens it once the
+    // app is ready — preserving cold-start-before-auth and logged-out cases.
+    const openedUrlDirectly: boolean = isRedirected && !!(urlIssueId || urlArticleId);
+    if (launchUrl && !openedUrlDirectly) {
+      log.info('App Actions: Deep link URL received: pendingDeepLinkURL=', launchUrl);
+      pendingDeepLinkURL = launchUrl;
     }
 
     await dispatch(checkUserAgreement());
@@ -1061,8 +1075,8 @@ export function initializeApp(
     if (!getState().app.showUserAgreement) {
       await dispatch(
         completeInitialization(
-          issueId,
-          articleId,
+          targetIssueId,
+          targetArticleId,
           navigateToActivity,
           undefined,
           isRedirected,
