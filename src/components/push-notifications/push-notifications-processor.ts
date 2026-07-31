@@ -78,22 +78,26 @@ export default class PushNotificationsProcessor extends PushNotifications {
         rejectToken = reject;
       },
     );
-    Notifications.registerRemoteNotifications();
-    Notifications.getInitialNotification()
-      .then(notification => {
-        if (notification) {
-          log.info(`Push notifications processor: Initial notification detected`);
-        }
-      })
-      .catch(err => log.info(`Push notifications processor: Initial notification detection failed ${err}`));
+
+    // IMPORTANT: attach the token listeners BEFORE calling
+    // `registerRemoteNotifications()`. On Android the (often cached) FCM token is
+    // delivered synchronously/immediately, so if registration is requested first
+    // the `registerRemoteNotificationsRegistered` event fires before this listener
+    // exists — the token is missed, `deviceTokenPromise` never settles, and every
+    // `getDeviceToken()` caller (i.e. the subscription flow) hangs forever.
+    // See https://wix.github.io/react-native-notifications/docs/subscription/
     Notifications.events().registerRemoteNotificationsRegistered(
       (event: { deviceToken: string }) => {
+        log.info(`Push notifications processor: Device token received`);
         this.setDeviceToken(event.deviceToken);
         resolveToken(event.deviceToken);
       },
     );
     Notifications.events().registerRemoteNotificationsRegistrationFailed(
-      (error: RegistrationError) => rejectToken(error),
+      (error: RegistrationError) => {
+        log.warn(`Push notifications processor: Remote notifications registration failed`, error);
+        rejectToken(error);
+      },
     );
     Notifications.events().registerNotificationReceivedForeground(
       (
@@ -121,5 +125,16 @@ export default class PushNotificationsProcessor extends PushNotifications {
         });
       },
     );
+
+    Notifications.getInitialNotification()
+      .then(notification => {
+        if (notification) {
+          log.info(`Push notifications processor: Initial notification detected`);
+        }
+      })
+      .catch(err => log.info(`Push notifications processor: Initial notification detection failed ${err}`));
+
+    // All listeners are attached — now it is safe to request registration.
+    Notifications.registerRemoteNotifications();
   }
 }
