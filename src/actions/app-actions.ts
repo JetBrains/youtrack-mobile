@@ -628,7 +628,9 @@ export function completeInitialization(
     }
 
     dispatch(loadWorkTimeSettings());
-    dispatch(subscribeToPushNotifications());
+    dispatch(subscribeToPushNotifications()).catch((err: unknown) =>
+      log.warn('App Actions: Failed to subscribe to push notifications', err),
+    );
     if (checkVersion(FEATURE_VERSION.inboxThreads)) {
       dispatch(inboxCheckUpdateStatus());
     }
@@ -1192,13 +1194,21 @@ export function setAccount(notificationRouteData: NotificationRouteData | null):
   };
 }
 
-export function subscribeToPushNotifications(): ReduxAction {
+export function subscribeToPushNotifications(): ReduxAction<Promise<void>> {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
+    log.info('App Actions: subscribeToPushNotifications — start');
     if (await DeviceInfo.isEmulator()) {
+      log.info('App Actions: EMULATOR - Skipping push subscription');
       return;
     }
 
-    PushNotificationsProcessor.init();
+    try {
+      PushNotificationsProcessor.init();
+      log.info('App Actions: Push processor initialized');
+    } catch (e) {
+      log.warn('App Actions: PushNotificationsProcessor.init() failed', e);
+      throw e;
+    }
 
     const onSwitchAccount = async (account: StorageState, issueId?: string, articleId?: string) => {
       await dispatch(switchAccount(account, false, issueId, articleId));
@@ -1207,11 +1217,13 @@ export function subscribeToPushNotifications(): ReduxAction {
     const userLogin = getState().app.user?.login as string;
     if (isRegisteredForPush()) {
       log.info('App Actions: Device was already registered for push notifications. Initializing.');
-      try {
-        PushNotifications.initialize(onSwitchAccount, getState().app.user?.login!);
-      } catch (e) {
-        setRegisteredForPush(false);
-      }
+      // `initialize` is async, so a synchronous try/catch never sees its rejection.
+      PushNotifications.initialize(onSwitchAccount, getState().app.user?.login!)
+        .then(() => log.info('App Actions: Push notifications re-initialized'))
+        .catch((e) => {
+          log.warn('App Actions: Push notifications re-initialize failed', e);
+          setRegisteredForPush(false);
+        });
       return;
     }
 
@@ -1229,8 +1241,11 @@ export function subscribeToPushNotifications(): ReduxAction {
         } catch (err) {
           log.warn(err);
         }
+      } else {
+        log.info(`App Actions: Android ${ver} (<33) — no runtime permission prompt; not subscribing here`);
       }
     } else {
+      log.info('App Actions: IOS: Subscribing to push notifications');
       await doSubscribe(onSwitchAccount, userLogin);
     }
   };
