@@ -6,16 +6,36 @@ import {isAndroidPlatform} from 'util/util';
 import type {StorageState} from 'components/storage/storage';
 import type {Token} from 'types/Notification';
 
+const DEVICE_TOKEN_TIMEOUT_MS = 30000;
+
 async function getDeviceToken(): Promise<Token> {
   let deviceToken: Token = null;
 
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<never>((_resolve, reject) => {
+    timeoutId = setTimeout(
+      () => reject(new Error(`device token not received within ${DEVICE_TOKEN_TIMEOUT_MS}ms`)),
+      DEVICE_TOKEN_TIMEOUT_MS,
+    );
+  });
+
   try {
-    deviceToken = await PushNotificationsProcessor.getDeviceToken();
+    // Bound the wait: if neither the "registered" nor the "registration failed"
+    // native event ever fires (e.g. misconfigured FCM/Firebase), the underlying
+    // promise never settles and the whole subscription flow would hang silently.
+    deviceToken = await Promise.race([
+      PushNotificationsProcessor.getDeviceToken(),
+      timeout,
+    ]);
   } catch (e) {
     log.warn(
       `${PNHelper.logPrefix}cannot retrieve device token from the phone`,
       e,
     );
+  } finally {
+    if (timeoutId !== undefined) {
+      clearTimeout(timeoutId);
+    }
   }
 
   return deviceToken;
