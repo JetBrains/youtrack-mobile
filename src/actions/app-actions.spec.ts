@@ -216,11 +216,11 @@ describe('app-actions', () => {
       expect(apiMock.user.logout).toHaveBeenCalled();
     });
 
-    it('should unsubscribe from push notifications in any case', async () => {
+    it('should not unsubscribe from push notifications when the device was never registered', async () => {
       setRegistered(false);
       await dispatch(actions.signOutFromAccount());
 
-      expect(PushNotifications.unregister).toHaveBeenCalled();
+      expect(PushNotifications.unregister).not.toHaveBeenCalled();
     });
 
     it('should unsubscribe from push notifications', async () => {

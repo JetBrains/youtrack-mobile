@@ -9,12 +9,13 @@ import {getStorageState, StorageState} from 'components/storage/storage';
 import {navigateToRouteById} from 'components/router/router-helper';
 import {targetAccountToSwitchTo} from 'actions/app-actions-helper';
 
-import type {NotificationCompletion, TokenHandler} from 'types/Notification';
+import type {NotificationCompletion} from 'types/Notification';
 import type {EmitterSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
 
 
 export default class PushNotificationsProcessor extends PushNotifications {
   static registerNotificationOpenListener: EmitterSubscription | null = null;
+  static initSubscriptions: EmitterSubscription[] = [];
 
   static subscribeOnNotificationOpen(
     onSwitchAccount: (account: StorageState, issueId?: string, articleId?: string) => any,
@@ -68,12 +69,19 @@ export default class PushNotificationsProcessor extends PushNotifications {
   }
 
   static init() {
-    let resolveToken: TokenHandler = (token) => {};
+    // `init()` runs on every subscribe attempt / account switch. Remove any
+    // listeners attached by a previous call first — otherwise they accumulate
+    // and a single native event invokes every stale callback (duplicate
+    // `completion(...)` calls for received notifications, duplicate logs, and an
+    // unbounded listener leak over the app's lifetime).
+    this.initSubscriptions.forEach(subscription => subscription?.remove?.());
+    this.initSubscriptions = [];
 
-    let rejectToken: TokenHandler = (reason) => {};
+    let resolveToken: (value: string | PromiseLike<string>) => void = () => {};
+    let rejectToken: (reason?: any) => void = () => {};
 
     this.deviceTokenPromise = new Promise<string>(
-      (resolve: TokenHandler, reject: TokenHandler) => {
+      (resolve, reject) => {
         resolveToken = resolve;
         rejectToken = reject;
       },
@@ -86,44 +94,52 @@ export default class PushNotificationsProcessor extends PushNotifications {
     // exists — the token is missed, `deviceTokenPromise` never settles, and every
     // `getDeviceToken()` caller (i.e. the subscription flow) hangs forever.
     // See https://wix.github.io/react-native-notifications/docs/subscription/
-    Notifications.events().registerRemoteNotificationsRegistered(
-      (event: { deviceToken: string }) => {
-        log.info(`Push notifications processor: Device token received`);
-        this.setDeviceToken(event.deviceToken);
-        resolveToken(event.deviceToken);
-      },
+    this.initSubscriptions.push(
+      Notifications.events().registerRemoteNotificationsRegistered(
+        (event: { deviceToken: string }) => {
+          log.info(`Push notifications processor: Device token received`);
+          this.setDeviceToken(event.deviceToken);
+          resolveToken(event.deviceToken);
+        },
+      ),
     );
-    Notifications.events().registerRemoteNotificationsRegistrationFailed(
-      (error: RegistrationError) => {
-        log.warn(`Push notifications processor: Remote notifications registration failed`, error);
-        rejectToken(error);
-      },
+    this.initSubscriptions.push(
+      Notifications.events().registerRemoteNotificationsRegistrationFailed(
+        (error: RegistrationError) => {
+          log.warn(`Push notifications processor: Remote notifications registration failed`, error);
+          rejectToken(error);
+        },
+      ),
     );
-    Notifications.events().registerNotificationReceivedForeground(
-      (
-        notification: Notification,
-        completion: (response: NotificationCompletion) => void,
-      ) => {
-        log.info(`Push notifications processor: Notification received in foreground`);
-        completion({
-          alert: true,
-          sound: true,
-          badge: false,
-        });
-      },
+    this.initSubscriptions.push(
+      Notifications.events().registerNotificationReceivedForeground(
+        (
+          _notification: Notification,
+          completion: (response: NotificationCompletion) => void,
+        ) => {
+          log.info(`Push notifications processor: Notification received in foreground`);
+          completion({
+            alert: true,
+            sound: true,
+            badge: false,
+          });
+        },
+      ),
     );
-    Notifications.events().registerNotificationReceivedBackground(
-      (
-        notification: Notification,
-        completion: (response: NotificationCompletion) => void,
-      ) => {
-        log.info(`Push notifications processor: Notification received in background`);
-        completion({
-          alert: true,
-          sound: true,
-          badge: false,
-        });
-      },
+    this.initSubscriptions.push(
+      Notifications.events().registerNotificationReceivedBackground(
+        (
+          _notification: Notification,
+          completion: (response: NotificationCompletion) => void,
+        ) => {
+          log.info(`Push notifications processor: Notification received in background`);
+          completion({
+            alert: true,
+            sound: true,
+            badge: false,
+          });
+        },
+      ),
     );
 
     Notifications.getInitialNotification()

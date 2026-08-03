@@ -88,7 +88,12 @@ async function register(userLogin: string): Promise<void> {
 }
 
 async function unregister(userLogin: string) {
-  const deviceToken: Token = await getDeviceToken();
+  // Fall back to the persisted token: `getDeviceToken()` resolves the in-memory
+  // `deviceTokenPromise`, which is only populated by `init()`. On a fresh app
+  // launch with an already-registered account `init()` never runs, so without
+  // this fallback logout would silently skip the server unsubscribe and leave a
+  // stale subscription that keeps delivering pushes after sign-out.
+  const deviceToken: Token = (await getDeviceToken()) ?? PNHelper.getStoredDeviceToken();
   if (deviceToken) {
     const response = await PNHelper.unsubscribe(deviceToken, userLogin);
     PNHelper.storeDeviceToken(null);
