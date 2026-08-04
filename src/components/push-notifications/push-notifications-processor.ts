@@ -17,6 +17,18 @@ export default class PushNotificationsProcessor extends PushNotifications {
   static registerNotificationOpenListener: EmitterSubscription | null = null;
   static initSubscriptions: EmitterSubscription[] = [];
 
+  // Timestamp of the most recent navigation triggered by a notification tap.
+  // `completeInitialization` consults this to avoid a concurrent app-bootstrap
+  // resetting the stack to the default route on top of the just-opened entity.
+  static lastNotificationNavigationAt = 0;
+  static readonly NOTIFICATION_NAV_WINDOW_MS = 5000;
+
+  // True when a notification tap navigated within the last
+  // `NOTIFICATION_NAV_WINDOW_MS`. Used as a re-init guard.
+  static hadRecentNotificationNavigation(): boolean {
+    return Date.now() - this.lastNotificationNavigationAt < this.NOTIFICATION_NAV_WINDOW_MS;
+  }
+
   static subscribeOnNotificationOpen(
     onSwitchAccount: (account: StorageState, issueId?: string, articleId?: string) => any,
   ) {
@@ -62,6 +74,10 @@ export default class PushNotificationsProcessor extends PushNotifications {
           log.info(`On notification open:: redirecting to detected Issue ID`);
           navigateToRouteById(issueId, articleId, helper.getActivityId(notification));
         }
+
+        // Record that a tap just drove navigation so a concurrent app bootstrap
+        // does not reset the stack to the default route on top of it.
+        PushNotificationsProcessor.lastNotificationNavigationAt = Date.now();
 
         completion();
       },

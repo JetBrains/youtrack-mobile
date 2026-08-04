@@ -22,6 +22,7 @@ import mocks from 'test/mocks';
 import OAuth2 from 'components/auth/oauth2';
 import PushNotifications from 'components/push-notifications/push-notifications';
 import Router from 'components/router/router';
+import PushNotificationsProcessor from 'components/push-notifications/push-notifications-processor';
 import {createPermissionsStore} from 'components/permissions-store/permissions-helper';
 import {folderIdAllKey} from 'views/inbox-threads/inbox-threads-helper';
 
@@ -554,6 +555,26 @@ describe('app-actions', () => {
       jest.spyOn(feature, 'checkVersion').mockReturnValue(false);
       await dispatch(actions.completeInitialization());
       expect(apiMock.inbox.getFolders).not.toHaveBeenCalled();
+    });
+
+    it('should navigate to the default route when no notification tap is in flight', async () => {
+      jest
+        .spyOn(PushNotificationsProcessor, 'hadRecentNotificationNavigation')
+        .mockReturnValue(false);
+
+      await dispatch(actions.completeInitialization());
+
+      expect(Router.navigateToDefaultRoute).toHaveBeenCalled();
+    });
+
+    it('should not reset to the default route when a notification tap just navigated', async () => {
+      jest
+        .spyOn(PushNotificationsProcessor, 'hadRecentNotificationNavigation')
+        .mockReturnValue(true);
+
+      await dispatch(actions.completeInitialization());
+
+      expect(Router.navigateToDefaultRoute).not.toHaveBeenCalled();
     });
   });
 
