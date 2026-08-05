@@ -364,6 +364,22 @@ describe('push-notifications-helper', () => {
         } as any),
       ).toEqual(undefined);
     });
+    it('should return `undefined` for a created issue even when event ids are present (no Activity tab jump)', () => {
+      expect(
+        helper.getActivityId({
+          categories: categoryName.ISSUE_CREATED,
+          eventIds: 'id1,id2',
+        } as any),
+      ).toEqual(undefined);
+    });
+    it('should return `undefined` for a created article even when event ids are present', () => {
+      expect(
+        helper.getActivityId({
+          categories: categoryName.ARTICLE_CREATED,
+          eventIds: 'id1,id2',
+        } as any),
+      ).toEqual(undefined);
+    });
     it('should return `undefined` if the first category is not a description or summary', () => {
       expect(
         helper.getActivityId({

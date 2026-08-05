@@ -114,13 +114,20 @@ function getActivityId(notification: Notification | null = null): string | undef
     return undefined;
   }
 
+  const isCreated: boolean = categories.some((it: string) =>
+    [categoryName.ISSUE_CREATED, categoryName.ARTICLE_CREATED]
+      .map((c: string) => c.toLowerCase())
+      .includes(it.trim().toLowerCase()),
+  );
+
+  if (isCreated) {
+    return undefined;
+  }
+
   const targetEventIdIndex: number = categories.findIndex((it: string) => {
     return ![
       categoryName.DESCRIPTION,
       categoryName.SUMMARY,
-      categoryName.ISSUE_CREATED,
-      categoryName.ISSUE_CREATED.split('_').pop(),
-      categoryName.ARTICLE_CREATED,
       categoryName.ARTICLE_CONTENT,
       categoryName.ARTICLE_SUMMARY,
     ].join(',').toLowerCase().split(',').includes(it.toLowerCase());
