@@ -8,6 +8,7 @@ import log from 'components/log/log';
 import {getStorageState, StorageState} from 'components/storage/storage';
 import {navigateToRouteById} from 'components/router/router-helper';
 import {targetAccountToSwitchTo} from 'actions/app-actions-helper';
+import {isAndroidPlatform} from 'util/util';
 
 import type {NotificationCompletion} from 'types/Notification';
 import type {EmitterSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
@@ -130,10 +131,21 @@ export default class PushNotificationsProcessor extends PushNotifications {
     this.initSubscriptions.push(
       Notifications.events().registerNotificationReceivedForeground(
         (
-          _notification: Notification,
+          notification: Notification,
           completion: (response: NotificationCompletion) => void,
         ) => {
           log.info(`Push notifications processor: Notification received in foreground`);
+          // Android does not surface a push while the app is foregrounded: the OS
+          // routes it straight here without posting to the tray (see
+          // `PushNotification.onReceived` — it only posts when the app is not
+          // visible). Re-post it as a local notification so the user still sees and
+          // can tap it. The payload is preserved verbatim, so tapping drives the
+          // same `registerNotificationOpened` navigation. iOS presents the banner
+          // natively from the `completion` flags below, so re-post on Android only
+          // to avoid a duplicate banner.
+          if (isAndroidPlatform() && notification?.payload) {
+            Notifications.postLocalNotification(notification.payload);
+          }
           completion({
             alert: true,
             sound: true,

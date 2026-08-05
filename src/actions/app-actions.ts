@@ -1033,7 +1033,14 @@ export function initializeApp(
     const targetArticleId: string | undefined = articleId || urlArticleId;
 
     let isRedirected: boolean = false;
-    if (cachedPermissions) {
+    // A warm notification tap recreates the activity and re-runs this bootstrap
+    // with EMPTY notification data (`getInitialNotification()` is empty on a warm
+    // relaunch). With no entity, `navigateToRouteById(undefined, undefined)` falls
+    // back to a bare default-route reset (`Router.Issues()`), which clobbers the
+    // entity the `registerNotificationOpened` handler has already opened. Skip the
+    // eager (re)navigation while a notification tap is driving navigation; the open
+    // handler has navigated and `completeInitialization` is guarded the same way.
+    if (cachedPermissions && !PushNotificationsProcessor.hadRecentNotificationNavigation()) {
       isRedirected = navigateToRouteById(targetIssueId, targetArticleId, navigateToActivity, !!profiles?.helpdesk?.isReporter);
     }
 
@@ -1206,8 +1213,8 @@ export function subscribeToPushNotifications(): ReduxAction<Promise<void>> {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     log.info('App Actions: subscribeToPushNotifications — start');
     if (await DeviceInfo.isEmulator()) {
-      log.info('App Actions: EMULATOR - Skipping push subscription');
-      return;
+      // log.info('App Actions: EMULATOR - Skipping push subscription');
+      // return;
     }
 
     try {

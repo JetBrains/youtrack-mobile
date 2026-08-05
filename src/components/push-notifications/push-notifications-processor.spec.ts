@@ -1,10 +1,17 @@
 import PushNotificationsProcessor from './push-notifications-processor';
 import helper from './push-notifications-helper';
 import {navigateToRouteById} from 'components/router/router-helper';
+import {isAndroidPlatform} from 'util/util';
 import {mockEventsRegistry} from '../../../test/jest-mock__react-native-notifications';
+
+import {Notifications} from 'react-native-notifications';
 
 import type {Notification} from 'react-native-notifications';
 
+jest.mock('util/util', () => ({
+  ...jest.requireActual('util/util'),
+  isAndroidPlatform: jest.fn(() => true),
+}));
 jest.mock('components/router/router-helper', () => ({
   navigateToRouteById: jest.fn(),
 }));
@@ -54,6 +61,42 @@ describe('Android', () => {
         mockEventsRegistry.registerNotificationReceivedBackground,
       ).toHaveBeenCalled();
       expect(mockEventsRegistry.registerNotificationOpened).toHaveBeenCalled();
+    });
+
+    const captureForegroundHandler = (): ((n: Notification, c: () => void) => void) => {
+      let handler: (n: Notification, c: () => void) => void = () => {};
+      // The default mock does not invoke the registered callback, so capture it and
+      // drive it manually. Reassign the property directly instead of `jest.spyOn`:
+      // the mock shares one function reference across the foreground/background/open
+      // registrations, so spying corrupts which callback is captured.
+      const original = mockEventsRegistry.registerNotificationReceivedForeground;
+      (mockEventsRegistry as any).registerNotificationReceivedForeground = jest.fn(
+        (cb: any) => {
+          handler = cb;
+          return {remove: jest.fn()};
+        },
+      );
+      PushNotificationsProcessor.init();
+      (mockEventsRegistry as any).registerNotificationReceivedForeground = original;
+      return handler;
+    };
+
+    it('should re-post a foreground notification as a local one on Android so it stays visible', () => {
+      (isAndroidPlatform as jest.Mock).mockReturnValue(true);
+
+      captureForegroundHandler()(mockEventsRegistry.notificationMock as Notification, jest.fn());
+
+      expect(Notifications.postLocalNotification).toHaveBeenCalledWith(
+        mockEventsRegistry.payloadMock,
+      );
+    });
+
+    it('should not re-post a foreground notification on iOS (presented natively)', () => {
+      (isAndroidPlatform as jest.Mock).mockReturnValue(false);
+
+      captureForegroundHandler()(mockEventsRegistry.notificationMock as Notification, jest.fn());
+
+      expect(Notifications.postLocalNotification).not.toHaveBeenCalled();
     });
 
     it('should set device token', () => {

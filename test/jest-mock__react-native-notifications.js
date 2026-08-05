@@ -31,6 +31,7 @@ const mockReactNativeNotification = () => {
       Notifications: {
         getInitialNotification: jest.fn().mockReturnValue(Promise.resolve()),
         registerRemoteNotifications: jest.fn(),
+        postLocalNotification: jest.fn(),
         events: () => mockEventsRegistry,
       },
     };

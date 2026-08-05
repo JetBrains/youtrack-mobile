@@ -635,6 +635,11 @@ describe('app-actions', () => {
     beforeEach(() => {
       jest.spyOn(appActionHelper, 'getCachedPermissions');
       jest.spyOn(routerHelper, 'navigateToRouteById');
+      // `resetMocks` is off, so a prior block's persistent spy on this static
+      // could leak in; pin the default so redirect behaviour is deterministic.
+      jest
+        .spyOn(PushNotificationsProcessor, 'hadRecentNotificationNavigation')
+        .mockReturnValue(false);
     });
 
     it('should not redirect user to `Issues screen` if no permissions are cached', async () => {
@@ -653,6 +658,21 @@ describe('app-actions', () => {
       await dispatch(actions.initializeApp(appConfigMock));
 
       expect(routerHelper.navigateToRouteById).toHaveBeenCalled();
+    });
+
+    it('should NOT redirect to the default route when a notification tap just navigated', async () => {
+      // A warm notification tap recreates the activity and re-runs bootstrap with
+      // empty notification data; the eager default reset would clobber the entity
+      // the open handler already opened. See push-second-tap reload fix.
+      (appActionHelper.getCachedPermissions as jest.Mock).mockReturnValueOnce([]);
+      setStoreAndCurrentUser({guest: false} as User);
+      jest
+        .spyOn(PushNotificationsProcessor, 'hadRecentNotificationNavigation')
+        .mockReturnValueOnce(true);
+
+      await dispatch(actions.initializeApp(appConfigMock));
+
+      expect(routerHelper.navigateToRouteById).not.toHaveBeenCalled();
     });
   });
 
