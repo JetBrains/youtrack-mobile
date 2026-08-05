@@ -576,6 +576,18 @@ describe('app-actions', () => {
 
       expect(Router.navigateToDefaultRoute).not.toHaveBeenCalled();
     });
+
+    it('should navigate to an explicit target even when a notification tap just navigated (e.g. a cross-account switch)', async () => {
+      jest
+        .spyOn(PushNotificationsProcessor, 'hadRecentNotificationNavigation')
+        .mockReturnValue(true);
+
+      await dispatch(actions.completeInitialization('ISSUE-1'));
+
+      expect(Router.navigateToDefaultRoute).toHaveBeenCalledWith(
+        expect.objectContaining({issueId: 'ISSUE-1'}),
+      );
+    });
   });
 
 

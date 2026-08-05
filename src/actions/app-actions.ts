@@ -612,12 +612,12 @@ export function completeInitialization(
 
     const isStackAtRoot = Router.getRoutes().length <= 1;
     log.info(`App Actions(completeInitialization): stack: ${JSON.stringify(Router.getRoutes())}`);
-    // Defense-in-depth: if a notification tap just navigated (e.g. a warm
-    // re-launch that still remounted the surface and re-ran bootstrap with empty
-    // `getInitialNotification()` data), do not reset the stack to the default
-    // route on top of the entity the tap already opened.
+    // After a recent notification tap, skip only a bare default-route reset;
+    // always honor an explicit target so navigation isn't stranded on "Connecting…".
     const hadRecentNotificationNav = PushNotificationsProcessor.hadRecentNotificationNavigation();
-    if (isStackAtRoot && !isRedirected && !pendingDeepLinkURL && !hadRecentNotificationNav) {
+    const hasExplicitTarget = !!(issueId || articleId || searchQuery || helpdeskFormId);
+    const suppressDefaultRouteReset = hadRecentNotificationNav && !hasExplicitTarget;
+    if (isStackAtRoot && !isRedirected && !pendingDeepLinkURL && !suppressDefaultRouteReset) {
       if (currentUser.profiles?.helpdesk?.isReporter) {
         Router.Tickets();
       } else {
