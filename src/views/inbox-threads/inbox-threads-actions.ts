@@ -260,7 +260,8 @@ const loadInboxThreads = (
     }
 
     async function doMarkSeen() {
-      (folderId === folderIdMap[0] ? [folderIdMap[1], folderIdMap[2]] : [folderId]).forEach((id: string) => {
+      const folders = (folderId === folderIdMap[0] ? [folderIdMap[1], folderIdMap[2]] : [folderId]) as string[];
+      folders.forEach((id: string) => {
         dispatch(markFolderSeen(id));
       });
     }
@@ -354,7 +355,7 @@ const onReactionSelect = (
     if (error) {
       notifyError(error);
     } else {
-      dispatch(markFolderSeen(folderIdMap[1], Date.now()));
+      dispatch(markFolderSeen(folderIdMap[1]!, Date.now()));
       onAfterSelect(existReaction ? null : response, !!existReaction);
     }
   };
