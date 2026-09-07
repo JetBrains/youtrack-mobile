@@ -35,12 +35,10 @@ jest.mock('react-native-gesture-handler', () => ({}));
 jest.mock('react-native-tab-view', () => ({}));
 
 
-/*
 jest.mock('react-native-encrypted-storage', () => ({
   getItem: jest.fn(() => Promise.resolve()),
   setItem: jest.fn(() => Promise.resolve()),
 }));
-*/
 
 jest.mock('react-native-device-info', () => mockDeviceInfo);
 
