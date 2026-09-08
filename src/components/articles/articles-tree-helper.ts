@@ -158,20 +158,27 @@ export const createBreadCrumbs = (
     return [];
   }
 
-  let parentId: string | null = article?.parentArticle?.id;
+  let parentId: string | null | undefined = article?.parentArticle?.id;
   const projectArticles: Article[] = flattenArticleListChildren(
     getProjectNodeData(projectNode),
   );
 
-  while (parentId) {
+  // Guard against a missing ancestor (parent not present in the loaded tree)
+  // and against a cyclic parent chain — either would spin this loop forever
+  // and freeze the JS thread.
+  const seen: Set<string> = new Set();
+  while (parentId && !seen.has(parentId)) {
+    seen.add(parentId);
     const parentArticle: Article | null | undefined = projectArticles.find(
       (it: Article) => it.id === parentId,
     );
 
-    if (parentArticle) {
-      breadCrumbs.push(parentArticle);
-      parentId = parentArticle.parentArticle?.id;
+    if (!parentArticle) {
+      break;
     }
+
+    breadCrumbs.push(parentArticle);
+    parentId = parentArticle.parentArticle?.id;
   }
 
   breadCrumbs.reverse();
