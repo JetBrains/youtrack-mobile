@@ -80,15 +80,23 @@ const MarkdownText = ({
   let textWithMentions: TextNodes = [text];
 
   if (mergedMentions.length !== 0) {
+    let mentionIndex = 0;
+    const renderMention = (mention: Mention) => (
+      <MarkdownMentionWithUserCard
+        key={`${node.key}-mention-${mentionIndex++}`}
+        mention={mention}
+        style={style}
+      />
+    );
     textWithMentions = text.split(/(\s+)/).reduce((akk: TextNodes, str: string) => {
       const textNodes: TextNodes = str ? createSortedRegexps(mergedMentions, text).reduce((arr: TextNodes, it: Matcher) => {
         const match: RegExpMatchArray | null = str.match(it.regex);
         let mdParts: any[] = [];
         if (match?.[0]) {
           mdParts = match[0].length === str.length
-            ? [<MarkdownMentionWithUserCard mention={it.mention} style={style}/>]
+            ? [renderMention(it.mention)]
             : str.split(it.regex).filter(i => i !== undefined).map(
-              (s: string) => s === '' ? <MarkdownMentionWithUserCard mention={it.mention} style={style}/> : s
+              (s: string) => s === '' ? renderMention(it.mention) : s
             );
         }
         return [...arr, ...mdParts];
