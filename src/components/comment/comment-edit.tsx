@@ -696,7 +696,6 @@ const CommentEdit = (props: Props) => {
     <View
       testID="test:id/commentEdit"
       accessibilityLabel="commentEdit"
-      accessible={true}
       style={props.isEditMode ? styles.commentEditContainer : styles.container}
     >
       {renderUserMentions()}
