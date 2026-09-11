@@ -32,7 +32,11 @@ const ArticleContent = (props: Props) => {
   }
 
   return (
-    <View style={styles.description}>
+    <View
+      testID="test:id/articleDescription"
+      accessible={true}
+      style={styles.description}
+    >
       <MarkdownViewChunks
         textStyle={markdownText}
         scrollData={scrollData}
