@@ -207,7 +207,13 @@ const ArticleDetails = (props: Props) => {
   return (
     <>
       {!!article.summary && (
-        <Text style={styles.summaryText}>{article.summary}</Text>
+        <Text
+          testID="test:id/articleSummary"
+          accessible={true}
+          style={styles.summaryText}
+        >
+          {article.summary}
+        </Text>
       )}
 
       {isLoading && !error && !article?.content && <SkeletonIssueContent />}

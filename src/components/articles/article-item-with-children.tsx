@@ -29,10 +29,18 @@ const ArticleItemWithChildren = (props: Props) => {
   return (
     <View style={[styles.row, style]}>
       <TouchableOpacity
+        testID="test:id/articleItem"
+        accessibilityLabel="articleItem"
+        accessible={false}
         style={{...styles.row, ...styles.item}}
         onPress={() => onArticlePress(article)}
       >
-        <Text numberOfLines={2} style={styles.articleTitleText}>
+        <Text
+          testID="test:id/articleItemSummary"
+          accessible={true}
+          numberOfLines={2}
+          style={styles.articleTitleText}
+        >
           {article.summary || i18n('Untitled')}
         </Text>
         <View style={styles.itemArticleIcon}>
