@@ -90,8 +90,6 @@ function Thread({thread, currentUser, uiTheme, onNavigate, style}: Props) {
   const Entity = (
     <InboxEntity
       testID="test:id/inboxEntity"
-      accessibilityLabel="inboxEntity"
-      accessible={true}
       entity={entity}
       onNavigate={() => onNavigate(entity)}
       style={[
@@ -106,7 +104,6 @@ function Thread({thread, currentUser, uiTheme, onNavigate, style}: Props) {
     <View
       testID="test:id/inboxThreadsListThread"
       accessibilityLabel="inboxThreadsListThread"
-      accessible={true}
       style={style}
     >
       {!isBottomPositioned && (

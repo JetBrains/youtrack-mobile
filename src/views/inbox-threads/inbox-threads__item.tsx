@@ -38,11 +38,11 @@ export default function ThreadItem({
 }: Props) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const theme: Theme = useContext(ThemeContext);
+  const isNavigable = typeof onNavigate === 'function';
   return (
     <View
       testID="test:id/inboxThreadItem"
       accessibilityLabel="inboxThreadItem"
-      accessible={true}
     >
       <UserInfo
         additionalInfo={reason}
@@ -53,10 +53,9 @@ export default function ThreadItem({
       />
       <TouchableOpacity
         testID="test:id/inboxThreadItemNavigateButton"
-        accessibilityLabel="inboxThreadItemNavigateButton"
-        accessible={true}
+        accessible={isNavigable}
         style={styles.threadChange}
-        disabled={typeof onNavigate !== 'function'}
+        disabled={!isNavigable}
         onPress={onNavigate}
         hitSlop={HIT_SLOP2}
       >

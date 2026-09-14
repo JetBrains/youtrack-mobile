@@ -76,6 +76,7 @@ export default function InboxThreadMention({
         change={
           <>
             <TouchableOpacity
+              testID="test:id/inboxThreadMentionComment"
               onPress={() => {
                 onNavigate(
                   target.issue || target.article,

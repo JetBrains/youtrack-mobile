@@ -26,8 +26,6 @@ export default function InboxEntity({entity, onNavigate, styleText, ...otherProp
         {!!readableID && (
           <Text
             testID="test:id/inboxEntityReadableId"
-            accessibilityLabel="inboxEntityReadableId"
-            accessible={true}
             style={[
               styles.notificationIssueInfo,
               styleText,
@@ -40,8 +38,6 @@ export default function InboxEntity({entity, onNavigate, styleText, ...otherProp
         {!!('summary' in entity && entity.summary) && (
           <Text
             testID="test:id/inboxEntitySummary"
-            accessibilityLabel="inboxEntitySummary"
-            accessible={true}
             style={[styles.notificationIssueInfo, styles.linkColor, styleText]}
           >
             {` ${entity.summary}`}
