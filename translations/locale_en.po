@@ -26,7 +26,7 @@ msgstr "(Clear value)"
 msgid "[Removed field]"
 msgstr "[Removed field]"
 
-#: src/views/article/article__details.tsx:169
+#: src/views/article/article__details.tsx:171
 msgid "{{amount}} article"
 msgid_plural "{{amount}} articles"
 msgstr[0] "{{amount}} article"
@@ -319,7 +319,7 @@ msgstr "Confirm logout"
 msgid "Confirmation required"
 msgstr "Confirmation required"
 
-#: src/actions/app-actions.ts:893
+#: src/actions/app-actions.ts:933
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
@@ -737,7 +737,7 @@ msgstr "Mark as read"
 msgid "Mark as unread"
 msgstr "Mark as unread"
 
-#: src/views/inbox-threads/inbox-threads-actions.ts:328
+#: src/views/inbox-threads/inbox-threads-actions.ts:329
 msgid "Marked as read"
 msgstr "Marked as read"
 
@@ -758,7 +758,7 @@ msgid "Medium"
 msgstr "Medium"
 
 #: src/components/activity-stream/activity__stream-history.tsx:196
-#: src/views/inbox-threads/inbox-threads__mention.tsx:102
+#: src/views/inbox-threads/inbox-threads__mention.tsx:103
 msgid "mentioned you"
 msgstr "mentioned you"
 
@@ -1129,7 +1129,7 @@ msgstr "Spent time:"
 msgid "Start a new article"
 msgstr "Start a new article"
 
-#: src/views/article/article__details.tsx:152
+#: src/views/article/article__details.tsx:154
 msgid "Sub-articles"
 msgstr "Sub-articles"
 
@@ -1240,11 +1240,11 @@ msgstr "There was an error retrieving information about the change's author from
 msgid "This action deletes all drafts, including unpublished sub-articles"
 msgstr "This action deletes all drafts, including unpublished sub-articles"
 
-#: src/views/inbox-threads/inbox-threads-actions.ts:286
+#: src/views/inbox-threads/inbox-threads-actions.ts:287
 msgid "Thread muted"
 msgstr "Thread muted"
 
-#: src/views/inbox-threads/inbox-threads-actions.ts:286
+#: src/views/inbox-threads/inbox-threads-actions.ts:287
 msgid "Thread unmuted"
 msgstr "Thread unmuted"
 
@@ -1299,7 +1299,7 @@ msgstr "Unmute thread"
 msgid "Unread only"
 msgstr "Unread only"
 
-#: src/components/articles/article-item-with-children.tsx:36
+#: src/components/articles/article-item-with-children.tsx:44
 msgid "Untitled"
 msgstr "Untitled"
 
@@ -1395,7 +1395,7 @@ msgstr "Write a comment, @mention people"
 msgid "Yes"
 msgstr "Yes"
 
-#: src/actions/app-actions.ts:803
+#: src/actions/app-actions.ts:825
 msgid "You are trying to open a link from another server. Please add this server to the app first."
 msgstr "You are trying to open a link from another server. Please add this server to the app first."
 

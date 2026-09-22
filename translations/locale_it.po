@@ -1098,7 +1098,7 @@ msgstr ""
 
 #: src/views/issues/index.ts
 msgid "Small"
-msgstr "Piccolo"
+msgstr "Piccola"
 
 #: src/components/error/error-message-data.ts
 #: src/components/error/error-messages.ts
