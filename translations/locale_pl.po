@@ -112,6 +112,7 @@ msgid "1w 1d 1h 1m"
 msgstr "1 t 1 d 1 h 1 m"
 
 #: legacy/src/components/user-agreement/user-agreement.tsx
+#: src/components/user-agreement/user-agreement.tsx
 msgid "Accept"
 msgstr "Zaakceptuj"
 
@@ -167,7 +168,7 @@ msgid "Add time"
 msgstr "Dodaj godzinę"
 
 #: legacy/src/views/article/arcticle-actions.ts
-#: src/screens/article/article-screen.tsx
+#: src/screens/article/components/article-actions-menu/article-actions-menu.tsx
 msgid "Add to favorites"
 msgstr "Dodaj do ulubionych"
 
@@ -244,8 +245,11 @@ msgstr "Usunięto artykuł z ulubionych"
 
 #: legacy/src/components/comment/comment-edit.tsx
 #: legacy/src/views/issue/issue-base-actions-creater.ts
+#: src/screens/article/article-activity.tsx
+#: src/screens/article/components/article-actions-menu/article-actions-menu.tsx
 #: src/screens/issue/components/composer-actions-menu/composer-actions-menu.tsx
 #: src/screens/issue/components/issue-actions-menu/issue-actions-menu.tsx
+#: src/screens/issue/issue-activity.tsx
 msgid "Attach file"
 msgstr "Załącz plik"
 
@@ -298,6 +302,7 @@ msgid "Cache cleared"
 msgstr ""
 
 #: legacy/src/components/attach-file/attach-file-dialog.tsx
+#: src/screens/issue/hooks/use-file-picker.ts
 msgid "Camera"
 msgstr "Kamera"
 
@@ -448,11 +453,11 @@ msgstr "Poprawiono treść"
 #: src/components/markdown/components/code/code.tsx
 #: src/components/markdown/components/code/code.tsx
 #: src/components/user-card/user-card.tsx
+#: src/hooks/use-copy-text.ts
 #: src/screens/article/article-activity.tsx
 #: src/screens/article/article-activity.tsx
 #: src/screens/article/article-screen.tsx
 #: src/screens/issue/components/text-custom-field/text-custom-field.tsx
-#: src/screens/issue/issue-activity.tsx
 #: src/screens/issue/issue-screen.tsx
 msgid "Copied"
 msgstr "Skopiowano"
@@ -477,14 +482,17 @@ msgstr "Skopiuj link"
 
 #: legacy/src/views/article/arcticle-actions.ts
 #: legacy/src/views/article/arcticle-actions.ts
-#: src/screens/article/article-screen.tsx
+#: src/screens/article/components/article-actions-menu/article-actions-menu.tsx
 msgid "Copy link to article"
 msgstr "Skopiuj link do artykułu"
 
 #: legacy/src/views/article/article__activity.tsx
 #: legacy/src/views/issue/activity/issue__activity-stream.tsx
 #: legacy/src/views/issue/issue-base-actions-creater.ts
+#: src/hooks/use-copy-text-actions.ts
 #: src/screens/article/article-activity.tsx
+#: src/screens/issue/issue-activity.tsx
+#: src/screens/issue/issue-activity.tsx
 #: src/screens/issue/issue-activity.tsx
 msgid "Copy text"
 msgstr "Skopiuj tekst"
@@ -525,6 +533,7 @@ msgid "Date"
 msgstr "Data"
 
 #: legacy/src/components/user-agreement/user-agreement.tsx
+#: src/components/user-agreement/user-agreement.tsx
 msgid "Decline"
 msgstr "Odrzuć"
 
@@ -547,7 +556,7 @@ msgstr "odrzucono żądanie ściągnięcia"
 #: src/components/attachments/attachments-row.tsx
 #: src/components/confirmation/confirmation.ts
 #: src/screens/article/article-activity.tsx
-#: src/screens/article/article-screen.tsx
+#: src/screens/article/components/article-actions-menu/article-actions-menu.tsx
 #: src/screens/issue/components/issue-actions-menu/issue-actions-menu.tsx
 #: src/screens/issue/issue-activity.tsx
 #: src/screens/issue/issue-activity.tsx
@@ -654,7 +663,7 @@ msgstr "Wersje robocze"
 #: legacy/src/views/issue/activity/issue__activity.tsx
 #: legacy/src/views/issue/issue-base-actions-creater.ts
 #: src/screens/article/article-activity.tsx
-#: src/screens/article/article-screen.tsx
+#: src/screens/article/components/article-actions-menu/article-actions-menu.tsx
 #: src/screens/issue/components/issue-actions-menu/issue-actions-menu.tsx
 #: src/screens/issue/issue-activity.tsx
 #: src/screens/issue/issue-activity.tsx
@@ -738,6 +747,7 @@ msgstr "Filtruj istniejące konta według nazwy lub nazwy użytkownika"
 #: src/screens/helpdesk-feedback/components/feedback-customer-group-select/feedback-customer-group-select.tsx
 #: src/screens/helpdesk-feedback/components/feedback-field-select/feedback-field-select.tsx
 #: src/screens/helpdesk-feedback/components/feedback-reporter-select/feedback-reporter-select.tsx
+#: src/screens/issue/components/work-editor/work-editor.tsx
 #: src/screens/issue/components/work-editor/work-editor.tsx
 #: src/screens/issue/components/work-editor/work-editor.tsx
 msgid "Filter items"
@@ -1114,6 +1124,7 @@ msgstr "Ustawienia powiadomień…"
 #: legacy/src/views/inbox/inbox.tsx
 #: src/screens/notifications/notifications-screen.tsx
 #: src/screens/notifications/notifications-screen.tsx
+#: src/screens/notifications/notifications-screen.tsx
 msgid "Notifications"
 msgstr "Powiadomienia"
 
@@ -1207,7 +1218,7 @@ msgid "Remove"
 msgstr "Usuń"
 
 #: legacy/src/views/article/arcticle-actions.ts
-#: src/screens/article/article-screen.tsx
+#: src/screens/article/components/article-actions-menu/article-actions-menu.tsx
 msgid "Remove favorite"
 msgstr "Usuń ulubione"
 
@@ -1232,6 +1243,8 @@ msgstr "ponownie otwarto żądanie ściągnięcia"
 
 #: legacy/src/views/article/article__activity.tsx
 #: legacy/src/views/issue/activity/issue__activity-stream.tsx
+#: src/screens/article/article-activity.tsx
+#: src/screens/issue/issue-activity.tsx
 msgid "Reply"
 msgstr "Odpowiedz"
 
@@ -1306,6 +1319,7 @@ msgid "Select an issue from the list"
 msgstr "Wybierz zgłoszenie z listy"
 
 #: legacy/src/views/issue/activity/activity__add-spent-time.tsx
+#: src/screens/issue/components/work-editor/work-editor.tsx
 msgid "Select an option"
 msgstr "Wybierz opcję"
 
@@ -1397,7 +1411,7 @@ msgstr "Udostępnij dzienniki"
 #: legacy/src/views/article/arcticle-actions.ts
 #: legacy/src/views/article/arcticle-actions.ts
 #: legacy/src/views/issue/issue-base-actions-creater.ts
-#: src/screens/article/article-screen.tsx
+#: src/screens/article/components/article-actions-menu/article-actions-menu.tsx
 #: src/screens/issue/components/issue-actions-menu/issue-actions-menu.tsx
 msgid "Share…"
 msgstr "Udostępnij…"

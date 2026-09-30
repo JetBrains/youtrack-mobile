@@ -89,6 +89,7 @@ msgid "1w 1d 1h 1m"
 msgstr "1w 1d 1h 1m"
 
 #: legacy/src/components/user-agreement/user-agreement.tsx
+#: src/components/user-agreement/user-agreement.tsx
 msgid "Accept"
 msgstr "수락"
 
@@ -144,7 +145,7 @@ msgid "Add time"
 msgstr "시간 추가"
 
 #: legacy/src/views/article/arcticle-actions.ts
-#: src/screens/article/article-screen.tsx
+#: src/screens/article/components/article-actions-menu/article-actions-menu.tsx
 msgid "Add to favorites"
 msgstr "즐겨찾기에 추가"
 
@@ -221,8 +222,11 @@ msgstr "자료가 즐겨찾기에서 제거됨"
 
 #: legacy/src/components/comment/comment-edit.tsx
 #: legacy/src/views/issue/issue-base-actions-creater.ts
+#: src/screens/article/article-activity.tsx
+#: src/screens/article/components/article-actions-menu/article-actions-menu.tsx
 #: src/screens/issue/components/composer-actions-menu/composer-actions-menu.tsx
 #: src/screens/issue/components/issue-actions-menu/issue-actions-menu.tsx
+#: src/screens/issue/issue-activity.tsx
 msgid "Attach file"
 msgstr "파일 첨부"
 
@@ -272,6 +276,7 @@ msgid "Cache cleared"
 msgstr "캐시 삭제됨"
 
 #: legacy/src/components/attach-file/attach-file-dialog.tsx
+#: src/screens/issue/hooks/use-file-picker.ts
 msgid "Camera"
 msgstr "카메라"
 
@@ -422,11 +427,11 @@ msgstr "내용 수정됨"
 #: src/components/markdown/components/code/code.tsx
 #: src/components/markdown/components/code/code.tsx
 #: src/components/user-card/user-card.tsx
+#: src/hooks/use-copy-text.ts
 #: src/screens/article/article-activity.tsx
 #: src/screens/article/article-activity.tsx
 #: src/screens/article/article-screen.tsx
 #: src/screens/issue/components/text-custom-field/text-custom-field.tsx
-#: src/screens/issue/issue-activity.tsx
 #: src/screens/issue/issue-screen.tsx
 msgid "Copied"
 msgstr "복사됨"
@@ -451,14 +456,17 @@ msgstr "링크 복사"
 
 #: legacy/src/views/article/arcticle-actions.ts
 #: legacy/src/views/article/arcticle-actions.ts
-#: src/screens/article/article-screen.tsx
+#: src/screens/article/components/article-actions-menu/article-actions-menu.tsx
 msgid "Copy link to article"
 msgstr "자료 링크 복사"
 
 #: legacy/src/views/article/article__activity.tsx
 #: legacy/src/views/issue/activity/issue__activity-stream.tsx
 #: legacy/src/views/issue/issue-base-actions-creater.ts
+#: src/hooks/use-copy-text-actions.ts
 #: src/screens/article/article-activity.tsx
+#: src/screens/issue/issue-activity.tsx
+#: src/screens/issue/issue-activity.tsx
 #: src/screens/issue/issue-activity.tsx
 msgid "Copy text"
 msgstr "텍스트 복사"
@@ -499,6 +507,7 @@ msgid "Date"
 msgstr "날짜"
 
 #: legacy/src/components/user-agreement/user-agreement.tsx
+#: src/components/user-agreement/user-agreement.tsx
 msgid "Decline"
 msgstr "취소"
 
@@ -521,7 +530,7 @@ msgstr "풀 리퀘스트가 거부되었습니다"
 #: src/components/attachments/attachments-row.tsx
 #: src/components/confirmation/confirmation.ts
 #: src/screens/article/article-activity.tsx
-#: src/screens/article/article-screen.tsx
+#: src/screens/article/components/article-actions-menu/article-actions-menu.tsx
 #: src/screens/issue/components/issue-actions-menu/issue-actions-menu.tsx
 #: src/screens/issue/issue-activity.tsx
 #: src/screens/issue/issue-activity.tsx
@@ -628,7 +637,7 @@ msgstr "이슈 초안"
 #: legacy/src/views/issue/activity/issue__activity.tsx
 #: legacy/src/views/issue/issue-base-actions-creater.ts
 #: src/screens/article/article-activity.tsx
-#: src/screens/article/article-screen.tsx
+#: src/screens/article/components/article-actions-menu/article-actions-menu.tsx
 #: src/screens/issue/components/issue-actions-menu/issue-actions-menu.tsx
 #: src/screens/issue/issue-activity.tsx
 #: src/screens/issue/issue-activity.tsx
@@ -710,6 +719,7 @@ msgstr "이름이나 사용자 이름으로 기존 계정 필터링"
 #: src/screens/helpdesk-feedback/components/feedback-customer-group-select/feedback-customer-group-select.tsx
 #: src/screens/helpdesk-feedback/components/feedback-field-select/feedback-field-select.tsx
 #: src/screens/helpdesk-feedback/components/feedback-reporter-select/feedback-reporter-select.tsx
+#: src/screens/issue/components/work-editor/work-editor.tsx
 #: src/screens/issue/components/work-editor/work-editor.tsx
 #: src/screens/issue/components/work-editor/work-editor.tsx
 msgid "Filter items"
@@ -1078,6 +1088,7 @@ msgstr "알림 설정…"
 #: legacy/src/views/inbox/inbox.tsx
 #: src/screens/notifications/notifications-screen.tsx
 #: src/screens/notifications/notifications-screen.tsx
+#: src/screens/notifications/notifications-screen.tsx
 msgid "Notifications"
 msgstr "알림"
 
@@ -1169,7 +1180,7 @@ msgid "Remove"
 msgstr "제거"
 
 #: legacy/src/views/article/arcticle-actions.ts
-#: src/screens/article/article-screen.tsx
+#: src/screens/article/components/article-actions-menu/article-actions-menu.tsx
 msgid "Remove favorite"
 msgstr "즐겨찾기 제거"
 
@@ -1194,6 +1205,8 @@ msgstr "풀 리퀘스트를 다시 열었음"
 
 #: legacy/src/views/article/article__activity.tsx
 #: legacy/src/views/issue/activity/issue__activity-stream.tsx
+#: src/screens/article/article-activity.tsx
+#: src/screens/issue/issue-activity.tsx
 msgid "Reply"
 msgstr "답글"
 
@@ -1268,6 +1281,7 @@ msgid "Select an issue from the list"
 msgstr "목록에서 이슈 선택"
 
 #: legacy/src/views/issue/activity/activity__add-spent-time.tsx
+#: src/screens/issue/components/work-editor/work-editor.tsx
 msgid "Select an option"
 msgstr "옵션 선택"
 
@@ -1359,7 +1373,7 @@ msgstr "로그 공유"
 #: legacy/src/views/article/arcticle-actions.ts
 #: legacy/src/views/article/arcticle-actions.ts
 #: legacy/src/views/issue/issue-base-actions-creater.ts
-#: src/screens/article/article-screen.tsx
+#: src/screens/article/components/article-actions-menu/article-actions-menu.tsx
 #: src/screens/issue/components/issue-actions-menu/issue-actions-menu.tsx
 msgid "Share…"
 msgstr "공유…"

@@ -112,6 +112,7 @@ msgid "1w 1d 1h 1m"
 msgstr "1н 1д 1ч 1м"
 
 #: legacy/src/components/user-agreement/user-agreement.tsx
+#: src/components/user-agreement/user-agreement.tsx
 msgid "Accept"
 msgstr "Принять"
 
@@ -169,7 +170,7 @@ msgid "Add time"
 msgstr "Добавить время"
 
 #: legacy/src/views/article/arcticle-actions.ts
-#: src/screens/article/article-screen.tsx
+#: src/screens/article/components/article-actions-menu/article-actions-menu.tsx
 msgid "Add to favorites"
 msgstr "Добавить в избранное"
 
@@ -246,8 +247,11 @@ msgstr "Статья удалена из избранного"
 
 #: legacy/src/components/comment/comment-edit.tsx
 #: legacy/src/views/issue/issue-base-actions-creater.ts
+#: src/screens/article/article-activity.tsx
+#: src/screens/article/components/article-actions-menu/article-actions-menu.tsx
 #: src/screens/issue/components/composer-actions-menu/composer-actions-menu.tsx
 #: src/screens/issue/components/issue-actions-menu/issue-actions-menu.tsx
+#: src/screens/issue/issue-activity.tsx
 msgid "Attach file"
 msgstr "Прикрепить файл"
 
@@ -300,6 +304,7 @@ msgid "Cache cleared"
 msgstr "Кэш очищен"
 
 #: legacy/src/components/attach-file/attach-file-dialog.tsx
+#: src/screens/issue/hooks/use-file-picker.ts
 msgid "Camera"
 msgstr "Камера"
 
@@ -450,11 +455,11 @@ msgstr "Содержимое изменено"
 #: src/components/markdown/components/code/code.tsx
 #: src/components/markdown/components/code/code.tsx
 #: src/components/user-card/user-card.tsx
+#: src/hooks/use-copy-text.ts
 #: src/screens/article/article-activity.tsx
 #: src/screens/article/article-activity.tsx
 #: src/screens/article/article-screen.tsx
 #: src/screens/issue/components/text-custom-field/text-custom-field.tsx
-#: src/screens/issue/issue-activity.tsx
 #: src/screens/issue/issue-screen.tsx
 msgid "Copied"
 msgstr "Скопировано"
@@ -479,14 +484,17 @@ msgstr "Скопировать ссылку"
 
 #: legacy/src/views/article/arcticle-actions.ts
 #: legacy/src/views/article/arcticle-actions.ts
-#: src/screens/article/article-screen.tsx
+#: src/screens/article/components/article-actions-menu/article-actions-menu.tsx
 msgid "Copy link to article"
 msgstr "Скопировать ссылку на статью"
 
 #: legacy/src/views/article/article__activity.tsx
 #: legacy/src/views/issue/activity/issue__activity-stream.tsx
 #: legacy/src/views/issue/issue-base-actions-creater.ts
+#: src/hooks/use-copy-text-actions.ts
 #: src/screens/article/article-activity.tsx
+#: src/screens/issue/issue-activity.tsx
+#: src/screens/issue/issue-activity.tsx
 #: src/screens/issue/issue-activity.tsx
 msgid "Copy text"
 msgstr "Скопировать текст"
@@ -527,6 +535,7 @@ msgid "Date"
 msgstr "Дата"
 
 #: legacy/src/components/user-agreement/user-agreement.tsx
+#: src/components/user-agreement/user-agreement.tsx
 msgid "Decline"
 msgstr "Отклонить"
 
@@ -549,7 +558,7 @@ msgstr "отклонил(а) пул-реквест"
 #: src/components/attachments/attachments-row.tsx
 #: src/components/confirmation/confirmation.ts
 #: src/screens/article/article-activity.tsx
-#: src/screens/article/article-screen.tsx
+#: src/screens/article/components/article-actions-menu/article-actions-menu.tsx
 #: src/screens/issue/components/issue-actions-menu/issue-actions-menu.tsx
 #: src/screens/issue/issue-activity.tsx
 #: src/screens/issue/issue-activity.tsx
@@ -656,7 +665,7 @@ msgstr "Черновики"
 #: legacy/src/views/issue/activity/issue__activity.tsx
 #: legacy/src/views/issue/issue-base-actions-creater.ts
 #: src/screens/article/article-activity.tsx
-#: src/screens/article/article-screen.tsx
+#: src/screens/article/components/article-actions-menu/article-actions-menu.tsx
 #: src/screens/issue/components/issue-actions-menu/issue-actions-menu.tsx
 #: src/screens/issue/issue-activity.tsx
 #: src/screens/issue/issue-activity.tsx
@@ -740,6 +749,7 @@ msgstr ""
 #: src/screens/helpdesk-feedback/components/feedback-customer-group-select/feedback-customer-group-select.tsx
 #: src/screens/helpdesk-feedback/components/feedback-field-select/feedback-field-select.tsx
 #: src/screens/helpdesk-feedback/components/feedback-reporter-select/feedback-reporter-select.tsx
+#: src/screens/issue/components/work-editor/work-editor.tsx
 #: src/screens/issue/components/work-editor/work-editor.tsx
 #: src/screens/issue/components/work-editor/work-editor.tsx
 msgid "Filter items"
@@ -1116,6 +1126,7 @@ msgstr "Настройки уведомлений…"
 #: legacy/src/views/inbox/inbox.tsx
 #: src/screens/notifications/notifications-screen.tsx
 #: src/screens/notifications/notifications-screen.tsx
+#: src/screens/notifications/notifications-screen.tsx
 msgid "Notifications"
 msgstr "Уведомления"
 
@@ -1207,7 +1218,7 @@ msgid "Remove"
 msgstr "Удалить"
 
 #: legacy/src/views/article/arcticle-actions.ts
-#: src/screens/article/article-screen.tsx
+#: src/screens/article/components/article-actions-menu/article-actions-menu.tsx
 msgid "Remove favorite"
 msgstr "Удалить из избранного"
 
@@ -1232,6 +1243,8 @@ msgstr "заново открыл(а) пул-реквест"
 
 #: legacy/src/views/article/article__activity.tsx
 #: legacy/src/views/issue/activity/issue__activity-stream.tsx
+#: src/screens/article/article-activity.tsx
+#: src/screens/issue/issue-activity.tsx
 msgid "Reply"
 msgstr "Ответить"
 
@@ -1306,6 +1319,7 @@ msgid "Select an issue from the list"
 msgstr "Выбрать задачу из списка"
 
 #: legacy/src/views/issue/activity/activity__add-spent-time.tsx
+#: src/screens/issue/components/work-editor/work-editor.tsx
 msgid "Select an option"
 msgstr "Выберите вариант"
 
@@ -1397,7 +1411,7 @@ msgstr "Поделиться логами"
 #: legacy/src/views/article/arcticle-actions.ts
 #: legacy/src/views/article/arcticle-actions.ts
 #: legacy/src/views/issue/issue-base-actions-creater.ts
-#: src/screens/article/article-screen.tsx
+#: src/screens/article/components/article-actions-menu/article-actions-menu.tsx
 #: src/screens/issue/components/issue-actions-menu/issue-actions-menu.tsx
 msgid "Share…"
 msgstr "Поделиться..."

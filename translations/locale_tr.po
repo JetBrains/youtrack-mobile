@@ -96,6 +96,7 @@ msgid "1w 1d 1h 1m"
 msgstr ""
 
 #: legacy/src/components/user-agreement/user-agreement.tsx
+#: src/components/user-agreement/user-agreement.tsx
 msgid "Accept"
 msgstr "Kabul et"
 
@@ -151,7 +152,7 @@ msgid "Add time"
 msgstr ""
 
 #: legacy/src/views/article/arcticle-actions.ts
-#: src/screens/article/article-screen.tsx
+#: src/screens/article/components/article-actions-menu/article-actions-menu.tsx
 msgid "Add to favorites"
 msgstr "Favorilere ekle"
 
@@ -228,8 +229,11 @@ msgstr ""
 
 #: legacy/src/components/comment/comment-edit.tsx
 #: legacy/src/views/issue/issue-base-actions-creater.ts
+#: src/screens/article/article-activity.tsx
+#: src/screens/article/components/article-actions-menu/article-actions-menu.tsx
 #: src/screens/issue/components/composer-actions-menu/composer-actions-menu.tsx
 #: src/screens/issue/components/issue-actions-menu/issue-actions-menu.tsx
+#: src/screens/issue/issue-activity.tsx
 msgid "Attach file"
 msgstr ""
 
@@ -280,6 +284,7 @@ msgid "Cache cleared"
 msgstr ""
 
 #: legacy/src/components/attach-file/attach-file-dialog.tsx
+#: src/screens/issue/hooks/use-file-picker.ts
 msgid "Camera"
 msgstr "Kamera"
 
@@ -430,11 +435,11 @@ msgstr "İçerik revize edildi"
 #: src/components/markdown/components/code/code.tsx
 #: src/components/markdown/components/code/code.tsx
 #: src/components/user-card/user-card.tsx
+#: src/hooks/use-copy-text.ts
 #: src/screens/article/article-activity.tsx
 #: src/screens/article/article-activity.tsx
 #: src/screens/article/article-screen.tsx
 #: src/screens/issue/components/text-custom-field/text-custom-field.tsx
-#: src/screens/issue/issue-activity.tsx
 #: src/screens/issue/issue-screen.tsx
 msgid "Copied"
 msgstr "Kopyalandı"
@@ -459,14 +464,17 @@ msgstr ""
 
 #: legacy/src/views/article/arcticle-actions.ts
 #: legacy/src/views/article/arcticle-actions.ts
-#: src/screens/article/article-screen.tsx
+#: src/screens/article/components/article-actions-menu/article-actions-menu.tsx
 msgid "Copy link to article"
 msgstr ""
 
 #: legacy/src/views/article/article__activity.tsx
 #: legacy/src/views/issue/activity/issue__activity-stream.tsx
 #: legacy/src/views/issue/issue-base-actions-creater.ts
+#: src/hooks/use-copy-text-actions.ts
 #: src/screens/article/article-activity.tsx
+#: src/screens/issue/issue-activity.tsx
+#: src/screens/issue/issue-activity.tsx
 #: src/screens/issue/issue-activity.tsx
 msgid "Copy text"
 msgstr "Metni kopyala"
@@ -507,6 +515,7 @@ msgid "Date"
 msgstr ""
 
 #: legacy/src/components/user-agreement/user-agreement.tsx
+#: src/components/user-agreement/user-agreement.tsx
 msgid "Decline"
 msgstr "Reddet"
 
@@ -529,7 +538,7 @@ msgstr "çekme talebi reddedildi"
 #: src/components/attachments/attachments-row.tsx
 #: src/components/confirmation/confirmation.ts
 #: src/screens/article/article-activity.tsx
-#: src/screens/article/article-screen.tsx
+#: src/screens/article/components/article-actions-menu/article-actions-menu.tsx
 #: src/screens/issue/components/issue-actions-menu/issue-actions-menu.tsx
 #: src/screens/issue/issue-activity.tsx
 #: src/screens/issue/issue-activity.tsx
@@ -636,7 +645,7 @@ msgstr "Taslaklar"
 #: legacy/src/views/issue/activity/issue__activity.tsx
 #: legacy/src/views/issue/issue-base-actions-creater.ts
 #: src/screens/article/article-activity.tsx
-#: src/screens/article/article-screen.tsx
+#: src/screens/article/components/article-actions-menu/article-actions-menu.tsx
 #: src/screens/issue/components/issue-actions-menu/issue-actions-menu.tsx
 #: src/screens/issue/issue-activity.tsx
 #: src/screens/issue/issue-activity.tsx
@@ -718,6 +727,7 @@ msgstr ""
 #: src/screens/helpdesk-feedback/components/feedback-customer-group-select/feedback-customer-group-select.tsx
 #: src/screens/helpdesk-feedback/components/feedback-field-select/feedback-field-select.tsx
 #: src/screens/helpdesk-feedback/components/feedback-reporter-select/feedback-reporter-select.tsx
+#: src/screens/issue/components/work-editor/work-editor.tsx
 #: src/screens/issue/components/work-editor/work-editor.tsx
 #: src/screens/issue/components/work-editor/work-editor.tsx
 msgid "Filter items"
@@ -1086,6 +1096,7 @@ msgstr "Bildirim ayarları…"
 #: legacy/src/views/inbox/inbox.tsx
 #: src/screens/notifications/notifications-screen.tsx
 #: src/screens/notifications/notifications-screen.tsx
+#: src/screens/notifications/notifications-screen.tsx
 msgid "Notifications"
 msgstr ""
 
@@ -1177,7 +1188,7 @@ msgid "Remove"
 msgstr "Kaldır"
 
 #: legacy/src/views/article/arcticle-actions.ts
-#: src/screens/article/article-screen.tsx
+#: src/screens/article/components/article-actions-menu/article-actions-menu.tsx
 msgid "Remove favorite"
 msgstr ""
 
@@ -1202,6 +1213,8 @@ msgstr ""
 
 #: legacy/src/views/article/article__activity.tsx
 #: legacy/src/views/issue/activity/issue__activity-stream.tsx
+#: src/screens/article/article-activity.tsx
+#: src/screens/issue/issue-activity.tsx
 msgid "Reply"
 msgstr "Yanıtla"
 
@@ -1276,6 +1289,7 @@ msgid "Select an issue from the list"
 msgstr ""
 
 #: legacy/src/views/issue/activity/activity__add-spent-time.tsx
+#: src/screens/issue/components/work-editor/work-editor.tsx
 msgid "Select an option"
 msgstr ""
 
@@ -1367,7 +1381,7 @@ msgstr "Günlükleri paylaş"
 #: legacy/src/views/article/arcticle-actions.ts
 #: legacy/src/views/article/arcticle-actions.ts
 #: legacy/src/views/issue/issue-base-actions-creater.ts
-#: src/screens/article/article-screen.tsx
+#: src/screens/article/components/article-actions-menu/article-actions-menu.tsx
 #: src/screens/issue/components/issue-actions-menu/issue-actions-menu.tsx
 msgid "Share…"
 msgstr "Paylaş…"
