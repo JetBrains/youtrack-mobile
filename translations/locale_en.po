@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Crowdin-SourceKey: msgstr\n"
+"X-Crowdin-Sourcekey: msgstr\n"
 "Language: en\n"
 
 #: src/components/linked-issues/linked-issues.tsx:149
@@ -83,8 +83,12 @@ msgid "Accept"
 msgstr "Accept"
 
 #: src/components/tip/tips/notifications-settings.tsx:33
-msgid "Activate the \"Unread only\" option to filter your notifications, then swipe right to mark them as read and keep your list clean."
-msgstr "Activate the \"Unread only\" option to filter your notifications, then swipe right to mark them as read and keep your list clean."
+msgid ""
+"Activate the \"Unread only\" option to filter your notifications, then "
+"swipe right to mark them as read and keep your list clean."
+msgstr ""
+"Activate the \"Unread only\" option to filter your notifications, then "
+"swipe right to mark them as read and keep your list clean."
 
 #: src/components/issue-tabbed/issue-tabbed.tsx:64
 msgid "Activity"
@@ -528,8 +532,12 @@ msgid "Enter search request"
 msgstr "Enter search request"
 
 #: src/views/enter-server/enter-server.tsx:202
-msgid "Enter the web address for a YouTrack installation where you have a registered account"
-msgstr "Enter the web address for a YouTrack installation where you have a registered account"
+msgid ""
+"Enter the web address for a YouTrack installation where you have a "
+"registered account"
+msgstr ""
+"Enter the web address for a YouTrack installation where you have a "
+"registered account"
 
 #: src/components/custom-fields-panel/custom-fields-panel.tsx:202
 msgid "Enter time value"
@@ -621,8 +629,16 @@ msgid "If this isn't what you expected, you might try one of these solutions:"
 msgstr "If this isn't what you expected, you might try one of these solutions:"
 
 #: src/components/error-boundary/error-boundary.tsx:98
-msgid "In addition to our built-in error reporting, YouTrack Mobile uses Sentry, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Sentry if you agree to allow us to do so."
-msgstr "In addition to our built-in error reporting, YouTrack Mobile uses Sentry, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Sentry if you agree to allow us to do so."
+msgid ""
+"In addition to our built-in error reporting, YouTrack Mobile uses Sentry, a "
+"third-party service that helps us diagnose problems and monitor application "
+"stability. We only share report data with Sentry if you agree to allow us "
+"to do so."
+msgstr ""
+"In addition to our built-in error reporting, YouTrack Mobile uses Sentry, a "
+"third-party service that helps us diagnose problems and monitor application "
+"stability. We only share report data with Sentry if you agree to allow us "
+"to do so."
 
 #: src/views/article/article.tsx:261
 msgid "in revision"
@@ -657,8 +673,12 @@ msgid "Issues can be sorted by up to 4 attributes"
 msgstr "Issues can be sorted by up to 4 attributes"
 
 #: src/components/error/error-message-data.ts:20
-msgid "It could mean that the issue doesn't exist or you don't have permission to view it"
-msgstr "It could mean that the issue doesn't exist or you don't have permission to view it"
+msgid ""
+"It could mean that the issue doesn't exist or you don't have permission to "
+"view it"
+msgstr ""
+"It could mean that the issue doesn't exist or you don't have permission to "
+"view it"
 
 #: src/components/error-boundary/error-boundary.tsx:110
 msgid "JetBrains Privacy Policy"
@@ -864,8 +884,12 @@ msgid "Paused"
 msgstr "Paused"
 
 #: src/views/issue/issue-user-cc.tsx:103
-msgid "People added as CCs receive the same notifications that are sent to the person who reported this ticket"
-msgstr "People added as CCs receive the same notifications that are sent to the person who reported this ticket"
+msgid ""
+"People added as CCs receive the same notifications that are sent to the "
+"person who reported this ticket"
+msgstr ""
+"People added as CCs receive the same notifications that are sent to the "
+"person who reported this ticket"
 
 #: src/components/attach-file/attach-file-dialog.tsx:71
 msgid "Photo and video library"
@@ -1169,28 +1193,44 @@ msgid "Thank you for your feedback!"
 msgstr "Thank you for your feedback!"
 
 #: src/components/error-boundary/error-boundary.tsx:138
-msgid "The application failed to restart automatically. Please try to restart it manually."
-msgstr "The application failed to restart automatically. Please try to restart it manually."
+msgid ""
+"The application failed to restart automatically. Please try to restart it "
+"manually."
+msgstr ""
+"The application failed to restart automatically. Please try to restart it "
+"manually."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts:19
-msgid "The author of this commit has not been identified because they haven't specified their email address in their YouTrack profile."
-msgstr "The author of this commit has not been identified because they haven't specified their email address in their YouTrack profile."
+msgid ""
+"The author of this commit has not been identified because they haven't "
+"specified their email address in their YouTrack profile."
+msgstr ""
+"The author of this commit has not been identified because they haven't "
+"specified their email address in their YouTrack profile."
 
 #: src/views/agile-board/agile-board.tsx:438
 msgid "The board {{boardName}} has configuration errors"
 msgstr "The board {{boardName}} has configuration errors"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts:192
-msgid "The change has been detached from this issue. It is still displayed here because its comment mentions the issue."
-msgstr "The change has been detached from this issue. It is still displayed here because its comment mentions the issue."
+msgid ""
+"The change has been detached from this issue. It is still displayed here "
+"because its comment mentions the issue."
+msgstr ""
+"The change has been detached from this issue. It is still displayed here "
+"because its comment mentions the issue."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts:188
 msgid "The change has been manually attached to this issue."
 msgstr "The change has been manually attached to this issue."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts:198
-msgid "The change was processed during the initial data fetching, thus no command has been applied."
-msgstr "The change was processed during the initial data fetching, thus no command has been applied."
+msgid ""
+"The change was processed during the initial data fetching, thus no command "
+"has been applied."
+msgstr ""
+"The change was processed during the initial data fetching, thus no command "
+"has been applied."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts:44
 msgid "The commit author does not belong to the committers group."
@@ -1201,8 +1241,12 @@ msgid "The commit author has not specified an email address."
 msgstr "The commit author has not specified an email address."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts:65
-msgid "The commit author has specified an email address that is associated with a different user account."
-msgstr "The commit author has specified an email address that is associated with a different user account."
+msgid ""
+"The commit author has specified an email address that is associated with a "
+"different user account."
+msgstr ""
+"The commit author has specified an email address that is associated with a "
+"different user account."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts:47
 msgid "The commit author is not an assignee in the project."
@@ -1213,28 +1257,52 @@ msgid "The search query contains unknown values"
 msgstr "The search query contains unknown values"
 
 #: src/actions/app-actions.ts:458
-msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
-msgstr "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
+msgid ""
+"The selected account is no longer authorized to use YouTrack Mobile. Please "
+"log in again."
+msgstr ""
+"The selected account is no longer authorized to use YouTrack Mobile. Please "
+"log in again."
 
 #: src/components/error/error-message-data.ts:56
 msgid "The server is overloaded or down for maintenance"
 msgstr "The server is overloaded or down for maintenance"
 
 #: src/views/agile-board/board-updaters.ts:279
-msgid "The settings for this agile board have been updated. Please reload the board."
-msgstr "The settings for this agile board have been updated. Please reload the board."
+msgid ""
+"The settings for this agile board have been updated. Please reload the "
+"board."
+msgstr ""
+"The settings for this agile board have been updated. Please reload the "
+"board."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts:38
-msgid "The VCS user name does not match any user in YouTrack. To link future commits, add the VCS user name to the Hub account for this user."
-msgstr "The VCS user name does not match any user in YouTrack. To link future commits, add the VCS user name to the Hub account for this user."
+msgid ""
+"The VCS user name does not match any user in YouTrack. To link future "
+"commits, add the VCS user name to the Hub account for this user."
+msgstr ""
+"The VCS user name does not match any user in YouTrack. To link future "
+"commits, add the VCS user name to the Hub account for this user."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts:41
-msgid "The VCS user name matches more than one user in YouTrack. To link future commits, remove the duplicate VCS user names from one or more Hub accounts or merge the duplicates into a single user account."
-msgstr "The VCS user name matches more than one user in YouTrack. To link future commits, remove the duplicate VCS user names from one or more Hub accounts or merge the duplicates into a single user account."
+msgid ""
+"The VCS user name matches more than one user in YouTrack. To link future "
+"commits, remove the duplicate VCS user names from one or more Hub accounts "
+"or merge the duplicates into a single user account."
+msgstr ""
+"The VCS user name matches more than one user in YouTrack. To link future "
+"commits, remove the duplicate VCS user names from one or more Hub accounts "
+"or merge the duplicates into a single user account."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts:27
-msgid "There was an error retrieving information about the change's author from TeamCity. The most probable reason is that TeamCity user that integration runs on behalf of does not have the required permissions."
-msgstr "There was an error retrieving information about the change's author from TeamCity. The most probable reason is that TeamCity user that integration runs on behalf of does not have the required permissions."
+msgid ""
+"There was an error retrieving information about the change's author from "
+"TeamCity. The most probable reason is that TeamCity user that integration "
+"runs on behalf of does not have the required permissions."
+msgstr ""
+"There was an error retrieving information about the change's author from "
+"TeamCity. The most probable reason is that TeamCity user that integration "
+"runs on behalf of does not have the required permissions."
 
 #: src/components/confirmation/article-confirmations.ts:20
 msgid "This action deletes all drafts, including unpublished sub-articles"
@@ -1264,12 +1332,20 @@ msgid "Title changed"
 msgstr "Title changed"
 
 #: src/views/inbox-threads/inbox-threads.tsx:149
-msgid "To view an item in context, select an issue, article, or update from the list"
-msgstr "To view an item in context, select an issue, article, or update from the list"
+msgid ""
+"To view an item in context, select an issue, article, or update from the "
+"list"
+msgstr ""
+"To view an item in context, select an issue, article, or update from the "
+"list"
 
 #: src/views/knowledge-base/knowledge-base.tsx:518
-msgid "To view articles in the knowledge base for a specific project, mark it as a favorite"
-msgstr "To view articles in the knowledge base for a specific project, mark it as a favorite"
+msgid ""
+"To view articles in the knowledge base for a specific project, mark it as a "
+"favorite"
+msgstr ""
+"To view articles in the knowledge base for a specific project, mark it as a "
+"favorite"
 
 #: src/components/activity-stream/activity__stream-history.tsx:134
 msgid "Total votes"
@@ -1367,16 +1443,32 @@ msgid "Visible to issue readers"
 msgstr "Visible to issue readers"
 
 #: src/components/error/error-message-data.ts:29
-msgid "We didn't find any issues in the current search context that match your query"
-msgstr "We didn't find any issues in the current search context that match your query"
+msgid ""
+"We didn't find any issues in the current search context that match your "
+"query"
+msgstr ""
+"We didn't find any issues in the current search context that match your "
+"query"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts:16
-msgid "When integrating TeamCity and YouTrack, the users are matched by their email addresses. TeamCity has not provided any email address of the committer."
-msgstr "When integrating TeamCity and YouTrack, the users are matched by their email addresses. TeamCity has not provided any email address of the committer."
+msgid ""
+"When integrating TeamCity and YouTrack, the users are matched by their "
+"email addresses. TeamCity has not provided any email address of the "
+"committer."
+msgstr ""
+"When integrating TeamCity and YouTrack, the users are matched by their "
+"email addresses. TeamCity has not provided any email address of the "
+"committer."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts:23
-msgid "When integrating TeamCity and YouTrack, the users are matched by their email addresses. There are two or more different YouTrack users that have the same email address as the commit's author has in TeamCity."
-msgstr "When integrating TeamCity and YouTrack, the users are matched by their email addresses. There are two or more different YouTrack users that have the same email address as the commit's author has in TeamCity."
+msgid ""
+"When integrating TeamCity and YouTrack, the users are matched by their "
+"email addresses. There are two or more different YouTrack users that have "
+"the same email address as the commit's author has in TeamCity."
+msgstr ""
+"When integrating TeamCity and YouTrack, the users are matched by their "
+"email addresses. There are two or more different YouTrack users that have "
+"the same email address as the commit's author has in TeamCity."
 
 #: src/components/error/error-message-data.ts:8
 msgid "Woah, you can't touch this!"
@@ -1396,8 +1488,12 @@ msgid "Yes"
 msgstr "Yes"
 
 #: src/actions/app-actions.ts:825
-msgid "You are trying to open a link from another server. Please add this server to the app first."
-msgstr "You are trying to open a link from another server. Please add this server to the app first."
+msgid ""
+"You are trying to open a link from another server. Please add this server "
+"to the app first."
+msgstr ""
+"You are trying to open a link from another server. Please add this server "
+"to the app first."
 
 #: src/views/issue/issue-user-cc.tsx:108
 msgid "You can only CC a maximum of 5 reporters per ticket"
@@ -1408,38 +1504,56 @@ msgid "You don’t have any unread notifications"
 msgstr "You don’t have any unread notifications"
 
 #: src/views/inbox/inbox.tsx:673
-msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
-msgstr "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
+msgid ""
+"You haven't received any notifications yet. To configure the notification "
+"preferences for your account, access your YouTrack profile in the web app."
+msgstr ""
+"You haven't received any notifications yet. To configure the notification "
+"preferences for your account, access your YouTrack profile in the web app."
 
 #: src/views/log-in/log-in.tsx:288
-msgid ""
-"You need a YouTrack account to use the app.\n"
-""
-msgstr ""
-"You need a YouTrack account to use the app.\n"
-""
+msgid "You need a YouTrack account to use the app.\n"
+msgstr "You need a YouTrack account to use the app.\n"
 
 #: src/components/error/error-message-data.ts:9
 msgid "Your account has insufficient permission to perform this operation."
 msgstr "Your account has insufficient permission to perform this operation."
 
 #: src/actions/app-actions.ts:258
-msgid "Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator."
-msgstr "Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator."
+msgid ""
+"Your authorization token has expired or is invalid. Re-enter your login "
+"credentials to refresh the token. If you are still unable to log in, please "
+"contact your administrator."
+msgstr ""
+"Your authorization token has expired or is invalid. Re-enter your login "
+"credentials to refresh the token. If you are still unable to log in, please "
+"contact your administrator."
 
 #: src/components/storage/storage.ts:328
-msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
-msgstr "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
+msgid ""
+"Your mobile device is running low on available storage space. Some app "
+"functionality may be unavailable."
+msgstr ""
+"Your mobile device is running low on available storage space. Some app "
+"functionality may be unavailable."
 
 #: src/components/error/error-message-data.ts:45
 msgid ""
-"Your YouTrack account requires that you provide a second factor of authentication to log in. This option is only available when you log in with a mobile browser. The mobile browser will also let you sign in using a third-party account (if available).\n"
+"Your YouTrack account requires that you provide a second factor of "
+"authentication to log in. This option is only available when you log in "
+"with a mobile browser. The mobile browser will also let you sign in using a "
+"third-party account (if available).\n"
 "\n"
-"To log in on this screen, enter your username and a one-time application password."
+"To log in on this screen, enter your username and a one-time application "
+"password."
 msgstr ""
-"Your YouTrack account requires that you provide a second factor of authentication to log in. This option is only available when you log in with a mobile browser. The mobile browser will also let you sign in using a third-party account (if available).\n"
+"Your YouTrack account requires that you provide a second factor of "
+"authentication to log in. This option is only available when you log in "
+"with a mobile browser. The mobile browser will also let you sign in using a "
+"third-party account (if available).\n"
 "\n"
-"To log in on this screen, enter your username and a one-time application password."
+"To log in on this screen, enter your username and a one-time application "
+"password."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts:53
 msgid "YouTrack did not find a user that matches the user account in Bitbucket."
@@ -1454,8 +1568,12 @@ msgid "YouTrack did not find a user that matches the user account in GitLab."
 msgstr "YouTrack did not find a user that matches the user account in GitLab."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts:59
-msgid "YouTrack did not receive an email address for the commit author from Bitbucket."
-msgstr "YouTrack did not receive an email address for the commit author from Bitbucket."
+msgid ""
+"YouTrack did not receive an email address for the commit author from "
+"Bitbucket."
+msgstr ""
+"YouTrack did not receive an email address for the commit author from "
+"Bitbucket."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts:89
 msgid "YouTrack did not receive an email address for the commit author from GitHub."
@@ -1478,20 +1596,35 @@ msgid "YouTrack did not receive user data for this commit author from GitLab."
 msgstr "YouTrack did not receive user data for this commit author from GitLab."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts:56
-msgid "YouTrack found multiple users with email addresses that match the registered email in Bitbucket."
-msgstr "YouTrack found multiple users with email addresses that match the registered email in Bitbucket."
+msgid ""
+"YouTrack found multiple users with email addresses that match the "
+"registered email in Bitbucket."
+msgstr ""
+"YouTrack found multiple users with email addresses that match the "
+"registered email in Bitbucket."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts:86
-msgid "YouTrack found multiple users with email addresses that match the registered email in GitHub."
-msgstr "YouTrack found multiple users with email addresses that match the registered email in GitHub."
+msgid ""
+"YouTrack found multiple users with email addresses that match the "
+"registered email in GitHub."
+msgstr ""
+"YouTrack found multiple users with email addresses that match the "
+"registered email in GitHub."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts:74
-msgid "YouTrack found multiple users with email addresses that match the registered email in GitLab."
-msgstr "YouTrack found multiple users with email addresses that match the registered email in GitLab."
+msgid ""
+"YouTrack found multiple users with email addresses that match the "
+"registered email in GitLab."
+msgstr ""
+"YouTrack found multiple users with email addresses that match the "
+"registered email in GitLab."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts:10
 #: src/components/activity-stream/activity__stream-vcs-helper.ts:32
 #: src/components/activity-stream/activity__stream-vcs-helper.ts:35
-msgid "YouTrack was unable to match the VCS user name to a Hub account for an unknown reason. Check your server logs for details."
-msgstr "YouTrack was unable to match the VCS user name to a Hub account for an unknown reason. Check your server logs for details."
-
+msgid ""
+"YouTrack was unable to match the VCS user name to a Hub account for an "
+"unknown reason. Check your server logs for details."
+msgstr ""
+"YouTrack was unable to match the VCS user name to a Hub account for an "
+"unknown reason. Check your server logs for details."
