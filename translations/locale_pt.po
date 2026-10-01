@@ -1095,6 +1095,7 @@ msgid "No user information provided by Upsource."
 msgstr "Nenhuma informação de usuário proveniente do Upsource."
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "Nope, can't find it!"
 msgstr "Não, não consegue encontrá-lo!"
 
@@ -1861,6 +1862,7 @@ msgid "Yes"
 msgstr "Sim"
 
 #: legacy/src/actions/app-actions.ts
+#: src/components/error/error-message-data.ts
 msgid ""
 "You are trying to open a link from another server. Please add this server "
 "to the app first."

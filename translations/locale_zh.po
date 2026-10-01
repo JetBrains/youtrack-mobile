@@ -1075,6 +1075,7 @@ msgid "No user information provided by Upsource."
 msgstr "Upsource 没有提供用户信息。"
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "Nope, can't find it!"
 msgstr "不， 找不到!"
 
@@ -1806,6 +1807,7 @@ msgid "Yes"
 msgstr "是"
 
 #: legacy/src/actions/app-actions.ts
+#: src/components/error/error-message-data.ts
 msgid ""
 "You are trying to open a link from another server. Please add this server "
 "to the app first."

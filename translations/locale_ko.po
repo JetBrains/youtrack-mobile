@@ -1075,6 +1075,7 @@ msgid "No user information provided by Upsource."
 msgstr "Upsource에서 제공하는 사용자 정보가 없습니다."
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "Nope, can't find it!"
 msgstr "찾을 수 없습니다."
 
@@ -1812,6 +1813,7 @@ msgid "Yes"
 msgstr "예"
 
 #: legacy/src/actions/app-actions.ts
+#: src/components/error/error-message-data.ts
 msgid ""
 "You are trying to open a link from another server. Please add this server "
 "to the app first."

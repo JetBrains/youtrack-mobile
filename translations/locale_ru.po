@@ -1113,6 +1113,7 @@ msgid "No user information provided by Upsource."
 msgstr "От Upsource не получены данные о пользователях."
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "Nope, can't find it!"
 msgstr "Не удается найти!"
 
@@ -1874,6 +1875,7 @@ msgid "Yes"
 msgstr "Да"
 
 #: legacy/src/actions/app-actions.ts
+#: src/components/error/error-message-data.ts
 msgid ""
 "You are trying to open a link from another server. Please add this server "
 "to the app first."

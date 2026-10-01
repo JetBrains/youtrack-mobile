@@ -1087,6 +1087,7 @@ msgid "No user information provided by Upsource."
 msgstr "Nincs felhasználói információ az Upsource-tól."
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "Nope, can't find it!"
 msgstr "Nem, nem találom!"
 
@@ -1857,6 +1858,7 @@ msgid "Yes"
 msgstr "Igen"
 
 #: legacy/src/actions/app-actions.ts
+#: src/components/error/error-message-data.ts
 msgid ""
 "You are trying to open a link from another server. Please add this server "
 "to the app first."
