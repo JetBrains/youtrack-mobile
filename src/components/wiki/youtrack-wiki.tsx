@@ -4,12 +4,7 @@ import HTMLView from 'react-native-htmlview';
 import toHtml from 'htmlparser-to-html';
 import Router from '../router/router';
 import {renderWikiCode} from './markdown/markdown-code-highlighter';
-import {
-  renderImage,
-  renderTable,
-  renderTableRow,
-  renderTableCell,
-} from './youtrack-wiki__renderers';
+import {renderImage, renderTable, renderTableRow, renderTableCell} from './youtrack-wiki__renderers';
 import {getBaseUrl} from '../config/config';
 import {extractIssueId} from '../open-url-handler/open-url-handler';
 import {hasMimeType} from '../mime-type/mime-type';
@@ -53,16 +48,11 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
   onImagePress = (source: Record<string, any>) => {
     return Router.PreviewFile({
       current: source,
-      imageAttachments: (this.props.attachments || []).filter(attach =>
-        hasMimeType.previewable(attach),
-      ),
+      imageAttachments: (this.props.attachments || []).filter(attach => hasMimeType.previewable(attach)),
       imageHeaders: this.props.imageHeaders,
     });
   };
-  renderShowFullExceptionLink = (
-    node: object,
-    index: number,
-  ) => {
+  renderShowFullExceptionLink = (node: object, index: number) => {
     return (
       <Text
         key={index}
@@ -95,10 +85,7 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
     const {imageHeaders, attachments = [], renderFullException} = this.props;
     const wikiNodeType = nodeHasType(node);
 
-    const getCode = () =>
-      node.children[0] && node.children[0].name === 'code'
-        ? node.children[0]
-        : node;
+    const getCode = () => (node.children[0] && node.children[0].name === 'code' ? node.children[0] : node);
 
     switch (true) {
       case wikiNodeType.textOrNewLine ||
@@ -110,22 +97,10 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
         return this.renderShowFullExceptionLink(node, index);
 
       case wikiNodeType.checkbox:
-        return (
-          <Text key={`checkbox-${node.attribs['data-position']}`}>
-            {'checked' in node.attribs ? '✓' : '☐'}
-          </Text>
-        );
+        return <Text key={`checkbox-${node.attribs['data-position']}`}>{'checked' in node.attribs ? '✓' : '☐'}</Text>;
 
       case wikiNodeType.code:
-        return (
-          <Text key={index}>
-            {renderWikiCode(
-              getCode(),
-              this.getLanguage(getCode()),
-              this.props.uiTheme,
-            )}
-          </Text>
-        );
+        return <Text key={index}>{renderWikiCode(getCode(), this.getLanguage(getCode()), this.props.uiTheme)}</Text>;
 
       case wikiNodeType.image:
         return renderImage({
