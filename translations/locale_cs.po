@@ -324,6 +324,7 @@ msgstr "Fotoaparát"
 #: src/components/action-sheet/action-sheet.ts
 #: src/components/attachments/attachments-row.tsx
 #: src/components/confirmation/confirmation.ts
+#: src/components/push-notifications/push-notifications.ts
 #: src/screens/create-issue/hooks/use-draft-close.ts
 #: src/screens/settings/feedback-form.tsx
 msgid "Cancel"
@@ -1377,6 +1378,7 @@ msgstr "Nastavit datum a čas"
 #: app/(app)/(tabs)/settings/_layout.tsx
 #: app/(app)/(tabs)/settings/index.tsx
 #: legacy/src/views/settings/settings.tsx
+#: src/components/push-notifications/push-notifications.ts
 msgid "Settings"
 msgstr "Nastavení"
 
