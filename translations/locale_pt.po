@@ -939,6 +939,7 @@ msgstr "Entrar "
 msgid "Log in to YouTrack"
 msgstr "Fazer login com o YouTrack"
 
+#: app/(auth)/log-in.tsx
 #: legacy/src/views/log-in/log-in.tsx
 #: src/screens/log-in/credentials-login-form.tsx
 msgid "Log in with Browser"
@@ -1591,6 +1592,7 @@ msgstr "O autor de submissão não é um atribuído no projeto."
 msgid "The search query contains unknown values"
 msgstr "A consulta contém valores desconhecidos"
 
+#: app/(auth)/log-in.tsx
 #: legacy/src/actions/app-actions.ts
 msgid ""
 "The selected account is no longer authorized to use YouTrack Mobile. Please "

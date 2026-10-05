@@ -921,6 +921,7 @@ msgstr "로그인"
 msgid "Log in to YouTrack"
 msgstr "YouTrack에 로그인"
 
+#: app/(auth)/log-in.tsx
 #: legacy/src/views/log-in/log-in.tsx
 #: src/screens/log-in/credentials-login-form.tsx
 msgid "Log in with Browser"
@@ -1558,6 +1559,7 @@ msgstr "커밋 작성자가 프로젝트 담당자가 아닙니다."
 msgid "The search query contains unknown values"
 msgstr "검색 쿼리에 알 수 없는 값이 있습니다."
 
+#: app/(auth)/log-in.tsx
 #: legacy/src/actions/app-actions.ts
 msgid ""
 "The selected account is no longer authorized to use YouTrack Mobile. Please "

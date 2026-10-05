@@ -927,6 +927,7 @@ msgstr "Giriş yap"
 msgid "Log in to YouTrack"
 msgstr ""
 
+#: app/(auth)/log-in.tsx
 #: legacy/src/views/log-in/log-in.tsx
 #: src/screens/log-in/credentials-login-form.tsx
 msgid "Log in with Browser"
@@ -1567,6 +1568,7 @@ msgstr ""
 msgid "The search query contains unknown values"
 msgstr "Arama sorgusu, bilinmeyen değerler içeriyor"
 
+#: app/(auth)/log-in.tsx
 #: legacy/src/actions/app-actions.ts
 msgid ""
 "The selected account is no longer authorized to use YouTrack Mobile. Please "

@@ -938,6 +938,7 @@ msgstr "Connexion"
 msgid "Log in to YouTrack"
 msgstr "Se connecter à YouTrack"
 
+#: app/(auth)/log-in.tsx
 #: legacy/src/views/log-in/log-in.tsx
 #: src/screens/log-in/credentials-login-form.tsx
 msgid "Log in with Browser"
@@ -1590,6 +1591,7 @@ msgstr "L'auteur du commit n'est pas un responsable de ce projet."
 msgid "The search query contains unknown values"
 msgstr "La requête de recherche contient des valeurs inconnues"
 
+#: app/(auth)/log-in.tsx
 #: legacy/src/actions/app-actions.ts
 msgid ""
 "The selected account is no longer authorized to use YouTrack Mobile. Please "

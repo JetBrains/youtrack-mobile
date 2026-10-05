@@ -921,6 +921,7 @@ msgstr "登录"
 msgid "Log in to YouTrack"
 msgstr "登录 YouTrack"
 
+#: app/(auth)/log-in.tsx
 #: legacy/src/views/log-in/log-in.tsx
 #: src/screens/log-in/credentials-login-form.tsx
 msgid "Log in with Browser"
@@ -1558,6 +1559,7 @@ msgstr "提交作者不是项目的被指派者。"
 msgid "The search query contains unknown values"
 msgstr "该搜索查询包含未知值"
 
+#: app/(auth)/log-in.tsx
 #: legacy/src/actions/app-actions.ts
 msgid ""
 "The selected account is no longer authorized to use YouTrack Mobile. Please "

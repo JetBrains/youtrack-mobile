@@ -938,6 +938,7 @@ msgstr "Iniciar sesión"
 msgid "Log in to YouTrack"
 msgstr "Iniciar sesión en YouTrack"
 
+#: app/(auth)/log-in.tsx
 #: legacy/src/views/log-in/log-in.tsx
 #: src/screens/log-in/credentials-login-form.tsx
 msgid "Log in with Browser"
@@ -1594,6 +1595,7 @@ msgstr "El autor de la confirmación no es un usuario asignado al proyecto."
 msgid "The search query contains unknown values"
 msgstr "La consulta de búsqueda contiene valores desconocidos"
 
+#: app/(auth)/log-in.tsx
 #: legacy/src/actions/app-actions.ts
 msgid ""
 "The selected account is no longer authorized to use YouTrack Mobile. Please "
