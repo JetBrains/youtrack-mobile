@@ -38,6 +38,7 @@ export type IssueFieldSortProperty = {
   asc: boolean;
   id: string;
   sortField: PredefinedFilterField | FilterField;
+  readOnly?: boolean;
 };
 export type CustomFilterField = {
   $type: 'CustomFilterField';
