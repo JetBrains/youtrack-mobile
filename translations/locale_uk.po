@@ -76,6 +76,7 @@ msgstr[2] "{{amount}} завдань"
 msgstr[3] "{{amount}} завдання"
 
 #: legacy/src/components/date/date.ts
+#: src/util/date.ts
 msgid "{{daysLeft}}d"
 msgid_plural "{{daysLeft}}d"
 msgstr[0] "{{daysLeft}} день"
@@ -84,6 +85,7 @@ msgstr[2] "{{daysLeft}} днів"
 msgstr[3] "{{daysLeft}} дня"
 
 #: legacy/src/components/date/date.ts
+#: src/util/date.ts
 msgid "{{hoursLeft}}h"
 msgid_plural "{{hoursLeft}}h"
 msgstr[0] "{{hoursLeft}} година"
@@ -92,6 +94,7 @@ msgstr[2] "{{hoursLeft}} годин"
 msgstr[3] "{{hoursLeft}} години"
 
 #: legacy/src/components/date/date.ts
+#: src/util/date.ts
 msgid "{{minutesAbsolute}}m"
 msgid_plural "{{minutesAbsolute}}m"
 msgstr[0] "{{minutesAbsolute}} хвилина"
@@ -422,8 +425,8 @@ msgstr "Підтвердьте вихід"
 msgid "Confirmation required"
 msgstr "Потрібне підтвердження"
 
-#: app/index.tsx
 #: legacy/src/actions/app-actions.ts
+#: src/screens/home/home-screen.tsx
 msgid "Connecting to YouTrack..."
 msgstr "Підключення до YouTrack..."
 
@@ -431,6 +434,7 @@ msgstr "Підключення до YouTrack..."
 #: legacy/src/components/error-boundary/error-boundary.tsx
 #: legacy/src/components/error-message/error-message-inline.tsx
 #: legacy/src/views/enter-server/enter-server.tsx
+#: src/components/crash-screen/crash-screen.tsx
 msgid "Contact support"
 msgstr "Служба підтримки"
 
@@ -618,10 +622,12 @@ msgid "Details"
 msgstr ""
 
 #: legacy/src/views/issue/activity/activity__add-spent-time.tsx
+#: src/screens/issue/components/work-editor/work-editor.tsx
 msgid "Discard and close"
 msgstr "Відхилити й закрити"
 
 #: legacy/src/views/issue/activity/activity__add-spent-time.tsx
+#: src/screens/issue/components/work-editor/work-editor.tsx
 msgid "Discard draft and close?"
 msgstr "Відхилити чернетку й закрити?"
 
@@ -902,6 +908,7 @@ msgstr ""
 
 #: legacy/src/components/error/error-message-data.ts
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "License error"
 msgstr ""
 
@@ -1141,6 +1148,7 @@ msgid "Password"
 msgstr "Пароль"
 
 #: legacy/src/components/custom-field/custom-field-sla.tsx
+#: src/components/sla-field/sla-field.tsx
 msgid "Paused"
 msgstr "Призупинено"
 
@@ -1256,6 +1264,7 @@ msgid "Reset visibility"
 msgstr ""
 
 #: legacy/src/components/error-boundary/error-boundary.tsx
+#: src/components/crash-screen/crash-screen.tsx
 msgid "Restart"
 msgstr ""
 
@@ -1265,7 +1274,9 @@ msgstr ""
 msgid "Restore"
 msgstr ""
 
+#: app/(auth)/log-in.tsx
 #: legacy/src/views/home/home.tsx
+#: src/screens/home/home-screen.tsx
 msgid "Retry"
 msgstr ""
 
@@ -1436,6 +1447,7 @@ msgstr ""
 #: legacy/src/components/error/error-message-data.ts
 #: legacy/src/components/error/error-messages.ts
 #: src/components/attachment-preview/svg-preview/attachment-preview-svg.tsx
+#: src/components/crash-screen/crash-screen.tsx
 #: src/components/error/error-resolver.ts
 msgid "Something went wrong"
 msgstr "Щось пішло не так"
@@ -1531,6 +1543,7 @@ msgid "Thank you for your feedback!"
 msgstr ""
 
 #: legacy/src/components/error-boundary/error-boundary.tsx
+#: src/components/crash-screen/crash-screen.tsx
 msgid ""
 "The application failed to restart automatically. Please try to restart it "
 "manually."
@@ -1589,6 +1602,7 @@ msgid "The commit author is not an assignee in the project."
 msgstr ""
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "The search query contains unknown values"
 msgstr "Пошуковий запит містить невідомі значення"
 
@@ -1600,6 +1614,7 @@ msgid ""
 msgstr ""
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "The server is overloaded or down for maintenance"
 msgstr ""
 
@@ -1742,6 +1757,7 @@ msgid "Use fewer search parameters"
 msgstr ""
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "User account is banned"
 msgstr ""
 
@@ -1819,6 +1835,7 @@ msgid ""
 msgstr ""
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "Woah, you can't touch this!"
 msgstr "Ей, вам не можна цього чіпати!"
 
@@ -1867,10 +1884,12 @@ msgid "You need a YouTrack account to use the app.\n"
 msgstr ""
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "Your account has insufficient permission to perform this operation."
 msgstr ""
 
 #: legacy/src/actions/app-actions.ts
+#: src/components/error/error-message-data.ts
 msgid ""
 "Your authorization token has expired or is invalid. Re-enter your login "
 "credentials to refresh the token. If you are still unable to log in, please "
@@ -1887,6 +1906,7 @@ msgid ""
 msgstr ""
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid ""
 "Your YouTrack account requires that you provide a second factor of "
 "authentication to log in. This option is only available when you log in "

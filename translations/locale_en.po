@@ -668,7 +668,7 @@ msgstr "Issue link removed"
 msgid "Issue updated"
 msgstr "Issue updated"
 
-#: src/views/issues/issues__sortby_list.tsx:206
+#: src/views/issues/issues__sortby_list.tsx:162
 msgid "Issues can be sorted by up to 4 attributes"
 msgstr "Issues can be sorted by up to 4 attributes"
 
@@ -1123,7 +1123,7 @@ msgstr "Small"
 msgid "Something went wrong"
 msgstr "Something went wrong"
 
-#: src/views/issues/issues__sortby_list.tsx:200
+#: src/views/issues/issues__sortby_list.tsx:157
 msgid "Sort Attributes"
 msgstr "Sort Attributes"
 

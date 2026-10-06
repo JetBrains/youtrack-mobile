@@ -62,16 +62,19 @@ msgid_plural "{{amount}} issues"
 msgstr "{{amount}} 个问题"
 
 #: legacy/src/components/date/date.ts
+#: src/util/date.ts
 msgid "{{daysLeft}}d"
 msgid_plural "{{daysLeft}}d"
 msgstr "{{daysLeft}} 天"
 
 #: legacy/src/components/date/date.ts
+#: src/util/date.ts
 msgid "{{hoursLeft}}h"
 msgid_plural "{{hoursLeft}}h"
 msgstr "{{hoursLeft}} 小时"
 
 #: legacy/src/components/date/date.ts
+#: src/util/date.ts
 msgid "{{minutesAbsolute}}m"
 msgid_plural "{{minutesAbsolute}}m"
 msgstr "{{minutesAbsolute}} 分钟"
@@ -396,8 +399,8 @@ msgstr "确认退出登录"
 msgid "Confirmation required"
 msgstr "需要确认"
 
-#: app/index.tsx
 #: legacy/src/actions/app-actions.ts
+#: src/screens/home/home-screen.tsx
 msgid "Connecting to YouTrack..."
 msgstr "正在连接到 YouTrack…"
 
@@ -405,6 +408,7 @@ msgstr "正在连接到 YouTrack…"
 #: legacy/src/components/error-boundary/error-boundary.tsx
 #: legacy/src/components/error-message/error-message-inline.tsx
 #: legacy/src/views/enter-server/enter-server.tsx
+#: src/components/crash-screen/crash-screen.tsx
 msgid "Contact support"
 msgstr "联系支持团队"
 
@@ -592,10 +596,12 @@ msgid "Details"
 msgstr "详情"
 
 #: legacy/src/views/issue/activity/activity__add-spent-time.tsx
+#: src/screens/issue/components/work-editor/work-editor.tsx
 msgid "Discard and close"
 msgstr "舍弃并关闭"
 
 #: legacy/src/views/issue/activity/activity__add-spent-time.tsx
+#: src/screens/issue/components/work-editor/work-editor.tsx
 msgid "Discard draft and close?"
 msgstr "是否舍弃草稿并关闭?"
 
@@ -878,6 +884,7 @@ msgstr "大"
 
 #: legacy/src/components/error/error-message-data.ts
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "License error"
 msgstr "许可证错误"
 
@@ -1111,6 +1118,7 @@ msgid "Password"
 msgstr "密码"
 
 #: legacy/src/components/custom-field/custom-field-sla.tsx
+#: src/components/sla-field/sla-field.tsx
 msgid "Paused"
 msgstr "已暂停"
 
@@ -1226,6 +1234,7 @@ msgid "Reset visibility"
 msgstr "重置可见性"
 
 #: legacy/src/components/error-boundary/error-boundary.tsx
+#: src/components/crash-screen/crash-screen.tsx
 msgid "Restart"
 msgstr "重新启动"
 
@@ -1235,7 +1244,9 @@ msgstr "重新启动"
 msgid "Restore"
 msgstr "恢复"
 
+#: app/(auth)/log-in.tsx
 #: legacy/src/views/home/home.tsx
+#: src/screens/home/home-screen.tsx
 msgid "Retry"
 msgstr "重试"
 
@@ -1406,6 +1417,7 @@ msgstr "小"
 #: legacy/src/components/error/error-message-data.ts
 #: legacy/src/components/error/error-messages.ts
 #: src/components/attachment-preview/svg-preview/attachment-preview-svg.tsx
+#: src/components/crash-screen/crash-screen.tsx
 #: src/components/error/error-resolver.ts
 msgid "Something went wrong"
 msgstr "出错了"
@@ -1498,6 +1510,7 @@ msgid "Thank you for your feedback!"
 msgstr "感谢您的反馈!"
 
 #: legacy/src/components/error-boundary/error-boundary.tsx
+#: src/components/crash-screen/crash-screen.tsx
 msgid ""
 "The application failed to restart automatically. Please try to restart it "
 "manually."
@@ -1556,6 +1569,7 @@ msgid "The commit author is not an assignee in the project."
 msgstr "提交作者不是项目的被指派者。"
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "The search query contains unknown values"
 msgstr "该搜索查询包含未知值"
 
@@ -1567,6 +1581,7 @@ msgid ""
 msgstr "所选帐户不再具备使用 YouTrack Mobile 的授权。请重新登录。"
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "The server is overloaded or down for maintenance"
 msgstr "服务器已过载或者正在停机进行维护"
 
@@ -1711,6 +1726,7 @@ msgid "Use fewer search parameters"
 msgstr "使用较少的搜索参数"
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "User account is banned"
 msgstr "用户帐户被禁言"
 
@@ -1790,6 +1806,7 @@ msgstr ""
 "TeamCity 中拥有相同的电子邮件地址。"
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "Woah, you can't touch this!"
 msgstr "注意，不要碰这个!"
 
@@ -1838,10 +1855,12 @@ msgid "You need a YouTrack account to use the app.\n"
 msgstr "您需要 YouTrack 帐户才能使用该应用。\n"
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "Your account has insufficient permission to perform this operation."
 msgstr "您的帐户权限不足，无法执行此操作。"
 
 #: legacy/src/actions/app-actions.ts
+#: src/components/error/error-message-data.ts
 msgid ""
 "Your authorization token has expired or is invalid. Re-enter your login "
 "credentials to refresh the token. If you are still unable to log in, please "
@@ -1855,6 +1874,7 @@ msgid ""
 msgstr "您的移动设备可用存储空间不足。某些应用功能可能不可用。"
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid ""
 "Your YouTrack account requires that you provide a second factor of "
 "authentication to log in. This option is only available when you log in "

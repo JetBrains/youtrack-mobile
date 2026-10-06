@@ -66,18 +66,21 @@ msgstr[0] "{{amount}} incidencia"
 msgstr[1] "{{amount}} incidencias"
 
 #: legacy/src/components/date/date.ts
+#: src/util/date.ts
 msgid "{{daysLeft}}d"
 msgid_plural "{{daysLeft}}d"
 msgstr[0] "{{daysLeft}}d."
 msgstr[1] "{{daysLeft}}d."
 
 #: legacy/src/components/date/date.ts
+#: src/util/date.ts
 msgid "{{hoursLeft}}h"
 msgid_plural "{{hoursLeft}}h"
 msgstr[0] "{{hoursLeft}}h"
 msgstr[1] "{{hoursLeft}}h"
 
 #: legacy/src/components/date/date.ts
+#: src/util/date.ts
 msgid "{{minutesAbsolute}}m"
 msgid_plural "{{minutesAbsolute}}m"
 msgstr[0] "{{minutesAbsolute}}min"
@@ -407,8 +410,8 @@ msgstr "Confirmar cierre de sesión"
 msgid "Confirmation required"
 msgstr "Confirmación necesaria"
 
-#: app/index.tsx
 #: legacy/src/actions/app-actions.ts
+#: src/screens/home/home-screen.tsx
 msgid "Connecting to YouTrack..."
 msgstr "Conectando a YouTrack..."
 
@@ -416,6 +419,7 @@ msgstr "Conectando a YouTrack..."
 #: legacy/src/components/error-boundary/error-boundary.tsx
 #: legacy/src/components/error-message/error-message-inline.tsx
 #: legacy/src/views/enter-server/enter-server.tsx
+#: src/components/crash-screen/crash-screen.tsx
 msgid "Contact support"
 msgstr "Contacte el servicio de asistencia técnica."
 
@@ -603,10 +607,12 @@ msgid "Details"
 msgstr "Detalles"
 
 #: legacy/src/views/issue/activity/activity__add-spent-time.tsx
+#: src/screens/issue/components/work-editor/work-editor.tsx
 msgid "Discard and close"
 msgstr "Descartar y cerrar"
 
 #: legacy/src/views/issue/activity/activity__add-spent-time.tsx
+#: src/screens/issue/components/work-editor/work-editor.tsx
 msgid "Discard draft and close?"
 msgstr "¿Descartar borrador y cerrar?"
 
@@ -895,6 +901,7 @@ msgstr "Large"
 
 #: legacy/src/components/error/error-message-data.ts
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "License error"
 msgstr "Error de licencia"
 
@@ -1130,6 +1137,7 @@ msgid "Password"
 msgstr "Contraseña"
 
 #: legacy/src/components/custom-field/custom-field-sla.tsx
+#: src/components/sla-field/sla-field.tsx
 msgid "Paused"
 msgstr "En pausa"
 
@@ -1247,6 +1255,7 @@ msgid "Reset visibility"
 msgstr "Restablecer visibilidad"
 
 #: legacy/src/components/error-boundary/error-boundary.tsx
+#: src/components/crash-screen/crash-screen.tsx
 msgid "Restart"
 msgstr "Reiniciar"
 
@@ -1256,7 +1265,9 @@ msgstr "Reiniciar"
 msgid "Restore"
 msgstr "Restaurar"
 
+#: app/(auth)/log-in.tsx
 #: legacy/src/views/home/home.tsx
+#: src/screens/home/home-screen.tsx
 msgid "Retry"
 msgstr "Reintentar"
 
@@ -1429,6 +1440,7 @@ msgstr "Pequeño"
 #: legacy/src/components/error/error-message-data.ts
 #: legacy/src/components/error/error-messages.ts
 #: src/components/attachment-preview/svg-preview/attachment-preview-svg.tsx
+#: src/components/crash-screen/crash-screen.tsx
 #: src/components/error/error-resolver.ts
 msgid "Something went wrong"
 msgstr "Algo ha salido mal."
@@ -1522,6 +1534,7 @@ msgid "Thank you for your feedback!"
 msgstr "¡Gracias por sus comentarios!"
 
 #: legacy/src/components/error-boundary/error-boundary.tsx
+#: src/components/crash-screen/crash-screen.tsx
 msgid ""
 "The application failed to restart automatically. Please try to restart it "
 "manually."
@@ -1592,6 +1605,7 @@ msgid "The commit author is not an assignee in the project."
 msgstr "El autor de la confirmación no es un usuario asignado al proyecto."
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "The search query contains unknown values"
 msgstr "La consulta de búsqueda contiene valores desconocidos"
 
@@ -1605,6 +1619,7 @@ msgstr ""
 "Inicie sesión de nuevo."
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "The server is overloaded or down for maintenance"
 msgstr "El servidor está sobrecargado o en mantenimiento"
 
@@ -1767,6 +1782,7 @@ msgid "Use fewer search parameters"
 msgstr "Utilice menos parámetros de búsqueda"
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "User account is banned"
 msgstr "La cuenta de usuario se ha bloqueado"
 
@@ -1853,6 +1869,7 @@ msgstr ""
 "tiene el autor de la confirmación en TeamCity."
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "Woah, you can't touch this!"
 msgstr "¡No, no lo toque!"
 
@@ -1908,10 +1925,12 @@ msgid "You need a YouTrack account to use the app.\n"
 msgstr "Necesita una cuenta de YouTrack para usar la aplicación.\n"
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "Your account has insufficient permission to perform this operation."
 msgstr "Su cuenta no tiene los permisos necesarios para realizar esta operación."
 
 #: legacy/src/actions/app-actions.ts
+#: src/components/error/error-message-data.ts
 msgid ""
 "Your authorization token has expired or is invalid. Re-enter your login "
 "credentials to refresh the token. If you are still unable to log in, please "
@@ -1931,6 +1950,7 @@ msgstr ""
 "estén disponibles."
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid ""
 "Your YouTrack account requires that you provide a second factor of "
 "authentication to log in. This option is only available when you log in "

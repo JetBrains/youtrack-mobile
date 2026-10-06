@@ -62,16 +62,19 @@ msgid_plural "{{amount}} issues"
 msgstr "이슈 {{amount}}개"
 
 #: legacy/src/components/date/date.ts
+#: src/util/date.ts
 msgid "{{daysLeft}}d"
 msgid_plural "{{daysLeft}}d"
 msgstr "{{daysLeft}}일"
 
 #: legacy/src/components/date/date.ts
+#: src/util/date.ts
 msgid "{{hoursLeft}}h"
 msgid_plural "{{hoursLeft}}h"
 msgstr "{{hoursLeft}}시간"
 
 #: legacy/src/components/date/date.ts
+#: src/util/date.ts
 msgid "{{minutesAbsolute}}m"
 msgid_plural "{{minutesAbsolute}}m"
 msgstr "{{minutesAbsolute}}분"
@@ -396,8 +399,8 @@ msgstr "로그아웃 확인"
 msgid "Confirmation required"
 msgstr "확인 필요"
 
-#: app/index.tsx
 #: legacy/src/actions/app-actions.ts
+#: src/screens/home/home-screen.tsx
 msgid "Connecting to YouTrack..."
 msgstr "YouTrack에 연결하는 중..."
 
@@ -405,6 +408,7 @@ msgstr "YouTrack에 연결하는 중..."
 #: legacy/src/components/error-boundary/error-boundary.tsx
 #: legacy/src/components/error-message/error-message-inline.tsx
 #: legacy/src/views/enter-server/enter-server.tsx
+#: src/components/crash-screen/crash-screen.tsx
 msgid "Contact support"
 msgstr "지원팀에 문의"
 
@@ -592,10 +596,12 @@ msgid "Details"
 msgstr "세부 정보"
 
 #: legacy/src/views/issue/activity/activity__add-spent-time.tsx
+#: src/screens/issue/components/work-editor/work-editor.tsx
 msgid "Discard and close"
 msgstr "취소하고 닫기"
 
 #: legacy/src/views/issue/activity/activity__add-spent-time.tsx
+#: src/screens/issue/components/work-editor/work-editor.tsx
 msgid "Discard draft and close?"
 msgstr "초안을 취소하고 닫으시겠습니까?"
 
@@ -878,6 +884,7 @@ msgstr "크게"
 
 #: legacy/src/components/error/error-message-data.ts
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "License error"
 msgstr "라이선스 오류"
 
@@ -1111,6 +1118,7 @@ msgid "Password"
 msgstr "비밀번호"
 
 #: legacy/src/components/custom-field/custom-field-sla.tsx
+#: src/components/sla-field/sla-field.tsx
 msgid "Paused"
 msgstr "일시 중지됨"
 
@@ -1226,6 +1234,7 @@ msgid "Reset visibility"
 msgstr "가시성 재설정"
 
 #: legacy/src/components/error-boundary/error-boundary.tsx
+#: src/components/crash-screen/crash-screen.tsx
 msgid "Restart"
 msgstr "다시 시작"
 
@@ -1235,7 +1244,9 @@ msgstr "다시 시작"
 msgid "Restore"
 msgstr "복원"
 
+#: app/(auth)/log-in.tsx
 #: legacy/src/views/home/home.tsx
+#: src/screens/home/home-screen.tsx
 msgid "Retry"
 msgstr "다시 시도"
 
@@ -1406,6 +1417,7 @@ msgstr "작게"
 #: legacy/src/components/error/error-message-data.ts
 #: legacy/src/components/error/error-messages.ts
 #: src/components/attachment-preview/svg-preview/attachment-preview-svg.tsx
+#: src/components/crash-screen/crash-screen.tsx
 #: src/components/error/error-resolver.ts
 msgid "Something went wrong"
 msgstr "뭔가가 잘못되었습니다"
@@ -1498,6 +1510,7 @@ msgid "Thank you for your feedback!"
 msgstr "의견을 보내 주셔서 감사합니다!"
 
 #: legacy/src/components/error-boundary/error-boundary.tsx
+#: src/components/crash-screen/crash-screen.tsx
 msgid ""
 "The application failed to restart automatically. Please try to restart it "
 "manually."
@@ -1556,6 +1569,7 @@ msgid "The commit author is not an assignee in the project."
 msgstr "커밋 작성자가 프로젝트 담당자가 아닙니다."
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "The search query contains unknown values"
 msgstr "검색 쿼리에 알 수 없는 값이 있습니다."
 
@@ -1567,6 +1581,7 @@ msgid ""
 msgstr "선택한 계정은 더 이상 YouTrack Mobile을 사용할 수 없습니다. 다시 로그인하십시오."
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "The server is overloaded or down for maintenance"
 msgstr "서버에 과부하가 걸렸거나 유지 관리를 위해 서비스가 중단되었습니다."
 
@@ -1715,6 +1730,7 @@ msgid "Use fewer search parameters"
 msgstr "더 적은 검색 매개변수 사용"
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "User account is banned"
 msgstr "사용자 계정이 금지됨"
 
@@ -1796,6 +1812,7 @@ msgstr ""
 "이메일 주소를 가진 YouTrack 사용자가 두 명 이상 존재합니다."
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "Woah, you can't touch this!"
 msgstr "이런, 여기에 접근하실 수 없습니다."
 
@@ -1844,10 +1861,12 @@ msgid "You need a YouTrack account to use the app.\n"
 msgstr "앱을 사용하려면 YouTrack 계정이 필요합니다.\n"
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid "Your account has insufficient permission to perform this operation."
 msgstr "귀하의 계정에는 이 작업을 수행할 수 있는 권한이 없습니다."
 
 #: legacy/src/actions/app-actions.ts
+#: src/components/error/error-message-data.ts
 msgid ""
 "Your authorization token has expired or is invalid. Re-enter your login "
 "credentials to refresh the token. If you are still unable to log in, please "
@@ -1863,6 +1882,7 @@ msgid ""
 msgstr "모바일 기기가 사용 가능한 스토리지 용량이 부족한 상태로 실행되고 있습니다. 일부 앱 기능을 사용하지 못할 수 있습니다."
 
 #: legacy/src/components/error/error-message-data.ts
+#: src/components/error/error-message-data.ts
 msgid ""
 "Your YouTrack account requires that you provide a second factor of "
 "authentication to log in. This option is only available when you log in "
