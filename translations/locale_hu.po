@@ -863,6 +863,7 @@ msgid "Issue updated"
 msgstr "Ügy frissítve"
 
 #: legacy/src/views/issues/issues__sortby_list.tsx
+#: src/screens/issues/components/sort-settings/sort-settings.tsx
 msgid "Issues can be sorted by up to 4 attributes"
 msgstr "Az ügyeket legfeljebb 4 attribútum szerint lehet rendezni"
 
@@ -1437,10 +1438,12 @@ msgid "Something went wrong"
 msgstr "Hiba történt"
 
 #: legacy/src/views/issues/issues__sortby_list.tsx
+#: src/screens/issues/components/sort-settings/sort-settings.tsx
 msgid "Sort Attributes"
 msgstr "Rendezési attribútumok"
 
 #: legacy/src/views/issues/issues__settings.tsx
+#: src/screens/issues/components/settings/issues-settings-screen.tsx
 msgid "Sort Order"
 msgstr "Rendezési sorrend"
 
@@ -1450,6 +1453,7 @@ msgid "Sort: oldest first"
 msgstr "Rendezés: a legrégebbiek elöl"
 
 #: legacy/src/views/issues/issues__sortby.tsx
+#: src/screens/issues/components/settings/sort-by-row.tsx
 msgid "Sorted by"
 msgstr "Rendezési elv:"
 
@@ -1673,6 +1677,7 @@ msgstr "Szál némítása feloldva"
 #: legacy/src/views/settings/settings.tsx
 #: legacy/src/views/tickets/tickets.tsx
 #: src/screens/issues/issues-config.ts
+#: src/screens/settings/tickets-tab-toggle.tsx
 msgid "Tickets"
 msgstr "Jegyek"
 

@@ -853,6 +853,7 @@ msgid "Issue updated"
 msgstr "工单已更新"
 
 #: legacy/src/views/issues/issues__sortby_list.tsx
+#: src/screens/issues/components/sort-settings/sort-settings.tsx
 msgid "Issues can be sorted by up to 4 attributes"
 msgstr "问题最多可以按 4 个特性进行排序"
 
@@ -1423,10 +1424,12 @@ msgid "Something went wrong"
 msgstr "出错了"
 
 #: legacy/src/views/issues/issues__sortby_list.tsx
+#: src/screens/issues/components/sort-settings/sort-settings.tsx
 msgid "Sort Attributes"
 msgstr "排序属性"
 
 #: legacy/src/views/issues/issues__settings.tsx
+#: src/screens/issues/components/settings/issues-settings-screen.tsx
 msgid "Sort Order"
 msgstr "排序顺序"
 
@@ -1436,6 +1439,7 @@ msgid "Sort: oldest first"
 msgstr "排序: 旧->新"
 
 #: legacy/src/views/issues/issues__sortby.tsx
+#: src/screens/issues/components/settings/sort-by-row.tsx
 msgid "Sorted by"
 msgstr "排序方式"
 
@@ -1635,6 +1639,7 @@ msgstr "已取消忽略消息串"
 #: legacy/src/views/settings/settings.tsx
 #: legacy/src/views/tickets/tickets.tsx
 #: src/screens/issues/issues-config.ts
+#: src/screens/settings/tickets-tab-toggle.tsx
 msgid "Tickets"
 msgstr "工单"
 

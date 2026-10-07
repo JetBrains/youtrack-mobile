@@ -881,6 +881,7 @@ msgid "Issue updated"
 msgstr "Případ byl aktualizován"
 
 #: legacy/src/views/issues/issues__sortby_list.tsx
+#: src/screens/issues/components/sort-settings/sort-settings.tsx
 msgid "Issues can be sorted by up to 4 attributes"
 msgstr "Případy lze třídit až podle 4 atributů"
 
@@ -1461,10 +1462,12 @@ msgid "Something went wrong"
 msgstr "Něco se pokazilo"
 
 #: legacy/src/views/issues/issues__sortby_list.tsx
+#: src/screens/issues/components/sort-settings/sort-settings.tsx
 msgid "Sort Attributes"
 msgstr "Řazení atributů"
 
 #: legacy/src/views/issues/issues__settings.tsx
+#: src/screens/issues/components/settings/issues-settings-screen.tsx
 msgid "Sort Order"
 msgstr "Řadit podle"
 
@@ -1474,6 +1477,7 @@ msgid "Sort: oldest first"
 msgstr "Řadit: od nejstarších"
 
 #: legacy/src/views/issues/issues__sortby.tsx
+#: src/screens/issues/components/settings/sort-by-row.tsx
 msgid "Sorted by"
 msgstr "Seřazeno dle"
 
@@ -1698,6 +1702,7 @@ msgstr "Vlákno bez ztlumení"
 #: legacy/src/views/settings/settings.tsx
 #: legacy/src/views/tickets/tickets.tsx
 #: src/screens/issues/issues-config.ts
+#: src/screens/settings/tickets-tab-toggle.tsx
 msgid "Tickets"
 msgstr "Požadavky"
 

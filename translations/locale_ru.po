@@ -885,6 +885,7 @@ msgid "Issue updated"
 msgstr "Задача обновлена"
 
 #: legacy/src/views/issues/issues__sortby_list.tsx
+#: src/screens/issues/components/sort-settings/sort-settings.tsx
 msgid "Issues can be sorted by up to 4 attributes"
 msgstr "Задачи можно фильтровать не более чем по 4 атрибутам"
 
@@ -1461,10 +1462,12 @@ msgid "Something went wrong"
 msgstr "Что-то пошло не так"
 
 #: legacy/src/views/issues/issues__sortby_list.tsx
+#: src/screens/issues/components/sort-settings/sort-settings.tsx
 msgid "Sort Attributes"
 msgstr "Атрибуты сортировки"
 
 #: legacy/src/views/issues/issues__settings.tsx
+#: src/screens/issues/components/settings/issues-settings-screen.tsx
 msgid "Sort Order"
 msgstr "Порядок сортировки"
 
@@ -1474,6 +1477,7 @@ msgid "Sort: oldest first"
 msgstr "Сортировка: сначала старые"
 
 #: legacy/src/views/issues/issues__sortby.tsx
+#: src/screens/issues/components/settings/sort-by-row.tsx
 msgid "Sorted by"
 msgstr "Сортировка:"
 
@@ -1695,6 +1699,7 @@ msgstr "Тема не игнорируется"
 #: legacy/src/views/settings/settings.tsx
 #: legacy/src/views/tickets/tickets.tsx
 #: src/screens/issues/issues-config.ts
+#: src/screens/settings/tickets-tab-toggle.tsx
 msgid "Tickets"
 msgstr "Запросы"
 

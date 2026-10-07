@@ -861,6 +861,7 @@ msgid "Issue updated"
 msgstr ""
 
 #: legacy/src/views/issues/issues__sortby_list.tsx
+#: src/screens/issues/components/sort-settings/sort-settings.tsx
 msgid "Issues can be sorted by up to 4 attributes"
 msgstr "I ticket possono essere ordinati in base a un massimo di 4 attributi"
 
@@ -1437,10 +1438,12 @@ msgid "Something went wrong"
 msgstr "Qualcosa è andato storto"
 
 #: legacy/src/views/issues/issues__sortby_list.tsx
+#: src/screens/issues/components/sort-settings/sort-settings.tsx
 msgid "Sort Attributes"
 msgstr ""
 
 #: legacy/src/views/issues/issues__settings.tsx
+#: src/screens/issues/components/settings/issues-settings-screen.tsx
 msgid "Sort Order"
 msgstr "Ordinamento"
 
@@ -1450,6 +1453,7 @@ msgid "Sort: oldest first"
 msgstr ""
 
 #: legacy/src/views/issues/issues__sortby.tsx
+#: src/screens/issues/components/settings/sort-by-row.tsx
 msgid "Sorted by"
 msgstr ""
 
@@ -1654,6 +1658,7 @@ msgstr "Audio del thread attivato"
 #: legacy/src/views/settings/settings.tsx
 #: legacy/src/views/tickets/tickets.tsx
 #: src/screens/issues/issues-config.ts
+#: src/screens/settings/tickets-tab-toggle.tsx
 msgid "Tickets"
 msgstr ""
 

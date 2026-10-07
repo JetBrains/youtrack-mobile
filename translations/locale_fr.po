@@ -868,6 +868,7 @@ msgid "Issue updated"
 msgstr "Ticket mis à jour"
 
 #: legacy/src/views/issues/issues__sortby_list.tsx
+#: src/screens/issues/components/sort-settings/sort-settings.tsx
 msgid "Issues can be sorted by up to 4 attributes"
 msgstr "Les tickets peuvent être triés selon 4 attributs au maximum"
 
@@ -1444,10 +1445,12 @@ msgid "Something went wrong"
 msgstr "Un problème est survenu"
 
 #: legacy/src/views/issues/issues__sortby_list.tsx
+#: src/screens/issues/components/sort-settings/sort-settings.tsx
 msgid "Sort Attributes"
 msgstr "Attributs de tri"
 
 #: legacy/src/views/issues/issues__settings.tsx
+#: src/screens/issues/components/settings/issues-settings-screen.tsx
 msgid "Sort Order"
 msgstr "Ordre de tri"
 
@@ -1457,6 +1460,7 @@ msgid "Sort: oldest first"
 msgstr "Trier : plus anciens en premier"
 
 #: legacy/src/views/issues/issues__sortby.tsx
+#: src/screens/issues/components/settings/sort-by-row.tsx
 msgid "Sorted by"
 msgstr "Tri par"
 
@@ -1682,6 +1686,7 @@ msgstr "Son du thread activé"
 #: legacy/src/views/settings/settings.tsx
 #: legacy/src/views/tickets/tickets.tsx
 #: src/screens/issues/issues-config.ts
+#: src/screens/settings/tickets-tab-toggle.tsx
 msgid "Tickets"
 msgstr "Tickets de support"
 

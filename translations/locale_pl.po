@@ -881,6 +881,7 @@ msgid "Issue updated"
 msgstr "Zaktualizowano zgłoszenie"
 
 #: legacy/src/views/issues/issues__sortby_list.tsx
+#: src/screens/issues/components/sort-settings/sort-settings.tsx
 msgid "Issues can be sorted by up to 4 attributes"
 msgstr "Zgłoszenia można sortować według maksymalnie 4 atrybutów"
 
@@ -1461,10 +1462,12 @@ msgid "Something went wrong"
 msgstr "Coś poszło nie tak"
 
 #: legacy/src/views/issues/issues__sortby_list.tsx
+#: src/screens/issues/components/sort-settings/sort-settings.tsx
 msgid "Sort Attributes"
 msgstr "Sortuj atrybuty"
 
 #: legacy/src/views/issues/issues__settings.tsx
+#: src/screens/issues/components/settings/issues-settings-screen.tsx
 msgid "Sort Order"
 msgstr "Kolejność sortowania"
 
@@ -1474,6 +1477,7 @@ msgid "Sort: oldest first"
 msgstr "Sortowanie: najpierw najstarsze"
 
 #: legacy/src/views/issues/issues__sortby.tsx
+#: src/screens/issues/components/settings/sort-by-row.tsx
 msgid "Sorted by"
 msgstr "Sortuj wg"
 
@@ -1695,6 +1699,7 @@ msgstr "Wyłączono wyciszenie wątku"
 #: legacy/src/views/settings/settings.tsx
 #: legacy/src/views/tickets/tickets.tsx
 #: src/screens/issues/issues-config.ts
+#: src/screens/settings/tickets-tab-toggle.tsx
 msgid "Tickets"
 msgstr "Zgłoszenia"
 
