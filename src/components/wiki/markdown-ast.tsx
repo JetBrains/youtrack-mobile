@@ -16,17 +16,10 @@ const MarkdownAST = (props: Props) => {
   const {ast, rules, textStyle} = props;
   const theme: Theme = useContext(ThemeContext);
   return (
-    <Markdown
-      style={markdownStyles(theme?.uiTheme, textStyle)}
-      markdownit={MarkdownItInstance}
-      rules={rules}
-    >
+    <Markdown style={markdownStyles(theme?.uiTheme, textStyle)} markdownit={MarkdownItInstance} rules={rules}>
       {ast}
     </Markdown>
   );
 };
 
-export default React.memo<Props>(
-  MarkdownAST,
-  (prevProps: Props, nextProps: Props) => prevProps.ast === nextProps.ast,
-) as React$AbstractComponent<Props, unknown>;
+export default React.memo<Props>(MarkdownAST, (prevProps: Props, nextProps: Props) => prevProps.ast === nextProps.ast);
