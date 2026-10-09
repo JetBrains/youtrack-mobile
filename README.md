@@ -26,9 +26,6 @@ YouTrack Mobile is written in React Native together with Redux and Flow. The app
 ## Bug and Issue Tracker
 Should you have any problems, report them to the [YouTrack Mobile issue tracker](https://youtrack.jetbrains.com/newissue?project=YTM&clearDraft=true).
 
-## Contributing
-
-YouTrack Mobile is an open-source project. We are very happy to accept community contributions.
 
 ### Prerequisites
 Before submitting PR's, read:
