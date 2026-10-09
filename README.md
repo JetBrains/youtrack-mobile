@@ -1,6 +1,15 @@
 
 # YouTrack Mobile ![](http://jb.gg/badges/official-flat-square.svg)
 
+> [!IMPORTANT]
+> **This repository is archived.** It contains the former React Native
+> implementation of YouTrack Mobile and is kept available for reference.
+> Development has moved to a new, Expo-based project in a private repository.
+> This repository no longer accepts changes or pull requests.
+>
+> To report a problem with YouTrack Mobile, use the
+> [YouTrack Mobile issue tracker](https://youtrack.jetbrains.com/newissue?project=YTM&clearDraft=true).
+
 YouTrack Mobile app lets you stay on track with your tasks while you're on the go:
 
 * Easily work with your projects and tasks no matter where you are. You can create, view, and update issues, as well as attach images and other files.
